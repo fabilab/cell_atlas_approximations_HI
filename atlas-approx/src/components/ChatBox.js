@@ -45,7 +45,7 @@ const ChatBox = (props) => {
                     <input 
                         className="input" 
                         type="text" 
-                        placeholder="Send a message."
+                        placeholder="What organisms are available?"
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                         onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
