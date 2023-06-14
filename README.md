@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/fabilab/cell_atlas_approximations/main/figures/figure_HI.png" width="150" height="150">
+
 # Cell Atlas Approximations - Human Interface
 Cell atlases are multi-organ single cell omics data sets describing entire organisms.
 
