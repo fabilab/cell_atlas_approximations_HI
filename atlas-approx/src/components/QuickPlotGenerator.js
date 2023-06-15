@@ -2,16 +2,7 @@ import { Layout, Row, Breadcrumb } from 'antd';
 import QuickPlotGeneratorSelection from './QuickPlotGeneratorSelection';
 import Api from '../Api';
 
-const QuickPlotGenerator = () => {
-
-    // async function fetchData () {
-    //     if (!avgExpression) {
-    //         const api = new Api();
-    //         const result = await api.getOrganisms();
-    //         setAvgExpression(result); // avgExpression = result
-    //     }
-    // }
-    // fetchData();
+const QuickPlotGenerator = (props) => {
 
     return (
         <>
@@ -19,27 +10,25 @@ const QuickPlotGenerator = () => {
                 separator=">"
                 items={[
                 {
-                    title: 'Homo Sapien'
+                    title: 'Organisms'
                 },
                 {
-                    title: 'Lung'
+                    title: 'Organs'
                 },
                 {
-                    title: 'Respiratory Genes'
+                    title: 'Gene group'
                 }
                 ]}
                 style={{
                     marginLeft: "20px",
-                    fontSize:'1.25em'
+                    fontSize:'1em'
                 }}
             />
             <Row>
                 {
-                  Array('Human', 'Mouse', 'Bird', 'Horse', 'Cat', 'Dog', 'Fish').map(a => (
-                    <QuickPlotGeneratorSelection
-                        name={a}
-                    />
-                  ))
+                props.organisms && props.organisms.map((o) => (
+                    <QuickPlotGeneratorSelection name={o} key={o} />
+                ))
                 }
             </Row>
         </>

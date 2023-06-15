@@ -8,7 +8,7 @@ const QuickPlotGeneratorSelection = (props) => {
             <Card span={4} style={{
             width: "8vh",
             height: "8vh",
-            margin: "20px",
+            margin: "15px",
             borderRadius: "50px",
             overflow: "hidden"
             }}></Card>

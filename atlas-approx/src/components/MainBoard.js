@@ -41,6 +41,21 @@ const MainBoard = () => {
         data: plotData
     })
 
+    const [organismsPanel, setOrganismsPanel] = useState([]);
+
+    useEffect(() => {
+        async function fetchOrganismsPanel() {
+            const api = new Api();
+            const organismsResult = await api.getOrganisms();
+            console.log("Testing here !!!!!!")
+            console.log(organismsResult);
+
+            setOrganismsPanel([...organismsResult]);
+            console.log("type of organismsPanel is !! " + typeof(organismsPanel));
+        }
+        fetchOrganismsPanel();
+    }, []);
+
     // run this function to update User's 
     useEffect(() => {
         async function parseUserInstruction() {
@@ -95,10 +110,12 @@ const MainBoard = () => {
             <Layout style={{backgroundColor:"RGB(240,242,245)"}}>
                 <Navbar/>
                 <Content>
-                    <QuickPlotGenerator/>
+                    <QuickPlotGenerator
+                        organisms={organismsPanel || []}
+                    />
                     <Card 
                         id='canvas' 
-                        style={{backgroundColor:'white', height: "68vh", margin:"2%"}}
+                        style={{backgroundColor:'white', height: "70vh", margin:"2%"}}
                     >{
                         plotState.data.values.length !== 0 ?
                         <PlotBox
