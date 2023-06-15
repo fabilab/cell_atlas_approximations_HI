@@ -1,96 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
-import Heatmap from './plots/Heatmap';
-import Api from "../Api";
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
+import transpose from "../utils/math";
 
-const MainBoard = () => {
+function MainBoard() {
 
-    // / history of the chat (both the box and the user's message)
-    const [userInstructions, setUserInstructions] = useState([]);
-    
-    const [plotData, setPlotData] = useState({
-        // type: "matrix",
-        // xaxis: [cell types],
-        // yaxis: [gene1, gene2],
-        // values: [[0, 1, 4, ...], [...]],
-        // valueUnit: "counts per ten thousand",
-        type: "", 
-        xaxis: [],
-        yaxis: [],
-        values: [],
-        valueUnit: "counts per ten thousand",
-    })
-    
-    const [plotState, setPlotState] = useState({
-        intent: "average",
-        plotType: "heatmap",
-        organism: "",
-        organ: "",
-        features: [],
-        transforms: [],
-        data: plotData
-    })
+    const chatBox = useRef();
+    const plotBox = useRef();
+    const [stale, setStale] = useState(false);
 
     // run this function to update User's 
     useEffect(() => {
-        async function parseUserInstruction() {
+        if (!stale)
+            return;
 
-            const latestInstruction = userInstructions.slice(-2)[0];
-            if (latestInstruction) {
-                // console.log(`latest instruction is ${userInstructions.slice(-2)[0].message}`);
-                const [organism, organ, featureString] = latestInstruction.message.split(',');
-                const features = featureString.split(' ');
+        async function updatePlot() {
+            // If the NLP response has side-effects, i.e. carries data to be plotted, deal with them
+            const latestResponse = chatBox.current.userInstructions.slice(-1)[0];
+            const organism = latestResponse.organism;
+            const organ = latestResponse.organ;
+            const celltypes = await window.atlasapproxAPI("celltypes", { organism: organism, organ: organ });
+            const features = latestResponse.features.split(",");
+            let matrix;
+            if (latestResponse.intent === "average")
+                matrix = latestResponse.average;
+            else if (latestResponse.intent === "fraction_detected")
+                matrix = latestResponse.fractions;
+            matrix = transpose(matrix);
 
-                const api = new Api();
-                const result = await api.getAvgExpression(organism, organ, features);
-
-                function transpose(matrix) {
-                    return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
-                }
-
-                const newPlotData = {
-                    ...plotData, // ... = exact copy of this
+            const newPlotState = {
+                ...plotBox.current.state,
+                organism,
+                organ,
+                features,
+                data: {
+                    ...plotBox.current.state.data, // ... = exact copy of this
                     type: "matrix",
-                    xaxis: result.celltypes,
-                    yaxis: result.features,
-                    values: transpose(result.average)
+                    xaxis: celltypes,
+                    yaxis: features,
+                    values: matrix
                 }
-
-                const newPlotState = {
-                    ...plotState,
-                    organism,
-                    organ,
-                    features,
-                    data: newPlotData
-                }
-                
-                setPlotData(newPlotData);
-                setPlotState(newPlotState);
-
             }
-        };
-        parseUserInstruction();
-    }, [userInstructions])
+            
+            plotBox.current.setState(newPlotState);
+            setStale(false);
+        }
+        updatePlot();
+
+    }, [stale])
 
     return (
         <div className="columns mb-0 pb-0 has-background-light" style={{position:"absolute",height:"100%", width:"100%"}}>
             <div className="column is-4" style={{height:'inherit'}}>
                 <ChatBox 
-                    userInstructions={userInstructions}
-                    setUserInstructions={(newSetOfInstructions) => setUserInstructions(newSetOfInstructions)} // if the user types in a new instruction, I need to be able to update it
-                    context={{}}
+                    ref={ chatBox }
+                    setParentStale={() => setStale(true)}
                 />
             </div>
             <div className="column is-8" id='canvas'>
                 {
-                    plotState.data.values.length !== 0 ?
-                    <PlotBox
-                        state={plotState}
-                    />
-                    :
-                    <></>
+                <PlotBox
+                    ref={ plotBox }
+                />
                 }
             </div>
         </div>

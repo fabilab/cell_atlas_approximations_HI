@@ -1,45 +1,72 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import Message from "./Message";
-import generateSystemResponse from "../utils/generateSystemResponse";
+import triggersPlot from "../utils/generateSystemResponse";
 
 // pass in both the old and new user instructions as props
-const ChatBox = (props) => {
+const ChatBox = forwardRef((props, ref) => {
 
     const [currentMessage, setCurrentMessage] = useState(''); // message string that the user is typing
+    // / history of the chat (both the box and the user's message)
+    const [userInstructions, setUserInstructions] = useState([]);
+    const [chatContext, setChatContext] = useState({});
 
     // Reply message to user
-    const sendMessage = (text) => {
-
-        let context = props.context;
-
-        if (text === 'clear') {
-            context = props.context = {};
-            props.setUserInstructions([]);
-            setCurrentMessage('');
-        } else {
-            const systemMessage = generateSystemResponse(text, context);
-            const messagesArray = [...props.userInstructions]; // this will become the new set of instructions
-            const today = new Date();
-            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-            messagesArray.push({role: 'user', message: text, time: time});
-            messagesArray.push({role: 'system', message: systemMessage, time: time});
-
-            props.setUserInstructions(messagesArray); // let parent know that I am updating the set of instructions
-            setCurrentMessage('');
+    const handleSubmit = ((text) => {
+        async function sendMessageAsync(text) {
+            if (text === 'clear') {
+                setUserInstructions([]);
+                setChatContext({});
+                setCurrentMessage('');
+                return "";
+            } else {
+                return window.ask(text, chatContext);
+            }
         }
-    };
 
-    const handleSubmit = (text) => {
-        sendMessage(text);
-    }
+        return sendMessageAsync(text)
+            .then((response) => { 
+                if (response === "")
+                    return;
+
+                const messagesArray = [...userInstructions]; // this will become the new set of instructions
+                const today = new Date();
+                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+                //console.log(text);
+                //console.log(response);
+
+                messagesArray.push({role: 'user', message: text, time: time});
+                messagesArray.push({role: 'system', message: response.answer, time: time, response: response});
+
+                // update state
+                setUserInstructions(messagesArray);
+                setChatContext(chatContext);
+
+                // reset current message
+                setCurrentMessage('');
+
+                // decide if this answer triggers a plot update
+
+                const latestResponse = userInstructions.slice(-1)[0];
+                //console.log(latestResponse);
+
+                console.log("check if plot update is needed");
+
+                // If the NLP response has no side-effect for the plot, exit
+                if (triggersPlot(latestResponse)) {
+                    console.log("triggering plot update");
+                    props.setParentStale();
+                }
+
+            });
+    })
 
     return (
         <div className="box" style={{height:'inherit'}}>
             <div className="box has-background-info-light" style={{height:'90%', overflow:'scroll'}}>
                 {
-                    (props.userInstructions.length !== 0) && 
-                    props.userInstructions.map(m => <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message}/>)
+                    (userInstructions.length !== 0) && 
+                     userInstructions.map(m => <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message}/>)
                 }
             </div>
             <div className="block">
@@ -59,6 +86,6 @@ const ChatBox = (props) => {
             </div>
         </div>
     );
-}
+})
 
 export default ChatBox
