@@ -1,4 +1,4 @@
-const generateSystemResponse = (userMessage) => {
+const generateSystemResponse = (userMessage, context) => {
     
     // assume user types genes in space separated format
     // if (userMessage.includes('CAR4') || userMessage.includes('CD19')) {
@@ -6,7 +6,10 @@ const generateSystemResponse = (userMessage) => {
     //     updateGeneList(userGeneList);
     //     return 'Heatmap updated';
     // }
-    return 'Hi Ying';
+
+    let response = await ask("question", context);
+
+    return '(echo) ' + userMessage;
 }
 
 export default generateSystemResponse

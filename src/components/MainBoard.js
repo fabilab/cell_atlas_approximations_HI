@@ -80,6 +80,7 @@ const MainBoard = () => {
                 <ChatBox 
                     userInstructions={userInstructions}
                     setUserInstructions={(newSetOfInstructions) => setUserInstructions(newSetOfInstructions)} // if the user types in a new instruction, I need to be able to update it
+                    context={{}}
                 />
             </div>
             <div className="column is-8" id='canvas'>

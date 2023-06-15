@@ -7,15 +7,17 @@ const ChatBox = (props) => {
 
     const [currentMessage, setCurrentMessage] = useState(''); // message string that the user is typing
 
-
     // Reply message to user
     const sendMessage = (text) => {
 
+        let context = props.context;
+
         if (text === 'clear') {
+            context = props.context = {};
             props.setUserInstructions([]);
             setCurrentMessage('');
         } else {
-            const systemMessage = generateSystemResponse(text);
+            const systemMessage = generateSystemResponse(text, context);
             const messagesArray = [...props.userInstructions]; // this will become the new set of instructions
             const today = new Date();
             const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
