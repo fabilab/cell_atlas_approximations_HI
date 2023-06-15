@@ -1,15 +1,14 @@
-const generateSystemResponse = (userMessage, context) => {
-    
-    // assume user types genes in space separated format
-    // if (userMessage.includes('CAR4') || userMessage.includes('CD19')) {
-    //     const userGeneList = userMessage.split(' ');
-    //     updateGeneList(userGeneList);
-    //     return 'Heatmap updated';
-    // }
+// decide if an NLP response triggers a plot update
+const triggersPlot = ((response) => {
+    if (!response)
+        return false;
+    if (!response.complete)
+        return false;
+    const plottableIntents = ["average", "fraction_detected"];
+    const generalIntent = response.intent.split(".")[0];
+    console.log("general intent:");
+    console.log(generalIntent);
+    return plottableIntents.includes(generalIntent);
+});
 
-    let response = await ask("question", context);
-
-    return '(echo) ' + userMessage;
-}
-
-export default generateSystemResponse
+export default triggersPlot
