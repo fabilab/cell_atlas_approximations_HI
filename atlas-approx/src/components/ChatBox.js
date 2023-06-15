@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { GithubOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import generateSystemResponse from "../utils/generateSystemResponse";
+
+import { Layout, Row, Input, Col } from "antd";
+const { Sider } = Layout;
 
 // pass in both the old and new user instructions as props
 const ChatBox = (props) => {
 
     const [currentMessage, setCurrentMessage] = useState(''); // message string that the user is typing
-
 
     // Reply message to user
     const sendMessage = (text) => {
@@ -33,29 +36,25 @@ const ChatBox = (props) => {
     }
 
     return (
-        <div className="box" style={{height:'inherit'}}>
-            <div className="box has-background-info-light" style={{height:'90%', overflow:'scroll'}}>
+        <Sider width={"25vw"} style={{padding:"1%", backgroundColor:"#263238"}}>
+            <div style={{ width: "inherit", height: "80vh", overflow:"scroll"}}>
                 {
                     (props.userInstructions.length !== 0) && 
                     props.userInstructions.map(m => <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message}/>)
                 }
             </div>
-            <div className="block">
-                <div className="control has-icons-right">
-                    <input 
-                        className="input" 
-                        type="text" 
-                        placeholder="Send a message."
-                        value={currentMessage}
-                        onChange={(e) => setCurrentMessage(e.target.value)}
-                        onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
-                        />
-                    <span className="icon is-right">
-                        <i className="far fa-paper-plane"></i>
-                    </span>
-                </div>      
-            </div>
-        </div>
+            <div style={{height:"5vh"}}></div>
+            <Row>
+                <Input.TextArea
+                    allowClear
+                    placeholder="Send a message"
+                    autoSize={{ minRows: 4, maxRows: 5 }}
+                    value={currentMessage}
+                    onChange={(e) => setCurrentMessage(e.target.value)}
+                    onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
+                />
+            </Row>
+        </Sider>
     );
 }
 

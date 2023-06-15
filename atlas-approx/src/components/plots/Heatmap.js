@@ -1,10 +1,5 @@
 import CanvasXpressReact from 'canvasxpress-react';
 
-// Source code: https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
-function transpose(matrix) {
-    return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
-}
-
 // props: arguments passed into React components
 const Heatmap = (props) => {
     const target = props.target;

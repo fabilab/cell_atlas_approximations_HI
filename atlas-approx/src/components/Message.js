@@ -1,8 +1,13 @@
+import { Col } from "antd";
+
 const Message = (props) => {
     const message = props.message;
+
+    const messageBoxMarginBottom = '1.5em';
+
     if (props.role === 'user') {
         return (
-            <div className="column is-7 is-offset-5">
+            <Col span={20} offset={4} style={{marginBottom:messageBoxMarginBottom}}>
                 <div className="media">
                     <div className="media-content">
                         <div className="box">
@@ -15,11 +20,11 @@ const Message = (props) => {
                         </figure>
                     </div>
                 </div>
-            </div>
+            </Col>
         );
     } else {
         return (
-            <div className="column is-7">
+            <Col span={20} style={{marginBottom:messageBoxMarginBottom}}>
                 <div className="media">
                     <div className="media-left">
                         <figure className="image is-32x32">
@@ -32,7 +37,8 @@ const Message = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Col>
+            
         );
     }
 }

@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Layout, Breadcrumb, Divider, Card } from 'antd';
 
 import Heatmap from './plots/Heatmap';
 import Api from "../Api";
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
+import Navbar from './Navbar';
+
+import background from "../asset/background_4.jpg";
+import QuickPlotGenerator from './QuickPlotGenerator';
+
+const { Content } = Layout;
+
 
 const MainBoard = () => {
 
@@ -40,12 +48,14 @@ const MainBoard = () => {
             const latestInstruction = userInstructions.slice(-2)[0];
             if (latestInstruction) {
                 // console.log(`latest instruction is ${userInstructions.slice(-2)[0].message}`);
-                const [organism, organ, featureString] = latestInstruction.message.split(',');
+                const str = latestInstruction.message.replace(/(\r\n|\n|\r)/gm, "");
+                const [organism, organ, featureString] = str.split(',');
                 const features = featureString.split(' ');
 
                 const api = new Api();
                 const result = await api.getAvgExpression(organism, organ, features);
 
+                // Source code: https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
                 function transpose(matrix) {
                     return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
                 }
@@ -70,29 +80,37 @@ const MainBoard = () => {
                 setPlotState(newPlotState);
 
             }
+            console.log(userInstructions);
         };
         parseUserInstruction();
     }, [userInstructions])
 
     return (
-        <div className="columns mb-0 pb-0 has-background-light" style={{position:"absolute",height:"100%", width:"100%"}}>
-            <div className="column is-4" style={{height:'inherit'}}>
-                <ChatBox 
-                    userInstructions={userInstructions}
-                    setUserInstructions={(newSetOfInstructions) => setUserInstructions(newSetOfInstructions)} // if the user types in a new instruction, I need to be able to update it
-                />
-            </div>
-            <div className="column is-8" id='canvas'>
-                {
-                    plotState.data.values.length !== 0 ?
-                    <PlotBox
-                        state={plotState}
-                    />
-                    :
-                    <></>
-                }
-            </div>
-        </div>
+        <Layout style={{minHeight: "100vh"}}>
+            <ChatBox
+                userInstructions={userInstructions}
+                setUserInstructions={(newSetOfInstructions) => setUserInstructions(newSetOfInstructions)} // if the user types in a new instruction, I need to be able to update it
+            />
+            {/* <Layout style={{backgroundImage:`url(${background})`}}> */}
+            <Layout style={{backgroundColor:"RGB(240,242,245)"}}>
+                <Navbar/>
+                <Content>
+                    <QuickPlotGenerator/>
+                    <Card 
+                        id='canvas' 
+                        style={{backgroundColor:'white', height: "68vh", margin:"2%"}}
+                    >{
+                        plotState.data.values.length !== 0 ?
+                        <PlotBox
+                            state={plotState}
+                        />
+                        :
+                        <></>
+                    }
+                    </Card>
+                </Content>
+            </Layout>
+        </Layout>
     )
 }
 
