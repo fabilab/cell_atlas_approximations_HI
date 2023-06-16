@@ -6,7 +6,7 @@ import triggersPlot from "../utils/chatSideEffects";
 const ChatBox = ({ userInstructions, setUserInstructions }) => {
 
     // message string that the user is typing
-    const [currentMessage, setCurrentMessage] = useState("");
+    const [currentMessage, setCurrentMessage] = useState("What is the expression of Ptprc in mouse lung?");
     // NLP context
     const [chatContext, setChatContext] = useState({});
 
@@ -65,7 +65,7 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
                     <input 
                         className="input" 
                         type="text" 
-                        placeholder="help me!!!"
+                        placeholder="help"
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                         onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
