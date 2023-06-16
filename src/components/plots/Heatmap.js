@@ -9,7 +9,7 @@ const Heatmap = (props) => {
 
     console.log("making heatmap");
 
-    var data =  {
+    let data =  {
         "y" : {
           "vars" : x_label,
           "smps" : y_label,
@@ -17,7 +17,12 @@ const Heatmap = (props) => {
         }
       };
 
-    var config = {
+    let nx = data.y.data[0].length;
+    let width = 50 + 30 * nx;
+    let ny = data.y.data.length;
+    let height = 50 + 30 * ny;
+
+    let config = {
         "graphOrientation": "vertical",
         "graphType": "Heatmap",
         "theme": "CanvasXpress",
@@ -26,7 +31,7 @@ const Heatmap = (props) => {
 
     return (
         //<div><img src="https://fabilab.org/images/logo2.png"></img></div>
-        <CanvasXpressReact target={target} data={data} config={config} width={500} height={500} />
+        <CanvasXpressReact target={target} data={data} config={config} width={width} height={height} />
    )
     
 

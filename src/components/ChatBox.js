@@ -1,16 +1,14 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState } from "react";
 import Message from "./Message";
 import triggersPlot from "../utils/chatSideEffects";
 
 // pass in both the old and new user instructions as props
-const ChatBox = forwardRef((props, ref) => {
+const ChatBox = ({ userInstructions, setUserInstructions }) => {
 
-    const [currentMessage, setCurrentMessage] = useState(""); // message string that the user is typing
-    // / history of the chat (both the box and the user's message)
-    const [userInstructions, setUserInstructions] = useState([]);
+    // message string that the user is typing
+    const [currentMessage, setCurrentMessage] = useState("");
+    // NLP context
     const [chatContext, setChatContext] = useState({});
-
-    useImperativeHandle(ref, () => ({getUserInstructions: () => {return userInstructions}}), [userInstructions]);
 
     // Reply message to user
     const handleSubmit = ((text) => {
@@ -32,27 +30,25 @@ const ChatBox = forwardRef((props, ref) => {
                 //console.log(text);
                 //console.log(response);
 
-                const messagesArray = [...userInstructions]; // this will become the new set of instructions
-                messagesArray.push({role: 'user', message: text, time: time});
-                messagesArray.push({role: 'system', message: response.answer, time: time, response: response});
-
-                // update state
-                setUserInstructions(messagesArray);
-                setChatContext(chatContext);
-
-                // reset current message
-                setCurrentMessage('');
-
                 // decide if this answer triggers a plot update
-
                 console.log("check if plot update is needed");
                 console.log(response);
 
                 // If the NLP response has no side-effect for the plot, exit
-                if (triggersPlot(response)) {
+                response.plot = triggersPlot(response);
+                if (response.plot) {
                     console.log("triggering plot update");
-                    props.setParentStale();
                 }
+
+                // update state
+                setCurrentMessage('');
+                setChatContext(chatContext);
+
+                // update parent state
+                const instructions = [...userInstructions]; // this will become the new set of instructions
+                instructions.push({role: 'user', message: text, time: time});
+                instructions.push({role: 'system', message: response.answer, time: time, response: response});
+                setUserInstructions(instructions);
             });
     })
 
@@ -81,6 +77,6 @@ const ChatBox = forwardRef((props, ref) => {
             </div>
         </div>
     );
-})
+};
 
 export default ChatBox
