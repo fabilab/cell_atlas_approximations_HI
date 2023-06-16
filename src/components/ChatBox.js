@@ -5,7 +5,7 @@ import triggersPlot from "../utils/chatSideEffects";
 // pass in both the old and new user instructions as props
 const ChatBox = forwardRef((props, ref) => {
 
-    const [currentMessage, setCurrentMessage] = useState("Plot expression of Ptprc,Col1a1 in mouse lung"); // message string that the user is typing
+    const [currentMessage, setCurrentMessage] = useState(""); // message string that the user is typing
     // / history of the chat (both the box and the user's message)
     const [userInstructions, setUserInstructions] = useState([]);
     const [chatContext, setChatContext] = useState({});
@@ -69,7 +69,7 @@ const ChatBox = forwardRef((props, ref) => {
                     <input 
                         className="input" 
                         type="text" 
-                        placeholder="What organisms are available?"
+                        placeholder="help me!!!"
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                         onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
