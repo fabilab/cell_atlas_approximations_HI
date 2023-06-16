@@ -34,11 +34,6 @@ const MainBoard = () => {
         return;
     }, [userInstructions]);
 
-    // update chat box based on plot, other clicks, etc.
-    useEffect(() => {
-        console.log("plot state has changed");
-    }, [plotState]);
-
     const updatePlotState = (response) => {
         (async () => {
             console.log("within async, response:");
