@@ -1,40 +1,38 @@
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import Message from "./Message";
-import triggersPlot from "../utils/generateSystemResponse";
+import triggersPlot from "../utils/chatSideEffects";
 
 // pass in both the old and new user instructions as props
 const ChatBox = forwardRef((props, ref) => {
 
-    const [currentMessage, setCurrentMessage] = useState(''); // message string that the user is typing
+    const [currentMessage, setCurrentMessage] = useState("Plot expression of Ptprc,Col1a1 in mouse lung"); // message string that the user is typing
     // / history of the chat (both the box and the user's message)
     const [userInstructions, setUserInstructions] = useState([]);
     const [chatContext, setChatContext] = useState({});
 
+    useImperativeHandle(ref, () => ({getUserInstructions: () => {return userInstructions}}), [userInstructions]);
+
     // Reply message to user
     const handleSubmit = ((text) => {
-        async function sendMessageAsync(text) {
-            if (text === 'clear') {
-                setUserInstructions([]);
-                setChatContext({});
-                setCurrentMessage('');
-                return "";
-            } else {
-                return window.ask(text, chatContext);
-            }
+        if (text === 'clear') {
+            setUserInstructions([]);
+            setChatContext({});
+            setCurrentMessage('');
+            return "";
         }
 
-        return sendMessageAsync(text)
+        return window.ask(text, chatContext)
             .then((response) => { 
                 if (response === "")
                     return;
 
-                const messagesArray = [...userInstructions]; // this will become the new set of instructions
                 const today = new Date();
                 const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
                 //console.log(text);
                 //console.log(response);
 
+                const messagesArray = [...userInstructions]; // this will become the new set of instructions
                 messagesArray.push({role: 'user', message: text, time: time});
                 messagesArray.push({role: 'system', message: response.answer, time: time, response: response});
 
@@ -47,17 +45,14 @@ const ChatBox = forwardRef((props, ref) => {
 
                 // decide if this answer triggers a plot update
 
-                const latestResponse = userInstructions.slice(-1)[0];
-                //console.log(latestResponse);
-
                 console.log("check if plot update is needed");
+                console.log(response);
 
                 // If the NLP response has no side-effect for the plot, exit
-                if (triggersPlot(latestResponse)) {
+                if (triggersPlot(response)) {
                     console.log("triggering plot update");
                     props.setParentStale();
                 }
-
             });
     })
 

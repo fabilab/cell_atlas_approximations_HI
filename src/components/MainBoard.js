@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
-import transpose from "../utils/math";
 
 function MainBoard() {
 
@@ -15,38 +14,9 @@ function MainBoard() {
         if (!stale)
             return;
 
-        async function updatePlot() {
-            // If the NLP response has side-effects, i.e. carries data to be plotted, deal with them
-            const latestResponse = chatBox.current.userInstructions.slice(-1)[0];
-            const organism = latestResponse.organism;
-            const organ = latestResponse.organ;
-            const celltypes = await window.atlasapproxAPI("celltypes", { organism: organism, organ: organ });
-            const features = latestResponse.features.split(",");
-            let matrix;
-            if (latestResponse.intent === "average")
-                matrix = latestResponse.average;
-            else if (latestResponse.intent === "fraction_detected")
-                matrix = latestResponse.fractions;
-            matrix = transpose(matrix);
-
-            const newPlotState = {
-                ...plotBox.current.state,
-                organism,
-                organ,
-                features,
-                data: {
-                    ...plotBox.current.state.data, // ... = exact copy of this
-                    type: "matrix",
-                    xaxis: celltypes,
-                    yaxis: features,
-                    values: matrix
-                }
-            }
-            
-            plotBox.current.setState(newPlotState);
-            setStale(false);
-        }
-        updatePlot();
+        const latestResponse = chatBox.current.getUserInstructions().slice(-1)[0].response;
+        plotBox.current.updateFromNLP(latestResponse);
+        setStale(false);
 
     }, [stale])
 
