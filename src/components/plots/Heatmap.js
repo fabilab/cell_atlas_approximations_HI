@@ -31,7 +31,13 @@ const Heatmap = (props) => {
 
     return (
         //<div><img src="https://fabilab.org/images/logo2.png"></img></div>
-        <CanvasXpressReact target={target} data={data} config={config} width={width} height={height} />
+        <CanvasXpressReact
+            target={target}
+            data={data}
+            config={config}
+            width={width}
+            height={height}
+        />
    )
     
 
