@@ -11,6 +11,7 @@ const PlotBox = (props) => {
                 yaxis={props.state.data.yaxis}
                 values={props.state.data.values}
                 organism={props.state.organism}
+                organ={props.state.organ}
             />
         );
     } else if (props.state.plotType === 'dotplot') {

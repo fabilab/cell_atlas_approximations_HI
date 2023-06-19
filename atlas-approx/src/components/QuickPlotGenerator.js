@@ -20,11 +20,13 @@ const QuickPlotGenerator = (props) => {
                 }
                 ]}
                 style={{
-                    marginLeft: "20px",
+                    marginLeft: "2vw",
+                    margin: "10px",
                     fontSize:'1em'
                 }}
             />
-            <Row>
+            <Row
+                style={{marginLeft:"1vw"}}>
                 {
                 props.organisms && props.organisms.map((o) => (
                     <QuickPlotGeneratorSelection name={o} key={o} />

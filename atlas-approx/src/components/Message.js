@@ -1,4 +1,6 @@
 import { Col } from "antd";
+import userImage from "../asset/user.jpg";
+import bot from "../asset/bot.jpg";
 
 const Message = (props) => {
     const message = props.message;
@@ -7,7 +9,7 @@ const Message = (props) => {
 
     if (props.role === 'user') {
         return (
-            <Col span={20} offset={4} style={{marginBottom:messageBoxMarginBottom}}>
+            <Col span={22} offset={4} style={{marginBottom:messageBoxMarginBottom}}>
                 <div className="media">
                     <div className="media-content">
                         <div className="box">
@@ -16,7 +18,7 @@ const Message = (props) => {
                     </div>
                     <div className="media-right">
                         <figure className="image is-32x32">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image"/>
+                            <img src={userImage} alt="Image"/>
                         </figure>
                     </div>
                 </div>
@@ -24,11 +26,11 @@ const Message = (props) => {
         );
     } else {
         return (
-            <Col span={20} style={{marginBottom:messageBoxMarginBottom}}>
+            <Col span={22} style={{marginBottom:messageBoxMarginBottom}}>
                 <div className="media">
                     <div className="media-left">
                         <figure className="image is-32x32">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image"/>
+                            <img src={bot} alt="Image"/>
                         </figure>
                     </div>
                     <div className="media-content">

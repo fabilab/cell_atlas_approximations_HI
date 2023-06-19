@@ -1,12 +1,12 @@
-const generateSystemResponse = (userMessage) => {
-    
-    // assume user types genes in space separated format
-    // if (userMessage.includes('CAR4') || userMessage.includes('CD19')) {
-    //     const userGeneList = userMessage.split(' ');
-    //     updateGeneList(userGeneList);
-    //     return 'Heatmap updated';
-    // }
-    return 'Hi Ying';
-}
 
-export default generateSystemResponse
+const generateSystemResponse = async (userMessage, context) => {
+    try {
+      const response = await window.ask(userMessage, context);
+      return response; // return the response object if successful
+    } catch (error) {
+      return null; // return null in case of an error
+    }
+  };
+  
+export default generateSystemResponse;
+  

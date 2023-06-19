@@ -19,7 +19,7 @@ const Heatmap = (props) => {
         "graphOrientation": "vertical",
         "graphType": "Heatmap",
         "theme": "CanvasXpress",
-        "title": "Heatmap of gene expression in " + props.organism,
+        "title": `Heatmap of gene expression in ${props.organism} ${props.organ}`,
     };
 
     return (

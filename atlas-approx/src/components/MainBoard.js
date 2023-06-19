@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Breadcrumb, Divider, Card } from 'antd';
+import { Layout, Breadcrumb, Divider, Card, Menu } from 'antd';
 
 import Heatmap from './plots/Heatmap';
 import Api from "../Api";
@@ -7,10 +7,10 @@ import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import Navbar from './Navbar';
 
-import background from "../asset/background_4.jpg";
 import QuickPlotGenerator from './QuickPlotGenerator';
+import Landing from './Landing';
 
-const { Content } = Layout;
+const { Content, Header, Sider } = Layout;
 
 
 const MainBoard = () => {
@@ -61,7 +61,7 @@ const MainBoard = () => {
         async function parseUserInstruction() {
 
             const latestInstruction = userInstructions.slice(-2)[0];
-            if (latestInstruction) {
+            if (latestInstruction && latestInstruction.message.includes(',')) {
                 // console.log(`latest instruction is ${userInstructions.slice(-2)[0].message}`);
                 const str = latestInstruction.message.replace(/(\r\n|\n|\r)/gm, "");
                 const [organism, organ, featureString] = str.split(',');
@@ -107,15 +107,15 @@ const MainBoard = () => {
                 setUserInstructions={(newSetOfInstructions) => setUserInstructions(newSetOfInstructions)} // if the user types in a new instruction, I need to be able to update it
             />
             {/* <Layout style={{backgroundImage:`url(${background})`}}> */}
-            <Layout style={{backgroundColor:"RGB(240,242,245)"}}>
+            <Layout style={{backgroundColor:"#fafafa"}}>
                 <Navbar/>
-                <Content>
+                {/* <Content>
                     <QuickPlotGenerator
                         organisms={organismsPanel || []}
                     />
                     <Card 
                         id='canvas' 
-                        style={{backgroundColor:'white', height: "70vh", margin:"2%"}}
+                        style={{backgroundColor:'white', height: "73vh", margin:"2%", marginTop:"0px"}}
                     >{
                         plotState.data.values.length !== 0 ?
                         <PlotBox
@@ -125,6 +125,11 @@ const MainBoard = () => {
                         <></>
                     }
                     </Card>
+                </Content> */}
+                <Content
+                    style={{margin:"30px", backgroundColor:"inherit"}}
+                >
+                     <Landing/>
                 </Content>
             </Layout>
         </Layout>
