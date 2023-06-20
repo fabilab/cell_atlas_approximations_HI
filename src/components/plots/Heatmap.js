@@ -1,7 +1,8 @@
 import CanvasXpressReact from 'canvasxpress-react';
 
 // props: arguments passed into React components
-const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {  
+const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => { 
+    console.log("start generating plot for..." + organism + "---" + organ + "---" + yaxis); 
     let data =  {
         "y" : {
           "vars" : xaxis,
@@ -18,10 +19,13 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
     };
 
     return (
-        <CanvasXpressReact target={target} data={data} config={config} width={500} height={500} />
+        <CanvasXpressReact 
+          target={target} 
+          data={data} 
+          config={config} 
+          width={500} 
+          height={500} />
    )
-    
-
     }
 
 export default Heatmap;

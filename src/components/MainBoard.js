@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Breadcrumb, Divider, Card, Menu } from 'antd';
+import { Layout, Card, Menu } from 'antd';
 
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import Navbar from './Navbar';
 
-import QuickPlotGenerator from './QuickPlotGenerator';
 import Landing from './Landing';
+import Heatmap from './plots/Heatmap';
 
-const { Content, Header, Sider } = Layout;
+const { Content } = Layout;
 
 
 const MainBoard = () => {
@@ -48,8 +48,11 @@ const MainBoard = () => {
             const organism = response.data.organism;
             const organ = response.data.organ;
             const features = response.data.features;
-            const celltypes = await window.atlasapproxAPI(
+            
+            // !! Need to extract the celltypes field from the celltypes API response !!
+            const celltypesResponse = await window.atlasapproxAPI(
                 "celltypes", { organism: organism, organ: organ });
+            const celltypes = celltypesResponse.celltypes;
 
             const intent = response.intent;
             const generalIntent = intent.split(".")[0];
@@ -88,35 +91,36 @@ const MainBoard = () => {
 
     return (
         <Layout style={{minHeight: "100vh"}}>
-            <ChatBox 
+            <ChatBox
+                // ref={ ChatBox }
                 userInstructions={ userInstructions }
-                setUserInstructions={ setUserInstructions }
+                setUserInstructions={ (e) => setUserInstructions(e) }
             />
 
             <Layout style={{backgroundColor:"#fafafa"}}>
                 <Navbar/>
-                {/* <Content>
-                    <QuickPlotGenerator
-                        organisms={organismsPanel || []}
-                    />
+                <Content>
+                    <div style={{height:"5vh"}}></div>
                     <Card 
-                        id='canvas' 
                         style={{backgroundColor:'white', height: "73vh", margin:"2%", marginTop:"0px"}}
-                    >{
-                        plotState.data.values.length !== 0 ?
-                        <PlotBox
-                            state={plotState}
-                            setState={ serPlotState }
-                        />
-                        :
-                        <></>
-                    }
+                    >
+                        <div id='canvas'>
+                            {
+                                plotState.data.values.length !== 0 ?
+                                <PlotBox
+                                    state={ plotState }
+                                    // setState={ setPlotState }
+                                />
+                                :
+                                <></>
+                            }
+                        </div>
                     </Card>
-                </Content> */}
+                </Content>
                 <Content
                     style={{margin:"30px", backgroundColor:"inherit"}}
                 >
-                    <Landing/>
+                    {/* <Landing/> */}
                 </Content>
             </Layout>
         </Layout>

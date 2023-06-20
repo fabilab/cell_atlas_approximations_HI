@@ -15,13 +15,14 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
         chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
     }, [{ userInstructions, setUserInstructions }]);
     // message string that the user is typing
-    const [currentMessage, setCurrentMessage] = useState("What is the expression of Ptprc in mouse lung?");
+    const [currentMessage, setCurrentMessage] = useState('');
     // NLP context
     const [chatContext, setChatContext] = useState({});
 
     // Reply message to user
     const handleSubmit = ((text) => {
         if (text === 'clear') {
+
             setUserInstructions([]);
             setChatContext({});
             setCurrentMessage('');
@@ -35,9 +36,6 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
 
                 const today = new Date();
                 const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-                //console.log(text);
-                //console.log(response);
 
                 // decide if this answer triggers a plot update
                 console.log("check if plot update is needed");
@@ -73,11 +71,10 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
             <Row>
                 <Input.TextArea
                     allowClear
-                    placeholder="help"
                     autoSize={{ minRows: 4, maxRows: 5 }}
                     value={currentMessage}
-                    onChange={(e) => setCurrentMessage(e.target.value)}
-                    onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
+                    onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+                    onKeyDown={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
                 />
             </Row>
         </Sider>

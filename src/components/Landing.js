@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Row, Image, Typography, Layout } from 'antd';
+import { Card, Col, Row, Typography } from 'antd';
 import heatmapSample from '../asset/plots/heatmap.png';
 import dotplotSample from '../asset/plots/dotplot.png';
 import networkSample from '../asset/plots/network.png';
