@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { GithubOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import triggersPlot from "../utils/chatSideEffects";
 
-import { Layout, Row, Input, Col } from "antd";
+import { Layout, Row, Input } from "antd";
 const { Sider } = Layout;
 
 // pass in both the old and new user instructions as props
