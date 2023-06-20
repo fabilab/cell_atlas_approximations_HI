@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Layout, Breadcrumb, Divider, Card, Menu } from 'antd';
 
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
-import transpose from "../utils/math";
+import Navbar from './Navbar';
+
+import QuickPlotGenerator from './QuickPlotGenerator';
+import Landing from './Landing';
+
+const { Content, Header, Sider } = Layout;
+
 
 const MainBoard = () => {
 
@@ -47,6 +54,10 @@ const MainBoard = () => {
             const intent = response.intent;
             const generalIntent = intent.split(".")[0];
 
+            // Source code: https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
+            function transpose(matrix) {
+                return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
+            }
             let matrix;
             if (generalIntent === "average")
                 matrix = response.data.average;
@@ -76,23 +87,40 @@ const MainBoard = () => {
     };
 
     return (
-        <div className="columns mb-0 pb-0 has-background-light" style={{position:"absolute",height:"100%", width:"100%"}}>
-            <div className="column is-4" style={{height:'inherit'}}>
-                <ChatBox 
-                    userInstructions={ userInstructions }
-                    setUserInstructions={ setUserInstructions }
-                />
-            </div>
-            <div className="column is-8" id='canvas'>
-                {
-                <PlotBox
-                    state={ plotState }
-                    setState={ setPlotState }
-                />
-                }
-            </div>
-        </div>
+        <Layout style={{minHeight: "100vh"}}>
+            <ChatBox 
+                userInstructions={ userInstructions }
+                setUserInstructions={ setUserInstructions }
+            />
+
+            <Layout style={{backgroundColor:"#fafafa"}}>
+                <Navbar/>
+                {/* <Content>
+                    <QuickPlotGenerator
+                        organisms={organismsPanel || []}
+                    />
+                    <Card 
+                        id='canvas' 
+                        style={{backgroundColor:'white', height: "73vh", margin:"2%", marginTop:"0px"}}
+                    >{
+                        plotState.data.values.length !== 0 ?
+                        <PlotBox
+                            state={plotState}
+                            setState={ serPlotState }
+                        />
+                        :
+                        <></>
+                    }
+                    </Card>
+                </Content> */}
+                <Content
+                    style={{margin:"30px", backgroundColor:"inherit"}}
+                >
+                    <Landing/>
+                </Content>
+            </Layout>
+        </Layout>
     )
-};
+}
 
 export default MainBoard;
