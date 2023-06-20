@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { GithubOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import triggersPlot from "../utils/chatSideEffects";
+
+import { Layout, Row, Input, Col } from "antd";
+const { Sider } = Layout;
 
 // pass in both the old and new user instructions as props
 const ChatBox = ({ userInstructions, setUserInstructions }) => {
 
+    // auto scroll
+    const chatboxRef = useRef(null);
+    useEffect(() => {
+        // Scroll to the bottom when messages change (source: chatgpt)
+        chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+    }, [{ userInstructions, setUserInstructions }]);
     // message string that the user is typing
     const [currentMessage, setCurrentMessage] = useState("What is the expression of Ptprc in mouse lung?");
     // NLP context
@@ -53,29 +63,25 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
     })
 
     return (
-        <div className="box" style={{height:'inherit'}}>
-            <div className="box has-background-info-light" style={{height:'90%', overflow:'scroll'}}>
+        <Sider width={"25vw"} style={{padding:"1%", backgroundColor:"#263238"}}>
+            <div style={{ width: "inherit", height: "80vh", overflow:"scroll"}} ref={chatboxRef}>
                 {
                     (userInstructions.length !== 0) && 
                      userInstructions.map(m => <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message}/>)
                 }
             </div>
-            <div className="block">
-                <div className="control has-icons-right">
-                    <input 
-                        className="input" 
-                        type="text" 
-                        placeholder="help"
-                        value={currentMessage}
-                        onChange={(e) => setCurrentMessage(e.target.value)}
-                        onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
-                        />
-                    <span className="icon is-right">
-                        <i className="far fa-paper-plane"></i>
-                    </span>
-                </div>      
-            </div>
-        </div>
+            <div style={{height:"5vh"}}></div>
+            <Row>
+                <Input.TextArea
+                    allowClear
+                    placeholder="help"
+                    autoSize={{ minRows: 4, maxRows: 5 }}
+                    value={currentMessage}
+                    onChange={(e) => setCurrentMessage(e.target.value)}
+                    onKeyUp={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
+                />
+            </Row>
+        </Sider>
     );
 };
 
