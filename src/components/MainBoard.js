@@ -83,8 +83,6 @@ const MainBoard = () => {
                     valueUnit: "counts per ten thousand"
                 }
             }
-            console.log("new plot state:");
-            console.log(newPlotState);
             setPlotState(newPlotState);
         })();
     };
@@ -92,36 +90,33 @@ const MainBoard = () => {
     return (
         <Layout style={{minHeight: "100vh"}}>
             <ChatBox
-                // ref={ ChatBox }
                 userInstructions={ userInstructions }
                 setUserInstructions={ (e) => setUserInstructions(e) }
             />
 
             <Layout style={{backgroundColor:"#fafafa"}}>
                 <Navbar/>
-                <Content>
-                    <div style={{height:"5vh"}}></div>
-                    <Card 
-                        style={{backgroundColor:'white', height: "73vh", margin:"2%", marginTop:"0px"}}
-                    >
-                        <div id='canvas'>
-                            {
-                                plotState.data.values.length !== 0 ?
+                {plotState.data.values.length !== 0 &&
+                    <Content>
+                        <div style={{height:"5vh"}}></div>
+                        <Card 
+                            style={{backgroundColor:'white', height: "73vh", margin:"2%", marginTop:"0px"}}
+                        >
+                            <div id='canvas'>
                                 <PlotBox
                                     state={ plotState }
-                                    // setState={ setPlotState }
                                 />
-                                :
-                                <></>
-                            }
-                        </div>
-                    </Card>
-                </Content>
-                <Content
-                    style={{margin:"30px", backgroundColor:"inherit"}}
-                >
-                    {/* <Landing/> */}
-                </Content>
+                            </div>
+                        </Card>
+                    </Content>
+                }
+                {plotState.data.values.length === 0 &&
+                    <Content
+                        style={{margin:"30px", backgroundColor:"inherit"}}
+                    >
+                        <Landing/>
+                    </Content>
+                }
             </Layout>
         </Layout>
     )

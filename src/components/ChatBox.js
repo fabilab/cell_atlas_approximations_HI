@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import triggersPlot from "../utils/chatSideEffects";
-
 import { Layout, Row, Input } from "antd";
 const { Sider } = Layout;
 
@@ -18,6 +17,12 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
     const [currentMessage, setCurrentMessage] = useState('');
     // NLP context
     const [chatContext, setChatContext] = useState({});
+    const [welcomeMessage, setWelcomeMessage] = useState(false);
+
+    // Display a auto bot message when the page load
+    useEffect(() => {
+        setWelcomeMessage(true);
+    });
 
     // Reply message to user
     const handleSubmit = ((text) => {
@@ -61,11 +66,27 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
 
     return (
         <Sider width={"25vw"} style={{padding:"1%", backgroundColor:"#263238"}}>
-            <div style={{ width: "inherit", height: "80vh", overflow:"scroll"}} ref={chatboxRef}>
-                {
-                    (userInstructions.length !== 0) && 
-                     userInstructions.map(m => <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message}/>)
-                }
+            <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
+                {welcomeMessage && (
+                    <Message
+                        key="welcome-message"
+                        role="system"
+                        message={
+                        <>
+                            Welcome to AtlasApprox! Click 
+                            {" "}
+                            <a href="https://github.com/fabilab/cell_atlas_approximations">
+                            Help
+                            </a>{" "}
+                            for the user menu.
+                        </>
+                        }
+                    />
+                )}
+                {userInstructions.length !== 0 &&
+                userInstructions.map((m) => (
+                    <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message} />
+                ))}
             </div>
             <div style={{height:"5vh"}}></div>
             <Row>

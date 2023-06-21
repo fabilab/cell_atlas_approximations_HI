@@ -4,10 +4,10 @@ import heatmapSample from '../asset/plots/heatmap.png';
 import dotplotSample from '../asset/plots/dotplot.png';
 import networkSample from '../asset/plots/network.png';
 import { Content } from 'react-bulma-components';
-
 const { Title } = Typography;
 
-const LandingPage = () => {
+const Landing = () => {
+
   return (
     <div className="landing-page">
         <Title level={3} style={{ textAlign:'center', marginBottom:"5vh", marginTop:"5vh"}}>Zero-backend Single Cell Atlas Exploration</Title>
@@ -42,4 +42,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default Landing;
