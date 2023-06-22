@@ -9,7 +9,7 @@ const triggersPlot = ((response) => {
     if (!response.complete)
         return false;
 
-    const plottableIntents = ["average", "fraction_detected"];
+    const plottableIntents = ["average", "fraction_detected", "add"];
     const generalIntent = response.intent.split(".")[0];
     console.log("general intent:");
     console.log(generalIntent);

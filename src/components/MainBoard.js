@@ -42,30 +42,53 @@ const MainBoard = () => {
     }, [userInstructions]);
 
     const updatePlotState = (response) => {
+        // console.log(response);
         (async () => {
-            console.log("within async, response:");
-            console.log(response);
+            const intent = response.intent;
+            let generalIntent = intent.split(".")[0];
+
+            // need to fetch the data again, with (old_genes + new_genes)
+            // keep everything else the same: organism, organ
+            if (generalIntent === "add") {
+
+                const updatedFeatures = plotState.features.concat(response.params.features.split(','));
+                
+                response.data = await window.atlasapproxAPI(
+                    "average", 
+                    { 
+                        organism: plotState.organism, 
+                        organ: plotState.organ,  
+                        features: updatedFeatures.join(',')
+                    }
+                );
+                
+                // need to update the general intent to average, cause add does not return full data for plotting
+                generalIntent = 'average'
+
+            } 
+
             const organism = response.data.organism;
             const organ = response.data.organ;
             const features = response.data.features;
-            
-            // !! Need to extract the celltypes field from the celltypes API response !!
+
+            // Need to extract the celltypes field from the celltypes API response !!
             const celltypesResponse = await window.atlasapproxAPI(
                 "celltypes", { organism: organism, organ: organ });
             const celltypes = celltypesResponse.celltypes;
 
-            const intent = response.intent;
-            const generalIntent = intent.split(".")[0];
 
             // Source code: https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
             function transpose(matrix) {
                 return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
             }
             let matrix;
-            if (generalIntent === "average")
+            if (generalIntent === "average") {
                 matrix = response.data.average;
-            else if (generalIntent === "fraction_detected")
+            }
+            else if (generalIntent === "fraction_detected") {
                 matrix = response.data.fractions;
+            }
+            
             matrix = transpose(matrix);
 
             const plotType = "heatmap";
@@ -84,6 +107,10 @@ const MainBoard = () => {
                 }
             }
             setPlotState(newPlotState);
+            
+            
+            
+            
         })();
     };
 
@@ -102,9 +129,11 @@ const MainBoard = () => {
                         <Card 
                             style={{backgroundColor:'white', height: "73vh", margin:"2%", marginTop:"0px"}}
                         >
-                            <div id='canvas'>
+                            <div id='canvas' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <PlotBox
                                     state={ plotState }
+                                    
+                                    // setState={ setPlotState }
                                 />
                             </div>
                         </Card>

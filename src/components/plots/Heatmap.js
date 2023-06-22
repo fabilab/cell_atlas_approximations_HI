@@ -12,10 +12,10 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
       };
 
     let config = {
-      "graphOrientation": "vertical",
-      "graphType": "Heatmap",
-      "theme": "CanvasXpress",
-      "title": `Heatmap of gene expression in ${organism} ${organ}`,
+      graphOrientation: "vertical",
+      graphType: "Heatmap",
+      theme: "CanvasXpress",
+      title: `Heatmap of gene expression in ${organism} ${organ}`,
     };
 
     return (
@@ -23,8 +23,7 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
           target={target} 
           data={data} 
           config={config} 
-          width={500} 
-          height={500} />
+        />
    )
     }
 

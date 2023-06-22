@@ -18,11 +18,39 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
     // NLP context
     const [chatContext, setChatContext] = useState({});
     const [welcomeMessage, setWelcomeMessage] = useState(false);
+    const [messageHistory, setMessageHistory] = useState([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
 
     // Display a auto bot message when the page load
     useEffect(() => {
         setWelcomeMessage(true);
-    });
+    },[ ]);
+
+    const handleKey = (e) => {
+        if (e.key === 'Enter') {
+          handleSubmit(currentMessage);
+        } else if (e.key === 'ArrowUp') {
+          if (historyIndex === -1) {
+            // Save the current message to the history
+            setMessageHistory([...messageHistory, currentMessage]);
+            setHistoryIndex(messageHistory.length);
+          } else if (historyIndex > 0) {
+            const newIndex = historyIndex - 1;
+            setHistoryIndex(newIndex);
+            setCurrentMessage(messageHistory[newIndex]);
+          }
+        } else if (e.key === 'ArrowDown') {
+          if (historyIndex >= 0 && historyIndex < messageHistory.length - 1) {
+            const newIndex = historyIndex + 1;
+            setHistoryIndex(newIndex);
+            setCurrentMessage(messageHistory[newIndex]);
+          } else if (historyIndex === messageHistory.length - 1) {
+            setHistoryIndex(-1);
+            setCurrentMessage('');
+          }
+        }
+      };
+      
 
     // Reply message to user
     const handleSubmit = ((text) => {
@@ -95,7 +123,8 @@ const ChatBox = ({ userInstructions, setUserInstructions }) => {
                     autoSize={{ minRows: 4, maxRows: 5 }}
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-                    onKeyDown={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
+                    onKeyUp={handleKey}
+                    // onKeyDown={(e) => {e.key === 'Enter' && handleSubmit(currentMessage)}}
                 />
             </Row>
         </Sider>
