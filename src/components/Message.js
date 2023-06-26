@@ -9,7 +9,7 @@ const Message = (props) => {
 
     if (props.role === 'user') {
         return (
-            <Col xs={16} md={16} lg={18} xl={22} xxl={22} offset={2} style={{marginBottom:messageBoxMarginBottom}}>
+            <Col xs={18} md={22} lg={22} xl={22} xxl={22} offset={2} style={{marginBottom:messageBoxMarginBottom}}>
                 <div className="media">
                     <div className="media-content">
                         <div className="box">
@@ -26,7 +26,7 @@ const Message = (props) => {
         );
     } else {
         return (
-            <Col xs={16} md={16} lg={18} xl={22} xxl={22} style={{marginBottom:messageBoxMarginBottom}}>
+            <Col xs={18} md={22} lg={22} xl={22} xxl={22} style={{marginBottom:messageBoxMarginBottom}}>
                 <div className="media">
                     <div className="media-left">
                         <figure className="image is-32x32">

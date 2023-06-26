@@ -14,7 +14,9 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
     graphType: "Heatmap",
     theme: "CanvasXpress",
     title: `Heatmap of gene expression in ${organism} ${organ}`,
-
+    smpTitle:"Genes",
+    varTitle:"Cell types",
+    "varLabelRotate":"45",
   };
 
   return (

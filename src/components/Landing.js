@@ -12,7 +12,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
         'What organisms are available in AtlasApprox?',
         'List cell types in microcebus myoxinus pancreas',
         'What is the average expression of ALK,CD8A,CD19 in human lung?',
-        'What are the marker genes of a specific cell type in mouse pancreas?',
+        'show the marker genes for coronary in human heart.',
         'What is the fraction of IL6,TNF,APOE,COL1A1,ALK,CD8A,CD19,TP53 in human lung?',
     ];
 
@@ -49,7 +49,9 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
                     style={{
                         color: currentMessage === s ? '#fa541c' : 'initial',
                         cursor: 'pointer',
-                    }}>
+                        ':hover':{ color: 'lightblue' }
+                    }}
+                    >
                         {s}
                     </p>
                 ))}

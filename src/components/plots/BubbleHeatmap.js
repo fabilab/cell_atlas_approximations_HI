@@ -13,19 +13,22 @@ const BubbleHeatmap = ({ target, xaxis, yaxis, average, fractions, organism, org
       };
 
     let config = {
-      "graphType":"Heatmap",
-      "guides":"true",
-      "heatmapIndicatorPosition":"top",
-      "legendKeyBackgroundBorderColor":"rgba(255,255,255,0)",
-      "legendKeyBackgroundColor":"rgba(255,255,255,0)",
-      "objectBorderColor":"rgb(0,0,0)",
-      "samplesClustered":"true",
-      "showSmpDendrogram":"false",
-      "showVarDendrogram":"false",
-      "sizeBy":"Size",
-      "sizeByData":"data2",
-      "title":`Bubble Heatmap showing gene expression and fractions in ${organism} ${organ}`,
-      "variablesClustered":"true",
+      graphType:"Heatmap",
+      guides:"true",
+      heatmapIndicatorPosition:"top",
+      legendKeyBackgroundBorderColor:"rgba(255,255,255,0)",
+      legendKeyBackgroundColor:"rgba(255,255,255,0)",
+      objectBorderColor:"rgb0,0,0)",
+      samplesClustered:"true",
+      showSmpDendrogram:"false",
+      showVarDendrogram:"false",
+      sizeBy:"Size",
+      sizeByData:"data2",
+      title:`Bubble Heatmap showing gene expression and fractions in ${organism} ${organ}`,
+      variablesClustered:"true",
+      smpTitle:"Genes",
+      varTitle:"Cell types",
+      varLabelRotate:"45",
     };
 
     return (

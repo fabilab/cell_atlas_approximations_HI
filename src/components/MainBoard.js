@@ -28,9 +28,16 @@ const MainBoard = () => {
   useEffect(() => {
     if (userInstructions.length === 0) return;
     const latestResponse = userInstructions.slice(-1)[0].response;
+    // console.log("Show latest response....");
+    // console.log(latestResponse);
+    if (latestResponse.intent === "markers.geneExpression") {
+      latestResponse.plot = true;
+    }
     if (latestResponse.plot) updatePlotState(latestResponse);
   }, [userInstructions]);
 
+
+  // Generate and update plot according to user intends
   const updatePlotState = async (response) => {
     const intent = response.intent;
     let generalIntent = intent.split(".")[0];
@@ -38,6 +45,7 @@ const MainBoard = () => {
 
     if (generalIntent === "add") {
       const updatedFeatures = plotState.features.concat(response.params.features.split(','));
+      console.log(updatedFeatures);
       response.data = await window.atlasapproxAPI("average", {
         organism: plotState.organism,
         organ: plotState.organ,
@@ -48,10 +56,23 @@ const MainBoard = () => {
 
     const organism = response.data.organism;
     const organ = response.data.organ;
-    const features = response.data.features;
+    let features = response.data.features;
 
     const celltypesResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
     const celltypes = celltypesResponse.celltypes;
+
+    if (generalIntent === "markers") {
+      const markerFeatures = response.data.markers;
+      console.log(markerFeatures);
+      response.data = await window.atlasapproxAPI("average", {
+        organism: organism,
+        organ: organ,
+        features: markerFeatures,
+      });
+      features = markerFeatures;
+      generalIntent = 'average';
+      
+    }
 
     let average, fractions;
     if (generalIntent === "average") {
@@ -81,8 +102,6 @@ const MainBoard = () => {
         organ,
         features
       });
-      console.log("fraction ======")
-      console.log(averageResponse);
       averageResponse.average = averageResponse.average ? transpose(averageResponse.average) : null;
       console.log(fractions);
       const plotType = "bubbleHeatmap";
