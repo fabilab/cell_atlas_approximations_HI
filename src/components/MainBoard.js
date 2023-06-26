@@ -18,8 +18,12 @@ function transpose(matrix) {
 }
 
 const MainBoard = () => {
+
   const [userInstructions, setUserInstructions] = useState([]);
   const [plotState, setPlotState] = useState(null);
+  // message string that the user is typing
+  const [currentMessage, setCurrentMessage] = useState('');
+  
 
   useEffect(() => {
     if (userInstructions.length === 0) return;
@@ -68,8 +72,8 @@ const MainBoard = () => {
           valueUnit: "counts per ten thousand"
         }
       };
-      console.log("new plot state for heatmap average!!!====");
-      console.log(newPlotState);
+    //   console.log("new plot state for heatmap average!!!====");
+    //   console.log(newPlotState);
     } else if (generalIntent === "fraction_detected") {
       fractions = response.data.fraction_detected ? transpose(response.data.fraction_detected) : null;
       let averageResponse = await window.atlasapproxAPI("average", {
@@ -77,6 +81,7 @@ const MainBoard = () => {
         organ,
         features
       });
+      console.log("fraction ======")
       console.log(averageResponse);
       averageResponse.average = averageResponse.average ? transpose(averageResponse.average) : null;
       console.log(fractions);
@@ -103,24 +108,33 @@ const MainBoard = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <ChatBox userInstructions={userInstructions} setUserInstructions={setUserInstructions} />
+      <ChatBox 
+        userInstructions={userInstructions} 
+        setUserInstructions={setUserInstructions}
+        currentMessage={currentMessage}
+        setCurrentMessage={setCurrentMessage}
+      />
       <Layout style={{ backgroundColor: "#fafafa" }}>
         <Navbar />
-        {plotState && (
+        {plotState ? (
           <Content>
             <div style={{ height: "5vh" }}></div>
             <Card style={{ backgroundColor: 'white', height: "73vh", margin: "2%", marginTop: "0px" }}>
-              <div id='canvas' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <PlotBox state={plotState} />
               </div>
             </Card>
           </Content>
-        )}
-        {!plotState && (
-          <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
-            <Landing />
-          </Content>
-        )}
+        )
+        :
+        <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
+            <Landing
+              currentMessage={currentMessage}
+              setCurrentMessage={setCurrentMessage}
+            />
+        </Content>
+        
+        }
       </Layout>
     </Layout>
   );

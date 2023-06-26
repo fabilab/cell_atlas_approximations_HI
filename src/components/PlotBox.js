@@ -7,7 +7,7 @@ const PlotBox = ({ state }) => {
     if (state.plotType === 'heatmap') {
         return (
             <Heatmap
-                target="canvas"
+                target="canvasId"
                 xaxis={state.data.xaxis}
                 yaxis={state.data.yaxis}
                 values={state.data.average}
@@ -18,7 +18,7 @@ const PlotBox = ({ state }) => {
     } else if (state.plotType === 'bubbleHeatmap') {
         return (
             <BubbleHeatmap
-                target="canvas"
+                target="canvasId"
                 xaxis={state.data.xaxis}
                 yaxis={state.data.yaxis}
                 average={state.data.average}
