@@ -64,13 +64,13 @@ const MainBoard = () => {
     if (generalIntent === "markers") {
       const markerFeatures = response.data.markers;
       console.log(markerFeatures);
-      response.data = await window.atlasapproxAPI("average", {
+      response.data = await window.atlasapproxAPI("fraction_detected", {
         organism: organism,
         organ: organ,
         features: markerFeatures,
       });
       features = markerFeatures;
-      generalIntent = 'average';
+      generalIntent = 'fraction_detected';
       
     }
 
@@ -139,7 +139,7 @@ const MainBoard = () => {
           <Content>
             <div style={{ height: "5vh" }}></div>
             <Card style={{ backgroundColor: 'white', height: "73vh", margin: "2%", marginTop: "0px" }}>
-              <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <PlotBox state={plotState} />
               </div>
             </Card>
