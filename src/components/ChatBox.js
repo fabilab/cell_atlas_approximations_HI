@@ -29,7 +29,7 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                 const nextMessage = messageHistory[historyIndex+1].message;
                 setCurrentMessage(nextMessage);
                 setHistoryIndex(historyIndex + 1);
-            } else if (historyIndex == messageHistory.length-1) {
+            } else if (historyIndex === messageHistory.length-1) {
                 setCurrentMessage('');
             }
         }
@@ -61,10 +61,6 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                 const today = new Date();
                 const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-                // decide if this answer triggers a plot update
-                console.log("check if plot update is needed");
-                console.log(response);
-
                 // If the NLP response has no side-effect for the plot, exit
                 response.plot = triggersPlot(response);
                 if (response.plot) {
@@ -92,12 +88,13 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                         role="system"
                         message={
                         <>
-                            Welcome to AtlasApprox! Click 
+                            Welcome to AtlasApprox! <br></br><br></br>Type 
                             {" "}
-                            <a href="https://github.com/fabilab/cell_atlas_approximations">
-                            Help
+                            <b><a href="https://github.com/fabilab/cell_atlas_approximations">
+                            help
                             </a>{" "}
-                            for the user menu.
+                            </b>
+                            for info.
                         </>
                         }
                     />

@@ -12,33 +12,33 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
         'What organisms are available in AtlasApprox?',
         'List cell types in microcebus myoxinus pancreas',
         'What is the average expression of ALK,CD8A,CD19 in human lung?',
-        'show the marker genes for coronary in human heart.',
+        'Show the marker genes for coronary in human heart.',
         'What is the fraction of IL6,TNF,APOE,COL1A1,ALK,CD8A,CD19,TP53 in human lung?',
     ];
 
     return (
         <div className="landing-page">
-            <Title level={3} style={{ textAlign:'center', marginBottom:"5vh", marginTop:"5vh"}}>Zero-backend Single Cell Atlas Exploration</Title>
+            <Title level={2} style={{ textAlign:'center', marginBottom:"5vh", marginTop:"5vh"}}><b><u>Zero</u></b>-backend Cell Atlas Exploration</Title>
             <Row gutter={48} className="card-row">
-                <Col span={2} />
-                <Col span={5}>
+                <Col span={1} />
+                <Col span={6}>
                     <Card className="landing-plot">
                         <img src={heatmapSample} alt="Heatmap" />
                     </Card>
                 </Col>
-                <Col span={1} />
-                <Col span={8}>
+                {/* <Col span={1} /> */}
+                <Col span={9}>
                     <Card className="landing-plot">
                         <img src={dotplotSample} alt="Dot plot" />
                     </Card>
                 </Col>
-                <Col span={1} />
-                <Col span={5}>
+                {/* <Col span={1} /> */}
+                <Col span={6}>
                     <Card className="landing-plot">
                         <img src={networkSample} alt="Network" />
                     </Card>
                 </Col>
-                <Col span={2} />
+                <Col span={1} />
         </Row>
             <Content style={{ textAlign:'center', margin:'10vh'}}>
                 <Title level={4} style={{ marginBottom:"5vh", color:"#1890ff"}}>AtlasApprox enables biologists,doctors and data scientist to quickly find answers for questions such as:</Title>
@@ -47,7 +47,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
                     key={index} 
                     onClick={() => setCurrentMessage(s)}
                     style={{
-                        color: currentMessage === s ? '#fa541c' : 'initial',
+                        color: currentMessage === s ? '#fa8c16' : 'initial',
                         cursor: 'pointer',
                         ':hover':{ color: 'lightblue' }
                     }}

@@ -18,7 +18,6 @@ function transpose(matrix) {
 }
 
 const MainBoard = () => {
-
   const [userInstructions, setUserInstructions] = useState([]);
   const [plotState, setPlotState] = useState(null);
   // message string that the user is typing
@@ -29,14 +28,14 @@ const MainBoard = () => {
     if (userInstructions.length === 0) return;
     const latestResponse = userInstructions.slice(-1)[0].response;
     // console.log("Show latest response....");
-    // console.log(latestResponse);
+    console.log(latestResponse);
     if (latestResponse.intent === "markers.geneExpression") {
       latestResponse.plot = true;
     }
     if (latestResponse.plot) updatePlotState(latestResponse);
   }, [userInstructions]);
 
-
+  let average, fractions;
   // Generate and update plot according to user intends
   const updatePlotState = async (response) => {
     const intent = response.intent;
@@ -44,14 +43,26 @@ const MainBoard = () => {
     let newPlotState = null;
 
     if (generalIntent === "add") {
-      const updatedFeatures = plotState.features.concat(response.params.features.split(','));
-      console.log(updatedFeatures);
-      response.data = await window.atlasapproxAPI("average", {
-        organism: plotState.organism,
-        organ: plotState.organ,
-        features: updatedFeatures.join(',')
-      });
-      generalIntent = 'average';
+      const updatedFeatures = plotState.features + "," + response.params.features.split(',');
+      fractions = plotState.data.fractions;
+
+      // check if the "add" action apply to average or fraction
+      if(!fractions) {
+        console.log("No fraction, only average expression");
+        response.data = await window.atlasapproxAPI("average", {
+          organism: plotState.organism,
+          organ: plotState.organ,
+          features: updatedFeatures,
+        });
+        generalIntent = 'average';
+      } else {
+        response.data = await window.atlasapproxAPI("fraction_detected", {
+          organism: plotState.organism,
+          organ: plotState.organ,
+          features: updatedFeatures,
+        });
+        generalIntent = 'fraction_detected';
+      }
     }
 
     const organism = response.data.organism;
@@ -63,7 +74,6 @@ const MainBoard = () => {
 
     if (generalIntent === "markers") {
       const markerFeatures = response.data.markers;
-      console.log(markerFeatures);
       response.data = await window.atlasapproxAPI("fraction_detected", {
         organism: organism,
         organ: organ,
@@ -74,7 +84,6 @@ const MainBoard = () => {
       
     }
 
-    let average, fractions;
     if (generalIntent === "average") {
       average = response.data.average ? transpose(response.data.average) : null;
       const plotType = "heatmap";
@@ -93,9 +102,9 @@ const MainBoard = () => {
           valueUnit: "counts per ten thousand"
         }
       };
-    //   console.log("new plot state for heatmap average!!!====");
-    //   console.log(newPlotState);
-    } else if (generalIntent === "fraction_detected") {
+    } 
+    
+    if (generalIntent === "fraction_detected") {
       fractions = response.data.fraction_detected ? transpose(response.data.fraction_detected) : null;
       let averageResponse = await window.atlasapproxAPI("average", {
         organism,
@@ -121,6 +130,8 @@ const MainBoard = () => {
         }
       };
     }
+
+    // if (generalIntent === )
 
     setPlotState(newPlotState);
   };
