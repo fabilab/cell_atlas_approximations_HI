@@ -28,7 +28,7 @@ const BubbleHeatmap = ({ target, xaxis, yaxis, average, fractions, organism, org
     variablesClustered: 'true',
     smpTitle: 'Genes',
     varTitle: 'Cell types',
-    varLabelRotate: '45',
+    // varLabelRotate: '45',
   };
 
   return (

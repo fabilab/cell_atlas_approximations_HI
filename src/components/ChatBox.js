@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import TypeWriterEffect from 'react-typewriter-effect';
 import Message from "./Message";
 import triggersPlot from "../utils/chatSideEffects";
 import { Layout, Row, Input } from "antd";
@@ -88,13 +89,22 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                         role="system"
                         message={
                         <>
-                            Welcome to AtlasApprox! <br></br><br></br>Type 
-                            {" "}
-                            <b><a href="https://github.com/fabilab/cell_atlas_approximations">
-                            help
-                            </a>{" "}
-                            </b>
-                            for info.
+                        <TypeWriterEffect
+                            textStyle={{ fontFamily: 'Red Hat Display',fontSize: '1.2em',}}
+                            startDelay={100}
+                            cursorColor="black"
+                            multiText={["Welcome to AtlasApprox!","Type `help` for a list of typical commands."]} 
+                            multiTextDelay={1000}
+                            typeSpeed={40}
+                        />
+                        <br />
+                        {/* <TypeWriterEffect
+                            textStyle={{ fontFamily: 'Red Hat Display', fontSize: '1.2em' }}
+                            startDelay={2000}
+                            cursorColor="black"
+                            text="Type help for info."
+                            typeSpeed={40}
+                        /> */}
                         </>
                         }
                     />
