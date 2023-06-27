@@ -14,6 +14,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
         'What is the average expression of ALK,CD8A,CD19 in human lung?',
         'Show the marker genes for coronary in human heart.',
         'What is the fraction of IL6,TNF,APOE,COL1A1,ALK,CD8A,CD19,TP53 in human lung?',
+        'what cell type is the highest expressor of ALK in human?',
     ];
 
     return (

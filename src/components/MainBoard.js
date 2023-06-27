@@ -32,15 +32,19 @@ const MainBoard = () => {
     if (latestResponse.intent === "markers.geneExpression") {
       latestResponse.plot = true;
     }
+    if (latestResponse.intent === "highest_measurement.geneExpression") {
+      latestResponse.plot = true;
+    }
     if (latestResponse.plot) updatePlotState(latestResponse);
   }, [userInstructions]);
 
-  let average, fractions;
+ 
   // Generate and update plot according to user intends
   const updatePlotState = async (response) => {
     const intent = response.intent;
     let generalIntent = intent.split(".")[0];
     let newPlotState = null;
+    let average, fractions;
 
     if (generalIntent === "add") {
       const updatedFeatures = plotState.features + "," + response.params.features.split(',');
@@ -65,8 +69,8 @@ const MainBoard = () => {
       }
     }
 
-    const organism = response.data.organism;
-    const organ = response.data.organ;
+    let organism = response.data.organism;
+    let organ = response.data.organ;
     let features = response.data.features;
 
     const celltypesResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
@@ -131,7 +135,39 @@ const MainBoard = () => {
       };
     }
 
-    // if (generalIntent === )
+    if (generalIntent === "highest_measurement") {
+      organism = response.params.organism;
+      let gene = response.params.feature;
+      const highestResponse = await window.atlasapproxAPI("highest_measurement", {
+        organism: organism,
+        feature: gene,
+        number: 15,
+      });
+      const plotType = "barChart"
+      // update plot state for bar chart
+      let organs = highestResponse.organs;
+      let celltypes = highestResponse.celltypes;
+      const xaxis = celltypes.map((c, index) => {
+        return c + ' (' + organs[index] + ')'
+      })
+      newPlotState = {
+        intent,
+        plotType,
+        organism,
+        organs,
+        celltypes,
+        gene,
+        data: {
+          type: "matrix",
+          xaxis: xaxis,
+          yaxis: highestResponse.average,
+          average: highestResponse.average,
+          fractions: null,
+          valueUnit: "counts per ten thousand"
+        }
+      };
+      console.log(celltypes);
+    }
 
     setPlotState(newPlotState);
   };

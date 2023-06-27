@@ -1,6 +1,7 @@
 import React from 'react';
 import Heatmap from "./plots/Heatmap"
 import BubbleHeatmap from './plots/BubbleHeatmap';
+import BarChart from './plots/BarChart';
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
@@ -26,11 +27,18 @@ const PlotBox = ({ state }) => {
                 organism={state.organism}
                 organ={state.organ}
             />);
-    } else {
-        console.log("No plot being generated")
-        return <></>
+    } else if(state.plotType === "barChart") {
+        console.log("State data average is =====!!!!")
+        console.log(state.data.average);
+        return (
+            <BarChart
+                target="canvasId"
+                xaxis={state.data.xaxis}
+                average={state.data.average}
+                organism={state.organism}
+                gene={state.gene}
+            />);
     }
-
 };
 
 export default PlotBox
