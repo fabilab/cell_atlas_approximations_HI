@@ -2,6 +2,7 @@ import { Col } from "antd";
 import userImage from "../asset/user.jpg";
 import bot from "../asset/bot.jpg";
 import { useState } from "react";
+import TypeWriterEffect from "react-typewriter-effect";
 
 const Message = (props) => {
     const message = props.message;
@@ -35,7 +36,13 @@ const Message = (props) => {
                     </div>
                     <div className="media-content">
                         <div className="box">
-                            {message}
+                            <TypeWriterEffect
+                                textStyle={{ fontFamily: 'Red Hat Display',fontSize: '1.2em',}}
+                                startDelay={100}
+                                cursorColor="black"
+                                text={message} 
+                                typeSpeed={20}
+                            />
                         </div>
                     </div>
                 </div>

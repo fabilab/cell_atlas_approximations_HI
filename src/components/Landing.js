@@ -15,6 +15,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
         'Show the marker genes for coronary in human heart.',
         'What is the fraction of IL6,TNF,APOE,COL1A1,ALK,CD8A,CD19,TP53 in human lung?',
         'what cell type is the highest expressor of ALK in human?',
+        'what cell types are present in each organ of a_queenslandica?',
     ];
 
     return (

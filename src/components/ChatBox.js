@@ -98,13 +98,6 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                             typeSpeed={40}
                         />
                         <br />
-                        {/* <TypeWriterEffect
-                            textStyle={{ fontFamily: 'Red Hat Display', fontSize: '1.2em' }}
-                            startDelay={2000}
-                            cursorColor="black"
-                            text="Type help for info."
-                            typeSpeed={40}
-                        /> */}
                         </>
                         }
                     />

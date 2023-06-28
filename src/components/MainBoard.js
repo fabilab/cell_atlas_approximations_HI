@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Card } from 'antd';
-
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
+import TableBox from './TableBox';
 import Navbar from './Navbar';
 
 import Landing from './Landing';
@@ -20,6 +20,7 @@ function transpose(matrix) {
 const MainBoard = () => {
   const [userInstructions, setUserInstructions] = useState([]);
   const [plotState, setPlotState] = useState(null);
+  const [tableData,setTableData] = useState(null);
   // message string that the user is typing
   const [currentMessage, setCurrentMessage] = useState('');
   
@@ -27,13 +28,15 @@ const MainBoard = () => {
   useEffect(() => {
     if (userInstructions.length === 0) return;
     const latestResponse = userInstructions.slice(-1)[0].response;
-    // console.log("Show latest response....");
-    console.log(latestResponse);
+    console.log("Intend is " + latestResponse.intent);
     if (latestResponse.intent === "markers.geneExpression") {
       latestResponse.plot = true;
     }
     if (latestResponse.intent === "highest_measurement.geneExpression") {
       latestResponse.plot = true;
+    }
+    if (latestResponse.intent === "celltypexorgan") {
+      updateTable(latestResponse);
     }
     if (latestResponse.plot) updatePlotState(latestResponse);
   }, [userInstructions]);
@@ -172,6 +175,26 @@ const MainBoard = () => {
     setPlotState(newPlotState);
   };
 
+  const updateTable = async(response) => {
+    // const tempResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
+    let newTableData = null;
+    let organism = response.params.organism;
+    let organs = response.data.organs;
+    let celltypes = response.data.celltypes;
+    let detected = response.data.detected;
+    newTableData = {
+      organism,
+      organs,
+      celltypes,
+      detected
+    };
+
+    setTableData(newTableData);
+    console.log("table state is")
+    console.log(newTableData);
+  }
+
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <ChatBox 
@@ -182,25 +205,20 @@ const MainBoard = () => {
       />
       <Layout style={{ backgroundColor: "#fafafa" }}>
         <Navbar />
-        {plotState ? (
-          <Content>
-            <div style={{ height: "5vh" }}></div>
-            <Card style={{ backgroundColor: 'white', height: "73vh", margin: "2%", marginTop: "0px" }}>
-              <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <PlotBox state={plotState} />
-              </div>
-            </Card>
-          </Content>
-        )
-        :
         <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
+          {tableData ? (
+            <TableBox state={tableData} />
+          ) : plotState ? (
+            <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <PlotBox state={plotState} />
+            </div>
+          ) : (
             <Landing
               currentMessage={currentMessage}
               setCurrentMessage={setCurrentMessage}
             />
+          )}
         </Content>
-        
-        }
       </Layout>
     </Layout>
   );
