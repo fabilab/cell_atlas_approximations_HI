@@ -52,85 +52,74 @@ const MainBoard = () => {
     setTableData(null);
     let intent = response.intent;
     let generalIntent = intent.split(".")[0];
-    let endPoint = response.endPoint;
     let newPlotState = null;
     let average, fractions;
     let organism = response.params.organism;
     let organ = response.params.organ;
     let features = response.params.features;
-    let celltypesResponse = await atlasapprox.celltypes(organism, organ)
-    let celltypes = celltypesResponse.celltypes;
-  
+
+    if (generalIntent === "add") {
+        // update parameter for average/fraction plots
+        features = plotState.features + "," + features.split(',');
+        organism = plotState.organism;
+        organ = plotState.organ;
+        // check if add command is applied to average or fraction
+        if(!plotState.data.fractions) {
+            generalIntent = 'average';
+        } else {
+            generalIntent = 'fraction_detected';
+        }
+     }
+    
+    let apiCelltypes = await atlasapprox.celltypes(organism, organ);
+    let celltypes = apiCelltypes.celltypes;
+
     if (generalIntent === "average") {
         let apiResponse = await atlasapprox.average(organism, organ,features)
         average = apiResponse.average ? transpose(apiResponse.average) : null;
-        const plotType = "heatmap";
+        
+        let plotType = "heatmap";
         newPlotState = {
-          intent,
-          plotType,
-          organism,
-          organ,
-          features,
-          data: {
-            type: "matrix",
-            xaxis: celltypes,
-            yaxis: features.split(","),
-            average: average,
-            fractions: null,
-            valueUnit: "counts per ten thousand"
+            intent,
+            plotType,
+            organism,
+            organ,
+            features,
+            data: {
+                type: "matrix",
+                xaxis: celltypes,
+                yaxis: features.split(","),
+                average: average,
+                fractions: null,
+                valueUnit: "counts per ten thousand"
           }
         };
-      } 
+    } 
 
-      if (generalIntent === "fraction_detected") {
+    if (generalIntent === "fraction_detected") {
         let apiFraction = await atlasapprox.fraction_detected(organism, organ, features);
         let apiAverage = await atlasapprox.average(organism, organ, features);
         fractions = apiFraction.fraction_detected ? transpose(apiFraction.fraction_detected) : null;
         average = apiAverage.average ? transpose(apiAverage.average) : null;
+        console.log("fraction is =======!!!!" + fractions);
         let plotType = "bubbleHeatmap";
         newPlotState = {
-          intent,
-          plotType,
-          organism,
-          organ,
-          features,
-          data: {
-            type: "matrix",
-            xaxis: celltypes,
-            yaxis: features.split(","),
-            average: average,
-            fractions: fractions,
-            valueUnit: "counts per ten thousand"
-          }
+            intent,
+            plotType,
+            organism,
+            organ,
+            features,
+            data: {
+                type: "matrix",
+                xaxis: celltypes,
+                yaxis: features.split(","),
+                average: average,
+                fractions: fractions,
+                valueUnit: "counts per ten thousand"
+            }
         };
-      }
-
-    if (generalIntent === "add") {
-        console.log("old Plot state intent is " + plotState.intent);
-        const updatedFeatures = plotState.features + "," + response.params.features.split(',');
-        fractions = plotState.data.fractions;
-
-    //   // check if the "add" action apply to average or fraction
-    //   if(!fractions) {
-    //     console.log("No fraction, only average expression");
-
-    //     // response.
-
-    //     response.data = await window.atlasapproxAPI("average", {
-    //       organism: plotState.organism,
-    //       organ: plotState.organ,
-    //       features: updatedFeatures,
-    //     });
-    //     generalIntent = 'average';
-    //   } else {
-    //     response.data = await window.atlasapproxAPI("fraction_detected", {
-    //       organism: plotState.organism,
-    //       organ: plotState.organ,
-    //       features: updatedFeatures,
-    //     });
-    //     generalIntent = 'fraction_detected';
-    //   }
     }
+
     if (generalIntent === "markers") {
       const markerFeatures = response.data.markers;
       response.data = await window.atlasapproxAPI("fraction_detected", {
