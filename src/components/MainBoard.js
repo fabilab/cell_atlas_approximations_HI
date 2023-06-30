@@ -101,7 +101,6 @@ const MainBoard = () => {
         let apiAverage = await atlasapprox.average(organism, organ, features);
         fractions = apiFraction.fraction_detected ? transpose(apiFraction.fraction_detected) : null;
         average = apiAverage.average ? transpose(apiAverage.average) : null;
-        console.log("fraction is =======!!!!" + fractions);
         let plotType = "bubbleHeatmap";
         newPlotState = {
             intent,
@@ -121,15 +120,15 @@ const MainBoard = () => {
     }
 
     if (generalIntent === "markers") {
-      const markerFeatures = response.data.markers;
-      response.data = await window.atlasapproxAPI("fraction_detected", {
-        organism: organism,
-        organ: organ,
-        features: markerFeatures,
-      });
-      features = markerFeatures;
-      generalIntent = 'fraction_detected';
-      
+        console.log("markers response: " + response.keys());
+    //   const markerFeatures = response.data.markers;
+    //   response.data = await window.atlasapproxAPI("fraction_detected", {
+    //     organism: organism,
+    //     organ: organ,
+    //     features: markerFeatures,
+    //   });
+    //   features = markerFeatures;
+    //   generalIntent = 'fraction_detected';
     }
 
     if (generalIntent === "highest_measurement") {
@@ -170,24 +169,19 @@ const MainBoard = () => {
   };
 
   const updateTable = async(response) => {
-    let organism = apiResponse.params.organism;
-    let organs = apiResponse.params.organs;
-    let celltypes = response.data.celltypes;
-    let detected = response.data.detected;
-    // const tempResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
-    let apiResponse = await atlasapprox.celltypexorgan(organism, organs=undefined)
-    console.log("API response for table is" + apiResponse);
+    let organism = response.params.organism;
+    let apiCellxOrgans = await atlasapprox.celltypexorgan(organism);
+    let organs = apiCellxOrgans.organs;
+    let detected = apiCellxOrgans.detected;
+    let celltypes = apiCellxOrgans.celltypes;
     let newTableData = null;
     newTableData = {
       organism,
       organs,
       celltypes,
-      detected
+      detected,
     };
-
     setTableData(newTableData);
-    console.log("table state is")
-    console.log(newTableData);
   }
 
 
