@@ -56,13 +56,20 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
         else {
             window.ask(text, chatContext)
                 .then((response) => {
+                    if(response === "")
+                        return;
+                        
                     let complete = response.complete;
                     let entities = response.entities; 
                     let intent = response.intent;
-
+                    const today = new Date();
+                    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    console.log("current intent is" + intent);
                     if (complete) {
+                        console.log("organisms response is true");
                         const { endpoint, params } = window.buildAPIParams(intent,entities);
                         const answer = window.buildAnswer(intent,params);
+                        console.log("answer is " + answer);
                         const responseData = {
                             intent: intent,
                             endpoint: endpoint,
@@ -75,13 +82,14 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
 
                         // update parent state
                         const instructions = [...userInstructions]; // this will become the new set of instructions
-                        instructions.push({role: 'user', message: text});
-                        instructions.push({role: 'system', message: answer, response: responseData});
+                        instructions.push({role: 'user', message: text, time: time});
+                        instructions.push({role: 'system', message: answer, time: time,response: responseData});
                         setUserInstructions(instructions);
                     } else {
                         // forward the followup question to chatbox
+                        console.log("follow up question is " + response.followUpQuestion);
                         const instructions = [...userInstructions]; // this will become the new set of instructions
-                        instructions.push({role: 'system', message: response.followUpQuestion});
+                        instructions.push({role: 'system', message: response.followUpQuestion, time: time});
                         setUserInstructions(instructions);
                     }
                 });

@@ -1,8 +1,5 @@
 // decide if an NLP response triggers a plot update
 const triggersPlot = ((response) => {
-    console.log("inside trigger check function");
-    console.log("response: ")
-    console.log(response);
 
     if (!response)
         return false;
