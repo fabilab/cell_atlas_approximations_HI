@@ -4,7 +4,7 @@ import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import TableBox from './TableBox';
 import Navbar from './Navbar';
-
+import atlasapprox from 'atlasapprox';
 import Landing from './Landing';
 
 const { Content } = Layout;
@@ -18,67 +18,119 @@ function transpose(matrix) {
 }
 
 const MainBoard = () => {
+  console.log("Test aa package =======")
+  console.log(atlasapprox.average("h_sapiens", "Lung","ALK,CD8A,CD19"));
   const [userInstructions, setUserInstructions] = useState([]);
   const [plotState, setPlotState] = useState(null);
   const [tableData,setTableData] = useState(null);
   // message string that the user is typing
   const [currentMessage, setCurrentMessage] = useState('');
   
+  const intents = [
+    "markers.geneExpression",
+    "highest_measurement.geneExpression",
+    "average.geneExpression",
+    "fraction_detected.geneExpression",
+    "add.features",
+  ]
 
   useEffect(() => {
     if (userInstructions.length === 0) return;
     const latestResponse = userInstructions.slice(-1)[0].response;
-    console.log("Intend is " + latestResponse.intent);
-    if (latestResponse.intent === "markers.geneExpression") {
-      latestResponse.plot = true;
+    console.log("response intend ====! " + latestResponse.intent);
+    console.log("response for add feature is:" + latestResponse);
+    if (intents.includes(latestResponse.intent)) {
+        updatePlotState(latestResponse);
+    } else if (latestResponse.intent === "celltypexorgan") {
+        updateTable(latestResponse);
     }
-    if (latestResponse.intent === "highest_measurement.geneExpression") {
-      latestResponse.plot = true;
-    }
-    if (latestResponse.intent === "celltypexorgan") {
-      updateTable(latestResponse);
-    }
-    if (latestResponse.plot) updatePlotState(latestResponse);
   }, [userInstructions]);
 
  
   // Generate and update plot according to user intends
   const updatePlotState = async (response) => {
-    const intent = response.intent;
+    setTableData(null);
+    let intent = response.intent;
     let generalIntent = intent.split(".")[0];
+    let endPoint = response.endPoint;
     let newPlotState = null;
     let average, fractions;
+    let organism = response.params.organism;
+    let organ = response.params.organ;
+    let features = response.params.features;
+    let celltypesResponse = await atlasapprox.celltypes(organism, organ)
+    let celltypes = celltypesResponse.celltypes;
+  
+    if (generalIntent === "average") {
+        let apiResponse = await atlasapprox.average(organism, organ,features)
+        average = apiResponse.average ? transpose(apiResponse.average) : null;
+        const plotType = "heatmap";
+        newPlotState = {
+          intent,
+          plotType,
+          organism,
+          organ,
+          features,
+          data: {
+            type: "matrix",
+            xaxis: celltypes,
+            yaxis: features.split(","),
+            average: average,
+            fractions: null,
+            valueUnit: "counts per ten thousand"
+          }
+        };
+      } 
+
+      if (generalIntent === "fraction_detected") {
+        let apiFraction = await atlasapprox.fraction_detected(organism, organ, features);
+        let apiAverage = await atlasapprox.average(organism, organ, features);
+        fractions = apiFraction.fraction_detected ? transpose(apiFraction.fraction_detected) : null;
+        average = apiAverage.average ? transpose(apiAverage.average) : null;
+        let plotType = "bubbleHeatmap";
+        newPlotState = {
+          intent,
+          plotType,
+          organism,
+          organ,
+          features,
+          data: {
+            type: "matrix",
+            xaxis: celltypes,
+            yaxis: features.split(","),
+            average: average,
+            fractions: fractions,
+            valueUnit: "counts per ten thousand"
+          }
+        };
+      }
 
     if (generalIntent === "add") {
-      const updatedFeatures = plotState.features + "," + response.params.features.split(',');
-      fractions = plotState.data.fractions;
+        console.log("old Plot state intent is " + plotState.intent);
+        const updatedFeatures = plotState.features + "," + response.params.features.split(',');
+        fractions = plotState.data.fractions;
 
-      // check if the "add" action apply to average or fraction
-      if(!fractions) {
-        console.log("No fraction, only average expression");
-        response.data = await window.atlasapproxAPI("average", {
-          organism: plotState.organism,
-          organ: plotState.organ,
-          features: updatedFeatures,
-        });
-        generalIntent = 'average';
-      } else {
-        response.data = await window.atlasapproxAPI("fraction_detected", {
-          organism: plotState.organism,
-          organ: plotState.organ,
-          features: updatedFeatures,
-        });
-        generalIntent = 'fraction_detected';
-      }
+    //   // check if the "add" action apply to average or fraction
+    //   if(!fractions) {
+    //     console.log("No fraction, only average expression");
+
+    //     // response.
+
+    //     response.data = await window.atlasapproxAPI("average", {
+    //       organism: plotState.organism,
+    //       organ: plotState.organ,
+    //       features: updatedFeatures,
+    //     });
+    //     generalIntent = 'average';
+    //   } else {
+    //     response.data = await window.atlasapproxAPI("fraction_detected", {
+    //       organism: plotState.organism,
+    //       organ: plotState.organ,
+    //       features: updatedFeatures,
+    //     });
+    //     generalIntent = 'fraction_detected';
+    //   }
     }
-
-    let organism = response.data.organism;
-    let organ = response.data.organ;
-    let features = response.data.features;
-
-    const celltypesResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
-    const celltypes = celltypesResponse.celltypes;
-
     if (generalIntent === "markers") {
       const markerFeatures = response.data.markers;
       response.data = await window.atlasapproxAPI("fraction_detected", {
@@ -89,53 +141,6 @@ const MainBoard = () => {
       features = markerFeatures;
       generalIntent = 'fraction_detected';
       
-    }
-
-    if (generalIntent === "average") {
-      average = response.data.average ? transpose(response.data.average) : null;
-      const plotType = "heatmap";
-      newPlotState = {
-        intent,
-        plotType,
-        organism,
-        organ,
-        features,
-        data: {
-          type: "matrix",
-          xaxis: celltypes,
-          yaxis: features,
-          average: average,
-          fractions: null,
-          valueUnit: "counts per ten thousand"
-        }
-      };
-    } 
-    
-    if (generalIntent === "fraction_detected") {
-      fractions = response.data.fraction_detected ? transpose(response.data.fraction_detected) : null;
-      let averageResponse = await window.atlasapproxAPI("average", {
-        organism,
-        organ,
-        features
-      });
-      averageResponse.average = averageResponse.average ? transpose(averageResponse.average) : null;
-      console.log(fractions);
-      const plotType = "bubbleHeatmap";
-      newPlotState = {
-        intent,
-        plotType,
-        organism,
-        organ,
-        features,
-        data: {
-          type: "matrix",
-          xaxis: celltypes,
-          yaxis: features,
-          average: averageResponse.average,
-          fractions: fractions,
-          valueUnit: "counts per ten thousand"
-        }
-      };
     }
 
     if (generalIntent === "highest_measurement") {
@@ -169,19 +174,21 @@ const MainBoard = () => {
           valueUnit: "counts per ten thousand"
         }
       };
-      console.log(celltypes);
     }
 
+    console.log("new plot state is" + newPlotState);
     setPlotState(newPlotState);
   };
 
   const updateTable = async(response) => {
-    // const tempResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
-    let newTableData = null;
-    let organism = response.params.organism;
-    let organs = response.data.organs;
+    let organism = apiResponse.params.organism;
+    let organs = apiResponse.params.organs;
     let celltypes = response.data.celltypes;
     let detected = response.data.detected;
+    // const tempResponse = await window.atlasapproxAPI("celltypes", { organism, organ });
+    let apiResponse = await atlasapprox.celltypexorgan(organism, organs=undefined)
+    console.log("API response for table is" + apiResponse);
+    let newTableData = null;
     newTableData = {
       organism,
       organs,

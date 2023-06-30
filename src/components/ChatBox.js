@@ -53,31 +53,39 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
             setCurrentMessage('');
             return "";
         }
+        else {
+            window.ask(text, chatContext)
+                .then((response) => {
+                    let complete = response.complete;
+                    let entities = response.entities; 
+                    let intent = response.intent;
 
-        return window.ask(text, chatContext)
-            .then((response) => { 
-                if (response === "")
-                    return;
+                    if (complete) {
+                        const { endpoint, params } = window.buildAPIParams(intent,entities);
+                        const answer = window.buildAnswer(intent,params);
+                        const responseData = {
+                            intent: intent,
+                            endpoint: endpoint,
+                            params: params,
+                            answer: answer,
+                        }
+                        // update state
+                        setCurrentMessage('');
+                        setChatContext(chatContext);
 
-                const today = new Date();
-                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-                // If the NLP response has no side-effect for the plot, exit
-                response.plot = triggersPlot(response);
-                if (response.plot) {
-                    console.log("triggering plot update");
-                }
-
-                // update state
-                setCurrentMessage('');
-                setChatContext(chatContext);
-
-                // update parent state
-                const instructions = [...userInstructions]; // this will become the new set of instructions
-                instructions.push({role: 'user', message: text, time: time});
-                instructions.push({role: 'system', message: response.answer, time: time, response: response});
-                setUserInstructions(instructions);
-            });
+                        // update parent state
+                        const instructions = [...userInstructions]; // this will become the new set of instructions
+                        instructions.push({role: 'user', message: text});
+                        instructions.push({role: 'system', message: answer, response: responseData});
+                        setUserInstructions(instructions);
+                    } else {
+                        // forward the followup question to chatbox
+                        const instructions = [...userInstructions]; // this will become the new set of instructions
+                        instructions.push({role: 'system', message: response.followUpQuestion});
+                        setUserInstructions(instructions);
+                    }
+                });
+        }
     })
 
     return (
