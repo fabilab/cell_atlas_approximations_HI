@@ -89,6 +89,7 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                     let complete = response.complete;
                     let entities = response.entities; 
                     let intent = response.intent;
+                    console.log("response is " + response);
                     const today = new Date();
                     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                     console.log("current intent is" + intent);
@@ -97,8 +98,6 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                         callAPI(endpoint, params).then((data) => {
                             console.log(data);
                             const answer = window.buildAnswer(intent, data);
-                            
-
                             const responseData = {
                                 intent: intent,
                                 endpoint: endpoint,
@@ -116,9 +115,14 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                             setUserInstructions(instructions);
                         })
                     } else {
+
+                        setCurrentMessage('');
+                        setChatContext(chatContext);
+                        
                         // forward the followup question to chatbox
                         console.log("follow up question is " + response.followUpQuestion);
-                        const instructions = [...userInstructions]; // this will become the new set of instructions
+                        const instructions = [...userInstructions];
+                        instructions.push({role: 'user', message: text, time: time});
                         instructions.push({role: 'system', message: response.followUpQuestion, time: time});
                         setUserInstructions(instructions);
                     }

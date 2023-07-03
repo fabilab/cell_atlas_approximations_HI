@@ -28,15 +28,13 @@ const PlotBox = ({ state }) => {
                 organ={state.organ}
             />);
     } else if(state.plotType === "barChart") {
-        console.log("State data average is =====!!!!")
-        console.log(state.data.average);
         return (
             <BarChart
                 target="canvasId"
                 xaxis={state.data.xaxis}
                 average={state.data.average}
                 organism={state.organism}
-                gene={state.gene}
+                gene={state.features}
             />);
     }
 };

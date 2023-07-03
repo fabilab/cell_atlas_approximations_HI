@@ -18,8 +18,6 @@ function transpose(matrix) {
 }
 
 const MainBoard = () => {
-  console.log("Test aa package =======")
-  console.log(atlasapprox.average("h_sapiens", "Lung","ALK,CD8A,CD19"));
   const [userInstructions, setUserInstructions] = useState([]);
   const [plotState, setPlotState] = useState(null);
   const [tableData,setTableData] = useState(null);
@@ -37,12 +35,12 @@ const MainBoard = () => {
   useEffect(() => {
     if (userInstructions.length === 0) return;
     const latestResponse = userInstructions.slice(-1)[0].response;
-    console.log("response intend ====! " + latestResponse.intent);
-    console.log("response for add feature is:" + latestResponse);
-    if (intents.includes(latestResponse.intent)) {
-        updatePlotState(latestResponse);
-    } else if (latestResponse.intent === "celltypexorgan") {
-        updateTable(latestResponse);
+    if(latestResponse) {
+      if (intents.includes(latestResponse.intent)) {
+          updatePlotState(latestResponse);
+      } else if (latestResponse.intent === "celltypexorgan") {
+          updateTable(latestResponse);
+      }
     }
   }, [userInstructions]);
 
@@ -132,13 +130,7 @@ const MainBoard = () => {
     }
 
     if (generalIntent === "highest_measurement") {
-      organism = response.params.organism;
-      let gene = response.params.feature;
-      const highestResponse = await window.atlasapproxAPI("highest_measurement", {
-        organism: organism,
-        feature: gene,
-        number: 15,
-      });
+      const highestResponse = await atlasapprox.highest_measurement(organism, features, 10)
       const plotType = "barChart"
       // update plot state for bar chart
       let organs = highestResponse.organs;
@@ -152,7 +144,7 @@ const MainBoard = () => {
         organism,
         organs,
         celltypes,
-        gene,
+        features,
         data: {
           type: "matrix",
           xaxis: xaxis,
@@ -164,7 +156,7 @@ const MainBoard = () => {
       };
     }
 
-    console.log("new plot state is" + newPlotState);
+    console.log(newPlotState);
     setPlotState(newPlotState);
   };
 

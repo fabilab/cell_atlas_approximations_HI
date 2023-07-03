@@ -13,10 +13,21 @@ const BarChart = ({ target, xaxis, average, organism, gene }) => {
   let config = {
     graphOrientation: "vertical",
     graphType: "Bar",
-    theme: "CanvasXpress",
-    title: `Bar chart showing highest expressor of ${gene} gene in ${organism}`,
+    theme: "paulTol",
+    title: `Highest expressor of ${gene} gene in ${organism}`,
     smpTitle:"Cell types/Organs",
-    "smpLabelRotate":"35",
+    "fontName": "Times New Roman",
+    "plotBoxColor": "pink",
+    // graphackgroundColor: "white",
+    // "graphOrientation": "vertical",
+    // "showLegend": false,
+    // "smpLabelRotate": 90,
+    // "smpTitle": "Samples",
+    // "theme": "paulTol",
+    // "title": "Bar Graph Title",
+    // "xAxis": ["V1"],
+    // "xAxisTitle": "Value",
+    // "graphType": "Bar"
   };
 
   return (
