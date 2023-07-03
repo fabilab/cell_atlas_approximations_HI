@@ -3,7 +3,6 @@ import { Card, Col, Row, Typography } from 'antd';
 import heatmapSample from '../asset/plots/heatmap.png';
 import dotplotSample from '../asset/plots/dotplot.png';
 import networkSample from '../asset/plots/network.png';
-import { Content } from 'react-bulma-components';
 const { Title } = Typography;
 
 const Landing = ({currentMessage, setCurrentMessage}) => {
@@ -42,13 +41,14 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
                 </Col>
                 <Col span={1} />
         </Row>
-            <Content style={{ textAlign:'center', margin:'7vh'}}>
+            <div style={{ textAlign:'center', margin:'7vh'}}>
                 <Title level={4} style={{ marginBottom:"5vh", color:"#1890ff"}}>AtlasApprox enables biologists,doctors and data scientist to quickly find answers for questions such as:</Title>
                 {sampleQueries.map((s,index) => (
                     <p 
                     key={index} 
                     onClick={() => setCurrentMessage(s)}
                     style={{
+                        margin:"1vh",
                         color: currentMessage === s ? '#fa8c16' : 'initial',
                         cursor: 'pointer',
                         ':hover':{ color: 'lightblue' }
@@ -57,7 +57,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
                         {s}
                     </p>
                 ))}
-            </Content>
+            </div>
         </div>
     );
 };

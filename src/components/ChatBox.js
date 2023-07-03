@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import TypeWriterEffect from 'react-typewriter-effect';
 import Message from "./Message";
-import triggersPlot from "../utils/chatSideEffects";
 import { Layout, Row, Input } from "antd";
+import Typewriter from "typewriter-effect";
 const { Sider } = Layout;
+
 
 let debug = true;
 
 // pass in both the old and new user instructions as props
 const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCurrentMessage }) => {
     const [chatContext, setChatContext] = useState({});
-    const [welcomeMessage, setWelcomeMessage] = useState(false);
+    const [welcomeMessage, setWelcomeMessage] = useState(true);
     const [messageHistory, setMessageHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(0);
 
@@ -39,15 +39,21 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
       };
     // Display a auto bot message when the page load
     useEffect(() => {
-        setWelcomeMessage(true);
-    },[ ]);
+        // Display welcome message after a certain delay
+        const timer = setTimeout(() => {
+          setWelcomeMessage(true);
+        }, 1000);
+    
+        return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }, []);
+    
 
     async function callAPI(endpoint, params = {}) {
         // Phrase https request from params (they are all GET for now, so URI encoding suffices)
         let uri = "https://api.atlasapprox.org/v1/" + endpoint
     
         const uriSuffix = new URLSearchParams(params).toString();
-        if (uriSuffix != "")
+        if (uriSuffix !== "")
             uri += "?" + uriSuffix;
     
         if (debug)
@@ -118,7 +124,7 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
 
                         setCurrentMessage('');
                         setChatContext(chatContext);
-                        
+
                         // forward the followup question to chatbox
                         console.log("follow up question is " + response.followUpQuestion);
                         const instructions = [...userInstructions];
@@ -133,28 +139,16 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
     return (
         <Sider width={"25vw"} style={{padding:"1%", backgroundColor:"#263238"}}>
             <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
-                {welcomeMessage && (
-                    <Message
-                        key="welcome-message"
-                        role="system"
-                        message={
-                        <>
-                        <TypeWriterEffect
-                            textStyle={{ fontFamily: 'Red Hat Display',fontSize: '1.2em',}}
-                            startDelay={100}
-                            cursorColor="black"
-                            multiText={["Welcome to AtlasApprox!","Type `help` for a list of typical commands."]} 
-                            multiTextDelay={1000}
-                            typeSpeed={40}
-                        />
-                        <br />
-                        </>
-                        }
-                    />
-                )}
+                {
+                    welcomeMessage &&
+                    <>
+                        <Message key="welcome-message-1" role="system" message="Welcome to AtlasApprox!" pause={false}/>
+                        <Message key="welcome-message-2" role="system" message="Please type `help` for a list of typical commands." pause={true} />
+                    </>
+                }
                 {userInstructions.length !== 0 &&
                 userInstructions.map((m) => (
-                    <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message} />
+                    <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message} pause={false}/>
                 ))}
             </div>
             <div style={{height:"5vh"}}></div>
