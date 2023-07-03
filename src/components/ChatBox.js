@@ -5,6 +5,8 @@ import triggersPlot from "../utils/chatSideEffects";
 import { Layout, Row, Input } from "antd";
 const { Sider } = Layout;
 
+let debug = true;
+
 // pass in both the old and new user instructions as props
 const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCurrentMessage }) => {
     const [chatContext, setChatContext] = useState({});
@@ -40,6 +42,31 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
         setWelcomeMessage(true);
     },[ ]);
 
+    async function callAPI(endpoint, params = {}) {
+        // Phrase https request from params (they are all GET for now, so URI encoding suffices)
+        let uri = "https://api.atlasapprox.org/v1/" + endpoint
+    
+        const uriSuffix = new URLSearchParams(params).toString();
+        if (uriSuffix != "")
+            uri += "?" + uriSuffix;
+    
+        if (debug)
+            console.log("API URI: " + uri)
+    
+        let response = await fetch(uri);
+    
+        // Check response
+        let data;
+        if (!response.ok) {
+            data = {
+                error: "API call failed",
+            }
+        } else {
+            // NOTE: response.body is a stream, so it can be processed only ONCE
+            data = await response.json();
+        }
+        return data;
+    }
     // Reply message to user
     const handleSubmit = ((text) => {
         const newMessage = { message: text, index: messageHistory.length };
@@ -58,7 +85,7 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                 .then((response) => {
                     if(response === "")
                         return;
-                        
+                    
                     let complete = response.complete;
                     let entities = response.entities; 
                     let intent = response.intent;
@@ -66,25 +93,28 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                     console.log("current intent is" + intent);
                     if (complete) {
-                        console.log("organisms response is true");
                         const { endpoint, params } = window.buildAPIParams(intent,entities);
-                        const answer = window.buildAnswer(intent,params);
-                        console.log("answer is " + answer);
-                        const responseData = {
-                            intent: intent,
-                            endpoint: endpoint,
-                            params: params,
-                            answer: answer,
-                        }
-                        // update state
-                        setCurrentMessage('');
-                        setChatContext(chatContext);
+                        callAPI(endpoint, params).then((data) => {
+                            console.log(data);
+                            const answer = window.buildAnswer(intent, data);
+                            
 
-                        // update parent state
-                        const instructions = [...userInstructions]; // this will become the new set of instructions
-                        instructions.push({role: 'user', message: text, time: time});
-                        instructions.push({role: 'system', message: answer, time: time,response: responseData});
-                        setUserInstructions(instructions);
+                            const responseData = {
+                                intent: intent,
+                                endpoint: endpoint,
+                                params: params,
+                                answer: answer,
+                            }
+                            // update state
+                            setCurrentMessage('');
+                            setChatContext(chatContext);
+
+                            // update parent state
+                            const instructions = [...userInstructions]; // this will become the new set of instructions
+                            instructions.push({role: 'user', message: text, time: time});
+                            instructions.push({role: 'system', message: answer, time: time,response: responseData});
+                            setUserInstructions(instructions);
+                        })
                     } else {
                         // forward the followup question to chatbox
                         console.log("follow up question is " + response.followUpQuestion);

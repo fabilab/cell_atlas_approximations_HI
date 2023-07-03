@@ -20,7 +20,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
 
     return (
         <div className="landing-page">
-            <Title level={2} style={{ textAlign:'center', marginBottom:"5vh", marginTop:"5vh"}}><b><u>Zero</u></b>-backend Cell Atlas Exploration</Title>
+            <Title level={2} style={{ textAlign:'center', marginBottom:"4vh", marginTop:"3vh"}}><b><u>Zero</u></b>-backend Cell Atlas Exploration</Title>
             <Row gutter={48} className="card-row">
                 <Col span={1} />
                 <Col span={6}>
@@ -42,7 +42,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
                 </Col>
                 <Col span={1} />
         </Row>
-            <Content style={{ textAlign:'center', margin:'10vh'}}>
+            <Content style={{ textAlign:'center', margin:'7vh'}}>
                 <Title level={4} style={{ marginBottom:"5vh", color:"#1890ff"}}>AtlasApprox enables biologists,doctors and data scientist to quickly find answers for questions such as:</Title>
                 {sampleQueries.map((s,index) => (
                     <p 
