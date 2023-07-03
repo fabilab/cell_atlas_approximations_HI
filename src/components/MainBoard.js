@@ -68,6 +68,15 @@ const MainBoard = () => {
             generalIntent = 'fraction_detected';
         }
      }
+
+    if (generalIntent === "markers") {
+      console.log(response);
+      // const markerFeatures = response.data.markers;
+      let markerCelltype = response.params.celltype;
+      let apiMarkers = await atlasapprox.markers(organism, organ, markerCelltype);
+      features = apiMarkers.markers.join(',');
+      generalIntent = 'fraction_detected';
+    }
     
     let apiCelltypes = await atlasapprox.celltypes(organism, organ);
     let celltypes = apiCelltypes.celltypes;
@@ -99,6 +108,7 @@ const MainBoard = () => {
         let apiAverage = await atlasapprox.average(organism, organ, features);
         fractions = apiFraction.fraction_detected ? transpose(apiFraction.fraction_detected) : null;
         average = apiAverage.average ? transpose(apiAverage.average) : null;
+        // console.log(typeof(features));
         let plotType = "bubbleHeatmap";
         newPlotState = {
             intent,
@@ -115,18 +125,6 @@ const MainBoard = () => {
                 valueUnit: "counts per ten thousand"
             }
         };
-    }
-
-    if (generalIntent === "markers") {
-        console.log("markers response: " + response.keys());
-    //   const markerFeatures = response.data.markers;
-    //   response.data = await window.atlasapproxAPI("fraction_detected", {
-    //     organism: organism,
-    //     organ: organ,
-    //     features: markerFeatures,
-    //   });
-    //   features = markerFeatures;
-    //   generalIntent = 'fraction_detected';
     }
 
     if (generalIntent === "highest_measurement") {
