@@ -21,6 +21,9 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
     title: `Heatmap of gene expression in ${organism} ${organ}`,
     smpTitle:"Genes",
     varTitle:"Cell types",
+    percentAspectRatioPlotArea: 0.5,
+    heatmapAutoAdjust: true,
+    heatmapIndicatorHeight: 25,
     // "varLabelRotate":"45",
   };
 
@@ -29,8 +32,6 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
       target={target} 
       data={data} 
       config={config}
-      width={800}
-      height={500}
     />
   )
 }

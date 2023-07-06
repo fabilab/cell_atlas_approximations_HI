@@ -6,6 +6,7 @@ import TableBox from './TableBox';
 import Navbar from './Navbar';
 import atlasapprox from 'atlasapprox';
 import Landing from './Landing';
+import { triggersPlotUpdate } from '../utils/chatSideEffects';
 
 const { Content } = Layout;
 
@@ -18,35 +19,25 @@ function transpose(matrix) {
 }
 
 const MainBoard = () => {
-  const [userInstructions, setUserInstructions] = useState([]);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState(null);
   const [tableData,setTableData] = useState(null);
   // message string that the user is typing
   const [currentMessage, setCurrentMessage] = useState('');
   
-  const intents = [
-    "markers.geneExpression",
-    "highest_measurement.geneExpression",
-    "average.geneExpression",
-    "fraction_detected.geneExpression",
-    "add.features",
-  ]
+
 
   useEffect(() => {
-    if (userInstructions.length === 0) return;
-    const latestResponse = userInstructions.slice(-1)[0].response;
-    if(latestResponse) {
-      if (intents.includes(latestResponse.intent)) {
-          updatePlotState(latestResponse);
-      } else if (latestResponse.intent === "celltypexorgan") {
-          updateTable(latestResponse);
-      }
-    }
-  }, [userInstructions]);
-
+    if (triggersPlotUpdate(currentResponse))
+          updatePlotState(currentResponse);
+  }, [currentResponse]);
  
   // Generate and update plot according to user intends
   const updatePlotState = async (response) => {
+    if (response.intent === "celltypexorgan")
+      return updateTable(response);
+
     setTableData(null);
     let intent = response.intent;
     let generalIntent = intent.split(".")[0];
@@ -178,10 +169,11 @@ const MainBoard = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <ChatBox 
-        userInstructions={userInstructions} 
-        setUserInstructions={setUserInstructions}
+        chatHistory={chatHistory} 
+        setChatHistory={setChatHistory}
         currentMessage={currentMessage}
         setCurrentMessage={setCurrentMessage}
+        setCurrentResponse={setCurrentResponse}
       />
       <Layout style={{ backgroundColor: "#fafafa" }}>
         <Navbar />

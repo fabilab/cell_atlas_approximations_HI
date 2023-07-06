@@ -2,13 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { Layout, Row, Input } from "antd";
 import Typewriter from "typewriter-effect";
+import { updateChat } from "../utils/chatSideEffects";
 const { Sider } = Layout;
 
 
 let debug = true;
 
 // pass in both the old and new user instructions as props
-const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCurrentMessage }) => {
+const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse }) => {
     const [chatContext, setChatContext] = useState({});
     const [welcomeMessage, setWelcomeMessage] = useState(true);
     const [messageHistory, setMessageHistory] = useState([]);
@@ -18,7 +19,7 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
     const chatboxRef = useRef(null);
     useEffect(() => {
         chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
-    }, [{userInstructions, setUserInstructions}]);
+    }, [{chatHistory, setChatHistory}]);
 
     const handleKeyDown = (e) => {
         if (e.key === 'ArrowUp') {
@@ -48,31 +49,7 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
     }, []);
     
 
-    async function callAPI(endpoint, params = {}) {
-        // Phrase https request from params (they are all GET for now, so URI encoding suffices)
-        let uri = "https://api.atlasapprox.org/v1/" + endpoint
-    
-        const uriSuffix = new URLSearchParams(params).toString();
-        if (uriSuffix !== "")
-            uri += "?" + uriSuffix;
-    
-        if (debug)
-            console.log("API URI: " + uri)
-    
-        let response = await fetch(uri);
-    
-        // Check response
-        let data;
-        if (!response.ok) {
-            data = {
-                error: "API call failed",
-            }
-        } else {
-            // NOTE: response.body is a stream, so it can be processed only ONCE
-            data = await response.json();
-        }
-        return data;
-    }
+
     // Reply message to user
     const handleSubmit = ((text) => {
         const newMessage = { message: text, index: messageHistory.length };
@@ -81,57 +58,36 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
         if (text === 'clear') {
             setMessageHistory([])
             setHistoryIndex(0);
-            setUserInstructions([]);
+            setChatHistory([]);
             setChatContext({});
             setCurrentMessage('');
             return "";
-        }
-        else {
+        } else if (text === 'help') {
+
+            
+          } else {
             window.ask(text, chatContext)
                 .then((response) => {
-                    if(response === "")
-                        return;
-                    
-                    let complete = response.complete;
-                    let entities = response.entities; 
-                    let intent = response.intent;
-                    console.log("response is " + response);
+                    const updateObject = updateChat(response);
+                    console.log(updateObject);
+                    console.log(response.message)
+                    response.hasData = updateObject.hasData;
+                    if (updateObject.hasData) {
+                        response.data = updateObject.data;
+                        response.params = updateObject.params;
+                    }
+                    // update parent response state
+                    setCurrentResponse(response);
+
+                    // update parent chat state
+                    setCurrentMessage('');
+                    setChatContext(chatContext);
+                    const instructions = [...chatHistory]; // this will become the new set of instructions
                     const today = new Date();
                     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    console.log("current intent is" + intent);
-                    if (complete) {
-                        const { endpoint, params } = window.buildAPIParams(intent,entities);
-                        callAPI(endpoint, params).then((data) => {
-                            console.log(data);
-                            const answer = window.buildAnswer(intent, data);
-                            const responseData = {
-                                intent: intent,
-                                endpoint: endpoint,
-                                params: params,
-                                answer: answer,
-                            }
-                            // update state
-                            setCurrentMessage('');
-                            setChatContext(chatContext);
-
-                            // update parent state
-                            const instructions = [...userInstructions]; // this will become the new set of instructions
-                            instructions.push({role: 'user', message: text, time: time});
-                            instructions.push({role: 'system', message: answer, time: time,response: responseData});
-                            setUserInstructions(instructions);
-                        })
-                    } else {
-
-                        setCurrentMessage('');
-                        setChatContext(chatContext);
-
-                        // forward the followup question to chatbox
-                        console.log("follow up question is " + response.followUpQuestion);
-                        const instructions = [...userInstructions];
-                        instructions.push({role: 'user', message: text, time: time});
-                        instructions.push({role: 'system', message: response.followUpQuestion, time: time});
-                        setUserInstructions(instructions);
-                    }
+                    instructions.push({role: 'user', message: text, time: time});
+                    instructions.push({role: 'system', message: updateObject.message, time: time});
+                    setChatHistory(instructions);                        
                 });
         }
     })
@@ -146,8 +102,8 @@ const ChatBox = ({ userInstructions, setUserInstructions, currentMessage, setCur
                         <Message key="welcome-message-2" role="system" message="Please type `help` for a list of typical commands." pause={true} />
                     </>
                 }
-                {userInstructions.length !== 0 &&
-                userInstructions.map((m) => (
+                {chatHistory.length !== 0 &&
+                chatHistory.map((m) => (
                     <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message} pause={false}/>
                 ))}
             </div>
