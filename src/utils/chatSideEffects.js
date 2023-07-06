@@ -7,6 +7,7 @@ const updatePlotIntents = [
     "average",
     "fraction_detected",
     "add",
+    "celltypexorgan",
   ];
 
 export const triggersPlotUpdate = ((response) => {
@@ -20,8 +21,6 @@ export const triggersPlotUpdate = ((response) => {
     console.log(generalIntent);
     return updatePlotIntents.includes(generalIntent);
 });
-
-
 
 
 export const updateChat = async (response) => {

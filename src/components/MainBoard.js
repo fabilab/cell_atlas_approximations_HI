@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Card } from 'antd';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
-import TableBox from './TableBox';
 import Navbar from './Navbar';
 import atlasapprox from 'atlasapprox';
 import Landing from './Landing';
@@ -22,7 +21,6 @@ const MainBoard = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState(null);
-  const [tableData,setTableData] = useState(null);
   // message string that the user is typing
   const [currentMessage, setCurrentMessage] = useState('');
   
@@ -35,10 +33,7 @@ const MainBoard = () => {
  
   // Generate and update plot according to user intends
   const updatePlotState = async (response) => {
-    if (response.intent === "celltypexorgan")
-      return updateTable(response);
 
-    setTableData(null);
     let intent = response.intent;
     let generalIntent = intent.split(".")[0];
     let newPlotState = null;
@@ -145,26 +140,26 @@ const MainBoard = () => {
       };
     }
 
+    if (generalIntent === "celltypexorgan") {
+		const plotType = "table"
+		let apiCellxOrgans = await atlasapprox.celltypexorgan(organism);
+		console.log("testing====")
+		console.log(apiCellxOrgans);
+		let organs = apiCellxOrgans.organs;
+		let detected = apiCellxOrgans.detected;
+		let celltypes = apiCellxOrgans.celltypes;
+		newPlotState = {
+			plotType,
+			organism,
+			organs,
+			celltypes,
+			detected,
+		};
+    }
+
     console.log(newPlotState);
     setPlotState(newPlotState);
   };
-
-  const updateTable = async(response) => {
-    let organism = response.params.organism;
-    let apiCellxOrgans = await atlasapprox.celltypexorgan(organism);
-    let organs = apiCellxOrgans.organs;
-    let detected = apiCellxOrgans.detected;
-    let celltypes = apiCellxOrgans.celltypes;
-    let newTableData = null;
-    newTableData = {
-      organism,
-      organs,
-      celltypes,
-      detected,
-    };
-    setTableData(newTableData);
-  }
-
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -178,13 +173,9 @@ const MainBoard = () => {
       <Layout style={{ backgroundColor: "#fafafa" }}>
         <Navbar />
         <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
-          {tableData ? (
-            <TableBox state={tableData} />
-          ) : plotState ? (
-            <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <PlotBox state={plotState} />
-            </div>
-          ) : (
+          {plotState ? (
+				  <PlotBox state={plotState} />
+            ) : (
             <Landing
               currentMessage={currentMessage}
               setCurrentMessage={setCurrentMessage}

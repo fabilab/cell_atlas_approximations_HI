@@ -2,40 +2,56 @@ import React from 'react';
 import Heatmap from "./plots/Heatmap"
 import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';
+import CellxOrganTable from './plots/CellxOrganTable';
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
     if (state.plotType === 'heatmap') {
         return (
-            <Heatmap
-                target="canvasId"
-                xaxis={state.data.xaxis}
-                yaxis={state.data.yaxis}
-                values={state.data.average}
-                organism={state.organism}
-                organ={state.organ}
-            />
+            <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Heatmap
+                    target="canvasId"
+                    xaxis={state.data.xaxis}
+                    yaxis={state.data.yaxis}
+                    values={state.data.average}
+                    organism={state.organism}
+                    organ={state.organ}
+                />
+            </div>
         );
     } else if (state.plotType === 'bubbleHeatmap') {
         return (
-            <BubbleHeatmap
-                target="canvasId"
-                xaxis={state.data.xaxis}
-                yaxis={state.data.yaxis}
-                average={state.data.average}
-                fractions={state.data.fractions}
-                organism={state.organism}
-                organ={state.organ}
-            />);
+            <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <BubbleHeatmap
+                    target="canvasId"
+                    xaxis={state.data.xaxis}
+                    yaxis={state.data.yaxis}
+                    average={state.data.average}
+                    fractions={state.data.fractions}
+                    organism={state.organism}
+                    organ={state.organ}
+                />
+            </div>
+        );
+            
     } else if(state.plotType === "barChart") {
         return (
-            <BarChart
-                target="canvasId"
-                xaxis={state.data.xaxis}
-                average={state.data.average}
-                organism={state.organism}
-                gene={state.features}
-            />);
+            <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <BarChart
+                    target="canvasId"
+                    xaxis={state.data.xaxis}
+                    average={state.data.average}
+                    organism={state.organism}
+                    gene={state.features}
+                />
+            </div>
+        );
+    } else if(state.plotType === "table") {
+        return (
+            <CellxOrganTable
+                state={state}
+            />
+        )
     }
 };
 

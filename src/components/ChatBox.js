@@ -19,8 +19,8 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     const chatboxRef = useRef(null);
     useEffect(() => {
         chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
-    }, [{chatHistory, setChatHistory}]);
-
+      }, [chatHistory, setChatHistory]);
+      
     const handleKeyDown = (e) => {
         if (e.key === 'ArrowUp') {
             if (historyIndex > 0) {
