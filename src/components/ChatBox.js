@@ -67,29 +67,32 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             
           } else {
             window.ask(text, chatContext)
-                .then((response) => {
-                    const updateObject = updateChat(response);
+              .then((response) => {
+                updateChat(response)
+                  .then((updateObject) => {
                     console.log(updateObject);
-                    console.log(response.message)
+                    console.log(updateObject.message);
                     response.hasData = updateObject.hasData;
                     if (updateObject.hasData) {
-                        response.data = updateObject.data;
-                        response.params = updateObject.params;
+                      console.log("Has data");
+                      response.data = updateObject.data;
+                      response.params = updateObject.params;
                     }
                     // update parent response state
                     setCurrentResponse(response);
-
+          
                     // update parent chat state
                     setCurrentMessage('');
                     setChatContext(chatContext);
                     const instructions = [...chatHistory]; // this will become the new set of instructions
                     const today = new Date();
                     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    instructions.push({role: 'user', message: text, time: time});
-                    instructions.push({role: 'system', message: updateObject.message, time: time});
-                    setChatHistory(instructions);                        
-                });
-        }
+                    instructions.push({ role: 'user', message: text, time: time });
+                    instructions.push({ role: 'system', message: updateObject.message, time: time });
+                    setChatHistory(instructions);
+                  })
+              });
+          }          
     })
 
     return (

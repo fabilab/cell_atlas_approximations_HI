@@ -6,7 +6,6 @@ import Typewriter from "typewriter-effect";
 
 const Message = (props) => {
   const { role, message, pause } = props;
-  console.log(message);
   const messageBoxMarginBottom = '1.5em';
 
   if (role === 'user') {

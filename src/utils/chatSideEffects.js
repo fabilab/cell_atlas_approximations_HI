@@ -9,7 +9,7 @@ const updatePlotIntents = [
     "add",
   ];
 
- export const triggersPlotUpdate = ((response) => {
+export const triggersPlotUpdate = ((response) => {
     if (!response)
         return false;
     if (!response.hasData)
@@ -23,36 +23,37 @@ const updatePlotIntents = [
 
 
 
-export const updateChat = ((response) => {
-    let entities = response.entities; 
+
+export const updateChat = async (response) => {
+    let entities = response.entities;
     let intent = response.intent;
-    console.log(response)
-    if(intent === "None")
-        return {
-            hasData: false,
-            message: "Sorry I didn't get that. Please rephrase.",
-        };
-
     let complete = response.complete;
-    if (!complete) {
-        // forward the followup question to chatbox
-        console.log("follow up question is " + response.followUpQuestion);
-        return {
-            hasData: false,
-            message: response.followUpQuestion,
-        };
+    console.log(response);
+    if (intent === "None") {
+      return {
+        hasData: false,
+        message: "Sorry I didn't get that. Please rephrase.",
+      };
     }
-
+  
+    console.log(complete);
+    if (!complete) {
+      // forward the followup question to chatbox
+      return {
+        hasData: false,
+        message: response.followUpQuestion,
+      };
+    }
+  
     console.log("current intent is" + intent);
-    const { endpoint, params } = window.buildAPIParams(intent,entities);
-    callAPI(endpoint, params).then((data) => {
-        console.log(data);
-        const answer = window.buildAnswer(intent, data);
-        return {
-            hasData: true,
-            params: params,
-            data: data,
-            message: answer,
-        }
-    });
-})
+    const { endpoint, params } = window.buildAPIParams(intent, entities);
+    const apiData = await callAPI(endpoint, params);
+    console.log(apiData);
+    const answer = window.buildAnswer(intent, apiData);
+    return {
+      hasData: true,
+      params: params,
+      data: apiData,
+      message: answer,
+    };
+  };
