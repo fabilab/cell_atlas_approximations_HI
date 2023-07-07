@@ -14,7 +14,7 @@ const CellxOrganTable = ({ state }) => {
         organCount++;
       }
     });
-    return organCount > 0 ? row : null;
+    return organCount > 1 ? row : null;
   }).filter(Boolean);
   
   // console.log("cell types that found in multiple organ\n");
@@ -107,7 +107,7 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '40vh',
+          y: '70vh',
         }}
       />
       <Table

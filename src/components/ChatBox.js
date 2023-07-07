@@ -3,13 +3,14 @@ import Message from "./Message";
 import { Layout, Row, Input } from "antd";
 import Typewriter from "typewriter-effect";
 import { updateChat } from "../utils/chatSideEffects";
+// import { }
 const { Sider } = Layout;
 
 
 let debug = true;
 
 // pass in both the old and new user instructions as props
-const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse }) => {
+const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
     const [chatContext, setChatContext] = useState({});
     const [welcomeMessage, setWelcomeMessage] = useState(true);
     const [messageHistory, setMessageHistory] = useState([]);
@@ -20,7 +21,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     useEffect(() => {
         chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
       }, [chatHistory, setChatHistory]);
-      
+
     const handleKeyDown = (e) => {
         if (e.key === 'ArrowUp') {
             if (historyIndex > 0) {
@@ -38,18 +39,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             }
         }
       };
-    // Display a auto bot message when the page load
-    useEffect(() => {
-        // Display welcome message after a certain delay
-        const timer = setTimeout(() => {
-          setWelcomeMessage(true);
-        }, 1000);
     
-        return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }, []);
-    
-
-
     // Reply message to user
     const handleSubmit = ((text) => {
         const newMessage = { message: text, index: messageHistory.length };
@@ -63,18 +53,47 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             setCurrentMessage('');
             return "";
         } else if (text === 'help') {
-
+            let helpMessage = "<a href=\"index.html\">Restart navigation</a><br><a href=\"userguide.html\">User guide</a>";
             
+            helpMessage += "<br>Example queries:<br>  - <a onclick={() => setCurrentMessage('What organs are available in human?') }>What organs are available in human?</a>";
+            
+            let suggestions = null;
+            if (plotState) {
+                if (plotState.plotType === "heatmap") {
+                    suggestions = ["Make a dot plot", "Add genes", "Remove genes"];
+                } else if (plotState.plotType === "bubbleHeatmap") {
+                    suggestions = ["Make a heatmap", "Add genes", "Remove genes"];
+                }
+            }
+
+            if (suggestions) {
+                helpMessage += "<br>Suggestions:"
+                for (let i = 0; i < suggestions.length; i++) {
+                    helpMessage += "<br>  - " + suggestions[i];
+                }
+            }
+            setCurrentMessage('');
+            const instructions = [...chatHistory]; // this will become the new set of instructions
+            const today = new Date();
+            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            instructions.push({ role: 'user', message: text, time: time });
+            instructions.push({ role: 'system', message: helpMessage, time: time });
+            setChatHistory(instructions);
+
+
+            // // Display sample queries
+            // setChatHistory((chatHistory) => [
+            //     ...chatHistory,
+            //     { role: 'system', message: 'Here are some sample queries:', time: new Date().getTime() },
+            //     ...sampleQueries.map((query) => ({ role: 'system', message: query, time: new Date().getTime() })),
+            // ]);
           } else {
             window.ask(text, chatContext)
               .then((response) => {
                 updateChat(response)
                   .then((updateObject) => {
-                    console.log(updateObject);
-                    console.log(updateObject.message);
                     response.hasData = updateObject.hasData;
                     if (updateObject.hasData) {
-                      console.log("Has data");
                       response.data = updateObject.data;
                       response.params = updateObject.params;
                     }

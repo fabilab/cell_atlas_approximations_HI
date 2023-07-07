@@ -1,8 +1,6 @@
 import CanvasXpressReact from 'canvasxpress-react';
 
 const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => { 
-  
-  console.log(target, xaxis, yaxis, values, organism, organ);
 
   const handleClick = (gene) => {
     const url = `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -12,11 +10,12 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
   let data =  {
     y: {
       vars: xaxis,
-      smps: yaxis.map((gene) => ({
-        v: gene,
-        f: `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}" target="_blank">${gene}</a>`,
-        click: () => handleClick(gene)
-      })),
+      // smps: yaxis.map((gene) => ({
+      //   v: gene,
+      //   f: `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}" target="_blank">${gene}</a>`,
+      //   click: () => handleClick(gene)
+      // })),
+      smps: yaxis,
       data: values
     }
   };
@@ -32,6 +31,16 @@ const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => {
     percentAspectRatioPlotArea: 0.5,
     heatmapAutoAdjust: true,
     heatmapIndicatorHeight: 25,
+    // disableCustomizer: true,
+    // disableDataFilters: true,
+    // disableDataTable: true,
+    // disableDrag: true,
+    // disableBeacon: true,
+    // disableEvents: true,
+    toolbarItems:["Save","Table"],
+    resizable: false,
+    movable:false,
+    
     // "varLabelRotate":"45",
   };
 

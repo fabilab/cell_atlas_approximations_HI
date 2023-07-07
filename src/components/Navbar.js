@@ -9,8 +9,11 @@ import {
  import { Menu, Layout } from 'antd';
  const { Header } = Layout;
 
+const Navbar = ({ setShowLanding }) => {
 
-const Navbar = () => {
+  const ShowLanding = () => {
+    setShowLanding(true);
+  }
 
   return (
     <Header style={{padding:'0px'}}>
@@ -28,9 +31,9 @@ const Navbar = () => {
         </Menu.Item>
         <Menu.Item>
           <CustomerServiceOutlined />
-          <a href="https://fabilab.org/" target="_blank"> Contact us</a>
+          <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
         </Menu.Item>
-        <Menu.Item style={{color: "#263238",marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
+        <Menu.Item onClick={ShowLanding} style={{color: "#263238",marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
           AtlasApprox
         </Menu.Item>
       </Menu>
