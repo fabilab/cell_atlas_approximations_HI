@@ -13,8 +13,8 @@ let intent = response.intent;
 let generalIntent = intent.split(".")[0];
 let newPlotState = null;
 let average, fractions;
-let organism = response.params.organism;
-let organ = response.params.organ;
+let organism = response.params.organism || plotState.organism;
+let organ = response.params.organ || plotState.organ;
 let features = response.params.features;
 let apiCelltypes = await atlasapprox.celltypes(organism, organ);
 let celltypes = apiCelltypes.celltypes;
@@ -25,6 +25,7 @@ const addIntent = (() => {
     features = plotState.features + "," + features.split(',');
     organism = plotState.organism;
     organ = plotState.organ;
+    celltypes = plotState.celltypes;
     // check if add command is applied to average or fraction
     if(!plotState.data.fractions) {
         averageIntent();
@@ -42,7 +43,9 @@ const markersIntent = async () => {
 
 const averageIntent = async () => {
     let apiResponse = await atlasapprox.average(organism, organ, features);
-    average = apiResponse.average ? transpose(apiResponse.average) : null;
+    average = apiResponse.average;
+    let apiCelltypes = await atlasapprox.celltypes(organism, organ);
+    let celltypes = apiCelltypes.celltypes;
     let plotType = "heatmap";
     newPlotState = {
       intent:"average",

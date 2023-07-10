@@ -1,56 +1,63 @@
-import CanvasXpressReact from 'canvasxpress-react';
+import Plot from 'react-plotly.js';
 
-const Heatmap = ({ target, xaxis, yaxis, values, organism, organ }) => { 
+const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => { 
+	const geneCardLink = (gene) =>
+    `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
-  const handleClick = (gene) => {
-    const url = `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
-    window.open(url, "_blank");
-  };
-  
-  let data =  {
-    y: {
-      vars: xaxis,
-      // smps: yaxis.map((gene) => ({
-      //   v: gene,
-      //   f: `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}" target="_blank">${gene}</a>`,
-      //   click: () => handleClick(gene)
-      // })),
-      smps: yaxis,
-      data: values
-    }
-  };
+	const yTickTexts = yaxis.map((gene) => {
+		const link = geneCardLink(gene);
+		return `<a href="${link}" target="_blank">${gene}</a>`;
+	});
+	const yTickVals = yaxis.map((_, index) => index);
 
+	let data = [
+	{
+		z: values,
+		x: xaxis,
+		y: yaxis,
+		type: 'heatmap',
+		hovertemplate:
+		"%{yaxis.title.text}: %{y} <br>" +
+		"%{xaxis.title.text}:%{x} <br>" +
+		"Expression: %{z}" +
+		"<extra></extra>"
+	}
+	];
 
-  let config = {
-    graphOrientation: "vertical",
-    graphType: "Heatmap",
-    theme: "CanvasXpress",
-    title: `Heatmap of gene expression in ${organism} ${organ}`,
-    smpTitle:"Genes",
-    varTitle:"Cell types",
-    percentAspectRatioPlotArea: 0.5,
-    heatmapAutoAdjust: true,
-    heatmapIndicatorHeight: 25,
-    // disableCustomizer: true,
-    // disableDataFilters: true,
-    // disableDataTable: true,
-    // disableDrag: true,
-    // disableBeacon: true,
-    // disableEvents: true,
-    toolbarItems:["Save","Table"],
-    resizable: false,
-    movable:false,
-    
-    // "varLabelRotate":"45",
-  };
+	let layout = {
+		xaxis: {
+			automargin: true,
+			title: {
+				text: 'Cell types',
+				font: {
+				size: 18,
+				},
+				standoff: 20,
+			},
+			y: 10,
+		},
+		yaxis: {
+			automargin: true,
+			title: {
+				text: 'Genes',
+				font: {
+				  size: 18,
+				},
+				standoff: 20,
+			},
+			tickmode: 'array',
+			ticktext: yTickTexts,
+			tickvals: yTickVals,
+		},
+		title: `Heatmap of gene expression in ${organism} ${organ}`,
+	};
 
-  return (
-    <CanvasXpressReact 
-    target={target}
-      data={data} 
-      config={config}
-    />
-  )
+return (
+    <Plot
+		data={data}
+		layout={layout}
+	/>
+  );
 }
 
 export default Heatmap;

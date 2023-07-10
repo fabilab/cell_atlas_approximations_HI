@@ -8,9 +8,8 @@ import CellxOrganTable from './plots/CellxOrganTable';
 const PlotBox = ({ state }) => {
     if (state.plotType === 'heatmap') {
         return (
-            <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Heatmap
-                    target="canvasId"
                     xaxis={state.data.xaxis}
                     yaxis={state.data.yaxis}
                     values={state.data.average}

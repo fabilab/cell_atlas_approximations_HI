@@ -17,6 +17,7 @@
     "canvasxpress-react": "^44.3.9",
     "crypto-browserify": "^3.12.0",
     "gh-pages": "^5.0.0",
+    "plotly.js": "^2.24.3",
     "plotly.js-dist": "^2.24.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

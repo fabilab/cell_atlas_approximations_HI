@@ -45,14 +45,6 @@ const MainBoard = () => {
             setShowLanding={setShowLanding}
         />
         <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
-          {/* {plotState ? (
-				  <PlotBox state={plotState} />
-            ) : (
-            <Landing
-              currentMessage={currentMessage}
-              setCurrentMessage={setCurrentMessage}
-            />
-          )} */}
           {showLanding ? (
             <Landing
               currentMessage={currentMessage}
