@@ -66,29 +66,30 @@ const averageIntent = async () => {
     setPlotState(newPlotState);
 };
 
-  const fractionsIntent = async () => {
-    let apiFraction = await atlasapprox.fraction_detected(organism, organ, features);
-    let apiAverage = await atlasapprox.average(organism, organ, features);
-    fractions = apiFraction.fraction_detected ? transpose(apiFraction.fraction_detected) : null;
-    average = apiAverage.average ? transpose(apiAverage.average) : null;
-    let plotType = "bubbleHeatmap";
-    newPlotState = {
-      intent,
-      plotType,
-      organism,
-      organ,
-      features,
-      data: {
-        type: "matrix",
-        xaxis: celltypes,
-        yaxis: features.split(","),
-        average: average,
-        fractions: fractions,
-        valueUnit: "counts per ten thousand",
-      },
-    };
-    setPlotState(newPlotState);
+const fractionsIntent = async () => {
+  let apiFraction = await atlasapprox.fraction_detected(organism, organ, features);
+  let apiAverage = await atlasapprox.average(organism, organ, features);
+  fractions = apiFraction.fraction_detected;
+  average = apiAverage.average;
+  let plotType = "bubbleHeatmap";
+
+  newPlotState = {
+    intent,
+    plotType,
+    organism,
+    organ,
+    features,
+    data: {
+      type: "matrix",
+      xaxis: celltypes,
+      yaxis: features.split(','),
+      average: average,
+      fractions: fractions,
+      valueUnit: "counts per million",
+    },
   };
+  setPlotState(newPlotState);
+};
 
 const measureIntent = async () => {
     const highestResponse = await atlasapprox.highest_measurement(organism, features, 10);
