@@ -20,11 +20,13 @@
     "plotly.js-dist": "^2.24.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.12.0",
     "react-scripts": "5.0.1",
     "react-ts-typewriter": "^0.1.8-b",
     "react-typewriter-effect": "^1.1.0",
     "split-pane-react": "^0.1.3",
+    "typewriter-effect": "^2.20.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

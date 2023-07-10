@@ -93,7 +93,7 @@ const measureIntent = async () => {
     let organs = highestResponse.organs;
     let celltypes = highestResponse.celltypes;
     console.log(celltypes);
-    const xaxis = celltypes.map((c, index) => {
+    const celltypesOrgan = celltypes.map((c, index) => {
       return c + " (" + organs[index] + ")";
     });
     newPlotState = {
@@ -105,7 +105,7 @@ const measureIntent = async () => {
       features,
       data: {
         type: "matrix",
-        xaxis: xaxis,
+        celltypesOrgan: celltypesOrgan,
         yaxis: highestResponse.average,
         average: highestResponse.average,
         fractions: null,

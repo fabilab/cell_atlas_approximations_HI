@@ -38,11 +38,10 @@ const PlotBox = ({ state }) => {
         return (
             <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <BarChart
-                    target="canvasId"
-                    xaxis={state.data.xaxis}
+                    celltypesOrgan={state.data.celltypesOrgan}
                     average={state.data.average}
                     organism={state.organism}
-                    gene={state.features}
+                    features={state.features}
                 />
             </div>
         );

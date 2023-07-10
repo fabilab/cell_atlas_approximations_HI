@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { Layout, Row, Input } from "antd";
-import Typewriter from "typewriter-effect";
+// import Typewriter from "typewriter-effect";
 import { updateChat } from "../utils/chatSideEffects";
 // import { }
 const { Sider } = Layout;
