@@ -1,51 +1,45 @@
-import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+// import { useState } from "react";
+// import { NavLink, Link } from "react-router-dom";
+import { 
+  GithubOutlined,
+  InfoCircleOutlined,
+  CodeOutlined,
+  CustomerServiceOutlined
+ } from '@ant-design/icons';
+ import { Menu, Layout } from 'antd';
+ const { Header } = Layout;
 
+const Navbar = ({ setShowLanding }) => {
 
-const Navbar = () => {
-  const [isExpanded, setExpanded] = useState(false);
+  const ShowLanding = () => {
+    setShowLanding(true);
+  }
 
-    
-    return (
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-brand">
-            <NavLink to='/' className="navbar-item">
-              <strong>AtlasApprox</strong>
-            </NavLink>
-            <a 
-              role="button" 
-              className="navbar-burger" 
-              aria-label="menu" 
-              aria-expanded="false" 
-              onClick={() => setExpanded(!isExpanded)}
-            >
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </a>
-          </div>
-
-          <div className={isExpanded ? "navbar-menu is-active" : "navbar-menu"}>
-            <div className="navbar-end">
-              <div className="navbar-item">
-                <Link to="/about" className="has-text-dark">
-                  About
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link to="https://atlasapprox.readthedocs.io/en/latest/index.html" className="has-text-dark">
-                  API
-                </Link>
-              </div>
-              <div className="navbar-item" >
-                <Link to="/contact" className="has-text-dark">
-                  Contact
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
-    )
+  return (
+    <Header style={{padding:'0px'}}>
+      <Menu mode="horizontal">
+        <Menu.Item>
+          <InfoCircleOutlined /> User Menu
+        </Menu.Item>
+        <Menu.Item>
+          <CodeOutlined />
+          <a href="https://atlasapprox.readthedocs.io/en/latest/index.html" target="_blank"> API</a>
+        </Menu.Item>
+        <Menu.Item>
+          <GithubOutlined />
+          <a href="https://github.com/fabilab/cell_atlas_approximations" target="_blank"> Github Repo</a>
+        </Menu.Item>
+        <Menu.Item>
+          <CustomerServiceOutlined />
+          <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
+        </Menu.Item>
+        <Menu.Item onClick={ShowLanding} style={{color: "#263238",marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
+          AtlasApprox
+        </Menu.Item>
+      </Menu>
+    </Header>
+  );
 }
 
 export default Navbar;
+

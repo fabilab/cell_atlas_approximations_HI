@@ -1,98 +1,71 @@
 import React, { useState, useEffect } from 'react';
-
+import { Layout, Card } from 'antd';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
-import transpose from "../utils/math";
+import Navbar from './Navbar';
+
+import Landing from './Landing';
+import { triggersPlotUpdate } from '../utils/chatSideEffects';
+import { updatePlotState } from '../utils/updatePlotState';
+
+const { Content } = Layout;
+
 
 const MainBoard = () => {
+  const [chatHistory, setChatHistory] = useState([]);
+  const [currentResponse, setCurrentResponse] = useState(null);
+  const [plotState, setPlotState] = useState(null);
+  const [showLanding, setShowLanding] = useState(true);
+  // message string that the user is typing
+  const [currentMessage, setCurrentMessage] = useState('');
+  
+  useEffect(() => {
+    if (triggersPlotUpdate(currentResponse)) {
+      console.log("updating plot!!!!!! =========")
+      console.log(triggersPlotUpdate(currentResponse));
+      updatePlotState(currentResponse, plotState, setPlotState);
+      setShowLanding(false);
+    }
+  }, [currentResponse]);
+ 
+  // Generate and update plot according to user intends
 
-    const [userInstructions, setUserInstructions] = useState([]);
-    // Initially "empty", so nothing is plotted (see the render return below)
-    const [plotState, setPlotState] = useState({
-        intent: "",
-        plotType: "",
-        organism: "",
-        organ: "",
-        features: [],
-        transforms: [],
-        data: {
-            type: "", 
-            xaxis: [],
-            yaxis: [],
-            values: [],
-            valueUnit: "",
-        },
-    });
-
-    // update plot upon new NLP instruction
-    useEffect(() => {
-        if (userInstructions.length === 0)
-            return;
-        const latestResponse = userInstructions.slice(-1)[0].response;
-        if (latestResponse.plot)
-            updatePlotState(latestResponse);
-        return;
-    }, [userInstructions]);
-
-    const updatePlotState = (response) => {
-        (async () => {
-            console.log("within async, response:");
-            console.log(response);
-            const organism = response.data.organism;
-            const organ = response.data.organ;
-            const features = response.data.features;
-            const celltypes = await window.atlasapproxAPI(
-                "celltypes", { organism: organism, organ: organ });
-
-            const intent = response.intent;
-            const generalIntent = intent.split(".")[0];
-
-            let matrix;
-            if (generalIntent === "average")
-                matrix = response.data.average;
-            else if (generalIntent === "fraction_detected")
-                matrix = response.data.fractions;
-            matrix = transpose(matrix);
-
-            const plotType = "heatmap";
-            const newPlotState = {
-                intent,
-                plotType,
-                organism,
-                organ,
-                features,
-                data: {
-                    type: "matrix",
-                    xaxis: celltypes,
-                    yaxis: features,
-                    values: matrix,
-                    valueUnit: "counts per ten thousand"
-                }
-            }
-            console.log("new plot state:");
-            console.log(newPlotState);
-            setPlotState(newPlotState);
-        })();
-    };
-
-    return (
-        <div className="columns mb-0 pb-0 has-background-light" style={{position:"absolute",height:"100%", width:"100%"}}>
-            <div className="column is-4" style={{height:'inherit'}}>
-                <ChatBox 
-                    userInstructions={ userInstructions }
-                    setUserInstructions={ setUserInstructions }
-                />
-            </div>
-            <div className="column is-8" id='canvas'>
-                {
-                <PlotBox
-                    state={ plotState }
-                    setState={ setPlotState }
-                />
-                }
-            </div>
-        </div>
-    )
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      <ChatBox 
+        chatHistory={chatHistory} 
+        setChatHistory={setChatHistory}
+        currentMessage={currentMessage}
+        setCurrentMessage={setCurrentMessage}
+        setCurrentResponse={setCurrentResponse}
+        plotState={plotState}
+      />
+      <Layout style={{ backgroundColor: "#fafafa" }}>
+        <Navbar
+            setShowLanding={setShowLanding}
+        />
+        <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
+          {/* {plotState ? (
+				  <PlotBox state={plotState} />
+            ) : (
+            <Landing
+              currentMessage={currentMessage}
+              setCurrentMessage={setCurrentMessage}
+            />
+          )} */}
+          {showLanding ? (
+            <Landing
+              currentMessage={currentMessage}
+              setCurrentMessage={setCurrentMessage}
+            />
+          ) : (
+            plotState && <PlotBox state={plotState} />
+          )}
+        </Content>
+      </Layout>
+    </Layout>
+  );
 };
 
 export default MainBoard;
+
