@@ -7,6 +7,7 @@ const updatePlotIntents = [
     "average",
     "fraction_detected",
     "add",
+    "remove",
     "celltypexorgan",
   ];
 

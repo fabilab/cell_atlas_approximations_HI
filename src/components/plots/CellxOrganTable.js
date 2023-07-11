@@ -107,16 +107,13 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '70vh',
+          y: '45vh',
         }}
       />
       <Table
         columns={columnsUnique}
         dataSource={[finalRow]} // Wrap the final row in an array to display it as a single row
         pagination={false}
-        scroll={{
-          y: '50vh',
-        }}
       />
   </section>
   );

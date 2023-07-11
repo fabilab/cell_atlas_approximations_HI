@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 const BarChart = ({ celltypesOrgan, average, organism, features }) => { 
 
 	let xValue = celltypesOrgan
-	let yValue = average.map(x => Number(x.toFixed(3)));;
+	let yValue = average.map(x => Number(x.toFixed(3)));
 	
 	let trace1 = {
 		x: xValue,
@@ -26,6 +26,7 @@ const BarChart = ({ celltypesOrgan, average, organism, features }) => {
 	
 	let layout = {
 		xaxis: {
+			automargin: true,
 			title: {
 				text: 'Cell types / Organs',
 				font: {

@@ -49,7 +49,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 			ticktext: yTickTexts,
 			tickvals: yTickVals,
 		},
-		title: `Heatmap of gene expression in ${organism} ${organ}`,
+		title: `<b>Heatmap of gene expression in ${organism} ${organ}</b>`,
 	};
 
 return (

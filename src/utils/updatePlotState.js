@@ -1,11 +1,11 @@
 import atlasapprox from "atlasapprox";
 
-function transpose(matrix) {
-if (matrix.length === 0) {
-    return matrix;
-}
-return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
-}
+// function transpose(matrix) {
+// if (matrix.length === 0) {
+//     return matrix;
+// }
+// return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
+// }
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
 
@@ -19,10 +19,26 @@ let features = response.params.features;
 let apiCelltypes = await atlasapprox.celltypes(organism, organ);
 let celltypes = apiCelltypes.celltypes;
 
-const addIntent = (() => {
-
+console.log(response);
+const addGenes = (() => {
+	console.log(plotState.features);
+	console.log(features);
     // update parameter for average/fraction plots
     features = plotState.features + "," + features.split(',');
+    organism = plotState.organism;
+    organ = plotState.organ;
+    celltypes = plotState.celltypes;
+    // check if add command is applied to average or fraction
+    if(!plotState.data.fractions) {
+        averageIntent();
+    } else {
+        fractionsIntent();
+    }
+});
+
+const removeGenes = (() => {
+	// console.log(typeof(features));
+	features = plotState.features.split(',').filter(g => !features.includes(g)).join(',');
     organism = plotState.organism;
     organ = plotState.organ;
     celltypes = plotState.celltypes;
@@ -141,8 +157,11 @@ const cellxorganIntent = async () => {
 
 switch (generalIntent) {
     case "add": 
-        addIntent();
+        addGenes();
         break;
+	case "remove":
+		removeGenes();
+		break;
     case "markers":
         markersIntent();
         break;
