@@ -20,11 +20,11 @@ const Navbar = ({ setShowLanding }) => {
       <Menu
         mode="horizontal"
         style={{
-          background: "linear-gradient(45deg, #1F3B75 0%, #3282B8 100%)",
+          background: "linear-gradient(45deg, #3282B8 10%, #1F3B75 90%)",
           color: "white",
         }}
       >
-        <Menu.Item>
+        <Menu.Item style={{fontFamily:"inherit"}}>
           <InfoCircleOutlined /> User Menu
         </Menu.Item>
         <Menu.Item>

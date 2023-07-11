@@ -10,11 +10,11 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
     const sampleQueries = [
         'What organisms are available in AtlasApprox?',
         'List cell types in microcebus myoxinus pancreas',
-        'What is the average expression of ALK,CD8A,CD19 in human lung?',
         'Show the marker genes for coronary in human heart.',
-        'What is the fraction of IL6,TNF,APOE,COL1A1,ALK,CD8A,CD19,TP53 in human lung?',
-        'what cell type is the highest expressor of ALK in human?',
         'what cell types are present in each organ of mouse?',
+        'what cell type is the highest expressor of ALK in human?',
+        'What is the fraction of IL6,TNF,APOE,CD8A,CD19,TP53 in human lung?',
+        'What is the average expression of IL6,TNF,APOE,COL1A1,ALK,TP53 in human lung?',
     ];
 
     return (
@@ -48,7 +48,7 @@ const Landing = ({currentMessage, setCurrentMessage}) => {
                     key={index} 
                     onClick={() => setCurrentMessage(s)}
                     style={{
-                        margin:"1vh",
+                        margin:"1.5vh",
                         color: currentMessage === s ? '#fa8c16' : 'initial',
                         cursor: 'pointer',
                         ':hover':{ color: 'lightblue' }

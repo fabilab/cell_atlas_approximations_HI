@@ -63,17 +63,21 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                 "What genes are expressed in cardiomyocytes?",
                 "What is the expression level of gene ABC in all cell types?"
             ];
-            helpMessage += exampleQueries
-                .map((query, index) => {
-                    return `<br>- <a href="#" onclick="setCurrentMessage('${query}')">${query}</a>`;
-                })
-                .join("");
+            
+            // helpMessage += exampleQueries
+            //     .map((query, index) => {
+            //         // return `<br>- <a href="#" onclick="${setCurrentMessage(query)}">${query}</a>`;
+            //         return `<br>- <a href="#" onclick='document.getElementById("chatBoxInput").value = "${query}"'>${query}</a>`;
+            //     })
+            //     .join("");
+            helpMessage += exampleQueries;
+
             setCurrentMessage('');
             const instructions = [...chatHistory]; // this will become the new set of instructions
             const today = new Date();
             const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
             instructions.push({ role: 'user', message: text, time: time });
-            instructions.push({ role: 'system', message: helpMessage, time: time });
+            instructions.push({ role: 'system', message: exampleQueries, time: time, isHelp:true});
             setChatHistory(instructions);
 
           } else {
@@ -96,7 +100,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                     const today = new Date();
                     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                     instructions.push({ role: 'user', message: text, time: time });
-                    instructions.push({ role: 'system', message: updateObject.message, time: time });
+                    instructions.push({ role: 'system', message: updateObject.message, time: time});
                     setChatHistory(instructions);
                   })
               });
@@ -115,23 +119,31 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                 }
                 {chatHistory.length !== 0 &&
                 chatHistory.map((m) => (
-                    <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message} pause={false}/>
+                    <Message 
+                        key={`${m.role}-${m.time}`} 
+                        role={m.role} 
+                        message={m.message} 
+                        pause={false}
+                        help={m.isHelp}
+                        setCurrentMessage={(m) => setCurrentMessage(m)}
+                    />
                 ))}
             </div>
             <div style={{height:"3vh"}}></div>
             <Row>
                 <Input.TextArea
-                allowClear
-                autoSize={{ minRows: 4, maxRows: 5 }}
-                value={currentMessage}
-                onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-                onKeyDown={handleKeyDown}
-                onPressEnter={() => handleSubmit(currentMessage)}
+                    id="chatBoxInput"
+                    allowClear
+                    autoSize={{ minRows: 4, maxRows: 5 }}
+                    value={currentMessage}
+                    onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+                    onKeyDown={handleKeyDown}
+                    onPressEnter={() => handleSubmit(currentMessage)}
                 />
             </Row>
             <Row>
                 <p style={{ margin: 0, color: "#999", fontSize: "11px" }}>
-                    Press Enter to send message. Key up to navigate command history.
+                    Press 'Enter' to send message. Key up to navigate command history.
                 </p>
             </Row>
         </Sider>
