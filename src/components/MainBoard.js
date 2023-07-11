@@ -40,7 +40,7 @@ const MainBoard = () => {
         setCurrentResponse={setCurrentResponse}
         plotState={plotState}
       />
-      <Layout style={{ backgroundColor: "#fafafa" }}>
+      <Layout style={{ backgroundColor: "white" }}>
         <Navbar
             setShowLanding={setShowLanding}
         />

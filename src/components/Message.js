@@ -10,24 +10,24 @@ const Message = (props) => {
 
   if (role === 'user') {
     return (
-      <Col xs={18} md={20} lg={22} xl={22} xxl={22} offset={2} style={{marginBottom: messageBoxMarginBottom}}>
+      <Col xs={18} md={20} lg={22} xl={23} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
         <div className="media">
-          <div className="media-content">
-            <div className="box">
-              {message}
-            </div>
-          </div>
-          <div className="media-right">
+          <div className="media-left">
             <figure className="image is-32x32">
               <img src={userImage} alt="User"/>
             </figure>
+          </div>
+          <div className="media-content">
+            <div className="box" style={{backgroundColor:"rgb(235,240,245)", color:"#1c3052"}}>
+              {message}
+            </div>
           </div>
         </div>
       </Col>
     );
   } else {
     return (
-      <Col xs={18} md={20} lg={22} xl={22} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
+      <Col xs={18} md={20} lg={22} xl={23} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
         <div className="media">
           <div className="media-left">
             <figure className="image is-32x32">

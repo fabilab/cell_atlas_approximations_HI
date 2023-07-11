@@ -17,10 +17,6 @@ const CellxOrganTable = ({ state }) => {
     return organCount > 1 ? row : null;
   }).filter(Boolean);
   
-  // console.log("cell types that found in multiple organ\n");
-  // console.log(multiOrgansData);
-
-
   //  cell types that found in only ONE organ
   const uniqueOrganData = state.celltypes.map((celltype, index) =>
   {

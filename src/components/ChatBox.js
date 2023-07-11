@@ -54,24 +54,20 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             return "";
         } else if (text === 'help') {
             let helpMessage = "<a href=\"index.html\">Restart navigation</a><br><a href=\"userguide.html\">User guide</a>";
-            
-            helpMessage += "<br>Example queries:<br>  - <a onclick={() => setCurrentMessage('What organs are available in human?') }>What organs are available in human?</a>";
-            
-            let suggestions = null;
-            if (plotState) {
-                if (plotState.plotType === "heatmap") {
-                    suggestions = ["Make a dot plot", "Add genes", "Remove genes"];
-                } else if (plotState.plotType === "bubbleHeatmap") {
-                    suggestions = ["Make a heatmap", "Add genes", "Remove genes"];
-                }
-            }
-
-            if (suggestions) {
-                helpMessage += "<br>Suggestions:"
-                for (let i = 0; i < suggestions.length; i++) {
-                    helpMessage += "<br>  - " + suggestions[i];
-                }
-            }
+            helpMessage += "<br>Example queries:";
+      
+            const exampleQueries = [
+                "What organisms are available?",
+                "What organs are available in human?",
+                "What cell types are available in human heart?",
+                "What genes are expressed in cardiomyocytes?",
+                "What is the expression level of gene ABC in all cell types?"
+            ];
+            helpMessage += exampleQueries
+                .map((query, index) => {
+                    return `<br>- <a href="#" onclick="setCurrentMessage('${query}')">${query}</a>`;
+                })
+                .join("");
             setCurrentMessage('');
             const instructions = [...chatHistory]; // this will become the new set of instructions
             const today = new Date();
@@ -80,13 +76,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             instructions.push({ role: 'system', message: helpMessage, time: time });
             setChatHistory(instructions);
 
-
-            // // Display sample queries
-            // setChatHistory((chatHistory) => [
-            //     ...chatHistory,
-            //     { role: 'system', message: 'Here are some sample queries:', time: new Date().getTime() },
-            //     ...sampleQueries.map((query) => ({ role: 'system', message: query, time: new Date().getTime() })),
-            // ]);
           } else {
             window.ask(text, chatContext)
               .then((response) => {
@@ -115,7 +104,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     })
 
     return (
-        <Sider width={"25vw"} style={{padding:"1%", backgroundColor:"#263238"}}>
+        <Sider width={"26vw"} style={{padding:"1%", backgroundColor:"#f5f5f5"}}>
             <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
                 {
                     welcomeMessage &&
@@ -129,16 +118,21 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                     <Message key={`${m.role}-${m.time}`} role={m.role} message={m.message} pause={false}/>
                 ))}
             </div>
-            <div style={{height:"5vh"}}></div>
+            <div style={{height:"3vh"}}></div>
             <Row>
                 <Input.TextArea
-                    allowClear
-                    autoSize={{ minRows: 4, maxRows: 5 }}
-                    value={currentMessage}
-                    onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-                    onKeyDown={handleKeyDown}
-                    onPressEnter={() => handleSubmit(currentMessage)}
+                allowClear
+                autoSize={{ minRows: 4, maxRows: 5 }}
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+                onKeyDown={handleKeyDown}
+                onPressEnter={() => handleSubmit(currentMessage)}
                 />
+            </Row>
+            <Row>
+                <p style={{ margin: 0, color: "#999", fontSize: "11px" }}>
+                    Press Enter to send message. Key up to navigate command history.
+                </p>
             </Row>
         </Sider>
     );
