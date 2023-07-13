@@ -1,4 +1,4 @@
-import atlasapprox from "atlasapprox";
+import atlasapprox, { organisms } from "atlasapprox";
 import { filterGenes } from "./chatSideEffects";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
@@ -7,8 +7,8 @@ let intent = response.intent;
 let generalIntent = intent.split(".")[0];
 let newPlotState = null;
 let average, fractions;
-let organism = response.params.organism || plotState.organism || "";
-let organ = response.params.organ || plotState.organ || "";
+let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
+let organ = (response.params && response.params.organ) || (plotState && plotState.organ) || "";
 let features = response.params.features;
 let apiCelltypes = await atlasapprox.celltypes(organism, organ);
 let celltypes = apiCelltypes.celltypes;
@@ -131,11 +131,8 @@ const measureIntent = async () => {
   };
 
 const cellxorganIntent = async () => {
-    console.log("here!!!===");
     const plotType = "table";
     let apiCellxOrgans = await atlasapprox.celltypexorgan(organism);
-    console.log("testing====")
-    console.log(apiCellxOrgans);
     let organs = apiCellxOrgans.organs;
     let detected = apiCellxOrgans.detected;
     let celltypes = apiCellxOrgans.celltypes;
@@ -149,6 +146,13 @@ const cellxorganIntent = async () => {
     setPlotState(newPlotState);
 };
 
+const organismsIntent = async () => {
+  const plotType = "showOrganisms";
+  newPlotState = {
+      plotType,
+  }
+  setPlotState(newPlotState);
+};
 
 console.log(generalIntent);
 switch (generalIntent) {
@@ -173,6 +177,8 @@ switch (generalIntent) {
     case "celltypexorgan":
         cellxorganIntent();
         break;
+    case "organisms":
+        organismsIntent();
     default:
 		console.log("default case")
       	break;

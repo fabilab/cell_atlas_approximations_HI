@@ -29,6 +29,7 @@ const updatePlotIntents = [
     "add",
     "remove",
     "celltypexorgan",
+    "organisms"
 ];
 const checkGenesIntents = [
   "average",

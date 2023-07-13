@@ -6,7 +6,7 @@
   "dependencies": {
     "@ant-design/colors": "^7.0.0",
     "@ant-design/icons": "^5.1.4",
-    "@emotion/react": "^11.11.0",
+    "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -20,6 +20,7 @@
     "plotly.js": "^2.24.3",
     "plotly.js-dist": "^2.24.2",
     "react": "^18.2.0",
+    "react-awesome-reveal": "^4.2.5",
     "react-dom": "^18.2.0",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.12.0",

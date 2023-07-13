@@ -3,6 +3,7 @@ import Heatmap from "./plots/Heatmap"
 import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';
 import CellxOrganTable from './plots/CellxOrganTable';
+import TableOrganisms from './plots/TableOrganisms';
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
@@ -47,6 +48,12 @@ const PlotBox = ({ state }) => {
     } else if(state.plotType === "table") {
         return (
             <CellxOrganTable
+                state={state}
+            />
+        )
+    } else if(state.plotType === "showOrganisms") {
+        return (
+            <TableOrganisms
                 state={state}
             />
         )
