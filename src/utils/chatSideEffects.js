@@ -88,11 +88,13 @@ export const updateChat = async (response) => {
       params['feature'] = params['features'];
       delete params['features'];
       apiData = await callAPI(endpoint, params);
-      answer = `Here are genes that are similar to ${params['feature']}: ${apiData['similar_features']}`;
+      // answer = window.buildAnswer(intent, apiData);
+      answer = `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } else {
       apiData = await callAPI(endpoint, params);
       answer += window.buildAnswer(intent, apiData);
     }
+    console.log(apiData);
     return {
       hasData: true,
       params: params,

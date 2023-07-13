@@ -4,12 +4,11 @@ import { filterGenes } from "./chatSideEffects";
 export const updatePlotState = async (response, plotState, setPlotState) => {
 console.log(response);
 let intent = response.intent;
-console.log(intent)
 let generalIntent = intent.split(".")[0];
 let newPlotState = null;
 let average, fractions;
 let organism = response.params.organism || plotState.organism || "";
-let organ = response.params.organ || plotState.organ;
+let organ = response.params.organ || plotState.organ || "";
 let features = response.params.features;
 let apiCelltypes = await atlasapprox.celltypes(organism, organ);
 let celltypes = apiCelltypes.celltypes;

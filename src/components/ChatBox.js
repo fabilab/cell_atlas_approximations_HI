@@ -79,11 +79,13 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                 updateChat(response)
                   .then((updateObject) => {
                     response.hasData = updateObject.hasData;
+                    console.log("Line 82 in ChatBox.js");
+                    console.log(response);
                     if (updateObject.hasData) {
                       response.data = updateObject.data;
                       response.params = updateObject.params;
                     }
-                    console.log(response);
+                    
                     // update parent response state
                     setCurrentResponse(response);
           

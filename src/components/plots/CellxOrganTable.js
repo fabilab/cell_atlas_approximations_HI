@@ -9,7 +9,7 @@ const CellxOrganTable = ({ state }) => {
     const row = { key: index, celltype };
     let organCount = 0;
     state.organs.forEach((organ, organIndex) => {
-      row[organ] = state.detected[index][organIndex];
+      row[organ] = state.detected[index][organIndex] > 0;
       if (state.detected[index][organIndex]) {
         organCount++;
       }
@@ -23,7 +23,7 @@ const CellxOrganTable = ({ state }) => {
     const row = { key: index, celltype };
     let organCount = 0;
     state.organs.forEach((organ, organIndex) => {
-      row[organ] = state.detected[index][organIndex];
+      row[organ] = state.detected[index][organIndex] > 0;
       if (state.detected[index][organIndex]) {
         organCount++;
       }
