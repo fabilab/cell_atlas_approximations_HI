@@ -52,27 +52,20 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             setChatContext({});
             setCurrentMessage('');
             return "";
-        } else if (text === 'help') {
-            let helpMessage = "<a href=\"index.html\">Restart navigation</a><br><a href=\"userguide.html\">User guide</a>";
-            helpMessage += "<br>Example queries:";
+        } else if (text.toLowerCase().replace(/\s/g, '') === 'help') {
+            // let helpMessage = "<a href=\"index.html\">Restart navigation</a><br><a href=\"userguide.html\">User guide</a>";
+            // let helpMessage = "<br>Example queries:";
       
             const exampleQueries = [
                 "What organisms are available?",
                 "What organs are available in human?",
                 "What cell types are available in human heart?",
-                "What genes are expressed in cardiomyocytes?",
+                "What genes are expressed in cardio myocytes?",
+                "show 10 similar genes to TP53 in human lung",
                 "What is the expression level of gene ABC in all cell types?"
             ];
             
-            // helpMessage += exampleQueries
-            //     .map((query, index) => {
-            //         // return `<br>- <a href="#" onclick="${setCurrentMessage(query)}">${query}</a>`;
-            //         return `<br>- <a href="#" onclick='document.getElementById("chatBoxInput").value = "${query}"'>${query}</a>`;
-            //     })
-            //     .join("");
-            helpMessage += exampleQueries;
-
-            setCurrentMessage('');
+            setCurrentMessage("");
             const instructions = [...chatHistory]; // this will become the new set of instructions
             const today = new Date();
             const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -90,6 +83,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                       response.data = updateObject.data;
                       response.params = updateObject.params;
                     }
+                    console.log(response);
                     // update parent response state
                     setCurrentResponse(response);
           

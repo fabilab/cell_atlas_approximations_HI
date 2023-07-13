@@ -1,29 +1,22 @@
 import atlasapprox from "atlasapprox";
-
-// function transpose(matrix) {
-// if (matrix.length === 0) {
-//     return matrix;
-// }
-// return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
-// }
+import { filterGenes } from "./chatSideEffects";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
-
+console.log(response);
 let intent = response.intent;
+console.log(intent)
 let generalIntent = intent.split(".")[0];
 let newPlotState = null;
 let average, fractions;
-let organism = response.params.organism || plotState.organism;
+let organism = response.params.organism || plotState.organism || "";
 let organ = response.params.organ || plotState.organ;
 let features = response.params.features;
 let apiCelltypes = await atlasapprox.celltypes(organism, organ);
 let celltypes = apiCelltypes.celltypes;
 
-console.log(response);
 const addGenes = (() => {
-	console.log(plotState.features);
-	console.log(features);
     // update parameter for average/fraction plots
+    console.log(features);
     features = plotState.features + "," + features.split(',');
     organism = plotState.organism;
     organ = plotState.organ;
@@ -58,6 +51,9 @@ const markersIntent = async () => {
 };
 
 const averageIntent = async () => {
+    let checkFeatures = features.split(',')
+    filterGenes(checkFeatures, organism, organ);
+
     let apiResponse = await atlasapprox.average(organism, organ, features);
     average = apiResponse.average;
     let apiCelltypes = await atlasapprox.celltypes(organism, organ);
@@ -136,7 +132,7 @@ const measureIntent = async () => {
   };
 
 const cellxorganIntent = async () => {
-
+    console.log("here!!!===");
     const plotType = "table";
     let apiCellxOrgans = await atlasapprox.celltypexorgan(organism);
     console.log("testing====")
@@ -155,6 +151,7 @@ const cellxorganIntent = async () => {
 };
 
 
+console.log(generalIntent);
 switch (generalIntent) {
     case "add": 
         addGenes();

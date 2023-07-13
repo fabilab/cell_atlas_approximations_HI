@@ -16,13 +16,17 @@ const MainBoard = () => {
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
+  const [showOrganisms, setOrganisms] = useState(true);
   // message string that the user is typing
   const [currentMessage, setCurrentMessage] = useState('');
+
   
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       console.log("updating plot!!!!!! =========")
       console.log(triggersPlotUpdate(currentResponse));
+      console.log(currentResponse)
+      console.log(plotState)
       updatePlotState(currentResponse, plotState, setPlotState);
       setShowLanding(false);
     }

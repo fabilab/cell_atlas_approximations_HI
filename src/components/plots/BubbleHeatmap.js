@@ -13,28 +13,28 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
     const yTickVals = yaxis.map((_, index) => index);
 
 	let dataList = [];
+    let all_x = [];
+    let all_y = [];
+    let all_color = [];
+    let all_size = [];
+    let all_hovertext = [];
+
+
 	for (let i = 0; i < yaxis.length; i++) {
-		let data = {
-			x: xaxis,
-			y: Array(xaxis.length).fill(yaxis[i]),
-			mode: 'markers',
-			marker: {
-				symbol: 'circle',
-				colorscale: 'Reds',
-				colorbar: {},
-				size: fractions[i].map((x) => x*20),
-				color: average[i],
-            },
-            hovertemplate: 
-                '%{yaxis.title.text}: %{y}<br>' +
-                '%{xaxis.title.text}: %{x}<br>' +
-                'Average: %{marker.color:.3f}<br>' +
-                'Fraction: %{marker.size:.3f}<extra></extra>'
-		}
+        all_x = all_x.concat(xaxis);
+        all_y = all_y.concat(Array(xaxis.length).fill(yaxis[i]));
+        all_color = all_color.concat(average[i]);
+        all_size = all_size.concat(fractions[i].map((x) => x.toPrecision(3)*100));
 
-		dataList.push(data);
+        const text = xaxis.map((celltype, index) => {
+            return (
+                `Gene: ${yaxis[i]}<br>Cell Type: ${celltype}<br>Avg Exp: ${average[i][index].toPrecision(3)}<br>Proportion: ${fractions[i][index].toPrecision(3)*100}%`
+            );
+        })
+
+        all_hovertext = all_hovertext.concat(text);
 	}
-
+    
     let layout = {
         xaxis: {
             automargin: true,
@@ -63,6 +63,26 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
         title: `<b>Bubble heatmap showing gene expression and fraction in ${organism} ${organ}</b>`,
     };
 
+    const desired_maximum_marker_size = 6.2;
+    
+    let data = {
+        x: all_x,
+        y: all_y,
+        mode: 'markers',
+        marker: {
+          color: all_color,
+          size: all_size,
+          sizeref: 2 * Math.max(...all_size) / (desired_maximum_marker_size**2),
+          colorscale: 'YlGnBu',
+          reversescale:true,
+          colorbar: {},
+        },
+        text: all_hovertext,
+        hoverinfo: 'text',
+    };
+      
+    console.log(data);
+
     let config = {
         toImageButtonOptions: {
             format: 'svg', // one of png, svg, jpeg, webp
@@ -76,7 +96,7 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
     }
 
     return <Plot 
-			data={dataList} 
+			data={[data]} 
 			layout={layout} 
             config={config}
 		/>;

@@ -7,15 +7,6 @@ import Typewriter from "typewriter-effect";
 const Message = (props) => {
   const { role, message, pause, help, setCurrentMessage } = props;
   const messageBoxMarginBottom = '1.5em';
-
-  const exampleQueries = [
-      "What organisms are available?",
-      "What organs are available in human?",
-      "What cell types are available in human heart?",
-      "What genes are expressed in cardio myocytes?",
-      "What is the expression level of gene ABC in all cell types?"
-  ];
-
   if (role === 'user') {
     return (
       <Col xs={18} md={20} lg={22} xl={23} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
@@ -26,7 +17,6 @@ const Message = (props) => {
             </figure>
           </div>
           <div className="media-content">
-            {/* <div className="box" style={{backgroundColor:"rgb(235,240,245)", color:"#1c3052"}}> */}
             <div className="box" style={{backgroundColor:"#e8f5e9", color:"#1c3052"}}>
               {message}
             </div>
@@ -44,7 +34,7 @@ const Message = (props) => {
             </figure>
           </div>
           <div className="media-content">
-            <div className="box" style={{ width: 'fit-content' }}>
+            <div className="box" style={{ width: 'inherit' }}>
             {
               message.map((m, i) => (
                 <a 
