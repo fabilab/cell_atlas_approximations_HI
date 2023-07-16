@@ -11,21 +11,39 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 	const yTickVals = yaxis.map((_, index) => index);
 
 	let data = [
-	{
-		z: values,
-		x: xaxis,
-		y: yaxis,
-		type: 'heatmap',
-		colorscale: 'Reds',
-		hovertemplate:
-		"%{yaxis.title.text}: %{y} <br>" +
-		"%{xaxis.title.text}:%{x} <br>" +
-		"Expression: %{z}" +
-		"<extra></extra>"
-	}
+		{
+			z: values,
+			x: xaxis,
+			y: yaxis,
+			type: 'heatmap',
+			colorscale: 'Reds',
+			hovertemplate:
+			"%{yaxis.title.text}: %{y} <br>" +
+			"%{xaxis.title.text}:%{x} <br>" +
+			"Expression: %{z}" +
+			"<extra></extra>"
+		}
 	];
 
+	let longestXlabel = 0, longestYlabel = 0;
+    for (let i=0; i < xaxis.length; i++) {
+        longestXlabel = Math.max(longestXlabel, xaxis[i].length);
+    }
+	for (let i=0; i < yaxis.length; i++) {
+		longestYlabel = Math.max(longestYlabel, yaxis[i].length);
+	}
+
+	let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
+    let ncelltypes = xaxis.length;
+    let pxCell = 15, pxChar = 6;
+    let ytickMargin = 85 + pxChar * longestYlabel;
+    let xtickMargin = pxChar * longestXlabel;
+    let graphWidth = ytickMargin + pxCell * ncelltypes + 300;
+    let graphHeight = pxCell * nfeatures * 0.6 + xtickMargin;
+
 	let layout = {
+		width: graphWidth,
+        height: graphHeight,
 		xaxis: {
 			automargin: true,
 			title: {

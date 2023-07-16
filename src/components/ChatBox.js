@@ -3,7 +3,6 @@ import Message from "./Message";
 import { Layout, Row, Input } from "antd";
 // import Typewriter from "typewriter-effect";
 import { updateChat } from "../utils/chatSideEffects";
-// import { }
 const { Sider } = Layout;
 
 
@@ -58,9 +57,10 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       
             const exampleQueries = [
                 "What organisms are available?",
-                "What organs are available in human?",
+                "what cell types are present in each organ of mus musculus?",
+                "Show 10 marker genes for coronary in human heart.",
                 "What cell types are available in human heart?",
-                "What genes are expressed in cardio myocytes?",
+                "what cell type is the highest expressor of COL1A1 in human?",
                 "show 10 similar genes to TP53 in human lung",
                 "What is the expression level of gene ABC in all cell types?"
             ];
@@ -105,6 +105,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
 
     return (
         <Sider width={"26vw"} style={{padding:"1%", backgroundColor:"#f5f5f5"}}>
+        {/* <Sider width={"26vw"} style={{padding:"1%", backgroundImage: `url(${chatBackground})`}}> */}
             <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
                 {
                     welcomeMessage &&

@@ -12,7 +12,6 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
     });
     const yTickVals = yaxis.map((_, index) => index);
 
-	let dataList = [];
     let all_x = [];
     let all_y = [];
     let all_color = [];
@@ -34,8 +33,26 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
 
         all_hovertext = all_hovertext.concat(text);
 	}
+
+    let longestXlabel = 0, longestYlabel = 0;
+    for (let i=0; i < xaxis.length; i++) {
+        longestXlabel = Math.max(longestXlabel, xaxis[i].length);
+    }
+	for (let i=0; i < yaxis.length; i++) {
+		longestYlabel = Math.max(longestYlabel, yaxis[i].length);
+	}
+
+	let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
+    let ncelltypes = xaxis.length;
+    let pxCell = 17, pxChar = 10;
+    let ytickMargin = 85 + pxChar * longestYlabel;
+    let xtickMargin = 15 + pxChar * longestXlabel;
+    let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
+    let graphHeight = pxCell * nfeatures * 0.6 + xtickMargin;
     
     let layout = {
+        width: graphWidth,
+        height: graphHeight,
         xaxis: {
             automargin: true,
             title: {

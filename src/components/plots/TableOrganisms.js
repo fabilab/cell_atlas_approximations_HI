@@ -40,7 +40,7 @@ const TableOrganisms = () => {
     },
     {
       src: m_leidyi,
-      title: 'Mnemiopsis leidyi',
+      title: 'Mnemiopsis leidyi (warty comb jelly)',
     },
     {
       src: m_musculus,
@@ -48,11 +48,11 @@ const TableOrganisms = () => {
     },
     {
       src: m_myoxinus,
-      title: 'Microcebus myoxinus (gray mouse lemur)',
+      title: 'Microcebus myoxinus (pygmy mouse lemur)',
     },
     {
       src: s_lacustris,
-      title: 'Salpingoeca lacustris',
+      title: 'Spongilla lacustris',
     },
     {
       src: t_adhaerens,

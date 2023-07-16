@@ -103,7 +103,7 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '45vh',
+          y: '50vh',
         }}
       />
       <Table
