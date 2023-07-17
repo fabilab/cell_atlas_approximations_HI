@@ -9,7 +9,8 @@ let newPlotState = null;
 let average, fractions;
 let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
 let organ = (response.params && response.params.organ) || (plotState && plotState.organ) || "";
-let features = response.params.features;
+//  for some intent, params has features instead of feature
+let features = response.params.features || response.params.feature;
 let apiCelltypes = await atlasapprox.celltypes(organism, organ);
 let celltypes = apiCelltypes.celltypes;
 
@@ -103,6 +104,7 @@ const fractionsIntent = async () => {
 };
 
 const measureIntent = async () => {
+  console.log(features);
     const highestResponse = await atlasapprox.highest_measurement(organism, features, 10);
     const plotType = "barChart";
     let organs = highestResponse.organs;

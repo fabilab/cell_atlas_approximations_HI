@@ -91,9 +91,16 @@ export const updateChat = async (response) => {
       apiData = await callAPI(endpoint, params);
       // answer = window.buildAnswer(intent, apiData);
       answer = `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
-    } else {
-      apiData = await callAPI(endpoint, params);
-      answer += window.buildAnswer(intent, apiData);
+    } else if (intent === "highest_measurement.geneExpression") {
+		params['feature'] = params['features'];
+		delete params['features'];
+		// Need to give it a number
+		params['number'] = "10";
+		apiData = await callAPI(endpoint, params);
+		answer = window.buildAnswer(intent, apiData);
+	} else {
+		apiData = await callAPI(endpoint, params);
+		answer += window.buildAnswer(intent, apiData);
     }
     console.log(apiData);
     return {
