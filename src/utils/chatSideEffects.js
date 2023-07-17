@@ -26,16 +26,17 @@ const updatePlotIntents = [
     "highest_measurement",
     "average",
     "fraction_detected",
+	"similar_features",
     "add",
     "remove",
     "celltypexorgan",
     "organisms"
 ];
 const checkGenesIntents = [
-  "average",
-  "fraction_detected",
-  "add",
-  "remove",
+	"average",
+	"fraction_detected",
+	"add",
+	"remove",
 ]
 
 export const triggersPlotUpdate = ((response) => {

@@ -48,6 +48,7 @@ const markersIntent = async () => {
     let apiMarkers = await atlasapprox.markers(organism, organ, markerCelltype);
     features = apiMarkers.markers.join(",");
     fractionsIntent();
+    console.log(typeof(features));
 };
 
 const averageIntent = async () => {
@@ -130,7 +131,17 @@ const measureIntent = async () => {
       },
     };
     setPlotState(newPlotState);
-  };
+};
+
+const similarGenes = async () => {
+  // generate a heatmap by default
+  let similarFeatures = response.data.similar_features
+  similarFeatures.unshift(features);
+  features = similarFeatures.join(",");
+
+  fractionsIntent();
+
+}
 
 const cellxorganIntent = async () => {
     const plotType = "table";
@@ -175,6 +186,9 @@ switch (generalIntent) {
         break;
     case "highest_measurement":
         measureIntent();
+        break;
+    case "similar_features":
+        similarGenes();
         break;
     case "celltypexorgan":
         cellxorganIntent();
