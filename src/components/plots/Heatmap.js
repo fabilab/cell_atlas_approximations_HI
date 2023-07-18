@@ -1,7 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
-import { svgLogo } from '../../asset/svgIcon.png';
 
 const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
   const geneCardLink = (gene) =>

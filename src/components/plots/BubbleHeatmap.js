@@ -1,6 +1,5 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import svgIcon from '../../asset/svgIcon.png';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) => {
