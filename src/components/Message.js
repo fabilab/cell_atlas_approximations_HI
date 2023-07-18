@@ -9,15 +9,15 @@ const Message = (props) => {
   const messageBoxMarginBottom = '1.5em';
   if (role === 'user') {
     return (
-      <Col xs={18} md={20} lg={22} xl={23} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
+      <Col xs={18} md={20} lg={22} xl={23} xxl={24} style={{marginBottom: messageBoxMarginBottom}}>
         <div className="media">
           <div className="media-left">
-            <figure className="image is-32x32">
+            {/* <figure className="image is-32x32">
               <img src={userImage} alt="User"/>
-            </figure>
+            </figure> */}
           </div>
           <div className="media-content">
-            <div className="box" style={{backgroundColor:"#e8f5e9", color:"#1c3052"}}>
+            <div className="box" style={{backgroundColor:"#444", color:"white"}}>
               {message}
             </div>
           </div>
@@ -26,12 +26,12 @@ const Message = (props) => {
     );
   } else if (help) {
     return (
-      <Col xs={18} md={20} lg={22} xl={23} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
+      <Col xs={18} md={20} lg={22} xl={23} xxl={24} style={{marginBottom: messageBoxMarginBottom}}>
         <div className="media">
           <div className="media-left">
-            <figure className="image is-32x32">
+            {/* <figure className="image is-32x32">
               <img src={bot} alt="Bot"/>
-            </figure>
+            </figure> */}
           </div>
           <div className="media-content">
             <div className="box" style={{ width: 'inherit' }}>
@@ -53,12 +53,12 @@ const Message = (props) => {
     );
   } else {
     return (
-      <Col xs={18} md={20} lg={22} xl={23} xxl={22} style={{marginBottom: messageBoxMarginBottom}}>
+      <Col xs={18} md={20} lg={22} xl={23} xxl={24} style={{marginBottom: messageBoxMarginBottom}}>
         <div className="media">
           <div className="media-left">
-            <figure className="image is-32x32">
+            {/* <figure className="image is-32x32">
               <img src={bot} alt="Bot"/>
-            </figure>
+            </figure> */}
           </div>
           <div className="media-content">
             <div className="box" style={{ width: 'fit-content' }}>
