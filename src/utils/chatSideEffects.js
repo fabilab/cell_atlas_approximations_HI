@@ -26,7 +26,7 @@ const updatePlotIntents = [
     "highest_measurement",
     "average",
     "fraction_detected",
-	"similar_features",
+	  "similar_features",
     "add",
     "remove",
     "celltypexorgan",
@@ -48,7 +48,6 @@ export const triggersPlotUpdate = ((response) => {
     const generalIntent = response.intent.split(".")[0];
     return updatePlotIntents.includes(generalIntent);
 });
-
 
 export const updateChat = async (response) => {
     let entities = response.entities;
