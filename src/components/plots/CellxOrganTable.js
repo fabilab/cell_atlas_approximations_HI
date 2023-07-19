@@ -9,7 +9,7 @@ const CellxOrganTable = ({ state }) => {
     const row = { key: index, celltype };
     let organCount = 0;
     state.organs.forEach((organ, organIndex) => {
-      row[organ] = state.detected[index][organIndex];
+      row[organ] = state.detected[index][organIndex] > 0;
       if (state.detected[index][organIndex]) {
         organCount++;
       }
@@ -17,17 +17,13 @@ const CellxOrganTable = ({ state }) => {
     return organCount > 1 ? row : null;
   }).filter(Boolean);
   
-  // console.log("cell types that found in multiple organ\n");
-  // console.log(multiOrgansData);
-
-
   //  cell types that found in only ONE organ
   const uniqueOrganData = state.celltypes.map((celltype, index) =>
   {
     const row = { key: index, celltype };
     let organCount = 0;
     state.organs.forEach((organ, organIndex) => {
-      row[organ] = state.detected[index][organIndex];
+      row[organ] = state.detected[index][organIndex] > 0;
       if (state.detected[index][organIndex]) {
         organCount++;
       }
@@ -107,16 +103,13 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '70vh',
+          y: '50vh',
         }}
       />
       <Table
         columns={columnsUnique}
         dataSource={[finalRow]} // Wrap the final row in an array to display it as a single row
         pagination={false}
-        scroll={{
-          y: '50vh',
-        }}
       />
   </section>
   );

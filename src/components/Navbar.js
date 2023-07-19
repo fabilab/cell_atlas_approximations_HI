@@ -17,8 +17,14 @@ const Navbar = ({ setShowLanding }) => {
 
   return (
     <Header style={{padding:'0px'}}>
-      <Menu mode="horizontal">
-        <Menu.Item>
+      <Menu
+        mode="horizontal"
+        style={{
+          background: "linear-gradient(45deg, #3282B8 10%, #1F3B75 90%)",
+          color: "white",
+        }}
+      >
+        <Menu.Item style={{fontFamily:"inherit"}}>
           <InfoCircleOutlined /> User Menu
         </Menu.Item>
         <Menu.Item>
@@ -33,7 +39,7 @@ const Navbar = ({ setShowLanding }) => {
           <CustomerServiceOutlined />
           <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
         </Menu.Item>
-        <Menu.Item onClick={ShowLanding} style={{color: "#263238",marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
+        <Menu.Item onClick={ShowLanding} style={{marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
           AtlasApprox
         </Menu.Item>
       </Menu>
