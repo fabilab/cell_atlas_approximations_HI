@@ -38,7 +38,9 @@ const PlotBox = ({ state }) => {
         return (
             <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <BarChart
+                    intent={state.intent}
                     celltypesOrgan={state.data.celltypesOrgan}
+                    targetCelltype={state.celltype}
                     average={state.data.average}
                     organism={state.organism}
                     features={state.features}

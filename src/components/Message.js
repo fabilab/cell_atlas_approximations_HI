@@ -17,7 +17,7 @@ const Message = (props) => {
             </figure> */}
           </div>
           <div className="media-content">
-            <div className="box" style={{backgroundColor:"#444", color:"white"}}>
+            <div className="box" style={{backgroundColor:"#307ca5", color:"white"}}>
               {message}
             </div>
           </div>

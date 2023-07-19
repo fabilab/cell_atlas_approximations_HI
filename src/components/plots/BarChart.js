@@ -1,7 +1,9 @@
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BarChart = ({ celltypesOrgan, average, organism, features }) => {
+const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, features }) => {
+    
+    console.log(intent);
     let xValue = celltypesOrgan;
     let yValue = average.map((x) => Number(x.toFixed(3)));
 
@@ -24,6 +26,13 @@ const BarChart = ({ celltypesOrgan, average, organism, features }) => {
 
     let data = [trace1];
 
+    let title = '';
+    if(intent === "similar_celltypes.geneExpression") {
+        title = `Cell Type Similarity to ${targetCelltype}: ${features} Correlation Analysis`;
+    } else if(intent === "highest_measurement") {
+        title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
+    
+    }    
     let layout = {
         xaxis: {
             automargin: true,
@@ -44,7 +53,7 @@ const BarChart = ({ celltypesOrgan, average, organism, features }) => {
             },
         },
 
-        title: `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`,
+        title: title,
         barmode: 'stack',
     };
 

@@ -30,7 +30,8 @@ const updatePlotIntents = [
     "add",
     "remove",
     "celltypexorgan",
-    "organisms"
+    "organisms",
+    "similar_celltypes",
 ];
 const checkGenesIntents = [
 	"average",
@@ -92,16 +93,16 @@ export const updateChat = async (response) => {
       // answer = window.buildAnswer(intent, apiData);
       answer = `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } else if (intent === "highest_measurement.geneExpression") {
+      console.log(params);
 		params['feature'] = params['features'];
+    params['number'] = '10';
 		delete params['features'];
-		// Need to give it a number
-		params['number'] = "10";
 		apiData = await callAPI(endpoint, params);
 		answer = window.buildAnswer(intent, apiData);
 	} else {
 		apiData = await callAPI(endpoint, params);
 		answer += window.buildAnswer(intent, apiData);
-    }
+  }
     console.log(apiData);
     return {
       hasData: true,

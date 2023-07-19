@@ -62,7 +62,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
                 "What cell types are available in human heart?",
                 "what cell type is the highest expressor of COL1A1 in human?",
                 "show 10 similar genes to TP53 in human lung",
-                "What is the expression level of gene ABC in all cell types?"
+                "show 5 cell types like Uterus pericyte in human",
             ];
             
             setCurrentMessage("");

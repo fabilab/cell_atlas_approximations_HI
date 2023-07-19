@@ -52,6 +52,8 @@ const markersIntent = async () => {
 };
 
 const averageIntent = async () => {
+    // let temp = atlasapprox.similar_celltypes("h_sapiens", "Lung", "fibroblast", "COL1A1,CD19,CD8A,TP53", 5, "correlation",  "gene_expression");
+    // console.log(temp);
     let checkFeatures = features.split(',')
     filterGenes(checkFeatures, organism, organ);
 
@@ -104,8 +106,38 @@ const fractionsIntent = async () => {
   setPlotState(newPlotState);
 };
 
+const similarCelltypes = async () => {
+  let celltype = response.params.celltype;
+  let nCelltypes = response.params.number;
+  const apiSimilarCelltypes = await atlasapprox.similar_celltypes(organism, organ, celltype, features, nCelltypes, "correlation");
+  console.log("----------Testing here");
+  console.log(apiSimilarCelltypes);
+  let similarCelltypes = apiSimilarCelltypes.similar_celltypes;
+  let similarOrgans = apiSimilarCelltypes.similar_organs;
+  const celltypesOrgan = similarCelltypes.map((c, index) => {
+    return c + " (" + similarOrgans[index] + ")";
+  });
+
+  let plotType = "barChart";
+  newPlotState = {
+    intent,
+    plotType,
+    organism,
+    organ,
+    celltype,
+    features,
+    data: {
+      type: "matrix",
+      celltypesOrgan: celltypesOrgan,
+      yaxis: apiSimilarCelltypes.distances,
+      average: apiSimilarCelltypes.distances,
+      fractions: null,
+      valueUnit: "counts per ten thousand",
+    },
+  };
+  setPlotState(newPlotState);
+}
 const measureIntent = async () => {
-  console.log(features);
     const highestResponse = await atlasapprox.highest_measurement(organism, features, 10);
     const plotType = "barChart";
     let organs = highestResponse.organs;
@@ -130,6 +162,7 @@ const measureIntent = async () => {
         valueUnit: "counts per ten thousand",
       },
     };
+    console.log(newPlotState);
     setPlotState(newPlotState);
 };
 
@@ -156,6 +189,7 @@ const cellxorganIntent = async () => {
         celltypes,
         detected,
     }
+    console.log(newPlotState);
     setPlotState(newPlotState);
 };
 
@@ -192,6 +226,9 @@ switch (generalIntent) {
         break;
     case "celltypexorgan":
         cellxorganIntent();
+        break;
+    case "similar_celltypes":
+        similarCelltypes();
         break;
     case "organisms":
         organismsIntent();
