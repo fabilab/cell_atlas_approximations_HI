@@ -55,7 +55,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
         },
         standoff: 20,
       },
-      y: 10,
+      // y: 10,
     },
     yaxis: {
       automargin: true,

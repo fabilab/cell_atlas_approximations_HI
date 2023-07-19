@@ -1,9 +1,11 @@
 import React from 'react';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Typography } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
 
 const CellxOrganTable = ({ state }) => {
   //  cell types that found in >= different organs
+  console.log(typeof(state.organs));
+  console.log(state.organs)
   const multiOrgansData = state.celltypes.map((celltype, index) => 
   {
     const row = { key: index, celltype };
@@ -30,8 +32,6 @@ const CellxOrganTable = ({ state }) => {
     });
     return organCount < 2 ? row : null;
   }).filter(Boolean);
-
-  console.log(uniqueOrganData);
   
   // console.log("cell types that found in unique organ\n");
   // console.log(uniqueOrganData);
@@ -53,10 +53,6 @@ const CellxOrganTable = ({ state }) => {
     })
   });
   
-  console.log("Final row is\n")
-  console.log(finalRow);
-  console.log("Multi organ data is\n")
-  console.log(multiOrgansData)
   const columnsMulti = [
     {
       title: 'Cell Types',
@@ -67,7 +63,7 @@ const CellxOrganTable = ({ state }) => {
           {text}
         </a>
       ),
-      width: '18%',
+      width: '6%',
     },
     ...state.organs.map((organ) => ({
       title: organ,
