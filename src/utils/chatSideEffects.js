@@ -6,7 +6,7 @@ import { isLabelWithInternallyDisabledControl } from "@testing-library/user-even
 
 // Check if a/list of given genes exist in an specific organism/organs
 export const filterGenes = async (genes, organism, organ) => {
-  let availableGenes = await atlasapprox.features(organism, organ);
+  let availableGenes = await atlasapprox.features(organism, organ, "gene_expression");
   let result = { found: [], notFound: [] };
 
   for (let gene of genes) {
@@ -89,7 +89,10 @@ export const updateChat = async (response) => {
     if (intent === "similar_features.geneExpression") {
       params['feature'] = params['features'];
       delete params['features'];
+      console.log("line 92 passed-----")
       apiData = await callAPI(endpoint, params);
+      console.log(apiData);
+      console.log("line 95 passed......");
       // answer = window.buildAnswer(intent, apiData);
       answer = `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } else if (intent === "highest_measurement.geneExpression") {

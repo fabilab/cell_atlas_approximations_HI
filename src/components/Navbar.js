@@ -1,13 +1,11 @@
-// import { useState } from "react";
-// import { NavLink, Link } from "react-router-dom";
 import { 
   GithubOutlined,
   InfoCircleOutlined,
   CodeOutlined,
   CustomerServiceOutlined
- } from '@ant-design/icons';
- import { Menu, Layout } from 'antd';
- const { Header } = Layout;
+} from '@ant-design/icons';
+import { Menu, Layout } from 'antd';
+const { Header } = Layout;
 
 const Navbar = ({ setShowLanding }) => {
 
@@ -16,7 +14,7 @@ const Navbar = ({ setShowLanding }) => {
   }
 
   return (
-    <Header style={{padding:'0px'}}>
+    <Header style={{ padding: '0px' }}>
       <Menu
         mode="horizontal"
         style={{
@@ -24,7 +22,7 @@ const Navbar = ({ setShowLanding }) => {
           color: "white",
         }}
       >
-        <Menu.Item style={{fontFamily:"inherit"}}>
+        <Menu.Item style={{ fontFamily: "inherit" }}>
           <InfoCircleOutlined /> User Menu
         </Menu.Item>
         <Menu.Item>
@@ -39,7 +37,7 @@ const Navbar = ({ setShowLanding }) => {
           <CustomerServiceOutlined />
           <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
         </Menu.Item>
-        <Menu.Item onClick={ShowLanding} style={{marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
+        <Menu.Item onClick={ShowLanding} style={{ marginLeft: "48%", fontSize: "1.4em", fontWeight: "bold" }}>
           AtlasApprox
         </Menu.Item>
       </Menu>
