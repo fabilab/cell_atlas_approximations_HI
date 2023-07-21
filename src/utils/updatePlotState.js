@@ -8,6 +8,8 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let newPlotState = null;
   let average, fractions;
   let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
+  console.log(response.params);
+  console.log(plotState);
   let organ = (response.params && response.params.organ) || (plotState && plotState.organ) || "";
   // For some intents, params have features instead of feature
   let features = response.params.features || response.params.feature;
@@ -54,7 +56,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     filterGenes(checkFeatures, organism, organ);
     let apiCelltypes = await atlasapprox.celltypes(organism, organ);
     let celltypes = apiCelltypes.celltypes;
-    let apiResponse = await atlasapprox.average(organism, features, organ, celltypes, "gene_expression");
+    let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     console.log(apiResponse);
     average = apiResponse.average;
 
@@ -79,8 +81,8 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   const fractionsIntent = async () => {
-    let apiFraction = await atlasapprox.fraction_detected(organism, features, organ, celltypes, "gene_expression")
-    let apiAverage = await atlasapprox.average(organism, features, organ, celltypes, "gene_expression");
+    let apiFraction = await atlasapprox.fraction_detected(organism, features, organ, null, "gene_expression")
+    let apiAverage = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     fractions = apiFraction.fraction_detected;
     average = apiAverage.average;
     let plotType = "bubbleHeatmap";
@@ -128,6 +130,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   function makeBarChart(organs, xaxis, yaxis) {
+    console.log("Calling make bar chart.......")
     const plotType = "barChart";
     newPlotState = {
       intent,

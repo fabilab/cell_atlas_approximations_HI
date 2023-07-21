@@ -21,6 +21,8 @@ const MainBoard = () => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
       setShowLanding(false);
+      console.log("changing current response....");
+      console.log(currentResponse);
     }
   }, [currentResponse]);
 

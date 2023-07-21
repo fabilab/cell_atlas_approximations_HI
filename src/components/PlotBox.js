@@ -7,6 +7,7 @@ import TableOrganisms from './plots/TableOrganisms';
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
+  console.log("Calling plot box....");
   if (state.plotType === 'heatmap') {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

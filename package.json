@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.6.1",
     "atlasapprox": "^0.1.1",
+    "atlasapprox-nlp": "^0.1.2",
     "canvasxpress": "^44.3.9",
     "canvasxpress-react": "^44.3.9",
     "crypto-browserify": "^3.12.0",

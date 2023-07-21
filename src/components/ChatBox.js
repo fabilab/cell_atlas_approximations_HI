@@ -2,8 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
+import { AtlasApproxNlp, buildAPIParams, buildAnswer } from "atlasapprox-nlp";
+import atlasapprox from "atlasapprox";
 const { Sider } = Layout;
 
+let nlp = new AtlasApproxNlp();
+window.nlpnlp = nlp;
 let debug = true;
 
 const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {

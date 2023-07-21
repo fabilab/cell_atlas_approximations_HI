@@ -3,6 +3,7 @@ import { downloadSVG } from '../../utils/downLoadSvg';
 import Plot from 'react-plotly.js';
 
 const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, features }) => {
+  console.log("Bar chart updated!")
   console.log(intent);
   let xValue = celltypesOrgan;
   let yValue = average.map((x) => Number(x.toFixed(3)));
