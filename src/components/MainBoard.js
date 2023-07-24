@@ -26,8 +26,6 @@ const MainBoard = () => {
     }
   }, [currentResponse]);
 
-  // Generate and update plot according to user intends
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <ChatBox
@@ -42,7 +40,11 @@ const MainBoard = () => {
         <Navbar
           setShowLanding={setShowLanding}
         />
-        <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
+        <Content style={{ 
+          backgroundColor: "inherit",
+          overflow: "auto", // scrollable
+          height: "calc(100vh - 100px)", // Set a fixed height to enable scrolling
+          }}>
           {showLanding ? (
             <Landing
               currentMessage={currentMessage}

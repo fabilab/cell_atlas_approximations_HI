@@ -14,12 +14,12 @@ const Landing = ({ currentMessage, setCurrentMessage }) => {
     'what cell types are present in each organ of @organism?',
     'what cell type is the highest expressor of TP53 in human?',
     'What is the fraction of IL6,TNF,APOE,CD8A,CD19,TP53 in human lung?',
-    'What is the average expression of IL6,TNF,APOE,COL1A1,ALK,TP53 in human lung?',
+    'what is the average expression of TP53,METTL14,HDAC8,MTOR,HNRNPL,LANCL2,SEH1L,MED4,AHR,HSPA14-1,TRA2A in human lung?',
   ];
 
   return (
     <div className="landing-page">
-      <Title level={2} style={{ textAlign: 'center', marginBottom: "4vh", marginTop: "3vh" }}>Cell Atlas Approximations </Title>
+      <Title level={2} style={{ textAlign: 'center', marginBottom: "4vh", marginTop: "7vh" }}>Cell Atlas Approximations </Title>
       <Row gutter={48} className="card-row">
         <Col span={1} />
         <Col span={6}>

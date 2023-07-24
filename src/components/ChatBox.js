@@ -103,7 +103,7 @@ const handleSubmit = (text) => {
   };
 
   return (
-    <Sider width={"26vw"} style={{ padding: "1%", backgroundColor: "#f5f5f5" }}>
+    <Sider width={"27vw"} style={{ padding: "1%", backgroundColor: "#f5f5f5" }}>
       <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
         {welcomeMessage && (
           <>

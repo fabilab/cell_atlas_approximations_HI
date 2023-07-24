@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Heatmap from "./plots/Heatmap"
 import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';

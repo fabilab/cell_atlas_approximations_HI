@@ -37,7 +37,7 @@ const Navbar = ({ setShowLanding }) => {
           <CustomerServiceOutlined />
           <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
         </Menu.Item>
-        <Menu.Item onClick={ShowLanding} style={{ marginLeft: "48%", fontSize: "1.4em", fontWeight: "bold" }}>
+        <Menu.Item onClick={ShowLanding} style={{ marginLeft: "40%", marginRight: "10%", fontSize: "1.4em", fontWeight: "bold" }}>
           AtlasApprox
         </Menu.Item>
       </Menu>

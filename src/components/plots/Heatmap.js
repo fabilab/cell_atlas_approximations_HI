@@ -37,16 +37,17 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 
   let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
   let ncelltypes = xaxis.length;
-  let pxCell = 15, pxChar = 6;
+  let pxCell = 10, pxChar = 4.4, plotGap = 10;
   let ytickMargin = 85 + pxChar * longestYlabel;
-  let xtickMargin = pxChar * longestXlabel;
-  let graphWidth = ytickMargin + pxCell * ncelltypes + 300;
-  let graphHeight = pxCell * nfeatures * 0.6 + xtickMargin;
-
+  let xtickMargin = 15 + pxChar * longestXlabel;
+  let graphWidth = ytickMargin + pxCell * ncelltypes * 3;
+  let graphHeight = pxCell  * nfeatures + plotGap + xtickMargin;
+  
   let layout = {
     width: graphWidth,
     height: graphHeight,
     xaxis: {
+      autorange: true,
       automargin: true,
       title: {
         text: 'Cell types',
