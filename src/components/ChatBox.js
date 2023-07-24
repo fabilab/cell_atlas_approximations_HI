@@ -75,7 +75,7 @@ const handleSubmit = (text) => {
 	} else {
 		window.ask(text, chatContext)
 			.then((response) => {
-				updateChat(response)
+				updateChat(response,plotState)
 					.then((updateObject) => {
 						response.hasData = updateObject.hasData;
 						console.log("Line 82 in ChatBox.js");

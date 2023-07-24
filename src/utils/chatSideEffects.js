@@ -1,11 +1,11 @@
-import atlasapprox from "atlasapprox";
+import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
-import { isLabelWithInternallyDisabledControl } from "@testing-library/user-event/dist/utils/index.js";
-// import atlasapprox from "atlasapprox";
-
 
 // Check if a/list of given genes exist in an specific organism/organs
 export const filterGenes = async (genes, organism, organ) => {
+  console.log(genes);
+  console.log(organism);
+  console.log(organ);
   let availableGenes = await atlasapprox.features(organism, organ, "gene_expression");
   let result = { found: [], notFound: [] };
 
@@ -50,7 +50,7 @@ export const triggersPlotUpdate = ((response) => {
     return updatePlotIntents.includes(generalIntent);
 });
 
-export const updateChat = async (response) => {
+export const updateChat = async (response,plotState) => {
     let entities = response.entities;
     let intent = response.intent;
     let complete = response.complete;
@@ -78,7 +78,12 @@ export const updateChat = async (response) => {
     console.log(params);
     // validate user input genes and handle error for some intends
     if (checkGenesIntents.includes(generalIntent)) {
-      let filterOutput = await filterGenes(params.features.split(','),params.organism,params.organ);
+
+      // for add and remove  gene intent, I need to get organ and organism from 
+      // current plot State to validate new genes
+      let organRequired = params.organ ||plotState.organ;
+      let organismRequired = params.organism || plotState.organism;
+      let filterOutput = await filterGenes(params.features.split(','),organismRequired, organRequired);
       if (filterOutput.notFound.length > 0) {
         genesNotFound = filterOutput.notFound.filter(gene => params.features.includes(gene)).join(',');
         params.features = params.features.split(',').filter(gene => filterOutput.found.includes(gene)).join(',');
