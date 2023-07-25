@@ -91,26 +91,39 @@ export const updateChat = async (response,plotState) => {
     }
     let answer = genesNotFound === "" ? "" : `Removed invalid genes: ${genesNotFound}. `;
     let apiData;
+
     if (intent === "similar_features.geneExpression") {
       params['feature'] = params['features'];
       delete params['features'];
-      console.log("line 92 passed-----")
       apiData = await callAPI(endpoint, params);
-      console.log(apiData);
-      console.log("line 95 passed......");
+
+      //  Bug? params look like this: 
+      // {
+      //   "number": "10",
+      //   "celltype": "TP53",
+      //   "organism": "h_sapiens",
+      //   "organ": "Lung",
+      //   "feature": "TP53"
+      // }
       // answer = window.buildAnswer(intent, apiData);
-      answer = `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
-    } else if (intent === "highest_measurement.geneExpression") {
+      answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
+    } 
+    
+    else if (intent === "highest_measurement.geneExpression") {
       console.log(params);
 		params['feature'] = params['features'];
     params['number'] = '10';
 		delete params['features'];
 		apiData = await callAPI(endpoint, params);
+
 		answer = window.buildAnswer(intent, apiData);
-	} else {
+	} 
+  
+  else {
 		apiData = await callAPI(endpoint, params);
 		answer += window.buildAnswer(intent, apiData);
   }
+  
     console.log(apiData);
     return {
       hasData: true,

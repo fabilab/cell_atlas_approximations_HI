@@ -1,4 +1,4 @@
-import atlasapprox from "atlasapprox";
+import atlasapprox from "@fabilab/atlasapprox";
 import { filterGenes } from "./chatSideEffects";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
@@ -106,16 +106,16 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   const similarCelltypes = async () => {
-    let celltype = response.params.celltype;
+    let targetCelltype = response.params.celltype;
     let nCelltypes = response.params.number;
-    const apiSimilarCelltypes = await atlasapprox.similar_celltypes(organism, organ, celltype, features, nCelltypes, "correlation");
+    const apiSimilarCelltypes = await atlasapprox.similar_celltypes(organism, organ, targetCelltype, features, nCelltypes, "correlation");
     let similarCelltypes = apiSimilarCelltypes.similar_celltypes;
     let similarOrgans = apiSimilarCelltypes.similar_organs;
     const celltypesOrgan = similarCelltypes.map((c, index) => {
       return c + " (" + similarOrgans[index] + ")";
     });
 
-    makeBarChart(organ, celltypesOrgan, apiSimilarCelltypes.distances);
+    makeBarChart(targetCelltype, organ, celltypesOrgan, apiSimilarCelltypes.distances);
   }
 
   const measureIntent = async () => {
@@ -126,15 +126,17 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     const celltypesOrgan = celltypes.map((c, index) => {
       return c + " (" + organs[index] + ")";
     });
-    makeBarChart(organs, celltypesOrgan, highestResponse.average);
+    makeBarChart(null,organs, celltypesOrgan, highestResponse.average);
   };
 
-  function makeBarChart(organs, xaxis, yaxis) {
+  function makeBarChart(targetCelltype,organs, xaxis, yaxis) {
     console.log("Calling make bar chart.......")
+    console.log(celltypes);
     const plotType = "barChart";
     newPlotState = {
       intent,
       plotType,
+      targetCelltype,
       organism,
       organs,
       celltypes,

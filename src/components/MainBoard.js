@@ -40,20 +40,27 @@ const MainBoard = () => {
         <Navbar
           setShowLanding={setShowLanding}
         />
-        <Content style={{ 
-          backgroundColor: "inherit",
-          overflow: "auto", // scrollable
-          height: "calc(100vh - 100px)", // Set a fixed height to enable scrolling
-          }}>
-          {showLanding ? (
-            <Landing
-              currentMessage={currentMessage}
-              setCurrentMessage={setCurrentMessage}
-            />
-          ) : (
-            plotState && <PlotBox state={plotState} />
-          )}
-        </Content>
+         <div>
+          <Content style={{ 
+            backgroundColor: "inherit",
+            overflow: "auto", // scrollable
+            height: "calc(100vh - 100px)", // Set a fixed height to enable scrolling
+            }}>
+            {showLanding ? (
+              <Landing
+                currentMessage={currentMessage}
+                setCurrentMessage={setCurrentMessage}
+              />
+            ) : (
+              plotState && 
+              <PlotBox state={plotState} 
+                style={{ 
+                 marginTop: "100px"
+                }}
+              />
+            )}
+          </Content>
+        </div>
       </Layout>
     </Layout>
   );

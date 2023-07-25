@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
-import { AtlasApproxNlp, buildAPIParams, buildAnswer } from "atlasapprox-nlp";
-import atlasapprox from "atlasapprox";
+// import { AtlasApproxNlp, buildAPIParams, buildAnswer } from "atlasapprox-nlp";
+import atlasapprox from "@fabilab/atlasapprox";
 const { Sider } = Layout;
 
-let nlp = new AtlasApproxNlp();
-window.nlpnlp = nlp;
-let debug = true;
+// let nlp = new AtlasApproxNlp();
+// window.nlpnlp = nlp;
+// let debug = true;
 
 const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
   const [chatContext, setChatContext] = useState({});
@@ -39,7 +39,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     }
   };
 
-  // ...
 
 const handleSubmit = (text) => {
 	const newMessage = { message: text, index: messageHistory.length };
@@ -103,7 +102,7 @@ const handleSubmit = (text) => {
   };
 
   return (
-    <Sider width={"27vw"} style={{ padding: "1%", backgroundColor: "#f5f5f5" }}>
+    <Sider width={"27vw"} style={{ padding: "0.8%", backgroundColor: "#f5f5f5" }}>
       <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
         {welcomeMessage && (
           <>

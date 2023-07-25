@@ -7,10 +7,9 @@ import TableOrganisms from './plots/TableOrganisms';
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
-  console.log("Calling plot box....");
   if (state.plotType === 'heatmap') {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <Heatmap
           xaxis={state.data.xaxis}
           yaxis={state.data.yaxis}
@@ -22,7 +21,7 @@ const PlotBox = ({ state }) => {
     );
   } else if (state.plotType === 'bubbleHeatmap') {
     return (
-      <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div id='canvasId' style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <BubbleHeatmap
           target="canvasId"
           xaxis={state.data.xaxis}
@@ -35,18 +34,20 @@ const PlotBox = ({ state }) => {
       </div>
     );
   } else if (state.plotType === "barChart") {
+    console.log("testing bar chart --------!!!!");
+    console.log(state);
     return (
-      <div id='canvasId' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div id='canvasId' style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <BarChart
           intent={state.intent}
           celltypesOrgan={state.data.celltypesOrgan}
-          targetCelltype={state.celltype}
+          targetCelltype={state.targetCelltype}
           average={state.data.average}
           organism={state.organism}
           features={state.features}
         />
       </div>
-    );
+    )
   } else if (state.plotType === "table") {
     return (
       <CellxOrganTable

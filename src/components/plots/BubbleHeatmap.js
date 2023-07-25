@@ -96,7 +96,7 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
     hoverinfo: 'text',
   };
 
-  console.log(`<b>Bubble heatmap showing gene expression and fraction in ${organism} ${organ}</b>`);
+  // console.log(`<b>Bubble heatmap showing gene expression and fraction in ${organism} ${organ}</b>`);
 
   let cameraRetro = {
     'width': 1000,
@@ -107,7 +107,6 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
 
   let plotName = `dotplot(${organism}-${organ})`;
   let config = {
-    displayModeBar: true,
     modeBarButtonsToAdd: [
       {
         name: 'Download plot as SVG',

@@ -92,7 +92,6 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 
   let plotName = `heatmap(${organism}-${organ})`;
   let config = {
-    displayModeBar: true,
     modeBarButtonsToAdd: [
       {
         name: 'Download plot as SVG',

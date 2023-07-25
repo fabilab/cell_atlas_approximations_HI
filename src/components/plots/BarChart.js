@@ -6,7 +6,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
   console.log("Bar chart updated!")
   console.log(intent);
   let xValue = celltypesOrgan;
-  let yValue = average.map((x) => Number(x.toFixed(3)));
+  let yValue = average.map((x) => Number(x.toFixed(2)));
 
   let trace1 = {
     x: xValue,
@@ -29,8 +29,8 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
 
   let title = '';
   if (intent === "similar_celltypes.geneExpression") {
-    title = `Cell Type Similarity to ${targetCelltype}: ${features} Correlation Analysis`;
-  } else if (intent === "highest_measurement") {
+    title = `<b>Cell Type Similarity to ${targetCelltype}: ${features} Correlation Analysis</b>`;
+  } else if (intent === "highest_measurement.geneExpression") {
     title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
   }
 
@@ -47,7 +47,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
     },
     yaxis: {
       title: {
-        text: 'Measurements',
+        text: 'Measurements (%)',
         font: {
           size: 18,
         },
@@ -74,7 +74,6 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
   let plotName = `barplot(${organism})`;
 
   let config = {
-    displayModeBar: true,
     modeBarButtonsToAdd: [
       {
         name: 'Download plot as SVG',
@@ -110,18 +109,19 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
         },
       },
     ],
+    modeBarButtonsToRemove: ['pan2d','select2d','lasso2d'],
     editable: true,
     responsive: true,
     scrollZoom: true,
-    modeBarButtonsToRemove: ['pan2d'],
   };
 
   return (
-    <Plot
-      data={data}
-      layout={layout}
-      config={config}
-    />
+      <Plot
+        data={data}
+        layout={layout}
+        config={config}
+        responsive={true}
+      />
   );
 };
 
