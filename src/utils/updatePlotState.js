@@ -23,7 +23,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     features = plotState.features + "," + features.split(',');
     organism = plotState.organism;
     organ = plotState.organ;
-    celltypes = plotState.celltypes;
+    celltypes = plotState.data.xaxis;
     // Check if add command is applied to average or fraction
     if (!plotState.data.fractions) {
       averageIntent();
@@ -37,7 +37,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     features = plotState.features.split(',').filter(g => !features.includes(g)).join(',');
     organism = plotState.organism;
     organ = plotState.organ;
-    celltypes = plotState.celltypes;
+    celltypes = plotState.data.xaxis;
     // Check if add command is applied to average or fraction
     if (!plotState.data.fractions) {
       averageIntent();
@@ -76,7 +76,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         valueUnit: "counts per ten thousand",
       },
     };
-    console.log(newPlotState);
     setPlotState(newPlotState);
   };
 

@@ -20,6 +20,7 @@ const PlotBox = ({ state }) => {
       </div>
     );
   } else if (state.plotType === 'bubbleHeatmap') {
+    console.log(state);
     return (
       <div id='canvasId' style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <BubbleHeatmap

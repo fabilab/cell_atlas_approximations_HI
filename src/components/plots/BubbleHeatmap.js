@@ -5,6 +5,8 @@ import { downloadSVG } from '../../utils/downLoadSvg';
 const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) => {
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
+  console.log("Bubble heatmap line 8")
+  console.log(xaxis);
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
     return `<a href="${link}" target="_blank">${gene}</a>`;
