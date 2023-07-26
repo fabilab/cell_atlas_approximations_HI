@@ -14,7 +14,7 @@ const CellxOrganTable = ({ state }) => {
         organCount++;
       }
     });
-    return organCount > 1 ? row : null;
+    return organCount > 0 ? row : null;
   }).filter(Boolean);
 
   //  cell types found in only 1 organs
@@ -27,7 +27,7 @@ const CellxOrganTable = ({ state }) => {
         organCount++;
       }
     });
-    return organCount < 2 ? row : null;
+    return organCount < 0 ? row : null;
   }).filter(Boolean);
 
   let finalRow = {
@@ -92,7 +92,7 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '50vh',
+          y: '80vh',
         }}
       />
       <Table

@@ -2,13 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
-// import { AtlasApproxNlp, buildAPIParams, buildAnswer } from "atlasapprox-nlp";
-import atlasapprox from "@fabilab/atlasapprox";
+import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
 const { Sider } = Layout;
-
-// let nlp = new AtlasApproxNlp();
-// window.nlpnlp = nlp;
-// let debug = true;
 
 const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
   const [chatContext, setChatContext] = useState({});
@@ -39,8 +34,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     }
   };
 
-
-const handleSubmit = (text) => {
+const handleSubmit = async (text) => {
 	const newMessage = { message: text, index: messageHistory.length };
 	setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
 	setHistoryIndex([...messageHistory, newMessage].length);
@@ -72,34 +66,39 @@ const handleSubmit = (text) => {
 		setChatHistory(instructions);
 
 	} else {
-		window.ask(text, chatContext)
-			.then((response) => {
-				updateChat(response,plotState)
-					.then((updateObject) => {
-						response.hasData = updateObject.hasData;
-						console.log("Line 82 in ChatBox.js");
-						console.log(response);
-						if (updateObject.hasData) {
-							response.data = updateObject.data;
-							response.params = updateObject.params;
-						}
+    let nlp = new AtlasApproxNlp();
+    await nlp.initialise();
+    let response = await nlp.ask(text);
 
-						// update parent response state
-						setCurrentResponse(response);
+    try {
+      const updateObject = await updateChat(response,plotState)
+      response.hasData = updateObject.hasData;
+      console.log("Line 82 in ChatBox.js");
+      console.log(response);
+      if (updateObject.hasData) {
+        response.data = updateObject.data;
+        response.params = updateObject.params;
+      }
 
-						// update parent chat state
-						setCurrentMessage('');
-						setChatContext(chatContext);
-						const instructions = [...chatHistory]; // this will become the new set of instructions
-						const today = new Date();
-						const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-						instructions.push({ role: 'user', message: text, time: time });
-						instructions.push({ role: 'system', message: updateObject.message, time: time });
-						setChatHistory(instructions);
-					});
-			});
+      // update parent response state
+      setCurrentResponse(response);
+
+      // update parent chat state
+      setCurrentMessage('');
+      setChatContext(chatContext);
+      const instructions = [...chatHistory]; // this will become the new set of instructions
+      const today = new Date();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      instructions.push({ role: 'user', message: text, time: time });
+      instructions.push({ role: 'system', message: updateObject.message, time: time });
+      setChatHistory(instructions);
+    } catch (error) {
+      console.error("Error occurred during updateChat:", error);
+    } finally {
+      nlp.reset();
     }
-  };
+  } // else
+}; //handleSubmit
 
   return (
     <Sider width={"27vw"} style={{ padding: "0.8%", backgroundColor: "#f5f5f5" }}>

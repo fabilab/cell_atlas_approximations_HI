@@ -17,6 +17,8 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
       z: values,
       x: xaxis,
       y: yaxis,
+      // xgap: 0.5,
+      // ygap: 0.5,
       type: 'heatmap',
       colorscale: 'Reds',
       hovertemplate:

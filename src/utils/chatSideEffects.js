@@ -1,5 +1,9 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
+import { AtlasApproxNlp, buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
+
+// initialse function from nlp package
+
 
 // Check if a/list of given genes exist in an specific organism/organs
 export const filterGenes = async (genes, organism, organ) => {
@@ -72,7 +76,7 @@ export const updateChat = async (response,plotState) => {
       };
     }
 
-    const { endpoint, params } = window.buildAPIParams(intent, entities);
+    const { endpoint, params } = buildAPIParams(intent, entities);
     let generalIntent = intent.split(".")[0];
     let genesNotFound = '';
     console.log(params);
@@ -96,16 +100,7 @@ export const updateChat = async (response,plotState) => {
       params['feature'] = params['features'];
       delete params['features'];
       apiData = await callAPI(endpoint, params);
-
-      //  Bug? params look like this: 
-      // {
-      //   "number": "10",
-      //   "celltype": "TP53",
-      //   "organism": "h_sapiens",
-      //   "organ": "Lung",
-      //   "feature": "TP53"
-      // }
-      // answer = window.buildAnswer(intent, apiData);
+      answer = buildAnswer(intent, apiData);
       answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } 
     
@@ -116,12 +111,13 @@ export const updateChat = async (response,plotState) => {
 		delete params['features'];
 		apiData = await callAPI(endpoint, params);
 
-		answer = window.buildAnswer(intent, apiData);
+		answer = buildAnswer(intent, apiData);
 	} 
   
   else {
 		apiData = await callAPI(endpoint, params);
-		answer += window.buildAnswer(intent, apiData);
+		answer += buildAnswer(intent, apiData);
+    console.log(answer);
   }
   
     console.log(apiData);
