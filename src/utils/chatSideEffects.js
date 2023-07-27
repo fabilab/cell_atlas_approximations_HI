@@ -2,9 +2,6 @@ import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
 import { AtlasApproxNlp, buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
 
-// initialse function from nlp package
-
-
 // Check if a/list of given genes exist in an specific organism/organs
 export const filterGenes = async (genes, organism, organ) => {
   console.log(genes);
@@ -100,18 +97,18 @@ export const updateChat = async (response,plotState) => {
       params['feature'] = params['features'];
       delete params['features'];
       apiData = await callAPI(endpoint, params);
-      answer = buildAnswer(intent, apiData);
+      // answer = buildAnswer(intent, apiData);
       answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } 
     
     else if (intent === "highest_measurement.geneExpression") {
       console.log(params);
-		params['feature'] = params['features'];
-    params['number'] = '10';
-		delete params['features'];
-		apiData = await callAPI(endpoint, params);
+      params['feature'] = params['features'];
+      params['number'] = '10';
+      delete params['features'];
+      apiData = await callAPI(endpoint, params);
 
-		answer = buildAnswer(intent, apiData);
+      answer = buildAnswer(intent, apiData);
 	} 
   
   else {

@@ -12,6 +12,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const chatboxRef = useRef(null);
+
   useEffect(() => {
     chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
   }, [chatHistory, setChatHistory]);
@@ -69,6 +70,7 @@ const handleSubmit = async (text) => {
     let nlp = new AtlasApproxNlp();
     await nlp.initialise();
     let response = await nlp.ask(text);
+    console.log(response);
 
     try {
       const updateObject = await updateChat(response,plotState)
@@ -95,13 +97,13 @@ const handleSubmit = async (text) => {
     } catch (error) {
       console.error("Error occurred during updateChat:", error);
     } finally {
-      nlp.reset();
+      
     }
   } // else
 }; //handleSubmit
 
   return (
-    <Sider width={"27vw"} style={{ padding: "0.8%", backgroundColor: "#f5f5f5" }}>
+    <Sider ref={chatboxRef} width={"27vw"} style={{ padding: "0.8%", backgroundColor: "#f5f5f5" }}>
       <div style={{ width: "inherit", height: "80vh", overflow: "scroll" }} ref={chatboxRef}>
         {welcomeMessage && (
           <>

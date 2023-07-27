@@ -14,7 +14,7 @@ const CellxOrganTable = ({ state }) => {
         organCount++;
       }
     });
-    return organCount > 0 ? row : null;
+    return organCount > 1 ? row : null;
   }).filter(Boolean);
 
   //  cell types found in only 1 organs
@@ -27,7 +27,7 @@ const CellxOrganTable = ({ state }) => {
         organCount++;
       }
     });
-    return organCount < 0 ? row : null;
+    return organCount < 2 ? row : null;
   }).filter(Boolean);
 
   let finalRow = {
@@ -53,10 +53,12 @@ const CellxOrganTable = ({ state }) => {
       dataIndex: 'celltype',
       key: 'celltype',
       render: (text) => (
-        <a href={`https://www.google.com/search?q=${text}`} target="_blank">
+        <a href={`https://www.google.com/search?q=${text}`} target="_blank" style={{fontWeight:"bold"}}>
           {text}
         </a>
       ),
+      width: 150,
+      fixed: 'left',
     },
     ...state.organs.map((organ) => ({
       title: organ,
@@ -70,6 +72,7 @@ const CellxOrganTable = ({ state }) => {
         ) : (
           <StopTwoTone twoToneColor="#d9d9d9" />
         ),
+      width: 120,
     })),
   ];
 
@@ -86,13 +89,13 @@ const CellxOrganTable = ({ state }) => {
   ];
 
   return (
-    <section>
+    <section style={{ margin: '2vh', justifyContent: 'center', alignItems: 'center'}}>
       <Table
         columns={columnsMulti}
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '80vh',
+          y: '50vh',
         }}
       />
       <Table
