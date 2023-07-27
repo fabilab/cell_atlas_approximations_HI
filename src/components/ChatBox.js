@@ -10,7 +10,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
   const [welcomeMessage, setWelcomeMessage] = useState(true);
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
-
   const chatboxRef = useRef(null);
 
   useEffect(() => {
@@ -55,7 +54,7 @@ const handleSubmit = async (text) => {
 			"What cell types are available in human heart?",
 			"what cell type is the highest expressor of COL1A1 in human?",
 			"show 10 similar genes to TP53 in human lung",
-			"show 5 cell types like Uterus pericyte in human",
+			"show 5 cell types like lung fibroblast in mouse",
 		];
   
 		setCurrentMessage('');
@@ -67,9 +66,10 @@ const handleSubmit = async (text) => {
 		setChatHistory(instructions);
 
 	} else {
-    let nlp = new AtlasApproxNlp();
+    let nlp = new AtlasApproxNlp(chatContext);
     await nlp.initialise();
     let response = await nlp.ask(text);
+    setChatContext(nlp.context);
     console.log(response);
 
     try {
@@ -87,7 +87,7 @@ const handleSubmit = async (text) => {
 
       // update parent chat state
       setCurrentMessage('');
-      setChatContext(chatContext);
+      
       const instructions = [...chatHistory]; // this will become the new set of instructions
       const today = new Date();
       const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -96,8 +96,6 @@ const handleSubmit = async (text) => {
       setChatHistory(instructions);
     } catch (error) {
       console.error("Error occurred during updateChat:", error);
-    } finally {
-      
     }
   } // else
 }; //handleSubmit
