@@ -29,7 +29,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
 
   let title = '';
   if (intent === "similar_celltypes.geneExpression") {
-    title = `<b>Cell Type Similarity to ${targetCelltype}: ${features} Correlation Analysis</b>`;
+    title = `<b>Gene Expression Correlation Analysis for Cell Type Similarity to ${targetCelltype}</b>`;
   } else if (intent === "highest_measurement.geneExpression") {
     title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
   }

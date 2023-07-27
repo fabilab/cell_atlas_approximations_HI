@@ -13,7 +13,7 @@ const Landing = ({ currentMessage, setCurrentMessage }) => {
     'Show the marker genes for coronary in human heart.',
     'what cell types are present in each organ of @organism?',
     'what cell type is the highest expressor of TP53 in human?',
-    'What is the fraction of IL6,TNF,APOE,CD8A,CD19,TP53 in human lung?',
+    'What is the fraction of TP53,METTL14,APOE,CD8A,CD19 in human lung?',
     'what is the average expression of TP53,METTL14,HDAC8,MTOR,HNRNPL,LANCL2,SEH1L,MED4,AHR,HSPA14-1,TRA2A in human lung?',
   ];
 

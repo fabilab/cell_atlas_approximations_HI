@@ -1,6 +1,7 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
 import { AtlasApproxNlp, buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
+import { message } from "antd";
 
 // Check if a/list of given genes exist in an specific organism/organs
 export const filterGenes = async (genes, organism, organ) => {
@@ -55,6 +56,7 @@ export const updateChat = async (response,plotState) => {
     let entities = response.entities;
     let intent = response.intent;
     let complete = response.complete;
+    let answer = "";
     console.log(response);
     console.log("intent is " + intent);
 
@@ -85,12 +87,20 @@ export const updateChat = async (response,plotState) => {
       let organRequired = params.organ ||plotState.organ;
       let organismRequired = params.organism || plotState.organism;
       let filterOutput = await filterGenes(params.features.split(','),organismRequired, organRequired);
+
+      if (filterOutput.found.length < 1) {
+        answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
+        return {
+          hasData: false,
+          message: answer,
+        }
+      }
       if (filterOutput.notFound.length > 0) {
         genesNotFound = filterOutput.notFound.filter(gene => params.features.includes(gene)).join(',');
         params.features = params.features.split(',').filter(gene => filterOutput.found.includes(gene)).join(',');
+        answer = genesNotFound === "" ? "" : `Removed invalid genes: ${genesNotFound}. `;
       }
     }
-    let answer = genesNotFound === "" ? "" : `Removed invalid genes: ${genesNotFound}. `;
     let apiData;
 
     if (intent === "similar_features.geneExpression") {

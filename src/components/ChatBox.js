@@ -49,11 +49,12 @@ const handleSubmit = async (text) => {
 	} else if (text.toLowerCase().replace(/\s/g, '') === 'help') {
 		const exampleQueries = [
 			"What organisms are available?",
+      "where are @celltype detected in @organism?",
 			"what cell types are present in each organ of mus musculus?",
 			"Show 10 marker genes for coronary in human heart.",
 			"What cell types are available in human heart?",
 			"what cell type is the highest expressor of COL1A1 in human?",
-			"show 10 similar genes to TP53 in human lung",
+			"show 10 similar genes to APOE in human lung",
 			"show 5 cell types like lung fibroblast in mouse",
 		];
   
