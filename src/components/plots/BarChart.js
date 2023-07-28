@@ -35,6 +35,8 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
   }
 
   let layout = {
+    width: '100%',
+    height: '100%',
     xaxis: {
       automargin: true,
       title: {
@@ -120,7 +122,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
         data={data}
         layout={layout}
         config={config}
-        responsive={true}
+        // responsive={true}
       />
   );
 };
