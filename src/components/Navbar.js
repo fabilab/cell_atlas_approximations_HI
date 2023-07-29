@@ -2,7 +2,8 @@ import {
   GithubOutlined,
   InfoCircleOutlined,
   CodeOutlined,
-  CustomerServiceOutlined
+  CustomerServiceOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 import { Menu, Layout } from 'antd';
 const { Header } = Layout;
@@ -37,8 +38,9 @@ const Navbar = ({ setShowLanding }) => {
           <CustomerServiceOutlined />
           <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
         </Menu.Item>
-        <Menu.Item onClick={ShowLanding} style={{ marginLeft: "40%", marginRight: "10%", fontSize: "1.4em", fontWeight: "bold" }}>
-          AtlasApprox
+        <Menu.Item style={{ marginLeft: "40%", marginRight: "10%", fontSize: "1.4em", fontWeight: "bold" }}>
+          <HomeOutlined className="navbar-icon" />
+          <a href='http://localhost:3000/'>AtlasApprox</a>
         </Menu.Item>
       </Menu>
     </Header>

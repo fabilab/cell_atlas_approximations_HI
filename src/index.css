@@ -32,3 +32,6 @@ code {
   display: flex;
   align-items: stretch;
 }
+.navbar-icon {
+  margin-right: 10px;
+}
