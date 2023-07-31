@@ -14,6 +14,7 @@ const Navbar = ({ }) => {
   return (
     <Header style={{ padding: '0px' }}>
         <Menu
+          selectable={false}
           className="customMenu"
           mode="horizontal"
           style={{
