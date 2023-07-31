@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { SendOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
 import Message from "./Message";
-import { Layout, Row, Input } from "antd";
+import { Button, Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
 const { Sider } = Layout;
+const { Item } = Menu;
 
 const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
   const [chatContext, setChatContext] = useState({});
@@ -130,19 +133,31 @@ const handleSubmit = async (text) => {
           ))}
       </div>
       <div style={{ height: "3vh" }}></div>
-      <Row>
-        <Input.TextArea
-          id="chatBoxInput"
-          allowClear
-          autoSize={{ minRows: 4, maxRows: 5 }}
-          value={currentMessage}
-          onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-          onKeyDown={handleKeyDown}
-          onPressEnter={() => handleSubmit(currentMessage)}
-        />
+      <Row className="chat-input-row">
+        <div className="chat-input-container">
+          <Input.TextArea
+            id="chatBoxInput"
+            // allowClear
+            autoSize={{ minRows: 4, maxRows: 5 }}
+            value={currentMessage}
+            onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+            onKeyDown={handleKeyDown}
+            onPressEnter={() => handleSubmit(currentMessage)}
+            className="chat-input"
+          />
+          <Button 
+            type="text"
+            icon={<SendOutlined
+              style={{ color: currentMessage.length > 0 ? '#1890ff' : 'grey' }}
+            />} 
+            onClick={() => handleSubmit(currentMessage)}
+            className="send-button"
+            ghost
+          />
+        </div>
       </Row>
       <Row>
-        <p style={{ margin: 0, color: "#999", fontSize: "11px" }}>
+        <p style={{ margin: 0, color: "#666", fontSize: "11px" }}>
           Press 'Enter' to send a message. Key up to navigate command history.
         </p>
       </Row>

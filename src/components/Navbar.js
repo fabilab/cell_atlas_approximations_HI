@@ -21,6 +21,7 @@ const Navbar = ({ setShowLanding }) => {
         style={{
           background: "linear-gradient(45deg, #3282B8 10%, #1F3B75 90%)",
           color: "white",
+          opacity:"0.95",
         }}
       >
         <Menu.Item style={{ fontFamily: "inherit" }}>

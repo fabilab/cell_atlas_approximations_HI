@@ -1,6 +1,6 @@
 import { Col } from "antd";
 import userImage from "../asset/user.jpg";
-import bot from "../asset/bot.jpg";
+import bot from "../asset/bot.png";
 import Typewriter from "typewriter-effect";
 
 const Message = (props) => {
@@ -11,11 +11,11 @@ const Message = (props) => {
     return (
       <Col xs={18} md={20} lg={24} xl={24} xxl={24} style={{marginBottom: messageBoxMarginBottom}}>
         <div className="media">
-          {/* <div className="media-left" style={{paddingTop:"9px"}}>
+          <div className="media-left" style={{paddingTop:"9px"}}>
             <figure className="image is-24x24">
               <img style={{borderRadius:"15px", verticalAlign:"middle"}} src={userImage} alt="User"/>
             </figure>
-          </div> */}
+          </div>
           <div className="media-content">
             <div className="box" style={{backgroundColor:"#444", color:"white"}}>
               {message}
@@ -29,11 +29,11 @@ const Message = (props) => {
     return (
       <Col xs={18} md={20} lg={24} xl={24} xxl={24} style={{ marginBottom: messageBoxMarginBottom }}>
         <div className="media">
-          {/* <div className="media-left" style={{paddingTop:"9px"}}>
+          <div className="media-left" style={{paddingTop:"9px"}}>
             <figure className="image is-24x24">
               <img style={{borderRadius:"15px"}} src={bot} alt="Bot"/>
             </figure>
-          </div> */}
+          </div>
           <div className="media-content">
             <div className="box" style={{ width: 'inherit' }}>
               {message.map((m, i) => (
@@ -52,11 +52,11 @@ const Message = (props) => {
     return (
       <Col xs={18} md={20} lg={24} xl={24} xxl={24} style={{ marginBottom: messageBoxMarginBottom }}>
         <div className="media">
-          {/* <div className="media-left" style={{paddingTop:"9px"}}>
+          <div className="media-left" style={{paddingTop:"9px"}}>
             <figure className="image is-24x24">
               <img style={{borderRadius:"15px"}} src={bot} alt="Bot"/>
             </figure>
-          </div> */}
+          </div>
           <div className="media-content">
             <div className="box" style={{ width: 'fit-content' }}>
               <Typewriter

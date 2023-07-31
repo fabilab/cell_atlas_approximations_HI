@@ -35,3 +35,28 @@ code {
 .navbar-icon {
   margin-right: 10px;
 }
+
+.chat-input-wrapper {
+  position: relative;
+}
+
+.send-button {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+}
+
+.chat-input-row {
+  position: relative;
+  width: 100%;
+}
+
+.chat-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.chat-input {
+  width: 100%;
+  padding-right: 20px;
+}
