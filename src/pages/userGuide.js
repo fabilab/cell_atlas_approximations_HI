@@ -1,9 +1,10 @@
+import Navbar from '../components/Navbar';
 
 const UserGuide = () => {
 
     return (
         <div>
-        Hello    
+            <Navbar></Navbar>
         </div>
     );
 }
