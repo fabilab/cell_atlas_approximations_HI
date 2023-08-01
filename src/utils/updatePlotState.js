@@ -57,8 +57,8 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     let apiCelltypes = await atlasapprox.celltypes(organism, organ);
     let celltypes = apiCelltypes.celltypes;
     let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
-    let chromatinAcc = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
-    console.log(chromatinAcc);
+    // let chromatinAcc = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
+    // console.log(chromatinAcc);
     console.log(apiResponse);
     average = apiResponse.average;
 
@@ -84,11 +84,11 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   const fractionsIntent = async () => {
     let apiFraction = await atlasapprox.fraction_detected(organism, features, organ, null, "gene_expression")
     let apiAverage = await atlasapprox.average(organism, features, organ, null, "gene_expression");
-    let average_chromo = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
+    // let average_chromo = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
 
     console.log(apiAverage);
     console.log("=========================")
-    console.log(average_chromo);
+    // console.log(average_chromo);
     fractions = apiFraction.fraction_detected;
     average = apiAverage.average;
     let plotType = "bubbleHeatmap";

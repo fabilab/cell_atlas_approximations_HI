@@ -61,7 +61,7 @@ const Message = (props) => {
             <div className="box" style={{ width: 'fit-content' }}>
               <Typewriter
                 options={{
-                  delay: 30, // Change the delay between each character (default: 70)
+                  delay: 10, // Change the delay between each character (default: 70)
                 }}
                 onInit={(typewriter) => {
                   typewriter

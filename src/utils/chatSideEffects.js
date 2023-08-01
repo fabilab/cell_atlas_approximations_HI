@@ -1,19 +1,17 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
 import { AtlasApproxNlp, buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
-import { message } from "antd";
 
 // Check if a/list of given genes exist in an specific organism/organs
 export const filterGenes = async (genes, organism, organ) => {
-  console.log(genes);
-  console.log(organism);
-  console.log(organ);
   let availableGenes = await atlasapprox.features(organism, organ, "gene_expression");
   let result = { found: [], notFound: [] };
 
   for (let gene of genes) {
     if (availableGenes.features.includes(gene)) {
-      result.found.push(gene);
+      if (! result.found.includes(gene)) {
+        result.found.push(gene);
+      }
     } else {
       result.notFound.push(gene);
     }
@@ -35,6 +33,9 @@ const updatePlotIntents = [
     "organisms",
     "similar_celltypes",
 ];
+
+// check is all genes requested are found in our database
+// check if the requested list of genes has duplications
 const checkGenesIntents = [
 	"average",
 	"fraction_detected",
@@ -57,8 +58,7 @@ export const updateChat = async (response,plotState) => {
     let intent = response.intent;
     let complete = response.complete;
     let answer = "";
-    console.log(response);
-    console.log("intent is " + intent);
+    let apiData;
 
     if (intent === "None") {
       return {
@@ -74,11 +74,9 @@ export const updateChat = async (response,plotState) => {
         message: response.followUpQuestion,
       };
     }
-
     const { endpoint, params } = buildAPIParams(intent, entities);
     let generalIntent = intent.split(".")[0];
     let genesNotFound = '';
-    console.log(params);
     // validate user input genes and handle error for some intends
     if (checkGenesIntents.includes(generalIntent)) {
 
@@ -87,7 +85,7 @@ export const updateChat = async (response,plotState) => {
       let organRequired = params.organ ||plotState.organ;
       let organismRequired = params.organism || plotState.organism;
       let filterOutput = await filterGenes(params.features.split(','),organismRequired, organRequired);
-
+      console.log(filterOutput);
       if (filterOutput.found.length < 1) {
         answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
         return {
@@ -97,13 +95,17 @@ export const updateChat = async (response,plotState) => {
       }
       if (filterOutput.notFound.length > 0) {
         genesNotFound = filterOutput.notFound.filter(gene => params.features.includes(gene)).join(',');
-        params.features = params.features.split(',').filter(gene => filterOutput.found.includes(gene)).join(',');
         answer = genesNotFound === "" ? "" : `Removed invalid genes: ${genesNotFound}. `;
       }
+      // move this line here to handle duplicate gene names
+      console.log(params.features);
+      params.features = [...new Set(params.features.split(','))].filter(gene => filterOutput.found.includes(gene)).join(',');
+      console.log(params.features);
+      apiData = await callAPI(endpoint, params);
+      answer += buildAnswer(intent, apiData);
     }
-    let apiData;
 
-    if (intent === "similar_features.geneExpression") {
+    else if (intent === "similar_features.geneExpression") {
       params['feature'] = params['features'];
       delete params['features'];
       apiData = await callAPI(endpoint, params);
@@ -117,17 +119,15 @@ export const updateChat = async (response,plotState) => {
       params['number'] = '10';
       delete params['features'];
       apiData = await callAPI(endpoint, params);
-
       answer = buildAnswer(intent, apiData);
-	} 
+	  } 
   
-  else {
-		apiData = await callAPI(endpoint, params);
-		answer += buildAnswer(intent, apiData);
-    console.log(answer);
-  }
-  
-    console.log(apiData);
+    else {
+      console.log("to this line ====")
+      apiData = await callAPI(endpoint, params);
+      answer += buildAnswer(intent, apiData);
+    }
+
     return {
       hasData: true,
       params: params,
