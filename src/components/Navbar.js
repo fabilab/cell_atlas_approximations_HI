@@ -25,7 +25,7 @@ const Navbar = ({ }) => {
             opacity:"0.95",
           }}
         >
-          <div style={{ display: 'flex', flexGrow: 1, marginLeft:"5%" }}> 
+          <div style={{ display: 'flex', flexGrow: 1, marginLeft:"4%" }}> 
             <Menu.Item style={{ fontFamily: "inherit" }}>
               <InfoCircleOutlined />
               <a href='/user-guide' target='_blank' rel='noopener noreferrer'> User guide</a>
@@ -43,7 +43,7 @@ const Navbar = ({ }) => {
               <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
             </Menu.Item>
           </div>
-          <Menu.Item style={{ fontSize: "1.4em", fontWeight: "bold", marginRight: '5%'}}>
+          <Menu.Item style={{ fontSize: "1.4em", fontWeight: "bold", marginRight: '6%'}}>
             <HomeOutlined className="navbar-icon" />
             <a href='http://localhost:3000/'>AtlasApprox</a>
           </Menu.Item>
