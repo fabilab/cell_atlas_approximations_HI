@@ -116,8 +116,7 @@ const handleSubmit = async (text) => {
       <div style={{ width: "inherit", height: "80vh", overflow: "scroll"}} ref={chatboxRef}>
           {welcomeMessage && (
             <>
-              <Message key="welcome-message-1" role="system" message="Welcome to AtlasApprox!" pause={false} />
-              <Message key="welcome-message-2" role="system" message="Please type `help` for a list of typical commands." pause={true} />
+              <Message key="welcome-message-1" role="system" message="Welcome to AtlasApprox! <br>Please type `help` for a list of typical commands." pause={true} />
             </>
           )}
           {chatHistory.length !== 0 &&

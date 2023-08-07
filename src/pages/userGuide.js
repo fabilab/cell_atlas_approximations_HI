@@ -1,12 +1,60 @@
+import React,{ useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import { Typography } from 'antd';
+
+const { Title } = Typography;
 
 const UserGuide = () => {
+  
+  const [userGuideMd, setuserGuideMd] = useState('');
 
-    return (
-        <div>
-            <Navbar></Navbar>
-        </div>
-    );
+  // fetch markdown content from the server (or local file) when component mounts
+  useEffect(() => {
+    fetch('userGuide.md')
+      .then(response => response.text())
+      .then(text => setuserGuideMd(text));
+  }, []);
+
+  const components = {
+    img({node, ...props}) {
+      return <img {...props} style={{ width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
+    }
+  }
+  
+  /* CSS in JS */
+const markdownStyle = {
+  fontFamily: 'Arial, sans-serif',
+  color: '#4a4a4a',
+  lineHeight: '1.6',
+  maxWidth: '800px',
+  margin: '0 auto',
+  padding: '20px'
 }
 
-export default UserGuide
+const titleStyle = {
+  borderBottom: '1px solid #ddd',
+  paddingBottom: '10px',
+  color: '#333',
+  marginBottom: '20px',
+}
+
+const sectionStyle = {
+  marginBottom: '40px',
+}
+return (
+  <>
+    <Navbar />
+    <div style={{...markdownStyle, marginTop: '5%'}}>
+      <ReactMarkdown 
+        remarkPlugins={[gfm]}
+        components={components}
+        children={userGuideMd}
+      />
+    </div>
+  </>
+);
+};
+
+export default UserGuide;

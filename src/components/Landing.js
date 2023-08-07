@@ -22,7 +22,7 @@ const Landing = ({ currentMessage, setCurrentMessage }) => {
 
   return (
     <div className="landing-page">
-      <Title level={2} style={{ textAlign: 'center', marginBottom: "4vh", marginTop: "7vh" }}>Cell Atlas Approximations </Title>
+      <Title level={2} style={{ textAlign: 'center', marginBottom: "4vh", marginTop: "11vh" }}>Cell Atlas Approximations </Title>
       <Row gutter={48} className="card-row">
         <Col span={1} />
         <Col span={6}>
@@ -42,7 +42,7 @@ const Landing = ({ currentMessage, setCurrentMessage }) => {
         </Col>
         <Col span={1} />
       </Row>
-      <div style={{ textAlign: 'center', margin: '7vh'}}>
+      <div style={{ textAlign: 'center', margin: '5vh'}}>
         <Title level={4} style={{ marginBottom: "2vh", color: "#1890ff" }}>Example questions:</Title>
         <div style={{maxHeight:"25vh", overflowY:"scroll"}}>
           {sampleQueries.map((s, index) => (

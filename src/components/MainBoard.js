@@ -45,6 +45,7 @@ const MainBoard = () => {
             backgroundColor: "inherit",
             overflow: "auto", // scrollable
             height: "calc(100vh - 100px)", // Set a fixed height to enable scrolling
+            marginTop:"7vh",
             }}>
             {showLanding ? (
               <Landing
