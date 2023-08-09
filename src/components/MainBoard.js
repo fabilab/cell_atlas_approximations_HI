@@ -27,8 +27,10 @@ const MainBoard = () => {
   }, [currentResponse]);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <ChatBox
+    <Layout style={{ minHeight: "100vh", backgroundColor: "white" }}>
+      <Navbar/>
+      <Landing/>
+      {/* <ChatBox
         chatHistory={chatHistory}
         setChatHistory={setChatHistory}
         currentMessage={currentMessage}
@@ -62,7 +64,7 @@ const MainBoard = () => {
             )}
           </Content>
         </div>
-      </Layout>
+      </Layout> */}
     </Layout>
   );
 };

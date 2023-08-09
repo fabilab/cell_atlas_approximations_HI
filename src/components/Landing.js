@@ -1,48 +1,106 @@
 import React from 'react';
-import { Card, Col, Row, Typography } from 'antd';
-import heatmapSample from '../asset/plots/heatmap.png';
-import dotplotSample from '../asset/plots/dotplot.png';
-import networkSample from '../asset/plots/network.png';
+import { Input, Typography, Row, Col } from 'antd';
+import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import search from '../asset/search.png';
 const { Title } = Typography;
+const { Text } = Typography;
+const style = {
+  background: '#0092ff',
+  padding: '8px 0',
+};
 
 const Landing = ({ currentMessage, setCurrentMessage }) => {
 
   const sampleQueries = [
-    'what species are available?',
-    'what kind of data is available?',
-    'where are @celltype detected in @organism?',
-    'show organ for @organism in chromatin accessibility.',
+    'What species are available?',
+    'Explore zebrafish',
+    'What kind of data is available?',
+    'Where are fibroblast detected in mouse?',
+    'Show organ for mouse in chromatin accessibility.',
     'Show the marker genes for coronary in human heart.',
-    'what cell types are present in each organ of @organism?',
-    'what cell type is the highest expressor of TP53 in human?',
+    'What cell types are present in each organ of mouse?',
+    'What cell type is the highest expressor of TP53 in human?',
+    'Compare expression of CD19 in fibroblast across organs in mouse',
     'What is the fraction of TP53,METTL14,APOE,CD8A,CD19 in human lung?',
-    'what is the average expression of TP53,METTL14,HDAC8,MTOR,HNRNPL,LANCL2,SEH1L,MED4,AHR,HSPA14-1,TRA2A in human lung?',
-    'what is the chromatin accessibility of chr1:9955-10355 in human lung?'
+    'What is the average expression of TP53,AHR,MED4,LANCL2 in human lung?',
+    'What is the chromatin accessibility of chr1:9955-10355 in human lung?'
   ];
 
   return (
     <div className="landing-page">
-      <Title level={2} style={{ textAlign: 'center', marginBottom: "4vh", marginTop: "11vh" }}>Cell Atlas Approximations </Title>
-      <Row gutter={48} className="card-row">
-        <Col span={1} />
-        <Col span={6}>
-          <Card className="landing-plot">
-            <img src={heatmapSample} alt="Heatmap" />
-          </Card>
-        </Col>
-        <Col span={9}>
-          <Card className="landing-plot">
-            <img src={dotplotSample} alt="Dot plot" />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card className="landing-plot">
-            <img src={networkSample} alt="Network" />
-          </Card>
-        </Col>
-        <Col span={1} />
-      </Row>
-      <div style={{ textAlign: 'center', margin: '5vh'}}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        marginTop: "24vh", 
+      }}>
+        <img src={search} alt="search icon" style={{ marginRight: '10px' }} />
+        <Title level={2} style={{ 
+          margin: 0,  // This is added to remove the default margin of the title
+          fontFamily: 'Arial, sans-serif',
+          color: '#303131',
+          lineHeight: '1.6',
+        }}>
+          Explore Cell Atlas Approximations
+        </Title>
+      </div>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginTop: '9vh' 
+      }}>
+        <Input
+          placeholder="Ask me a question OR click on the Xmas tree below..."
+          prefix={<RobotOutlined style={{ paddingRight: '10px' }}/> }
+          suffix={<SendOutlined />}
+          style={{
+            maxWidth: '50vw', 
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',  // Shadow effect
+            height: '50px',  // Increased height
+            borderRadius: '25px',
+            color:'#1677ff',
+            fontWeight: 'bold'
+          }}
+        />
+      </div>
+      <div style={{ 
+          marginTop: '5vh', 
+          // fontWeight: 'bold', 
+          color: '#303131', 
+          marginLeft:'15%',
+          marginRight: '15%',
+        }}>
+        <Row gutter={{
+          xs: 8,
+          sm: 16,
+          md: 24,
+          lg: 32,
+        }}>
+        {sampleQueries.map((query, index) => (
+          <Col span={12} key={index}>
+            <div style={{
+              marginBottom: '2vh',
+              textAlign: index % 2 === 1 ? "left" : "right",
+              }}> {/* This div will help space out each Text component */}
+              <Text
+                onClick={() => setCurrentMessage(query)}
+                style={{
+
+                  color: currentMessage === query ? '#fa8c16' : 'initial',
+                  cursor: 'pointer',
+                  ':hover': { color: 'lightblue' }
+                }}
+                >{query}
+              </Text>
+            </div>
+          </Col>
+        ))}
+        </Row>
+      </div>
+
+      
+      {/* <div style={{ textAlign: 'center', margin: '5vh'}}>
         <Title level={4} style={{ marginBottom: "2vh", color: "#1890ff" }}>Example questions:</Title>
         <div style={{maxHeight:"25vh", overflowY:"scroll"}}>
           {sampleQueries.map((s, index) => (
@@ -62,7 +120,7 @@ const Landing = ({ currentMessage, setCurrentMessage }) => {
         </div>
         <br/>
         <p style={{color:"#1890ff"}}>scroll to view more</p>
-      </div>
+      </div> */}
     </div>
   );
 };

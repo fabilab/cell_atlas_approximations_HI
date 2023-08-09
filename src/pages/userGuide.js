@@ -33,16 +33,6 @@ const markdownStyle = {
   padding: '20px'
 }
 
-const titleStyle = {
-  borderBottom: '1px solid #ddd',
-  paddingBottom: '10px',
-  color: '#333',
-  marginBottom: '20px',
-}
-
-const sectionStyle = {
-  marginBottom: '40px',
-}
 return (
   <>
     <Navbar />
