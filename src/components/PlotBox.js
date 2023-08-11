@@ -9,7 +9,13 @@ import TableOrganisms from './plots/TableOrganisms';
 const PlotBox = ({ state }) => {
   if (state.plotType === 'heatmap') {
     return (
-      <div style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div style={{ 
+            flex: 1,
+            marginTop: '3vh', 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+          }}>
         <Heatmap
           xaxis={state.data.xaxis}
           yaxis={state.data.yaxis}

@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Layout } from 'antd';
+import { Layout, Row, Col } from 'antd';
+import { useLocation } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
-import Navbar from './Navbar';
-import Landing from './Landing';
 import { triggersPlotUpdate } from '../utils/chatSideEffects';
 import { updatePlotState } from '../utils/updatePlotState';
 
 const { Content } = Layout;
 
 const MainBoard = () => {
+
+  // Get the first user's query from Landing page
+  const location = useLocation();
+  const firstQuery = location.state;
+  console.log(firstQuery);
+  
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
   // message string that the user is typing
-  const [currentMessage, setCurrentMessage] = useState('');
+  const [currentMessage, setCurrentMessage] = useState(firstQuery);
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
@@ -27,17 +32,31 @@ const MainBoard = () => {
   }, [currentResponse]);
 
   return (
-    <Layout style={{ minHeight: "100vh", backgroundColor: "white" }}>
-      <Navbar/>
-      <Landing/>
-      {/* <ChatBox
-        chatHistory={chatHistory}
-        setChatHistory={setChatHistory}
-        currentMessage={currentMessage}
-        setCurrentMessage={setCurrentMessage}
-        setCurrentResponse={setCurrentResponse}
-        plotState={plotState}
-      />
+    <div style={{ height: "95vh", marginTop:'55px'}}>
+      <Row style={{height:"inherit"}} >
+        <Col span={6}>
+          <ChatBox
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            currentMessage={currentMessage}
+            setCurrentMessage={setCurrentMessage}
+            setCurrentResponse={setCurrentResponse}
+            plotState={plotState}
+          />
+        </Col>
+        <Col span={18}>
+          {
+            plotState &&
+            <PlotBox state={plotState} 
+              style={{ 
+                marginTop: "100px"
+              }}
+            />
+          }
+          
+        </Col>
+      </Row>
+       {/*
       <Layout style={{ backgroundColor: "white" }}>
         <Navbar
           setShowLanding={setShowLanding}
@@ -65,7 +84,7 @@ const MainBoard = () => {
           </Content>
         </div>
       </Layout> */}
-    </Layout>
+    </div>
   );
 };
 

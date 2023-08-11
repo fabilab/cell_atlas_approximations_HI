@@ -6,7 +6,7 @@ import {
     CustomerServiceOutlined,
     HomeOutlined
 } from '@ant-design/icons';
-import logo from '../asset/bot.png';
+import logo from '../asset/fabiLogo.png';
 import { Layout, Row, Col } from 'antd';
 const { Header } = Layout;
 
@@ -20,15 +20,17 @@ const Navbar = () => {
         position: 'fixed', 
         top: 0,
         width: '100%',
-        zIndex: 10, // Ensures the header is above other content
+        zIndex: 100, // Ensures the header is above other content
         backgroundColor: '#1D2531',
         // backgroundColor: 'lightblue',
         opacity: '95%',
         color: 'white',
         fontFamily: 'Arial, sans-serif',
+        height:'57px'
+
       }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={logo} alt="Bot Logo" style={{ height: '47px', marginRight: '10px' }} />
+            <img src={logo} alt="Bot Logo" style={{ height: '40px', marginRight: '10px' }} />
         </div>
         <div style={{ display: 'flex'}}>
           <div style={{ fontFamily: "inherit", marginRight: '20px' }}>

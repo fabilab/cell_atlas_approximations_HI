@@ -23,7 +23,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       }
     };
     scrollToBottom();
-  }, [chatHistory, setChatHistory]);
+  }, [chatHistory]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
@@ -43,82 +43,97 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     }
   };
 
-const handleSubmit = async (text) => {
-	const newMessage = { message: text, index: messageHistory.length };
-	setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
-	setHistoryIndex([...messageHistory, newMessage].length);
+  const handleSubmit = async (text) => {
+    const newMessage = { message: text, index: messageHistory.length };
+    setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
+    setHistoryIndex([...messageHistory, newMessage].length);
 
-	if (text === 'clear') {
-		setMessageHistory([]);
-		setHistoryIndex(0);
-		setChatHistory([]);
-		setChatContext({});
-		setCurrentMessage('');
-		return '';
-	} else if (text.toLowerCase().replace(/\s/g, '') === 'help') {
-		const exampleQueries = [
-			"What organisms are available?",
-      "where are @celltype detected in @organism?",
-			"what cell types are present in each organ of mus musculus?",
-			"Show 10 marker genes for coronary in human heart.",
-			"What cell types are available in human heart?",
-			"what cell type is the highest expressor of COL1A1 in human?",
-			"show 10 similar genes to APOE in human lung",
-			"show 5 cell types like lung fibroblast in mouse",
-      "what is the chromatin accessibility of APOE,COL1A1 in mouse lung?",
-		];
-  
-		setCurrentMessage('');
-		const instructions = [...chatHistory]; // this will become the new set of instructions
-		const today = new Date();
-		const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-		instructions.push({ role: 'user', message: text, time: time });
-		instructions.push({ role: 'system', message: exampleQueries, time: time, isHelp: true });
-		setChatHistory(instructions);
-
-	} else {
-    let nlp = new AtlasApproxNlp(chatContext);
-    await nlp.initialise();
-    let response = await nlp.ask(text);
-    setChatContext(nlp.context);
-    console.log(response);
-
-    try {
-      const updateObject = await updateChat(response,plotState)
-      response.hasData = updateObject.hasData;
-      console.log("Line 82 in ChatBox.js");
-      console.log(response);
-      if (updateObject.hasData) {
-        response.data = updateObject.data;
-        response.params = updateObject.params;
-      }
-
-      // update parent response state
-      setCurrentResponse(response);
-
-      // update parent chat state
+    if (text === 'clear') {
+      setMessageHistory([]);
+      setHistoryIndex(0);
+      setChatHistory([]);
+      setChatContext({});
       setCurrentMessage('');
-      
+      return '';
+    } else if (text.toLowerCase().replace(/\s/g, '') === 'help') {
+      const exampleQueries = [
+        "What organisms are available?",
+        "where are @celltype detected in @organism?",
+        "what cell types are present in each organ of mus musculus?",
+        "Show 10 marker genes for coronary in human heart.",
+        "What cell types are available in human heart?",
+        "what cell type is the highest expressor of COL1A1 in human?",
+        "show 10 similar genes to APOE in human lung",
+        "show 5 cell types like lung fibroblast in mouse",
+        "what is the chromatin accessibility of APOE,COL1A1 in mouse lung?",
+      ];
+    
+      setCurrentMessage('');
       const instructions = [...chatHistory]; // this will become the new set of instructions
       const today = new Date();
       const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       instructions.push({ role: 'user', message: text, time: time });
-      instructions.push({ role: 'system', message: updateObject.message, time: time });
+      instructions.push({ role: 'system', message: exampleQueries, time: time, isHelp: true });
       setChatHistory(instructions);
-    } catch (error) {
-      console.error("Error occurred during updateChat:", error);
+
+    } else {
+      let nlp = new AtlasApproxNlp(chatContext);
+      await nlp.initialise();
+      let response = await nlp.ask(text);
+      setChatContext(nlp.context);
+      console.log(response);
+
+      try {
+        const updateObject = await updateChat(response,plotState)
+        response.hasData = updateObject.hasData;
+        console.log("Line 82 in ChatBox.js");
+        console.log(response);
+        if (updateObject.hasData) {
+          response.data = updateObject.data;
+          response.params = updateObject.params;
+        }
+
+        // update parent response state
+        setCurrentResponse(response);
+
+        // update parent chat state
+        setCurrentMessage('');
+        
+        const instructions = [...chatHistory]; // this will become the new set of instructions
+        const today = new Date();
+        const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        instructions.push({ role: 'user', message: text, time: time });
+        instructions.push({ role: 'system', message: updateObject.message, time: time });
+        setChatHistory(instructions);
+      } catch (error) {
+        console.error("Error occurred during updateChat:", error);
+      }
+    } // else
+  }; //handleSubmit
+
+  useEffect(() => {
+    if (chatHistory.length === 0) {
+      handleSubmit(currentMessage);
     }
-  } // else
-}; //handleSubmit
+  }, [chatHistory]);
 
   return (
-    <Sider width={"27vw"} style={{ padding: "0.8%", backgroundColor: "#f5f5f5" }}>
-      <div style={{ width: "inherit", height: "80vh", overflow: "scroll"}} ref={chatboxRef}>
-          {welcomeMessage && (
-            <>
-              <Message key="welcome-message-1" role="system" message="Welcome to AtlasApprox! <br>Please type `help` for a list of typical commands." pause={true} />
-            </>
-          )}
+    <div width={"27vw"} style={{ 
+        display: 'flex',
+        flexDirection: 'column',
+        height:`${window.innerHeight*0.88}px`,
+        paddingBottom: "0.8%", 
+        backgroundColor: "#e6eef5", 
+        paddingTop:'5vh', 
+      }}>
+      <div style={{ width: "inherit", overflow: "scroll", height:`${window.innerHeight*0.75}px`}} ref={chatboxRef}>
+          {welcomeMessage 
+          // && (
+          //   <>
+          //     <Message key="welcome-message-1" role="system" message="Welcome to AtlasApprox! <br>Please type `help` for a list of typical commands." pause={true} />
+          //   </>
+          // )
+          }
           {chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message
@@ -137,12 +152,12 @@ const handleSubmit = async (text) => {
           <Input.TextArea
             id="chatBoxInput"
             // allowClear
-            autoSize={{ minRows: 4, maxRows: 5 }}
-            value={currentMessage}
-            onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-            onKeyDown={handleKeyDown}
-            onPressEnter={() => handleSubmit(currentMessage)}
-            className="chat-input"
+              autoSize={{ minRows: 4, maxRows: 5 }}
+              value={currentMessage}
+              onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+              onKeyDown={handleKeyDown}
+              onPressEnter={() => handleSubmit(currentMessage)}
+              className="chat-input"
           />
           <Button 
             type="text"
@@ -160,7 +175,7 @@ const handleSubmit = async (text) => {
           Press 'Enter' to send a message. Key up to navigate command history.
         </p>
       </Row>
-    </Sider>
+    </div>
   );
 };
 
