@@ -15,8 +15,8 @@ const Navbar = () => {
       <Header style={{
         display: 'flex', 
         justifyContent: 'space-between', 
-        paddingLeft: '5%', 
-        paddingRight: '5%',
+        paddingLeft: '2%', 
+        paddingRight: '2%',
         position: 'fixed', 
         top: 0,
         width: '100%',
@@ -35,7 +35,7 @@ const Navbar = () => {
         <div style={{ display: 'flex'}}>
           <div style={{ fontFamily: "inherit", marginRight: '20px' }}>
             <InfoCircleOutlined />
-            <a href='/user-guide' target='_blank' style={{color:'white'}}> User guide</a>
+            <a href='/user-guide' target='_blank' style={{ color: 'white'}}> User guide</a>
           </div>
           <div style={{ marginRight: '20px' }}>
             <CodeOutlined />

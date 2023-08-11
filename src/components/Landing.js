@@ -32,7 +32,7 @@ const Landing = ({ }) => {
 
   return (
     <div className="landing-page" style={{
-      background: 'linear-gradient(to bottom right, #D2E5F1 10%, #ffffff, #ffffff 70%, #fff0ab 100%)',
+      background: 'linear-gradient(to bottom right, #b3e5fc 10%, #ffffff, #ffffff 70%, #fff59d 100%)',
       height: '100vh'
       // background: 'linear-gradient(to right, #b0e57c, #ffffff, #80d8ff)'
       }}>
@@ -42,9 +42,9 @@ const Landing = ({ }) => {
         justifyContent: 'center', 
         paddingTop: "24vh", 
       }}>
-        <img src={search} alt="search icon" style={{ marginRight: '10px' }} />
+        <img src={search} alt="search icon" style={{ marginRight: '10px', height:'70px' }} />
         <Title level={2} style={{ 
-          margin: 0,  // This is added to remove the default margin of the title
+          margin: 0, 
           fontFamily: 'Arial, sans-serif',
           color: '#303131',
           lineHeight: '1.6',

@@ -92,7 +92,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 
   let plotName = `heatmap(${organism}-${organ})`;
   let config = {
-    modeBarButtonsToAdd: [
+    modeBarButtons: [['toImage'], [
       {
         name: 'Download plot as SVG',
         icon: cameraRetro,
@@ -117,11 +117,10 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 		  document.body.removeChild(a);
 		},
 	  }
-    ],
-    editable: true,
+    ]],
+    editable: false,
     responsive: true,
-    scrollZoom: true,
-	modeBarButtonsToRemove: ['pan2d']
+    scrollZoom: false,
   };
 
 

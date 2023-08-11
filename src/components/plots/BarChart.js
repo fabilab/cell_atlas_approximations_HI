@@ -50,7 +50,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
     },
     yaxis: {
       title: {
-        text: 'Measurements (%)',
+        text: 'Distance',
         font: {
           size: 16,
         },
