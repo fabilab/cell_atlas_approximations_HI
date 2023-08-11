@@ -23,15 +23,15 @@ const Navbar = () => {
         zIndex: 100, // Ensures the header is above other content
         backgroundColor: '#1D2531',
         // backgroundColor: 'lightblue',
-        opacity: '95%',
+        opacity: '96%',
         color: 'white',
         fontFamily: 'Arial, sans-serif',
         height:'57px'
 
       }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Link to='/' style={{ display: 'flex', alignItems: 'center' }}>
             <img src={logo} alt="Bot Logo" style={{ height: '40px', marginRight: '10px' }} />
-        </div>
+        </Link>
         <div style={{ display: 'flex'}}>
           <div style={{ fontFamily: "inherit", marginRight: '20px' }}>
             <InfoCircleOutlined />

@@ -17,13 +17,11 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
       z: values,
       x: xaxis,
       y: yaxis,
-      // xgap: 0.5,
-      // ygap: 0.5,
       type: 'heatmap',
       colorscale: 'Reds',
       hovertemplate:
         "%{yaxis.title.text}: %{y} <br>" +
-        "%{xaxis.title.text}:%{x} <br>" +
+        "%{xaxis.title.text}: %{x} <br>" +
         "Expression: %{z}" +
         "<extra></extra>"
     }
@@ -43,7 +41,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
   let ytickMargin = 85 + pxChar * longestYlabel;
   let xtickMargin = 15 + pxChar * longestXlabel;
   let graphWidth = ytickMargin + pxCell * ncelltypes * 3;
-  let graphHeight = pxCell  * nfeatures + plotGap + xtickMargin;
+  let graphHeight = pxCell  * nfeatures * 0.7 + plotGap + xtickMargin;
   
   let layout = {
     width: graphWidth,
@@ -54,7 +52,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
       title: {
         text: 'Cell types',
         font: {
-          size: 18,
+          size: 16,
         },
         standoff: 20,
       },
@@ -65,7 +63,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
       title: {
         text: 'Genes',
         font: {
-          size: 18,
+          size: 16,
         },
         standoff: 20,
       },

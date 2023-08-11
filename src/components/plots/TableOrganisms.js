@@ -40,7 +40,7 @@ const TableOrganisms = () => {
 
   return (
     <div>
-      <Title level={2} style={{ textAlign: 'center', marginBottom: '4vh', marginTop: '3vh' }}>
+      <Title level={3} style={{ textAlign: 'center', marginBottom: '4vh', marginTop: '3vh' }}>
         Available Organisms
       </Title>
 

@@ -63,7 +63,7 @@ const Landing = ({ }) => {
           value={searchMessage}
           onChange={(e) => setSearchMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
           prefix={<RobotOutlined style={{ paddingRight: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/> }
-          suffix={<SendOutlined style={{color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/>}
+          suffix={<SendOutlined style={{paddingLeft: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/>}
           style={{
             maxWidth: '50vw', 
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',  // Shadow effect

@@ -13,7 +13,6 @@ const MainBoard = () => {
   // Get the first user's query from Landing page
   const location = useLocation();
   const firstQuery = location.state;
-  console.log(firstQuery);
   
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
@@ -34,7 +33,7 @@ const MainBoard = () => {
   return (
     <div style={{ height: "95vh", marginTop:'55px'}}>
       <Row style={{height:"inherit"}} >
-        <Col span={6}>
+        <Col span={7}>
           <ChatBox
             chatHistory={chatHistory}
             setChatHistory={setChatHistory}
@@ -44,13 +43,10 @@ const MainBoard = () => {
             plotState={plotState}
           />
         </Col>
-        <Col span={18}>
+        <Col span={17}>
           {
             plotState &&
             <PlotBox state={plotState} 
-              style={{ 
-                marginTop: "100px"
-              }}
             />
           }
           

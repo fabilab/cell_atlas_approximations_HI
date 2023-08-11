@@ -55,27 +55,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       setChatContext({});
       setCurrentMessage('');
       return '';
-    } else if (text.toLowerCase().replace(/\s/g, '') === 'help') {
-      const exampleQueries = [
-        "What organisms are available?",
-        "where are @celltype detected in @organism?",
-        "what cell types are present in each organ of mus musculus?",
-        "Show 10 marker genes for coronary in human heart.",
-        "What cell types are available in human heart?",
-        "what cell type is the highest expressor of COL1A1 in human?",
-        "show 10 similar genes to APOE in human lung",
-        "show 5 cell types like lung fibroblast in mouse",
-        "what is the chromatin accessibility of APOE,COL1A1 in mouse lung?",
-      ];
-    
-      setCurrentMessage('');
-      const instructions = [...chatHistory]; // this will become the new set of instructions
-      const today = new Date();
-      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      instructions.push({ role: 'user', message: text, time: time });
-      instructions.push({ role: 'system', message: exampleQueries, time: time, isHelp: true });
-      setChatHistory(instructions);
-
     } else {
       let nlp = new AtlasApproxNlp(chatContext);
       await nlp.initialise();
@@ -124,7 +103,8 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
         height:`${window.innerHeight*0.88}px`,
         paddingBottom: "0.8%", 
         backgroundColor: "#e6eef5", 
-        paddingTop:'5vh', 
+        paddingTop:'5vh',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       }}>
       <div style={{ width: "inherit", overflow: "scroll", height:`${window.innerHeight*0.75}px`}} ref={chatboxRef}>
           {welcomeMessage 
@@ -147,7 +127,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
           ))}
       </div>
       <div style={{ height: "3vh" }}></div>
-      <Row className="chat-input-row">
+      <Row className="chat-input-row" style={{padding:'10px'}}>
         <div className="chat-input-container">
           <Input.TextArea
             id="chatBoxInput"
@@ -169,8 +149,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             ghost
           />
         </div>
-      </Row>
-      <Row>
         <p style={{ margin: 0, color: "#666", fontSize: "11px" }}>
           Press 'Enter' to send a message. Key up to navigate command history.
         </p>

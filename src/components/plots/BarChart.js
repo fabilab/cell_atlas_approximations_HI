@@ -42,21 +42,23 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
       title: {
         text: 'Cell types / Organs',
         font: {
-          size: 18,
+          size: 16,
         },
-        standoff: 40,
+        standoff: 20,
       },
+      tickangle: 90,
     },
     yaxis: {
       title: {
         text: 'Measurements (%)',
         font: {
-          size: 18,
+          size: 16,
         },
+        standoff: 20,
       },
     },
     title: title,
-    barmode: 'stack',
+    // barmode: 'stack',
   };
 
   let cameraRetro = {

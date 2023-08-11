@@ -28,7 +28,7 @@ const PlotBox = ({ state }) => {
   } else if (state.plotType === 'bubbleHeatmap') {
     console.log(state);
     return (
-      <div id='canvasId' style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div id='canvasId' style={{ marginTop: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <BubbleHeatmap
           target="canvasId"
           xaxis={state.data.xaxis}
@@ -44,7 +44,7 @@ const PlotBox = ({ state }) => {
     console.log("testing bar chart --------!!!!");
     console.log(state);
     return (
-      <div id='canvasId' style={{ marginTop: '3vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div id='canvasId' style={{ marginTop: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <BarChart
           intent={state.intent}
           celltypesOrgan={state.data.celltypesOrgan}

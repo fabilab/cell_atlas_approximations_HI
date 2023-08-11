@@ -95,14 +95,14 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '50vh',
+          y: '70vh',
         }}
       />
-      <Table
+      {/* <Table
         columns={columnsUnique}
         dataSource={[finalRow]}
         pagination={false}
-      />
+      /> */}
     </section>
   );
 };

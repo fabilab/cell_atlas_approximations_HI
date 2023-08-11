@@ -123,7 +123,6 @@ export const updateChat = async (response,plotState) => {
 	  } 
   
     else {
-      console.log("to this line ====")
       apiData = await callAPI(endpoint, params);
       answer += buildAnswer(intent, apiData);
     }
