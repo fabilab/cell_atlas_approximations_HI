@@ -18,7 +18,7 @@ const Message = (props) => {
 
   const messageBoxStyle = {
     fontFamily: 'Sans-Serif',
-    fontSize: '14px',
+    fontSize: '13.5px',
     padding: '12px',
     borderRadius: '8px',
     backgroundColor: role === 'user' ? '#565C5E' : 'white',

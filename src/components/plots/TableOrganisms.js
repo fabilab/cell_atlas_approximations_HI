@@ -10,6 +10,8 @@ import m_musculus from '../../asset/organisms/m_musculus.jpeg';
 import t_adhaerens from '../../asset/organisms/t_adhaerens.jpeg';
 import d_rerio from '../../asset/organisms/d_rerio.jpeg';
 import m_myoxinus from '../../asset/organisms/m_myoxinus.jpeg';
+import s_mediterranea from '../../asset/organisms/s_mediterranea.png';
+import x_laevis from '../../asset/organisms/x_laevis.jpeg';
 
 const { Title } = Typography;
 const { Meta } = Card;
@@ -31,28 +33,30 @@ const TableOrganisms = () => {
     { src: m_myoxinus, title: 'Microcebus myoxinus (pygmy mouse lemur)' },
     { src: s_lacustris, title: 'Spongilla lacustris' },
     { src: t_adhaerens, title: 'Trichoplax adhaerens' },
+    { src: s_mediterranea, title: 'Schmidtea mediterranea'},
+    { src: x_laevis, title: 'Xenopus laevis'},
   ];
 
   const rows = [];
-  for (let i = 0; i < organismImages.length; i += 3) {
-    rows.push(organismImages.slice(i, i + 3));
+  for (let i = 0; i < organismImages.length; i += 4) {
+    rows.push(organismImages.slice(i, i + 4));
   }
 
   return (
     <div>
-      <Title level={3} style={{ textAlign: 'center', marginBottom: '4vh', marginTop: '3vh' }}>
+      <Title level={3} style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '5vh' }}>
         Available Organisms
       </Title>
 
       {rows.map((row, index) => (
-        <Row gutter={[16, 16]} key={index} justify="center">
+        <Row gutter={[32, 24]} key={index} justify="center">
           {row.map((image, innerIndex) => (
             <Col key={innerIndex} xs={24} sm={12} md={8} lg={6}>
               <Fade>
                 <Card style={{ width: '100%', margin: '10px' }}>
                   <div
                     style={{
-                      height: 140,
+                      height: 110,
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',

@@ -102,18 +102,11 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
         flexDirection: 'column',
         height:`${window.innerHeight*0.88}px`,
         paddingBottom: "0.8%", 
-        backgroundColor: "#e6eef5", 
+        backgroundColor: "#e4eff7",
         paddingTop:'5vh',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       }}>
       <div style={{ width: "inherit", overflow: "scroll", height:`${window.innerHeight*0.75}px`}} ref={chatboxRef}>
-          {welcomeMessage 
-          // && (
-          //   <>
-          //     <Message key="welcome-message-1" role="system" message="Welcome to AtlasApprox! <br>Please type `help` for a list of typical commands." pause={true} />
-          //   </>
-          // )
-          }
           {chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message

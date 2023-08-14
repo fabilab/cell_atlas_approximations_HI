@@ -21,7 +21,7 @@ const Landing = ({ }) => {
     'What kind of data is available?',
     'Where are fibroblast detected in mouse?',
     'Show organ for mouse in chromatin accessibility.',
-    'Show the marker genes for coronary in human heart.',
+    'Show 10 marker genes for coronary in human heart.',
     'What cell types are present in each organ of mouse?',
     'What cell type is the highest expressor of TP53 in human?',
     'Compare expression of CD19 in fibroblast across organs in mouse.',
@@ -32,7 +32,7 @@ const Landing = ({ }) => {
 
   return (
     <div className="landing-page" style={{
-      background: 'linear-gradient(to bottom right, #b3e5fc 10%, #ffffff, #ffffff 70%, #fff59d 100%)',
+      background: 'linear-gradient(to bottom right, #d3edf9 10%, #ffffff, #ffffff 70%, #fffad6 100%)',
       height: '100vh'
       // background: 'linear-gradient(to right, #b0e57c, #ffffff, #80d8ff)'
       }}>
@@ -63,7 +63,7 @@ const Landing = ({ }) => {
           value={searchMessage}
           onChange={(e) => setSearchMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
           prefix={<RobotOutlined style={{ paddingRight: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/> }
-          suffix={<SendOutlined style={{paddingLeft: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/>}
+          suffix={<SendOutlined style={{paddingLeft: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }} onClick={() => sendFirstSearch(searchMessage)}/>}
           style={{
             maxWidth: '50vw', 
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',  // Shadow effect
@@ -98,7 +98,6 @@ const Landing = ({ }) => {
                   color: searchMessage === query ? '#303131' : 'initial',
                   fontWeight: searchMessage === query ? 'bold' : '',
                   cursor: 'pointer',
-                  ':hover': { color: 'lightblue' }
                 }}
                 >{query}
               </Text>

@@ -118,7 +118,6 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 		},
 	  }
     ]],
-    editable: false,
     responsive: true,
     scrollZoom: false,
   };

@@ -114,9 +114,8 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
       },
     ],
     modeBarButtonsToRemove: ['pan2d','select2d','lasso2d'],
-    editable: true,
     responsive: true,
-    scrollZoom: true,
+    scrollZoom: false,
   };
 
   return (

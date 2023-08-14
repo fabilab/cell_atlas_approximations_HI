@@ -9,77 +9,51 @@ import { updatePlotState } from '../utils/updatePlotState';
 const { Content } = Layout;
 
 const MainBoard = () => {
-
-  // Get the first user's query from Landing page
   const location = useLocation();
   const firstQuery = location.state;
-  
+
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
-  // message string that the user is typing
   const [currentMessage, setCurrentMessage] = useState(firstQuery);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
       setShowLanding(false);
-      console.log("changing current response....");
-      console.log(currentResponse);
     }
   }, [currentResponse]);
 
   return (
-    <div style={{ height: "95vh", marginTop:'55px'}}>
-      <Row style={{height:"inherit"}} >
-        <Col span={7}>
-          <ChatBox
-            chatHistory={chatHistory}
-            setChatHistory={setChatHistory}
-            currentMessage={currentMessage}
-            setCurrentMessage={setCurrentMessage}
-            setCurrentResponse={setCurrentResponse}
-            plotState={plotState}
-          />
-        </Col>
-        <Col span={17}>
-          {
-            plotState &&
-            <PlotBox state={plotState} 
-            />
-          }
-          
-        </Col>
-      </Row>
-       {/*
-      <Layout style={{ backgroundColor: "white" }}>
-        <Navbar
-          setShowLanding={setShowLanding}
+    <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
+      <div style={{ flex: '0 0 30%', boxShadow: '4px 0px 6px rgba(0, 0, 0, 0.1)', overflow: 'auto' }}>
+        <ChatBox
+          style={{ height:'100%' }}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          currentMessage={currentMessage}
+          setCurrentMessage={setCurrentMessage}
+          setCurrentResponse={setCurrentResponse}
+          plotState={plotState}
         />
-         <div>
-          <Content style={{ 
-            backgroundColor: "inherit",
-            overflow: "auto", // scrollable
-            height: "calc(100vh - 100px)", // Set a fixed height to enable scrolling
-            marginTop:"7vh",
-            }}>
-            {showLanding ? (
-              <Landing
-                currentMessage={currentMessage}
-                setCurrentMessage={setCurrentMessage}
-              />
-            ) : (
-              plotState && 
-              <PlotBox state={plotState} 
-                style={{ 
-                 marginTop: "100px"
-                }}
-              />
-            )}
-          </Content>
-        </div>
-      </Layout> */}
+      </div>
+      <div style={{ flex: 1, padding: '20px', overflow: 'auto'}}>
+        {plotState && <PlotBox state={plotState} />}
+      </div>
     </div>
   );
 };

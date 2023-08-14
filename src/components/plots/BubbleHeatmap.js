@@ -48,7 +48,7 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
   let ytickMargin = pxChar * longestYlabel;
   let xtickMargin = pxChar * longestXlabel;
   let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-  let graphHeight = pxCell * nfeatures * 0.3 + xtickMargin;
+  let graphHeight = nfeatures * 6 + xtickMargin;
 
   let layout = {
     width: graphWidth,
@@ -116,9 +116,8 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
         click: () => downloadSVG(plotName),
       },
     ],
-    editable: true,
     responsive: true,
-    scrollZoom: true,
+    scrollZoom: false,
   };
 
   return (

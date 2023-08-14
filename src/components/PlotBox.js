@@ -5,6 +5,13 @@ import BarChart from './plots/BarChart';
 import CellxOrganTable from './plots/CellxOrganTable';
 import TableOrganisms from './plots/TableOrganisms';
 
+const plotStyle = {
+  marginTop: '5vh', 
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center'
+}
+
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
   if (state.plotType === 'heatmap') {
@@ -26,9 +33,8 @@ const PlotBox = ({ state }) => {
       </div>
     );
   } else if (state.plotType === 'bubbleHeatmap') {
-    console.log(state);
     return (
-      <div id='canvasId' style={{ marginTop: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div id='canvasId' style={plotStyle}>
         <BubbleHeatmap
           target="canvasId"
           xaxis={state.data.xaxis}
@@ -41,10 +47,8 @@ const PlotBox = ({ state }) => {
       </div>
     );
   } else if (state.plotType === "barChart") {
-    console.log("testing bar chart --------!!!!");
-    console.log(state);
     return (
-      <div id='canvasId' style={{ marginTop: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div id='canvasId' style={plotStyle}>
         <BarChart
           intent={state.intent}
           celltypesOrgan={state.data.celltypesOrgan}
