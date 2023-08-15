@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
+const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit }) => {
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
@@ -19,6 +19,13 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
       y: yaxis,
       type: 'heatmap',
       colorscale: 'Reds',
+      // get unit from API call
+      colorbar: {
+        title: {
+          text: unit,
+          titleside: "bottom"
+        }
+      },
       hovertemplate:
         "%{yaxis.title.text}: %{y} <br>" +
         "%{xaxis.title.text}: %{x} <br>" +

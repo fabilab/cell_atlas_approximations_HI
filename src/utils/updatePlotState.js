@@ -59,7 +59,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     // console.log(chromatinAcc);
     console.log(apiResponse);
     average = apiResponse.average;
-
     let plotType = "heatmap";
     newPlotState = {
       intent: "average",
@@ -73,7 +72,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         yaxis: features.split(","),
         average: average,
         fractions: null,
-        valueUnit: "counts per ten thousand",
+        valueUnit: apiResponse.unit,
       },
     };
     setPlotState(newPlotState);
@@ -103,7 +102,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         yaxis: features.split(','),
         average: average,
         fractions: fractions,
-        valueUnit: "counts per million",
+        valueUnit: apiAverage.unit,
       },
     };
     setPlotState(newPlotState);

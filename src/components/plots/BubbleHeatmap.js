@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) => {
+const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit }) => {
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
   console.log("Bubble heatmap line 8")
@@ -55,24 +55,10 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
     height: graphHeight,
     xaxis: {
       automargin: true,
-      title: {
-        text: 'Cell types',
-        font: {
-          size: 17,
-        },
-        standoff: 20,
-      },
       tickangle: 90,
     },
     yaxis: {
       automargin: true,
-      title: {
-        text: 'Genes',
-        font: {
-          size: 17,
-        },
-        standoff: 20,
-      },
       tickmode: 'array',
       ticktext: yTickTexts,
       tickvals: yTickVals,
@@ -92,7 +78,10 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ }) =>
       sizeref: 2 * Math.max(...all_size) / (desired_maximum_marker_size ** 2),
       colorscale: 'YlGnBu',
       reversescale: true,
-      colorbar: {},
+      colorbar: {title: {
+        text: unit,
+        titleside: "bottom"
+      }},
     },
     text: all_hovertext,
     hoverinfo: 'text',

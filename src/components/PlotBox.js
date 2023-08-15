@@ -14,6 +14,7 @@ const plotStyle = {
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
+  console.log(state)
   if (state.plotType === 'heatmap') {
     return (
       <div style={{ 
@@ -29,6 +30,7 @@ const PlotBox = ({ state }) => {
           values={state.data.average}
           organism={state.organism}
           organ={state.organ}
+          unit={state.data.valueUnit}
         />
       </div>
     );
@@ -43,6 +45,8 @@ const PlotBox = ({ state }) => {
           fractions={state.data.fractions}
           organism={state.organism}
           organ={state.organ}
+          unit={state.data.valueUnit}
+
         />
       </div>
     );

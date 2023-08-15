@@ -34,6 +34,7 @@ const MainBoard = () => {
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
+      console.log(plotState)
       setShowLanding(false);
     }
   }, [currentResponse]);
@@ -51,7 +52,7 @@ const MainBoard = () => {
           plotState={plotState}
         />
       </div>
-      <div style={{ flex: 1, margin:'20px', overflow: 'auto'}}>
+      <div style={{ flex: 1, margin:'10px', overflow: 'auto'}}>
         {plotState && <PlotBox state={plotState} />}
       </div>
     </div>
