@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit }) => {
+const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
@@ -12,6 +12,11 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit }) => {
   });
   const yTickVals = yaxis.map((_, index) => index);
 
+  // Apply log transform to data is requested by user
+  if (hasLog) {
+    values = values.map(subArray => subArray.map(value => Math.log(value)));
+    unit = "log( " + unit + " )";
+  } 
   let data = [
     {
       z: values,

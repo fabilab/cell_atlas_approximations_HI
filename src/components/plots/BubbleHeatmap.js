@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit }) => {
+const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit, hasLog }) => {
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
   console.log("Bubble heatmap line 8")
@@ -68,6 +68,11 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
 
   const desired_maximum_marker_size = 6.2;
 
+
+  if(hasLog) {
+    all_color = all_color.map(value => Math.log(value));
+    unit = "log( " + unit + " )";
+  }
   let data = {
     x: all_x,
     y: all_y,

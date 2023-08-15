@@ -14,6 +14,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let features = response.params.features || response.params.feature;
   let apiCelltypes = await atlasapprox.celltypes(organism, organ);
   let celltypes = apiCelltypes.celltypes;
+  let hasLog = plotState.hasLog;
 
   const addGenes = () => {
     // Update parameter for average/fraction plots
@@ -45,13 +46,25 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     }
   };
 
+  const toggleLog = () => {
+    hasLog = !hasLog;
+    features = plotState.features;
+    organism = plotState.organism;
+    organ = plotState.organ;
+    celltypes = plotState.data.xaxis;
+    if (!plotState.data.fractions) {
+      averageIntent();
+    } else {
+      fractionsIntent();
+    }
+
+  }
   const markersIntent = async () => {
     features = response.data.markers.join(",");
     fractionsIntent();
   };
 
   const averageIntent = async () => {
-
     let apiCelltypes = await atlasapprox.celltypes(organism, organ);
     let celltypes = apiCelltypes.celltypes;
     let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
@@ -74,6 +87,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         fractions: null,
         valueUnit: apiResponse.unit,
       },
+      hasLog: hasLog
     };
     setPlotState(newPlotState);
   };
@@ -104,6 +118,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         fractions: fractions,
         valueUnit: apiAverage.unit,
       },
+      hasLog: hasLog
     };
     setPlotState(newPlotState);
   };
@@ -190,7 +205,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     setPlotState(newPlotState);
   };
 
-  console.log(generalIntent);
+  console.log(generalIntent)
   switch (generalIntent) {
     case "add":
       addGenes();
@@ -198,6 +213,9 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     case "remove":
       removeGenes();
       break;
+    case "plot":
+      toggleLog();
+    break;
     case "markers":
       markersIntent();
       break;

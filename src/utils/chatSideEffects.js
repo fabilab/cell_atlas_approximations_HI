@@ -14,6 +14,7 @@ const updatePlotIntents = [
     "celltypexorgan",
     "organisms",
     "similar_celltypes",
+    "plot",
 ];
 
 // check is all genes requested are found in our database

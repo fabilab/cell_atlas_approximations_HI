@@ -14,7 +14,7 @@ const MainBoard = () => {
 
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
-  const [plotState, setPlotState] = useState(null);
+  const [plotState, setPlotState] = useState({"hasLog": false});
   const [showLanding, setShowLanding] = useState(true);
   const [currentMessage, setCurrentMessage] = useState(firstQuery);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
