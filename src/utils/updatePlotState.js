@@ -1,5 +1,4 @@
 import atlasapprox from "@fabilab/atlasapprox";
-import { filterGenes } from "./chatSideEffects";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
   console.log(response);
@@ -33,7 +32,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   const removeGenes = () => {
-    // console.log(typeof(features));
+
     features = plotState.features.split(',').filter(g => !features.includes(g)).join(',');
     organism = plotState.organism;
     organ = plotState.organ;
@@ -52,8 +51,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   const averageIntent = async () => {
-    let checkFeatures = features.split(',')
-    filterGenes(checkFeatures, organism, organ);
+
     let apiCelltypes = await atlasapprox.celltypes(organism, organ);
     let celltypes = apiCelltypes.celltypes;
     let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");

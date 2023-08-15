@@ -2,24 +2,6 @@ import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
 import { AtlasApproxNlp, buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
 
-// Check if a/list of given genes exist in an specific organism/organs
-export const filterGenes = async (genes, organism, organ) => {
-  let availableGenes = await atlasapprox.features(organism, organ, "gene_expression");
-  let result = { found: [], notFound: [] };
-
-  for (let gene of genes) {
-    if (availableGenes.features.includes(gene)) {
-      if (! result.found.includes(gene)) {
-        result.found.push(gene);
-      }
-    } else {
-      result.notFound.push(gene);
-    }
-  }
-  console.log(result);
-  return result;
-};
-
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
     "markers",
@@ -78,30 +60,9 @@ export const updateChat = async (response,plotState) => {
     }
     const { endpoint, params } = buildAPIParams(intent, entities);
     let generalIntent = intent.split(".")[0];
-    let genesNotFound = '';
-    // validate user input genes and handle error for some intends
     if (checkGenesIntents.includes(generalIntent)) {
-
-      // for add and remove  gene intent, I need to get organ and organism from 
-      // current plot State to validate new genes
-      let organRequired = params.organ ||plotState.organ;
-      let organismRequired = params.organism || plotState.organism;
-      let filterOutput = await filterGenes(params.features.split(','),organismRequired, organRequired);
-      console.log(filterOutput);
-      if (filterOutput.found.length < 1) {
-        answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
-        return {
-          hasData: false,
-          message: answer,
-        }
-      }
-      if (filterOutput.notFound.length > 0) {
-        genesNotFound = filterOutput.notFound.filter(gene => params.features.includes(gene)).join(',');
-        answer = genesNotFound === "" ? "" : `Removed invalid genes: ${genesNotFound}. `;
-      }
-      // move this line here to handle duplicate gene names
-      console.log(params.features);
-      params.features = [...new Set(params.features.split(','))].filter(gene => filterOutput.found.includes(gene)).join(',');
+      // handle duplicate gene names in user input list
+      params.features = [...new Set(params.features.split(','))].join(',');
       console.log(params.features);
       apiData = await callAPI(endpoint, params);
       answer += buildAnswer(intent, apiData);
