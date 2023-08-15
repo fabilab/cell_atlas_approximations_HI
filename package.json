@@ -1,7 +1,7 @@
 {
   "name": "atlas-approx-hi",
   "version": "0.1.0",
-  "homepage": "https://atlasapprox.org/",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@ant-design/colors": "^7.0.0",

@@ -8,7 +8,7 @@ import Navbar from './components/Navbar';
 function App() {
 
   return (
-    <HashRouter basename="/">
+    <HashRouter>
       <div>
         <Navbar/>
         <Routes>
