@@ -37,11 +37,11 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 
   let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
   let ncelltypes = xaxis.length;
-  let pxCell = 10, pxChar = 4.4, plotGap = 10;
-  let ytickMargin = 85 + pxChar * longestYlabel;
-  let xtickMargin = 15 + pxChar * longestXlabel;
-  let graphWidth = ytickMargin + pxCell * ncelltypes * 3;
-  let graphHeight = pxCell  * nfeatures * 0.7 + plotGap + xtickMargin;
+  let pxCell = 17, pxChar = 10;
+  let ytickMargin = pxChar * longestYlabel;
+  let xtickMargin = pxChar * longestXlabel;
+  let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
+  let graphHeight = nfeatures * 7.1 + xtickMargin;
   
   let layout = {
     width: graphWidth,
@@ -49,24 +49,9 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
     xaxis: {
       autorange: true,
       automargin: true,
-      title: {
-        text: 'Cell types',
-        font: {
-          size: 16,
-        },
-        standoff: 20,
-      },
-      // y: 10,
     },
     yaxis: {
       automargin: true,
-      title: {
-        text: 'Genes',
-        font: {
-          size: 16,
-        },
-        standoff: 20,
-      },
       tickmode: 'array',
       ticktext: yTickTexts,
       tickvals: yTickVals,

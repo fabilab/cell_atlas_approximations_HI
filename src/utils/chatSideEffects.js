@@ -59,6 +59,8 @@ export const updateChat = async (response,plotState) => {
     let complete = response.complete;
     let answer = "";
     let apiData;
+    console.log("Response is =====")
+    console.log(response);
 
     if (intent === "None") {
       return {

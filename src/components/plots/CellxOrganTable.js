@@ -57,7 +57,7 @@ const CellxOrganTable = ({ state }) => {
           {text}
         </a>
       ),
-      width: 150,
+      width: '10vw',
       fixed: 'left',
     },
     ...state.organs.map((organ) => ({
@@ -72,7 +72,7 @@ const CellxOrganTable = ({ state }) => {
         ) : (
           <StopTwoTone twoToneColor="#d9d9d9" />
         ),
-      width: 120,
+      width: '10vw',
     })),
   ];
 
@@ -95,14 +95,14 @@ const CellxOrganTable = ({ state }) => {
         dataSource={multiOrgansData}
         pagination={false}
         scroll={{
-          y: '70vh',
+          y: '50vh',
         }}
       />
-      {/* <Table
+      <Table
         columns={columnsUnique}
         dataSource={[finalRow]}
         pagination={false}
-      /> */}
+      />
     </section>
   );
 };

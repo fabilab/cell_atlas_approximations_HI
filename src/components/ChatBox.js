@@ -5,12 +5,9 @@ import Message from "./Message";
 import { Button, Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
-const { Sider } = Layout;
-const { Item } = Menu;
 
 const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
   const [chatContext, setChatContext] = useState({});
-  const [welcomeMessage, setWelcomeMessage] = useState(true);
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
 

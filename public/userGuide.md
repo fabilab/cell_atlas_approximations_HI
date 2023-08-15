@@ -10,10 +10,32 @@ AtlasApprox aims to democratise accessibility to single cell analysis by buildin
 ![about](./demo/about.png)
 
 ### Data Source
-TODO: put a list of url where we get the data from
+**Homo sapiens**: - RNA: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896) - ATAC: [Zhang et al. 2021](https://doi.org/10.1016/j.cell.2021.10.024)
 
-### Home page
-When you arrive on the "Cell Atlas Approximations" portal's main interface, you will find a split view layout featuring two main sections: a chat interface and a plot display area.
+**Mus musculus**: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
+
+**Mus myoxinus**: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+
+**Caenorhabditis elegans**: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
+
+**Danio rerio**: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
+
+**Spongilla lacustris**: [Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
+
+**Amphimedon queenslandica**, **Mnemiopsis leidyi**, and **Trichoplax adhaerens**: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
+
+**Xenopus laevis**: [Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)
+
+**Schmidtea mediterranea**: [Plass et al 2018](https://www.science.org/doi/10.1126/science.aaq1723#sec-10)
+
+### Landing page
+
+### Data exploration dashboard
+
+Once user send their first query, the landing page will be re-arranged into a dashboard, with a split view layout featuring two main sections: a chat interface and a plot display area.
+
+![mainboard](./demo/mainboard.png)
+
 #### Chat Area
 On the left side of the screen is the ChatBox. This area serves as an interactive interface for users to ask questions about cell atlas data. Users can type their queries into the text input area and press 'Enter' to send the question. The system, equipped with an intelligent bot, responds to the queries and displays the answers in this chat history area. This part of the interface keeps a history of all interactions, allowing users to review past questions and responses.
 
@@ -30,7 +52,7 @@ Query: "What cell types are present in each organ of the mouse?"
 
 This query provides information about the different cell types present in each organ of the mouse.
 
-![celltypeXorgan](./demo/celltypexorgan.png)
+![celltypeXorgan](./demo/cellxorgan-table.png)
 
 #### Gene Expression Profile
 
@@ -38,7 +60,7 @@ Query: "What is the expression of Tp53,Mettl14,Apoe,Cd8a,Cd19,Mettl14,Hdac8,Mtor
 
 This query retrieves the average expression of the a list of specified genes in the mouse lung.
 
-![geneExpression](./demo/geneExpression.png)
+![geneExpression](./demo/average-expression.png)
 
 #### Gene Presence Ratio
 
@@ -49,12 +71,13 @@ This query provides the fraction of cells that express each of the specified gen
 ### Highest Expressor
 Query: what cell type is the highest expressor of Apoe in mouse?
 
-![highestExpressor](./demo/highestExpressor.png)
+![highestExpressor](./demo/highest-expressor.png)
+
 #### marker genes
 
 Query: "Show 10 markers of fibroblast in the mouse lung"
 
 This query identifies 10 marker genes for the fibroblast cell type in the mouse lung.
+![markerGene](./demo//marker-genes.png)
 
-A paragraph with *emphasis* and **strong importance**.
 
