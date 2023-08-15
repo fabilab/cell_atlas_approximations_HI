@@ -1,65 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Card } from 'antd';
+import { Layout, Row, Col } from 'antd';
+import { useLocation } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
-import Navbar from './Navbar';
-
-import Landing from './Landing';
 import { triggersPlotUpdate } from '../utils/chatSideEffects';
 import { updatePlotState } from '../utils/updatePlotState';
 
 const { Content } = Layout;
 
-
 const MainBoard = () => {
+  const location = useLocation();
+  const firstQuery = location.state;
+
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
-  const [showOrganisms, setOrganisms] = useState(true);
-  // message string that the user is typing
-  const [currentMessage, setCurrentMessage] = useState('');
+  const [currentMessage, setCurrentMessage] = useState(firstQuery);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
-      console.log("updating plot!!!!!! =========")
-      console.log(triggersPlotUpdate(currentResponse));
-      console.log(currentResponse)
-      console.log(plotState)
       updatePlotState(currentResponse, plotState, setPlotState);
+      console.log(plotState)
       setShowLanding(false);
     }
   }, [currentResponse]);
- 
-  // Generate and update plot according to user intends
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <ChatBox 
-        chatHistory={chatHistory} 
-        setChatHistory={setChatHistory}
-        currentMessage={currentMessage}
-        setCurrentMessage={setCurrentMessage}
-        setCurrentResponse={setCurrentResponse}
-        plotState={plotState}
-      />
-      <Layout style={{ backgroundColor: "white" }}>
-        <Navbar
-            setShowLanding={setShowLanding}
+    <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
+      <div style={{ flex: '0 0 28%', boxShadow: '4px 0px 6px rgba(0, 0, 0, 0.1)', overflow: 'auto' }}>
+        <ChatBox
+          style={{ height:'100%' }}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          currentMessage={currentMessage}
+          setCurrentMessage={setCurrentMessage}
+          setCurrentResponse={setCurrentResponse}
+          plotState={plotState}
         />
-        <Content style={{ margin: "30px", backgroundColor: "inherit" }}>
-          {showLanding ? (
-            <Landing
-              currentMessage={currentMessage}
-              setCurrentMessage={setCurrentMessage}
-            />
-          ) : (
-            plotState && <PlotBox state={plotState} />
-          )}
-        </Content>
-      </Layout>
-    </Layout>
+      </div>
+      <div style={{ flex: 1, margin:'10px', overflow: 'auto'}}>
+        {plotState && <PlotBox state={plotState} />}
+      </div>
+    </div>
   );
 };
 

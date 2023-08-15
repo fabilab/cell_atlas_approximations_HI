@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
+const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit }) => {
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
 
@@ -19,9 +19,16 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
       y: yaxis,
       type: 'heatmap',
       colorscale: 'Reds',
+      // get unit from API call
+      colorbar: {
+        title: {
+          text: unit,
+          titleside: "bottom"
+        }
+      },
       hovertemplate:
         "%{yaxis.title.text}: %{y} <br>" +
-        "%{xaxis.title.text}:%{x} <br>" +
+        "%{xaxis.title.text}: %{x} <br>" +
         "Expression: %{z}" +
         "<extra></extra>"
     }
@@ -37,35 +44,21 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 
   let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
   let ncelltypes = xaxis.length;
-  let pxCell = 15, pxChar = 6;
-  let ytickMargin = 85 + pxChar * longestYlabel;
+  let pxCell = 17, pxChar = 10;
+  let ytickMargin = pxChar * longestYlabel;
   let xtickMargin = pxChar * longestXlabel;
-  let graphWidth = ytickMargin + pxCell * ncelltypes + 300;
-  let graphHeight = pxCell * nfeatures * 0.6 + xtickMargin;
-
+  let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
+  let graphHeight = nfeatures * 7.1 + xtickMargin;
+  
   let layout = {
     width: graphWidth,
     height: graphHeight,
     xaxis: {
+      autorange: true,
       automargin: true,
-      title: {
-        text: 'Cell types',
-        font: {
-          size: 18,
-        },
-        standoff: 20,
-      },
-      // y: 10,
     },
     yaxis: {
       automargin: true,
-      title: {
-        text: 'Genes',
-        font: {
-          size: 18,
-        },
-        standoff: 20,
-      },
       tickmode: 'array',
       ticktext: yTickTexts,
       tickvals: yTickVals,
@@ -91,8 +84,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 
   let plotName = `heatmap(${organism}-${organ})`;
   let config = {
-    displayModeBar: true,
-    modeBarButtonsToAdd: [
+    modeBarButtons: [['toImage'], [
       {
         name: 'Download plot as SVG',
         icon: cameraRetro,
@@ -117,11 +109,9 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ }) => {
 		  document.body.removeChild(a);
 		},
 	  }
-    ],
-    editable: true,
+    ]],
     responsive: true,
-    scrollZoom: true,
-	modeBarButtonsToRemove: ['pan2d']
+    scrollZoom: false,
   };
 
 

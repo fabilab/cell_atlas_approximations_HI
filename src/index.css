@@ -1,3 +1,8 @@
+/* body, h1, h2, h3, p, div {
+  margin: 0;
+  padding: 0;
+} */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -31,4 +36,41 @@ code {
 .card-row {
   display: flex;
   align-items: stretch;
+}
+.navbar-icon {
+  margin-right: 10px;
+}
+
+.chat-input-wrapper {
+  position: relative;
+}
+
+.send-button {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+}
+
+.chat-input-row {
+  position: relative;
+  width: 100%;
+}
+
+.chat-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.chat-input {
+  width: 100%;
+  padding-right: 20px;
+}
+
+.customMenu .ant-menu-horizontal {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.tab-link:hover {
+  color: #b0ebf7 !important;
 }

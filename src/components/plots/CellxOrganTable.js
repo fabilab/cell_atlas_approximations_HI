@@ -3,11 +3,9 @@ import { Table, Tag, Typography } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
 
 const CellxOrganTable = ({ state }) => {
-  //  cell types that found in >= different organs
-  console.log(typeof(state.organs));
-  console.log(state.organs)
-  const multiOrgansData = state.celltypes.map((celltype, index) => 
-  {
+
+  //  cell types found in >= 2 organs
+  const multiOrgansData = state.celltypes.map((celltype, index) => {
     const row = { key: index, celltype };
     let organCount = 0;
     state.organs.forEach((organ, organIndex) => {
@@ -18,10 +16,9 @@ const CellxOrganTable = ({ state }) => {
     });
     return organCount > 1 ? row : null;
   }).filter(Boolean);
-  
-  //  cell types that found in only ONE organ
-  const uniqueOrganData = state.celltypes.map((celltype, index) =>
-  {
+
+  //  cell types found in only 1 organs
+  const uniqueOrganData = state.celltypes.map((celltype, index) => {
     const row = { key: index, celltype };
     let organCount = 0;
     state.organs.forEach((organ, organIndex) => {
@@ -32,14 +29,11 @@ const CellxOrganTable = ({ state }) => {
     });
     return organCount < 2 ? row : null;
   }).filter(Boolean);
-  
-  // console.log("cell types that found in unique organ\n");
-  // console.log(uniqueOrganData);
 
   let finalRow = {
     key: multiOrgansData.length + 1,
     celltype: 'Cell types in Unique Organ'
-  }
+  };
 
   state.organs.forEach((organ, organIndex) => {
     uniqueOrganData.forEach((celltype, celltypeIndex) => {
@@ -50,33 +44,35 @@ const CellxOrganTable = ({ state }) => {
           finalRow[organ] = celltype.celltype;
         }
       }
-    })
+    });
   });
-  
+
   const columnsMulti = [
     {
       title: 'Cell Types',
       dataIndex: 'celltype',
       key: 'celltype',
       render: (text) => (
-        <a href={`https://www.google.com/search?q=${text}`} target="_blank">
+        <a href={`https://www.google.com/search?q=${text}`} target="_blank" style={{fontWeight:"bold"}}>
           {text}
         </a>
       ),
-      width: '6%',
+      width: '10vw',
+      fixed: 'left',
     },
     ...state.organs.map((organ) => ({
       title: organ,
       dataIndex: organ,
       render: (value) =>
         value ? (
-          typeof(value) === 'string' ? 
+          typeof (value) === 'string' ? 
             value 
           : 
             <i className="fas fa-check fa-xl" style={{ color: '#45b82e' }}></i>
         ) : (
           <StopTwoTone twoToneColor="#d9d9d9" />
         ),
+      width: '10vw',
     })),
   ];
 
@@ -93,7 +89,7 @@ const CellxOrganTable = ({ state }) => {
   ];
 
   return (
-    <section>
+    <section style={{ margin: '2vh', justifyContent: 'center', alignItems: 'center'}}>
       <Table
         columns={columnsMulti}
         dataSource={multiOrgansData}
@@ -104,10 +100,10 @@ const CellxOrganTable = ({ state }) => {
       />
       <Table
         columns={columnsUnique}
-        dataSource={[finalRow]} // Wrap the final row in an array to display it as a single row
+        dataSource={[finalRow]}
         pagination={false}
       />
-  </section>
+    </section>
   );
 };
 

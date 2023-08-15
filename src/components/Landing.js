@@ -1,65 +1,113 @@
-import React from 'react';
-import { Card, Col, Row, Typography } from 'antd';
-import heatmapSample from '../asset/plots/heatmap.png';
-import dotplotSample from '../asset/plots/dotplot.png';
-import networkSample from '../asset/plots/network.png';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Input, Typography, Row, Col } from 'antd';
+import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import search from '../asset/search.png';
 const { Title } = Typography;
+const { Text } = Typography;
 
-const Landing = ({currentMessage, setCurrentMessage}) => {
 
-    const sampleQueries = [
-        'what species are available?',
-        'show tissues for @organism in chromatin accessibility.',
-        'Show the marker genes for coronary in human heart.',
-        'what cell types are present in each organ of @organism?',
-        'what cell type is the highest expressor of TP53 in human?',
-        'What is the fraction of IL6,TNF,APOE,CD8A,CD19,TP53 in human lung?',
-        'What is the average expression of IL6,TNF,APOE,COL1A1,ALK,TP53 in human lung?',
-    ];
+const Landing = ({ }) => {
 
-    return (
-        <div className="landing-page">
-            <Title level={2} style={{ textAlign:'center', marginBottom:"4vh", marginTop:"3vh"}}>Cell Atlas Approximations </Title>
-            <Row gutter={48} className="card-row">
-                <Col span={1} />
-                <Col span={6}>
-                    <Card className="landing-plot">
-                        <img src={heatmapSample} alt="Heatmap" />
-                    </Card>
-                </Col>
-                {/* <Col span={1} /> */}
-                <Col span={9}>
-                    <Card className="landing-plot">
-                        <img src={dotplotSample} alt="Dot plot" />
-                    </Card>
-                </Col>
-                {/* <Col span={1} /> */}
-                <Col span={6}>
-                    <Card className="landing-plot">
-                        <img src={networkSample} alt="Network" />
-                    </Card>
-                </Col>
-                <Col span={1} />
-        </Row>
-            <div style={{ textAlign:'center', margin:'7vh'}}>
-                <Title level={4} style={{ marginBottom:"2vh", color:"#1890ff"}}>Example questions:</Title>
-                {sampleQueries.map((s,index) => (
-                    <p 
-                    key={index} 
-                    onClick={() => setCurrentMessage(s)}
-                    style={{
-                        margin:"1.5vh",
-                        color: currentMessage === s ? '#fa8c16' : 'initial',
-                        cursor: 'pointer',
-                        ':hover':{ color: 'lightblue' }
-                    }}
-                    >
-                        {s}
-                    </p>
-                ))}
+  const [searchMessage, setSearchMessage] = useState('')
+  const history = useHistory();
+  const sendFirstSearch = (query) => {
+    history.push({pathname:'/mainboard', state: query })
+  }
+
+  const sampleQueries = [
+    'What species are available?',
+    'Explore zebrafish.',
+    'What kind of data is available?',
+    'what organs are available in human?',
+    'Where are fibroblast detected in mouse?',
+    'Show 10 marker genes for coronary in human heart.',
+    'What cell types are present in each organ of mouse?',
+    'What cell type is the highest expressor of TP53 in human?',
+    'Compare expression of CD19 in fibroblast across organs in mouse.',
+    'What is the fraction of TP53,METTL14,APOE,CD8A,CD19 in human lung?',
+    'What is the average expression of TP53,AHR,MED4,LANCL2 in human lung?',
+    'What is the chromatin accessibility of chr1:9955-10355 in human lung?'
+  ];
+
+  return (
+    <div className="landing-page" style={{
+      background: 'linear-gradient(to bottom right, #d3edf9 10%, #ffffff, #ffffff 70%, #fffad6 100%)',
+      height: '100vh'
+      // background: 'linear-gradient(to right, #b0e57c, #ffffff, #80d8ff)'
+      }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        paddingTop: "24vh", 
+      }}>
+        <img src={search} alt="search icon" style={{ marginRight: '10px', height:'70px' }} />
+        <Title level={2} style={{ 
+          margin: 0, 
+          fontFamily: 'Arial, sans-serif',
+          color: '#303131',
+          lineHeight: '1.6',
+        }}>
+          Explore Cell Atlas Approximations
+        </Title>
+      </div>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginTop: '8vh' 
+      }}>
+        <Input
+          placeholder="Ask me a question OR click on the Xmas tree below..."
+          value={searchMessage}
+          onChange={(e) => setSearchMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+          prefix={<RobotOutlined style={{ paddingRight: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/> }
+          suffix={<SendOutlined style={{paddingLeft: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }} onClick={() => sendFirstSearch(searchMessage)}/>}
+          style={{
+            maxWidth: '50vw', 
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',  // Shadow effect
+            height: '50px',  // Increased height
+            borderRadius: '25px',
+          }}
+          onPressEnter={() => sendFirstSearch(searchMessage)}
+        />
+      </div>
+      <div style={{ 
+          marginTop: '8vh', 
+          // fontWeight: 'bold', 
+          color: '#303131', 
+          marginLeft:'15%',
+          marginRight: '15%',
+        }}>
+        <Row gutter={{
+          xs: 8,
+          sm: 16,
+          md: 24,
+          lg: 32,
+        }}>
+        {sampleQueries.map((query, index) => (
+          <Col span={12} key={index}>
+            <div style={{
+              marginBottom: '2vh',
+              textAlign: index % 2 === 1 ? "left" : "right",
+              }}>
+              <Text
+                onClick={() => setSearchMessage(query)}
+                style={{
+                  color: searchMessage === query ? '#303131' : 'initial',
+                  fontWeight: searchMessage === query ? 'bold' : '',
+                  cursor: 'pointer',
+                }}
+                >{query}
+              </Text>
             </div>
-        </div>
-    );
+          </Col>
+        ))}
+        </Row>
+      </div>
+    </div>
+  );
 };
 
 export default Landing;

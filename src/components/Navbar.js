@@ -1,50 +1,65 @@
-// import { useState } from "react";
-// import { NavLink, Link } from "react-router-dom";
-import { 
-  GithubOutlined,
-  InfoCircleOutlined,
-  CodeOutlined,
-  CustomerServiceOutlined
- } from '@ant-design/icons';
- import { Menu, Layout } from 'antd';
- const { Header } = Layout;
+import { Link } from 'react-router-dom';
+import {
+    GithubOutlined,
+    InfoCircleOutlined,
+    CodeOutlined,
+    CustomerServiceOutlined,
+    HomeOutlined
+} from '@ant-design/icons';
+import logo from '../asset/fabiLogo.png';
+import { Layout, Row, Col } from 'antd';
+const { Header } = Layout;
 
-const Navbar = ({ setShowLanding }) => {
+const headerStyle = {
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  paddingLeft: '2%', 
+  paddingRight: '2%',
+  position: 'fixed', 
+  top: 0,
+  width: '100%',
+  zIndex: 100, // Ensures the header is above other content
+  backgroundColor: '#1D2531',
+  // backgroundColor: 'lightblue',
+  opacity: '96%',
+  color: 'white',
+  fontFamily: 'Arial, sans-serif',
+  height:'57px'
+}
 
-  const ShowLanding = () => {
-    setShowLanding(true);
-  }
+const navItemStyle = {
+  color: 'white',
 
-  return (
-    <Header style={{padding:'0px'}}>
-      <Menu
-        mode="horizontal"
-        style={{
-          background: "linear-gradient(45deg, #3282B8 10%, #1F3B75 90%)",
-          color: "white",
-        }}
-      >
-        <Menu.Item style={{fontFamily:"inherit"}}>
-          <InfoCircleOutlined /> User Menu
-        </Menu.Item>
-        <Menu.Item>
-          <CodeOutlined />
-          <a href="https://atlasapprox.readthedocs.io/en/latest/index.html" target="_blank"> API</a>
-        </Menu.Item>
-        <Menu.Item>
-          <GithubOutlined />
-          <a href="https://github.com/fabilab/cell_atlas_approximations" target="_blank"> Github Repo</a>
-        </Menu.Item>
-        <Menu.Item>
-          <CustomerServiceOutlined />
-          <a href="https://fabilab.org/pages/contact.html" target="_blank"> Contact us</a>
-        </Menu.Item>
-        <Menu.Item onClick={ShowLanding} style={{marginLeft:"48%", fontSize:"1.4em", fontWeight:"bold"}}>
-          AtlasApprox
-        </Menu.Item>
-      </Menu>
-    </Header>
-  );
+}
+
+const Navbar = () => {
+    return (
+      <Header style={headerStyle}>
+        <Link to='/' style={{ display: 'flex', alignItems: 'center' }}>
+            <img src={logo} alt="Bot Logo" style={{ height: '40px', marginRight: '10px' }} />
+        </Link>
+        <div style={{ display: 'flex'}}>
+          <div style={{ fontFamily: "inherit", marginRight: '20px'}}>
+            <InfoCircleOutlined />
+            <a href='/user-guide' target='_blank' style={navItemStyle} className="tab-link"> User guide</a>
+          </div>
+          <div style={{ marginRight: '20px' }}>
+            <CodeOutlined />
+            <a href="//atlasapprox.readthedocs.io/en/latest/index.html" target="_blank" style={navItemStyle} className="tab-link"> API</a>
+          </div>
+          <div style={{ marginRight: '20px' }}>
+            <GithubOutlined />
+            <a href="//github.com/fabilab/cell_atlas_approximations" target="_blank" style={navItemStyle} className="tab-link"> 
+              Github Repo
+            </a>
+          </div>
+          <div>
+            <CustomerServiceOutlined />
+            <a href="//fabilab.org/pages/contact.html" target="_blank" style={navItemStyle} className="tab-link"> Contact us</a>
+          </div>
+        </div>
+      </Header>
+    );
 }
 
 export default Navbar;
