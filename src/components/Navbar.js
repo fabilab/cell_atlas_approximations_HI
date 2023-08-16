@@ -23,7 +23,7 @@ const headerStyle = {
   opacity: '96%',
   color: 'white',
   fontFamily: 'Arial, sans-serif',
-  height:'57px'
+  height:'55px'
 }
 
 const navItemStyle = {

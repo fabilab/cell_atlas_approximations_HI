@@ -92,14 +92,16 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
   }, [chatHistory]);
 
   return (
-    <div width={"27vw"} style={{ 
+    <div style={{ 
+        width: "26%",
         display: 'flex',
         flexDirection: 'column',
+        gap: '30px',
         height: "inherit",
         backgroundColor: "#e4eff7",
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       }}>
-      <div style={{ width: "inherit", overflow: "scroll", height:`${window.innerHeight*0.75}px`, paddingTop:"3vh"}} ref={chatboxRef}>
+      <div style={{ width: "100%", overflow: "scroll", height:`${window.innerHeight*0.75}px`, paddingTop:"3vh"}} ref={chatboxRef}>
           {chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message
@@ -112,7 +114,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
               />
           ))}
       </div>
-      <div style={{ height: "3vh" }}></div>
       <Row className="chat-input-row" style={{padding:'10px'}}>
         <div className="chat-input-container">
           <Input.TextArea
@@ -135,7 +136,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             ghost
           />
         </div>
-        <p style={{ margin: 0, color: "#666", fontSize: "11px" }}>
+        <p style={{ margin: '3px', color: "#666", fontSize: "10.5px" }}>
           Press 'Enter' to send a message. Key up to navigate command history.
         </p>
       </Row>
