@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/cell_atlas_approximations_HI/static/css/main.2972c7cd.css",
-    "main.js": "/cell_atlas_approximations_HI/static/js/main.3a464c3c.js",
+    "main.js": "/cell_atlas_approximations_HI/static/js/main.b120bcad.js",
     "static/media/s_lacustris.jpeg": "/cell_atlas_approximations_HI/static/media/s_lacustris.22fec386ae7142eb370a.jpeg",
     "static/media/fa-solid-900.ttf": "/cell_atlas_approximations_HI/static/media/fa-solid-900.d75e3fd1eb12e9bd6655.ttf",
     "static/media/h_sapiens.png": "/cell_atlas_approximations_HI/static/media/h_sapiens.c6ef5ff9e7aaeb1de9b3.png",
@@ -23,10 +23,10 @@
     "static/media/fa-v4compatibility.woff2": "/cell_atlas_approximations_HI/static/media/fa-v4compatibility.1bac2991f3dbfa237aec.woff2",
     "index.html": "/cell_atlas_approximations_HI/index.html",
     "main.2972c7cd.css.map": "/cell_atlas_approximations_HI/static/css/main.2972c7cd.css.map",
-    "main.3a464c3c.js.map": "/cell_atlas_approximations_HI/static/js/main.3a464c3c.js.map"
+    "main.b120bcad.js.map": "/cell_atlas_approximations_HI/static/js/main.b120bcad.js.map"
   },
   "entrypoints": [
     "static/css/main.2972c7cd.css",
-    "static/js/main.3a464c3c.js"
+    "static/js/main.b120bcad.js"
   ]
 }
