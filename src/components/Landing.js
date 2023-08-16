@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
 import search from '../asset/search.png';
@@ -10,9 +10,9 @@ const { Text } = Typography;
 const Landing = ({ }) => {
 
   const [searchMessage, setSearchMessage] = useState('')
-  //const history = useHistory();
+  const history = useHistory();
   const sendFirstSearch = (query) => {
-  //  history.push({pathname:'/mainboard', state: query })
+   history.push({pathname:'/mainboard', state: query })
   }
 
   const sampleQueries = [
