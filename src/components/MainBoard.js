@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Col } from 'antd';
 import { useLocation } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import { triggersPlotUpdate } from '../utils/chatSideEffects';
 import { updatePlotState } from '../utils/updatePlotState';
-
-const { Content } = Layout;
 
 const MainBoard = () => {
   const location = useLocation();

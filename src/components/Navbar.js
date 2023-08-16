@@ -4,10 +4,9 @@ import {
     InfoCircleOutlined,
     CodeOutlined,
     CustomerServiceOutlined,
-    HomeOutlined
 } from '@ant-design/icons';
 import logo from '../asset/fabiLogo.png';
-import { Layout, Row, Col } from 'antd';
+import { Layout } from 'antd';
 const { Header } = Layout;
 
 const headerStyle = {

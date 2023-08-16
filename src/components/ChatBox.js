@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { SendOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
 import Message from "./Message";
 import { Button, Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";

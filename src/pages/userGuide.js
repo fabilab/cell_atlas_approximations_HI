@@ -2,9 +2,6 @@ import React,{ useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
-import { Typography } from 'antd';
-
-const { Title } = Typography;
 
 const UserGuide = () => {
   

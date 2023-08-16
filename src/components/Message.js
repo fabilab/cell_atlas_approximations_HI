@@ -1,6 +1,5 @@
 import { Row, Col } from "antd";
 import { Link } from "react-router-dom";
-import userImage from "../asset/user.png";
 import bot from "../asset/bot.png";
 import Typewriter from "typewriter-effect";
 

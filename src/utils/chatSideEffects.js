@@ -1,6 +1,5 @@
-import atlasapprox from "@fabilab/atlasapprox";
 import callAPI from "./callAPI.js";
-import { AtlasApproxNlp, buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
+import { buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
