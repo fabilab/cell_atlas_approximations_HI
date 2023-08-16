@@ -1,5 +1,5 @@
 import callAPI from "./callAPI.js";
-import { buildAPIParams, buildAnswer } from '@fabilab/atlasapprox-nlp';
+import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
