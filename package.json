@@ -1,7 +1,7 @@
 {
   "name": "atlas-approx-hi",
-  "version": "0.1.0",
-  "homepage": "./",
+  "version": "0.2.0",
+  "homepage": "https://fabilab.github.io/cell_atlas_approximations_HI",
   "private": true,
   "dependencies": {
     "@ant-design/colors": "^7.0.0",
@@ -36,6 +36,9 @@
     "split-pane-react": "^0.1.3",
     "typewriter-effect": "^2.20.1",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
   },
   "scripts": {
     "predeploy": "npm run build",

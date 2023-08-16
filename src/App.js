@@ -7,11 +7,11 @@ import Navbar from './components/Navbar';
 function App() {
 
   return (
-    <HashRouter>
+    <HashRouter basename='/'>
       <div>
         <Navbar/>
         <Routes>
-          <Route path="/" element={<Landing/>} />
+          <Route exact path="/" element={<Landing/>} />
           <Route path="/mainboard" element={<MainBoard/>}/>
           <Route path="/user-guide" element={<UserGuide/>} />
         </Routes>
