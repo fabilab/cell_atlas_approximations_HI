@@ -95,13 +95,11 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     <div width={"27vw"} style={{ 
         display: 'flex',
         flexDirection: 'column',
-        height:`${window.innerHeight*0.88}px`,
-        paddingBottom: "0.8%", 
+        height: "inherit",
         backgroundColor: "#e4eff7",
-        paddingTop:'5vh',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       }}>
-      <div style={{ width: "inherit", overflow: "scroll", height:`${window.innerHeight*0.75}px`}} ref={chatboxRef}>
+      <div style={{ width: "inherit", overflow: "scroll", height:`${window.innerHeight*0.75}px`, paddingTop:"3vh"}} ref={chatboxRef}>
           {chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message
