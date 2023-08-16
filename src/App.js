@@ -1,9 +1,8 @@
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import UserGuide from './pages/userGuide'
 import MainBoard from './components/MainBoard';
 import Landing from './components/Landing';
 import Navbar from './components/Navbar';
-import { Switch } from 'react-router-dom';
 
 function App() {
 
@@ -11,11 +10,11 @@ function App() {
     <HashRouter>
       <div>
         <Navbar/>
-        <Switch>
-          <Route path="/" exact component={Landing} />
-          <Route path="/mainboard" component={MainBoard}/>
-          <Route path="/user-guide" component={UserGuide} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Landing/>} />
+          <Route path="/mainboard" element={<MainBoard/>}/>
+          <Route path="/user-guide" element={<UserGuide/>} />
+        </Routes>
       </div>
     </HashRouter>
   );
