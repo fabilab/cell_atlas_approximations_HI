@@ -7,7 +7,7 @@ const { Title } = Typography;
 const { Text } = Typography;
 
 
-const Landing = ({ }) => {
+const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Landing = ({ }) => {
     'Explore zebrafish.',
     'What kind of data is available?',
     'what organs are available in human?',
-    'Where are fibroblast detected in mouse?',
+    'where were fibroblast found in human?',
     'Show 10 marker genes for coronary in human heart.',
     'What cell types are present in each organ of mouse?',
     'What cell type is the highest expressor of TP53 in human?',

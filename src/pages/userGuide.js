@@ -16,7 +16,7 @@ const UserGuide = () => {
 
   const components = {
     img({node, ...props}) {
-      return <img {...props} style={{ width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
+      return <img {...props} alt="images" style={{ width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
     }
   }
   

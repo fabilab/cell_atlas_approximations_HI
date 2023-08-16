@@ -4,7 +4,7 @@ const buildAnswer = (intent, data) => {
         let text = "";
         for (let i=0; i < list.length; i++) {
             text += list[i];
-            if (i != list.length - 1)
+            if (i !== list.length - 1)
                 text += sep;
             else
                 text += end;
@@ -31,17 +31,19 @@ const buildAnswer = (intent, data) => {
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
-        if ((data.organs.length == 1) && (data.organs[0] === "whole"))
+        if ((data.organs.length === 1) && (data.organs[0] === "whole"))
             answer = "Cells from this organism were dissociated without separating the tissues first. This happens mostly in small organisms, which can be difficult to dissect. While organ information is not directly available, you can ask about cell types: many are good proxies for tissues in this organism. To specify an organ to the chat bot, use 'whole'.";
         break;
       case "celltypes":
         answer = "The cell types in " + data.organism + " " + data.organ + " are: " + _chainList(data.celltypes, ", ", ".");
         break;
       case "celltype_location":
-        if (data.organs.length == 0) {
+        if (data.organs.length === 0) {
           answer = "The cell type " + data.celltype + " was not detected in any organ of " + data.organism + ".";
+          console.log(data.celltype);
         } else {
-          answer = "The cell type " + data.celltype + " was detected in " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
+          // answer = "The cell type " + data.celltype + " was detected in" + data.organism + " are: " + _chainList(data.organs, ", ", ".");
+          answer = "In " + data.organism + ", " + data.celltype + " cells were detected within the " + _chainList(data.organs, ", ", ".");
         }
         break;
       case "average":
@@ -95,13 +97,13 @@ const buildAnswer = (intent, data) => {
       case "similar_features":
         switch (sIntent) {
           case "geneExpression":
-            answer = "The genes similar to " + data.feature + " in " + data.organism + " " + organ + " are: " + data.similar_features;
+            answer = "The genes similar to " + data.feature + " in " + data.organism + " " + data.organ + " are: " + data.similar_features;
             break;
           case "chromatinAccessibility":
-            answer = "The peaks with similar accessibility to " + data.feature + " in " + data.organism + + " " + organ + " are: " + data.similar_features;
+            answer = "The peaks with similar accessibility to " + data.feature + " in " + data.organism + + " " + data.organ + " are: " + data.similar_features;
             break;
           default:
-            answer = "The features similar to " + data.feature + " in " + data.organism + " " + organ + " are: " + data.similar_features;
+            answer = "The features similar to " + data.feature + " in " + data.organism + " " + data.organ + " are: " + data.similar_features;
         }
         break;
       case "similar_celltypes":
@@ -159,8 +161,8 @@ const buildAPIParams = (intent, entities) => {
     let params = {};
     for (let i=0; i < entities.length; i++) {
         const entity = entities[i];
-        let param;
-        if (entity.type == "enum") {
+        let paramValue;
+        if (entity.type === "enum") {
             paramValue = entity.option;
         } else {
             paramValue = entity.sourceText;

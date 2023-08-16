@@ -56,7 +56,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       await nlp.initialise();
       let response = await nlp.ask(text);
       setChatContext(nlp.context);
-      console.log(response);
 
       try {
         const updateObject = await updateChat(response,plotState)

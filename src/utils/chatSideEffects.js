@@ -63,16 +63,14 @@ export const updateChat = async (response,plotState) => {
     if (checkGenesIntents.includes(generalIntent)) {
       // handle duplicate gene names in user input list
       params.features = [...new Set(params.features.split(','))].join(',');
-      console.log(params.features);
       apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
+      answer = buildAnswer(intent, apiData);
     }
 
     else if (intent === "similar_features.geneExpression") {
       params['feature'] = params['features'];
       delete params['features'];
       apiData = await callAPI(endpoint, params);
-      // answer = buildAnswer(intent, apiData);
       answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } 
     
