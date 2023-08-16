@@ -1,6 +1,6 @@
 {
   "name": "atlas-approx-hi",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "homepage": "https://fabilab.github.io/cell_atlas_approximations_HI",
   "private": true,
   "dependencies": {
