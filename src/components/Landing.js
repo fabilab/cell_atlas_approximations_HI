@@ -33,7 +33,7 @@ const Landing = () => {
 
   return (
     <div className="landing-page" style={{
-      background: 'linear-gradient(to bottom right, #d3edf9 10%, #ffffff, #ffffff 70%, #fffad6 100%)',
+      background: 'linear-gradient(to bottom right, #bde7ff 10%, #ffffff, #ffffff 70%, #faf7c0 100%)',
       height: '100vh'
       // background: 'linear-gradient(to right, #b0e57c, #ffffff, #80d8ff)'
       }}>

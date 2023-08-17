@@ -37,7 +37,6 @@ const MainBoard = () => {
 
   return (
     <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
-      {/* <div style={{ flex: '0 0 28%', overflow: 'auto' }}> */}
         <ChatBox
           style={{ height:'100%' }}
           chatHistory={chatHistory}
@@ -47,7 +46,6 @@ const MainBoard = () => {
           setCurrentResponse={setCurrentResponse}
           plotState={plotState}
         />
-      {/* </div> */}
       <div style={{ flex: 1, margin:'10px', overflow: 'auto'}}>
         {plotState && <PlotBox state={plotState} />}
       </div>

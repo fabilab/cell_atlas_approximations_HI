@@ -67,7 +67,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     // let chromatinAcc = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
     // console.log(chromatinAcc);
-
+    console.log("Generate plot for gene expression");
     average = apiResponse.average;
     let plotType = "heatmap";
     newPlotState = {
