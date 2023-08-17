@@ -41,8 +41,6 @@ export const updateChat = async (response,plotState) => {
     let complete = response.complete;
     let answer = "";
     let apiData;
-    console.log("Response is =====")
-    console.log(response);
 
     if (intent === "None") {
       return {
@@ -88,11 +86,8 @@ export const updateChat = async (response,plotState) => {
 
       // handle duplicate gene names in user input list
       params.features = [...new Set(params.features.split(','))].join(',');
-      console.log(params.features);
 
       apiData = await callAPI(endpoint, params);
-      console.log(checkFeatures);
-      console.log(apiData)
       answer += buildAnswer(intent, apiData);
     }
 

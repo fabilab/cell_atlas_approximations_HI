@@ -31,7 +31,7 @@ const TableOrganisms = () => {
     { src: c_elegans, title: 'Caenorhabditis elegans' },
     { src: d_melanogaster, title: 'Drosophila melanogaster' },
     { src: d_rerio, title: 'Danio rerio (zebrafish)' },
-    { src: h_miamia, title: 'Homo miamia' },
+    { src: h_miamia, title: 'Hofstenia miamia' },
     { src: h_sapiens, title: 'Homo sapiens (human)' },
     { src: m_leidyi, title: 'Mnemiopsis leidyi (warty comb jelly)' },
     { src: m_musculus, title: 'Mus musculus (house mouse)' },

@@ -20,7 +20,6 @@ export default class Api {
     )
 
     makeRequest = async (path, method, body) => {
-        console.log(this.api_url + path);
         return fetch(this.api_url + path, {
             method: method || 'GET',
             headers: {

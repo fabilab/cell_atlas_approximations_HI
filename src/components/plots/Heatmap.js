@@ -32,8 +32,8 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
         }
       },
       hovertemplate:
-        "%{yaxis.title.text}: %{y} <br>" +
-        "%{xaxis.title.text}: %{x} <br>" +
+        "Gene: %{y} <br>" +
+        "Cell type: %{x} <br>" +
         "Expression: %{z}" +
         "<extra></extra>"
     }

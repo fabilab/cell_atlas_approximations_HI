@@ -31,7 +31,6 @@ const MainBoard = () => {
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
-      console.log(plotState)
       setShowLanding(false);
     }
   }, [currentResponse]);
