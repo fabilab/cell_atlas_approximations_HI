@@ -61,10 +61,39 @@ export const updateChat = async (response,plotState) => {
     const { endpoint, params } = buildAPIParams(intent, entities);
     let generalIntent = intent.split(".")[0];
     if (checkGenesIntents.includes(generalIntent)) {
+      // check and remove invalid genes before generate plots
+
+      let checkFeatures = await callAPI('has_features', params);
+      let geneFound = [];
+      let geneNotFound = [];
+      checkFeatures.features.map((feature,index) => {
+        checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
+      })
+      
+      // if none of the genes were valid
+      if (geneFound.length < 1) {
+        answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
+        return {
+          hasData: false,
+          message: answer,
+        }
+      }
+
+      // if there is at least one invalid gene
+      if (geneNotFound.length > 0) {
+        let geneNotFoundString = geneNotFound.join(', ');
+        answer = `Removed invalid genes: ${geneNotFoundString}.`;
+        params.features = params.features.split(',').filter(item => !geneNotFound.includes(item)).join(',');
+      }
+
       // handle duplicate gene names in user input list
       params.features = [...new Set(params.features.split(','))].join(',');
+      console.log(params.features);
+
       apiData = await callAPI(endpoint, params);
-      answer = buildAnswer(intent, apiData);
+      console.log(checkFeatures);
+      console.log(apiData)
+      answer += buildAnswer(intent, apiData);
     }
 
     else if (intent === "similar_features.geneExpression") {

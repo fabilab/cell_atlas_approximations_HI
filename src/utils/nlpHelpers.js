@@ -144,7 +144,24 @@ const buildAnswer = (intent, data) => {
             answer = "Removed.";
         }
         break;
-
+      case "plot":
+        switch (sIntent) {
+          case "log":
+            answer = "Done! Data has been modified as requested";
+            break;
+          default:
+            answer = "Done";
+        }
+        break;
+        case "explore":
+          switch (sIntent) {
+            case "organism":
+              answer = "Hello! Our Explore Organisms page is currently in development. We appreciate your patience. Thank you!";
+              break;
+            default:
+              answer = "Done";
+          }
+          break;
       default:
         answer = "Sorry, I have no answer to that.";
     };
