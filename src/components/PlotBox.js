@@ -14,7 +14,6 @@ const plotStyle = {
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
-  console.log(state)
   if (state.plotType === 'heatmap') {
     return (
       <div style={{ 

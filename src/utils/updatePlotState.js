@@ -7,8 +7,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let newPlotState = null;
   let average, fractions;
   let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
-  console.log(response.params);
-  console.log(plotState);
   let organ = (response.params && response.params.organ) || (plotState && plotState.organ) || "";
   // For some intents, params have features instead of feature
   let features = response.params.features || response.params.feature;
@@ -17,9 +15,8 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let hasLog = plotState.hasLog;
 
   const addGenes = () => {
+    
     // Update parameter for average/fraction plots
-		console.log(plotState);
-    console.log(features);
     features = plotState.features + "," + features.split(',');
     organism = plotState.organism;
     organ = plotState.organ;
@@ -70,7 +67,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     // let chromatinAcc = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
     // console.log(chromatinAcc);
-    console.log(apiResponse);
+
     average = apiResponse.average;
     let plotType = "heatmap";
     newPlotState = {
@@ -97,9 +94,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     let apiAverage = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     // let average_chromo = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
 
-    console.log(apiAverage);
     console.log("============Fraction intent=============")
-    // console.log(average_chromo);
     fractions = apiFraction.fraction_detected;
     average = apiAverage.average;
     let plotType = "bubbleHeatmap";
@@ -140,7 +135,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     const highestResponse = await atlasapprox.highest_measurement(organism, features, 10);
     let organs = highestResponse.organs;
     let celltypes = highestResponse.celltypes;
-    console.log(celltypes);
     const celltypesOrgan = celltypes.map((c, index) => {
       return c + " (" + organs[index] + ")";
     });
@@ -148,8 +142,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   function makeBarChart(targetCelltype,organs, xaxis, yaxis) {
-    console.log("Calling make bar chart.......")
-    console.log(celltypes);
+
     const plotType = "barChart";
     newPlotState = {
       intent,
@@ -241,7 +234,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       organismsIntent();
 			break;
     default:
-      console.log("default case");
       break;
   }
 };

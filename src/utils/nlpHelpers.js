@@ -40,7 +40,6 @@ const buildAnswer = (intent, data) => {
       case "celltype_location":
         if (data.organs.length === 0) {
           answer = "The cell type " + data.celltype + " was not detected in any organ of " + data.organism + ".";
-          console.log(data.celltype);
         } else {
           // answer = "The cell type " + data.celltype + " was detected in" + data.organism + " are: " + _chainList(data.organs, ", ", ".");
           answer = "In " + data.organism + ", " + data.celltype + " cells were detected within the " + _chainList(data.organs, ", ", ".");

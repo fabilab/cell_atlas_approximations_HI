@@ -60,8 +60,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       try {
         const updateObject = await updateChat(response,plotState)
         response.hasData = updateObject.hasData;
-        console.log("Line 82 in ChatBox.js");
-        console.log(response);
         if (updateObject.hasData) {
           response.data = updateObject.data;
           response.params = updateObject.params;
@@ -133,7 +131,6 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             />} 
             onClick={() => handleSubmit(currentMessage)}
             className="send-button"
-            ghost
           />
         </div>
         <p style={{ margin: '3px', color: "#666", fontSize: "10.5px" }}>
