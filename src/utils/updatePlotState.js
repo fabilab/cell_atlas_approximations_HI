@@ -98,7 +98,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     // let average_chromo = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
 
     console.log(apiAverage);
-    console.log("=========================")
+    console.log("============Fraction intent=============")
     // console.log(average_chromo);
     fractions = apiFraction.fraction_detected;
     average = apiAverage.average;
