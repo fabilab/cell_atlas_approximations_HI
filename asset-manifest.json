@@ -1,7 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.e762b015.css",
-    "main.js": "/static/js/main.8ea3dad4.js",
+    "main.js": "/static/js/main.65897948.js",
+    "static/media/d_melanogaster.jpeg": "/static/media/d_melanogaster.0d8bc6a7f10fb56a822d.jpeg",
     "static/media/s_lacustris.jpeg": "/static/media/s_lacustris.22fec386ae7142eb370a.jpeg",
     "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.d75e3fd1eb12e9bd6655.ttf",
     "static/media/h_sapiens.png": "/static/media/h_sapiens.c6ef5ff9e7aaeb1de9b3.png",
@@ -13,6 +14,7 @@
     "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.50701fbb8177c2dde530.ttf",
     "static/media/fabiLogo.png": "/static/media/fabiLogo.d0fe2e8fd74e9426adff.png",
     "static/media/t_adhaerens.jpeg": "/static/media/t_adhaerens.509e72d24a026884803e.jpeg",
+    "static/media/h_miamia.jpeg": "/static/media/h_miamia.fb8dbbf4b5dfbd28c022.jpeg",
     "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.b041b1fa4fe241b23445.woff2",
     "static/media/c_elegans.jpeg": "/static/media/c_elegans.2d5e8a0056bbdf079682.jpeg",
     "static/media/d_rerio.jpeg": "/static/media/d_rerio.e6bc8dbf0e142e0856fc.jpeg",
@@ -23,10 +25,10 @@
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.1bac2991f3dbfa237aec.woff2",
     "index.html": "/index.html",
     "main.e762b015.css.map": "/static/css/main.e762b015.css.map",
-    "main.8ea3dad4.js.map": "/static/js/main.8ea3dad4.js.map"
+    "main.65897948.js.map": "/static/js/main.65897948.js.map"
   },
   "entrypoints": [
     "static/css/main.e762b015.css",
-    "static/js/main.8ea3dad4.js"
+    "static/js/main.65897948.js"
   ]
 }
