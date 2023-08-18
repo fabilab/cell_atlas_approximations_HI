@@ -58,11 +58,11 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
     let ytickMargin = pxChar * longestYlabel;
     let xtickMargin = pxChar * longestXlabel;
     let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-    let graphHeight = nfeatures * 7.1 + xtickMargin;
+    let graphHeight = nfeatures * 7.3 + xtickMargin;
     
     let layout = {
       width: graphWidth,
-      height: `${graphHeight}px`,
+      height: `${graphHeight}`,
       xaxis: {
         autorange: true,
         automargin: true,

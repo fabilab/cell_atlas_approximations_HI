@@ -61,14 +61,18 @@ export const updateChat = async (response, plotState) => {
     if (checkGenesIntents.includes(generalIntent)) {
       // check and remove invalid genes before generate plots
 
-      console.log(params);
       // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
-      if (generalIntent == 'add') {
-        let tmpOrganism = plotState.organism;
-        let tmpOrgan = plotState.organ;
-        params['organism'] = tmpOrganism; 
-        params['organ'] = tmpOrgan;
-      }
+      if (generalIntent === 'add') {
+        params['organism'] = plotState.organism; 
+        params['organ'] = plotState.organ;
+    
+        if (params.features && plotState.features) {
+          const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+          params.features = params.features.split(',')
+            .filter(gene => !plotStateGenes.includes(gene.trim()))
+            .join(',');
+        }
+    }
 
       let checkFeatures = await callAPI('has_features', params);
       console.log(checkFeatures);
@@ -122,6 +126,7 @@ export const updateChat = async (response, plotState) => {
       answer += buildAnswer(intent, apiData);
     }
 
+    console.log(params);
     return {
       hasData: true,
       params: params,

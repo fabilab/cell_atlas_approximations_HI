@@ -18,17 +18,18 @@ const Landing = () => {
 
   const sampleQueries = [
     'What species are available?',
-    'Explore zebrafish.',
+    // 'Explore zebrafish.',
     'What kind of data is available?',
     'what organs are available in human?',
     'where were fibroblast found in human?',
-    'Show 10 marker genes for coronary in human heart.',
+    'Show 6 genes similar to Col1a1 in mouse lung',
+    'Show 10 markers of fibroblast in the mouse lung',
     'What cell types are present in each organ of mouse?',
     'What cell type is the highest expressor of TP53 in human?',
-    'Compare expression of CD19 in fibroblast across organs in mouse.',
-    'What is the fraction of TP53,METTL14,APOE,CD8A,CD19 in human lung?',
-    'What is the average expression of TP53,AHR,MED4,LANCL2 in human lung?',
-    'What is the chromatin accessibility of chr1:9955-10355 in human lung?'
+    // 'Compare expression of CD19 in fibroblast across organs in mouse.',
+    'What is the fraction of TP53,APOE,CD19,COL1A1,TGFBI,EPCAM in human lung?',
+    'What is the gene expression of TP53,AHR,MED4,VWF,COL1A1 in human lung?',
+    // 'What is the chromatin accessibility of chr1:9955-10355 in human lung?'
   ];
 
   return (

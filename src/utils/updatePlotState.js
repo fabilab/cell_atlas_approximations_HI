@@ -57,6 +57,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   }
   const markersIntent = async () => {
+    console.log(features = response.data);
     features = response.data.markers.join(",");
     fractionsIntent();
   };
@@ -166,6 +167,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   const similarGenes = async () => {
     // Generate a heatmap by default
+    console.log(response.data);
     let similarFeatures = response.data.similar_features
     similarFeatures.unshift(features);
     features = similarFeatures.join(",");
