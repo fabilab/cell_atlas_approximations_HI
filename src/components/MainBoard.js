@@ -30,9 +30,13 @@ const MainBoard = () => {
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
+      console.log("here's the current response, which triggers a plot update:");
       console.log(currentResponse);
       updatePlotState(currentResponse, plotState, setPlotState);
       setShowLanding(false);
+    } else {
+      console.log("here's the current response, which does not trigger a plot update:");
+      console.log(currentResponse);
     }
   }, [currentResponse]);
 
