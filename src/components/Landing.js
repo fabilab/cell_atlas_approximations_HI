@@ -20,7 +20,7 @@ const Landing = () => {
     // 'Explore zebrafish.',
     'What kind of data is available?',
     'What organs are available in human?',
-    'where are fibroblast detected in human?',
+    'Where are fibroblast detected in human?',
     'Show 10 genes similar to Col1a1 in mouse lung.',
     'Show 10 markers of fibroblast in the mouse lung.',
     'What cell types are present in each organ of mouse?',
