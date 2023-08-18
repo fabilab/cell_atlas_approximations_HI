@@ -48,8 +48,7 @@ const Navbar = () => {
           </div>
           <div style={{ marginRight: '20px' }}>
             <GithubOutlined />
-            <a href="//github.com/fabilab/cell_atlas_approximations" target="_blank" style={navItemStyle} className="tab-link"> 
-              Github Repo
+            <a href="//github.com/fabilab/cell_atlas_approximations" target="_blank" style={navItemStyle} className="tab-link"> Github Repo
             </a>
           </div>
           <div>

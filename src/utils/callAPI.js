@@ -1,4 +1,5 @@
 async function callAPI(endpoint, params = {}) {
+
     // Phrase https request from params (they are all GET for now, so URI encoding suffices)
     let uri = "https://api.atlasapprox.org/v1/" + endpoint
 

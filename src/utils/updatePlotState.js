@@ -21,7 +21,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     organism = plotState.organism;
     organ = plotState.organ;
     celltypes = plotState.data.xaxis;
-    // Check if add command is applied to average or fraction
+    // add to a dotplot or heatmap?
     if (!plotState.data.fractions) {
       averageIntent();
     } else {
@@ -57,6 +57,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   }
   const markersIntent = async () => {
+    console.log(features = response.data);
     features = response.data.markers.join(",");
     fractionsIntent();
   };
@@ -166,6 +167,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   const similarGenes = async () => {
     // Generate a heatmap by default
+    console.log(response.data);
     let similarFeatures = response.data.similar_features
     similarFeatures.unshift(features);
     features = similarFeatures.join(",");

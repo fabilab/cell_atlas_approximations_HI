@@ -59,6 +59,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
 
       try {
         const updateObject = await updateChat(response,plotState)
+        console.log(updateObject);
         response.hasData = updateObject.hasData;
         if (updateObject.hasData) {
           response.data = updateObject.data;

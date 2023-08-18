@@ -57,7 +57,6 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
       },
     },
     title: title,
-    // barmode: 'stack',
   };
 
   let cameraRetro = {

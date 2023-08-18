@@ -12,30 +12,29 @@ const Landing = () => {
   const [searchMessage, setSearchMessage] = useState('')
   const navigate = useNavigate();
   const sendFirstSearch = (query) => {
-  //  history.push({pathname:'/mainboard', state: query })
    navigate("/mainboard", { state: query });
   }
 
   const sampleQueries = [
     'What species are available?',
-    'Explore zebrafish.',
+    // 'Explore zebrafish.',
     'What kind of data is available?',
-    'what organs are available in human?',
-    'where were fibroblast found in human?',
-    'Show 10 marker genes for coronary in human heart.',
+    'What organs are available in human?',
+    'Where are fibroblast detected in human?',
+    'Show 10 genes similar to Col1a1 in mouse lung.',
+    'Show 10 markers of fibroblast in the mouse lung.',
     'What cell types are present in each organ of mouse?',
-    'What cell type is the highest expressor of TP53 in human?',
-    'Compare expression of CD19 in fibroblast across organs in mouse.',
-    'What is the fraction of TP53,METTL14,APOE,CD8A,CD19 in human lung?',
-    'What is the average expression of TP53,AHR,MED4,LANCL2 in human lung?',
-    'What is the chromatin accessibility of chr1:9955-10355 in human lung?'
+    'What cell type is the highest expressor of PECAM1 in human?',
+    // 'Compare expression of CD19 in fibroblast across organs in mouse.',
+    'What is the fraction of TP53, APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
+    'What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
+    // 'What is the chromatin accessibility of chr1:9955-10355 in human lung?'
   ];
 
   return (
     <div className="landing-page" style={{
       background: 'linear-gradient(to bottom right, #bde7ff 10%, #ffffff, #ffffff 70%, #faf7c0 100%)',
       height: '100vh'
-      // background: 'linear-gradient(to right, #b0e57c, #ffffff, #80d8ff)'
       }}>
       <div style={{ 
         display: 'flex', 
