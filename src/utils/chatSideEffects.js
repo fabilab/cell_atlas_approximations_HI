@@ -21,8 +21,7 @@ const updatePlotIntents = [
 const checkGenesIntents = [
 	"average",
 	"fraction_detected",
-	"add",
-	"remove",
+  "add",
 ]
 
 export const triggersPlotUpdate = ((response) => {
@@ -35,7 +34,8 @@ export const triggersPlotUpdate = ((response) => {
     return updatePlotIntents.includes(generalIntent);
 });
 
-export const updateChat = async (response,plotState) => {
+export const updateChat = async (response, plotState) => {
+    console.log(response);
     let entities = response.entities;
     let intent = response.intent;
     let complete = response.complete;
@@ -61,7 +61,17 @@ export const updateChat = async (response,plotState) => {
     if (checkGenesIntents.includes(generalIntent)) {
       // check and remove invalid genes before generate plots
 
+      console.log(params);
+      // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
+      if (generalIntent == 'add') {
+        let tmpOrganism = plotState.organism;
+        let tmpOrgan = plotState.organ;
+        params['organism'] = tmpOrganism; 
+        params['organ'] = tmpOrgan;
+      }
+
       let checkFeatures = await callAPI('has_features', params);
+      console.log(checkFeatures);
       let geneFound = [];
       let geneNotFound = [];
       checkFeatures.features.map((feature,index) => {

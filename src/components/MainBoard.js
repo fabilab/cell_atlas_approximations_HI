@@ -30,6 +30,7 @@ const MainBoard = () => {
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
+      console.log(currentResponse);
       updatePlotState(currentResponse, plotState, setPlotState);
       setShowLanding(false);
     }
