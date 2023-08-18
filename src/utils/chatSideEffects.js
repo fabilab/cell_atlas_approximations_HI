@@ -72,6 +72,7 @@ export const updateChat = async (response, plotState) => {
             .filter(gene => !plotStateGenes.includes(gene.trim()))
             .join(',');
         }
+
     }
 
       let checkFeatures = await callAPI('has_features', params);
