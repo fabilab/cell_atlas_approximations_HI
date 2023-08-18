@@ -17,7 +17,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   const addGenes = () => {
     
     // Update parameter for average/fraction plots
-    features = plotState.features + "," + features.split(',');
+    features = plotState.features + "," + features;
     organism = plotState.organism;
     organ = plotState.organ;
     celltypes = plotState.data.xaxis;
@@ -31,7 +31,8 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   const removeGenes = () => {
 
-    features = plotState.features.split(',').filter(g => !features.includes(g)).join(',');
+    let featuresLowerCase = features.split(",").map((fea) => (fea.toLowerCase()));
+    features = plotState.features.split(',').filter(g => !featuresLowerCase.includes(g.toLowerCase())).join(',');
     organism = plotState.organism;
     organ = plotState.organ;
     celltypes = plotState.data.xaxis;
@@ -80,7 +81,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       data: {
         type: "matrix",
         xaxis: celltypes,
-        yaxis: features.split(","),
+        yaxis: apiResponse.features,
         average: average,
         fractions: null,
         valueUnit: apiResponse.unit,
@@ -108,7 +109,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       data: {
         type: "matrix",
         xaxis: celltypes,
-        yaxis: features.split(','),
+        yaxis: apiFraction.features,
         average: average,
         fractions: fractions,
         valueUnit: apiAverage.unit,
