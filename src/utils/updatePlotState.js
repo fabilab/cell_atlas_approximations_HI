@@ -95,7 +95,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     let apiAverage = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     // let average_chromo = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
 
-    console.log("============Fraction intent=============")
     fractions = apiFraction.fraction_detected;
     average = apiAverage.average;
     let plotType = "bubbleHeatmap";

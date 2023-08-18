@@ -27,11 +27,15 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
   let data = [trace1];
 
   let title = '';
+  let yLabel = '';
   if (intent === "similar_celltypes.geneExpression") {
     title = `<b>Gene Expression Correlation Analysis for Cell Type Similarity to ${targetCelltype}</b>`;
+    yLabel = 'Distance';
   } else if (intent === "highest_measurement.geneExpression") {
     title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
+    yLabel = 'Counts per ten thousand';
   }
+
 
   let layout = {
     width: '100%',
@@ -49,7 +53,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
     },
     yaxis: {
       title: {
-        text: 'Distance',
+        text: yLabel,
         font: {
           size: 16,
         },
