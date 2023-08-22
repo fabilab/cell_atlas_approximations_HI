@@ -80,6 +80,7 @@ const CellxOrganTable = ({ state }) => {
           columns={columns}
           dataSource={multiOrgansData}
           pagination={false}
+          className="sticky-header-table"
         />
       </section>
     );

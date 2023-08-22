@@ -74,3 +74,9 @@ code {
 .tab-link:hover {
   color: #b0ebf7 !important;
 }
+
+.sticky-header-table .ant-table-thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 2;  /* to ensure the header stays on top */
+}

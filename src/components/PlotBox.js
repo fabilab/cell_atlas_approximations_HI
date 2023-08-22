@@ -24,6 +24,7 @@ const PlotBox = ({ state }) => {
           organism={state.organism}
           organ={state.organ}
           unit={state.data.valueUnit}
+          measurementType={state.data.measurementType}
           hasLog={state.hasLog}
         />
       </div>

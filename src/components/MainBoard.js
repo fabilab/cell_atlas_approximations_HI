@@ -8,13 +8,12 @@ import { updatePlotState } from '../utils/updatePlotState';
 const MainBoard = () => {
   const location = useLocation();
   const firstQuery = location.state;
-
   const [chatHistory, setChatHistory] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState({"hasLog": false});
-  const [showLanding, setShowLanding] = useState(true);
   const [currentMessage, setCurrentMessage] = useState(firstQuery);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // console.log(currentResponse);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,12 +30,11 @@ const MainBoard = () => {
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       console.log("here's the current response, which triggers a plot update:");
-      console.log(currentResponse);
+      // console.log(currentResponse);
       updatePlotState(currentResponse, plotState, setPlotState);
-      setShowLanding(false);
     } else {
       console.log("here's the current response, which does not trigger a plot update:");
-      console.log(currentResponse);
+      // console.log(currentResponse);
     }
   }, [currentResponse]);
 

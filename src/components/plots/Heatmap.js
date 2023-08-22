@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
+const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, measurementType, hasLog }) => {
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
@@ -23,6 +23,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
       values = values.map(subArray => subArray.map(value => Math.log(value)));
       unit = "log( " + unit + " )";
     } 
+
     let data = [
       {
         z: values,
@@ -60,6 +61,13 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
     let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
     let graphHeight = nfeatures * 7.3 + xtickMargin;
     
+    let title;
+    if (measurementType === 'geneExpression') {
+      title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
+    } else {
+      title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
+    }
+
     let layout = {
       width: graphWidth,
       height: `${graphHeight}`,
@@ -73,7 +81,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
         ticktext: yTickTexts,
         tickvals: yTickVals,
       },
-      title: `<b>Heatmap of gene expression in ${organism} ${organ}</b>`,
+      title: title,
     };
   
     let cameraRetro= {
