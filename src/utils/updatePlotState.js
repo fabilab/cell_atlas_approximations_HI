@@ -2,8 +2,11 @@ import atlasapprox from "@fabilab/atlasapprox";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
   console.log(response);
+  console.log("Updating plot !!!!=====");
   let intent = response.intent;
-  let generalIntent = intent.split(".")[0];
+  let mainIntent = intent.split(".")[0];
+  let subIntent = intent.split(".")[1];
+  console.log(subIntent);
   let newPlotState = null;
   let average, fractions;
   let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
@@ -63,14 +66,15 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     fractionsIntent();
   };
 
-  const averageIntent = async () => {
-    let apiCelltypes = await atlasapprox.celltypes(organism, organ);
-    let celltypes = apiCelltypes.celltypes;
-    let apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
-    // let chromatinAcc = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
-    // console.log(chromatinAcc);
-    console.log("Generate plot for gene expression");
-    average = apiResponse.average;
+  const averageIntent = async (subIntent) => {
+
+    let apiResponse;
+    if (subIntent === 'chromatinAccessibility') {
+      apiResponse = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
+    } else {
+      apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
+    }
+
     let plotType = "heatmap";
     newPlotState = {
       intent: "average",
@@ -80,11 +84,12 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       features,
       data: {
         type: "matrix",
-        xaxis: celltypes,
+        xaxis: apiResponse.celltypes,
         yaxis: apiResponse.features,
-        average: average,
+        average: apiResponse.average,
         fractions: null,
         valueUnit: apiResponse.unit,
+        measurementType: apiResponse.measurement_type,
       },
       hasLog: hasLog
     };
@@ -200,8 +205,8 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     setPlotState(newPlotState);
   };
 
-  console.log(generalIntent)
-  switch (generalIntent) {
+  console.log(mainIntent)
+  switch (mainIntent) {
     case "add":
       addGenes();
       break;
@@ -215,7 +220,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       markersIntent();
       break;
     case "average":
-      averageIntent();
+      averageIntent(subIntent);
       break;
     case "fraction_detected":
       fractionsIntent();
