@@ -205,7 +205,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     setPlotState(newPlotState);
   };
 
-  console.log(mainIntent)
   switch (mainIntent) {
     case "add":
       addGenes();
