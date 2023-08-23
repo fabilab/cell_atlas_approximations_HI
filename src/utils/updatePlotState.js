@@ -16,6 +16,16 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let apiCelltypes = await atlasapprox.celltypes(organism, organ);
   let celltypes = apiCelltypes.celltypes;
   let hasLog = plotState.hasLog;
+  let plotType;
+
+  const exploreOrganism = () => {
+    plotType = "organismProfile";
+    newPlotState = {
+      plotType,
+      organism,
+    }
+    setPlotState(newPlotState);
+  };
 
   const addGenes = () => {
     
@@ -75,7 +85,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
     }
 
-    let plotType = "heatmap";
+    plotType = "heatmap";
     newPlotState = {
       intent: "average",
       plotType,
@@ -103,7 +113,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
     fractions = apiFraction.fraction_detected;
     average = apiAverage.average;
-    let plotType = "bubbleHeatmap";
+    plotType = "bubbleHeatmap";
 
     newPlotState = {
       intent,
@@ -149,7 +159,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   function makeBarChart(targetCelltype,organs, xaxis, yaxis) {
 
-    const plotType = "barChart";
+    plotType = "barChart";
     newPlotState = {
       intent,
       plotType,
@@ -181,7 +191,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   }
 
   const cellxorganIntent = async () => {
-    const plotType = "table";
+    plotType = "table";
     let apiOrgans = await atlasapprox.organs(organism, "gene_expression");
     let organs = apiOrgans.organs;
     let apiCellxOrgans = await atlasapprox.celltypexorgan(organism, organs, "gene_expression");
@@ -198,7 +208,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   const organismsIntent = async () => {
-    const plotType = "showOrganisms";
+    plotType = "showOrganisms";
     newPlotState = {
       plotType,
     }
@@ -206,6 +216,9 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   switch (mainIntent) {
+    case "explore":
+      exploreOrganism();
+      break;
     case "add":
       addGenes();
       break;

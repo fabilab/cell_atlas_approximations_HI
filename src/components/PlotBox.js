@@ -4,6 +4,7 @@ import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';
 import CellxOrganTable from './plots/CellxOrganTable';
 import TableOrganisms from './plots/TableOrganisms';
+import OrganismProfile from './plots/OrganismProfile';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -14,7 +15,6 @@ const plotStyle = {
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
-  console.log("updating plotbox");
   if (state.plotType === 'heatmap') {
     return (
       <div style={plotStyle}>
@@ -70,6 +70,15 @@ const PlotBox = ({ state }) => {
       <TableOrganisms
         state={state}
       />
+    )
+  } else if (state.plotType === 'organismProfile') {
+    console.log(state);
+    return (
+      <div style={plotStyle}>
+        <OrganismProfile
+          organism={state.organism}
+        />
+      </div>
     )
   }
 };
