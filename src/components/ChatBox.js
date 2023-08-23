@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Layout, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
 
-const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
+const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
+  const [currentMessage, setCurrentMessage] = useState(initialMessage || '');
   const [chatContext, setChatContext] = useState({});
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [localMessage, setLocalMessage] = useState(initialMessage || '');
 
   const chatboxRef = useRef(null);
   useEffect(() => {
@@ -25,16 +27,16 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     if (e.key === 'ArrowUp') {
       if (historyIndex > 0) {
         const previousMessage = messageHistory[historyIndex - 1].message;
-        setCurrentMessage(previousMessage);
+        setLocalMessage(previousMessage);
         setHistoryIndex(historyIndex - 1);
       }
     } else if (e.key === 'ArrowDown') {
       if (historyIndex < messageHistory.length - 1) {
         const nextMessage = messageHistory[historyIndex + 1].message;
-        setCurrentMessage(nextMessage);
+        setLocalMessage(nextMessage);
         setHistoryIndex(historyIndex + 1);
       } else if (historyIndex === messageHistory.length - 1) {
-        setCurrentMessage('');
+        setLocalMessage('');
       }
     }
   };
@@ -52,6 +54,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       setCurrentMessage('');
       return '';
     } else {
+      setCurrentMessage(localMessage); 
       let nlp = new AtlasApproxNlp(chatContext);
       await nlp.initialise();
       let response = await nlp.ask(text);
@@ -71,7 +74,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
         setCurrentResponse(response);
 
         // update parent chat state
-        setCurrentMessage('');
+        setLocalMessage('');
         
         const instructions = [...chatHistory]; // this will become the new set of instructions
         const today = new Date();
@@ -86,8 +89,8 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
   }; //handleSubmit
 
   useEffect(() => {
-    if (chatHistory.length === 0) {
-      handleSubmit(currentMessage);
+    if (!chatHistory || chatHistory.length === 0) {
+      handleSubmit(localMessage);
     }
   }, [chatHistory]);
 
@@ -120,10 +123,10 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             id="chatBoxInput"
             // allowClear
               autoSize={{ minRows: 4, maxRows: 5 }}
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+              value={localMessage}
+              onChange={(e) => setLocalMessage(e.target.value.replace(/(\\r\\n|\\n|\\r)/gm, ""))}
               onKeyDown={handleKeyDown}
-              onPressEnter={() => handleSubmit(currentMessage)}
+              onPressEnter={() => handleSubmit(localMessage)}
               className="chat-input"
           />
           <Button 
@@ -131,7 +134,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             icon={<SendOutlined
               style={{ color: currentMessage.length > 0 ? '#1890ff' : 'grey' }}
             />} 
-            onClick={() => handleSubmit(currentMessage)}
+            onClick={() => handleSubmit(localMessage)}
             className="send-button"
           />
         </div>

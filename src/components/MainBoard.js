@@ -13,8 +13,8 @@ const MainBoard = () => {
   const [plotState, setPlotState] = useState({"hasLog": false});
   const [currentMessage, setCurrentMessage] = useState(firstQuery);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  // console.log(currentResponse);
 
+  console.log(currentResponse);
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -29,23 +29,17 @@ const MainBoard = () => {
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
-      console.log("here's the current response, which triggers a plot update:");
-      // console.log(currentResponse);
       updatePlotState(currentResponse, plotState, setPlotState);
-    } else {
-      console.log("here's the current response, which does not trigger a plot update:");
-      // console.log(currentResponse);
-    }
+    } 
   }, [currentResponse]);
 
   return (
     <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
         <ChatBox
           style={{ height:'100%' }}
+          initialMessage={firstQuery}
           chatHistory={chatHistory}
           setChatHistory={setChatHistory}
-          currentMessage={currentMessage}
-          setCurrentMessage={setCurrentMessage}
           setCurrentResponse={setCurrentResponse}
           plotState={plotState}
         />
