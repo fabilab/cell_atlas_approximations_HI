@@ -124,7 +124,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
             // allowClear
               autoSize={{ minRows: 4, maxRows: 5 }}
               value={localMessage}
-              onChange={(e) => setLocalMessage(e.target.value.replace(/(\\r\\n|\\n|\\r)/gm, ""))}
+              onChange={(e) => setLocalMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
               onKeyDown={handleKeyDown}
               onPressEnter={() => handleSubmit(localMessage)}
               className="chat-input"
