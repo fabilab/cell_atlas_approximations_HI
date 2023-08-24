@@ -1,59 +1,101 @@
 const organismMapping = {
   "a_queenslandica": {
     biologicalName: "Amphimedon queenslandica",
-    commonName: "Sponge"
+    commonName: "Sponge",
+    dataSource: "[Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)",
+    about: "",
+    genesFromPaper: "",
   },
   "c_elegans": {
     biologicalName: "Caenorhabditis elegans",
-    commonName: "Nematode"
+    commonName: "Nematode",
+    dataSource: "[Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)",
+    about: "",
+    genesFromPaper: "",
   },
   "d_melanogaster": {
     biologicalName: "Drosophila melanogaster",
-    commonName: "Fruit Fly"
+    commonName: "Fruit fly",
+    dataSource: "Data source not available",
+    about: "",
+    genesFromPaper: "",
   },
   "d_rerio": {
     biologicalName: "Danio rerio",
-    commonName: "Zebrafish"
+    commonName: "Zebrafish",
+    dataSource: "[Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)",
+    about: "",
+    genesFromPaper: "epcam, si, krt18, krt8, cldnb, elavl3, krt4, tfap2a, LOC100537766, cldnh, six1b, LOC100006216, myt1a, dlb, sox19a, actc1a, pfn1, cxcl12b, pax6b ",
   },
   "h_miamia": {
     biologicalName: "Hofstenia miamia",
-    commonName: "Three-banded Panther Worm"
+    commonName: "Three-banded panther Worm",
+    dataSource: "Data source not available",
+    about: "",
+    genesFromPaper: "",
   },
   "h_sapiens": {
     biologicalName: "Homo sapiens",
-    commonName: "Human"
+    commonName: "Human",
+    dataSource: "RNA: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896), ATAC: [Zhang et al. 2021](https://doi.org/10.1016/j.cell.2021.10.024)",
+    about: "",
+    genesFromPaper: "",
   },
   "m_leidyi": {
     biologicalName: "Mnemiopsis leidyi",
-    commonName: "Comb Jelly"
+    commonName: "Comb jelly",
+    dataSource: "[Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)",
+    about: "",
+    genesFromPaper: "",
   },
   "m_musculus": {
     biologicalName: "Mus musculus",
-    commonName: "House Mouse"
+    commonName: "House mouse",
+    dataSource: "[Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)",
+    about: "",
+    genesFromPaper: "",
   },
   "m_myoxinus": {
     biologicalName: "Microcebus myoxinus",
-    commonName: "Mouse Lemur"
+    commonName: "Mouse lemur",
+    dataSource: "[Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)",
+    about: "",
+    genesFromPaper: "",
   },
   "s_lacustris": {
     biologicalName: "Spongilla lacustris",
-    commonName: "Freshwater Sponge"
+    commonName: "Freshwater sponge",
+    dataSource: "[Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)",
+    about: "",
+    genesFromPaper: "",
   },
   "s_mansoni": {
     biologicalName: "Schistosoma mansoni",
-    commonName: "Blood Fluke"
+    commonName: "Blood fluke",
+    dataSource: "Data source not available",
+    about: "",
+    genesFromPaper: "",
   },
   "s_mediterranea": {
     biologicalName: "Schmidtea mediterranea",
-    commonName: "Planarian Worm"
+    commonName: "Planarian worm",
+    dataSource: "[Plass et al 2018](https://www.science.org/doi/10.1126/science.aaq1723#sec-10)",
+    about: "",
+    genesFromPaper: "",
   },
   "t_adhaerens": {
     biologicalName: "Trichoplax adhaerens",
-    commonName: "Placozoan"
+    commonName: "Placozoan",
+    dataSource: "[Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)",
+    about: "",
+    genesFromPaper: "",
   },
   "x_laevis": {
     biologicalName: "Xenopus laevis",
-    commonName: "African Clawed Frog"
+    commonName: "African clawed frog",
+    dataSource: "[Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)",
+    about: "",
+    genesFromPaper: "",
   }
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card, Row, Col, Typography } from 'antd';
 import { Fade } from 'react-awesome-reveal';
 import a_queenslandica from '../../asset/organisms/a_queenslandica.jpeg';
@@ -20,11 +20,6 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = () => {
-  const [showImages, setShowImages] = useState(false);
-
-  useEffect(() => {
-    setShowImages(true);
-  }, []);
 
   const organismImages = [
     { src: a_queenslandica, title: 'Amphimedon queenslandica' },
@@ -35,7 +30,7 @@ const TableOrganisms = () => {
     { src: h_sapiens, title: 'Homo sapiens (human)' },
     { src: m_leidyi, title: 'Mnemiopsis leidyi (warty comb jelly)' },
     { src: m_musculus, title: 'Mus musculus (house mouse)' },
-    { src: m_myoxinus, title: 'Microcebus myoxinus (pygmy mouse lemur)' },
+    { src: m_myoxinus, title: 'Microcebus myoxinus (mouse lemur)' },
     { src: s_lacustris, title: 'Spongilla lacustris' },
     { src: s_mansoni, title: 'Schistosoma mansoni' },
     { src: s_mediterranea, title: 'Schmidtea mediterranea'},
