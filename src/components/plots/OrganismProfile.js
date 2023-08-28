@@ -4,21 +4,42 @@ import atlasapprox from "@fabilab/atlasapprox";
 
 
 const OrganismProfile = ({ organism }) => {
+
     const [apiOrgans, setOrgans] = useState({ organs: [] });
+    const [error, setError] = useState(null);
+    
     useEffect(() => {
         const fetchData = async () => {
+            if (!organism) {
+                setError('Organism is unknown.'); // Handling undefined organism
+                return;
+            }
             try {
                 const result = await atlasapprox.organs(organism);
                 setOrgans(result);
             } catch (error) {
-                console.error("Error fetching tissues:", error);
+                setError('API call failed.');
             }
         };
 
         fetchData();
     }, [organism]);
 
-    let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
+    if (error) {
+        return (
+            <div style={{ padding: "3%", width: "85%", boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'}}>
+                <p>{error}</p>
+            </div>
+        );
+    }
+
+    let imagePath = null;
+    try {
+        imagePath = require(`../../asset/organisms/${organism}.jpeg`);
+    } catch (error) {
+        
+    }
+    
     let biologicalName = organismMapping[organism]?.biologicalName || "Unknown";
     let commonName = organismMapping[organism]?.commonName || "Unknown";
     let dataSource = organismMapping[organism]?.dataSource || "Data source not available";
@@ -35,11 +56,14 @@ const OrganismProfile = ({ organism }) => {
                     <p>Common name: {commonName}</p>
                     <p>Data source / Paper: <a href={url} style={{color: 'blue'}} target="_blank" rel="noopener noreferrer">{linkText}</a></p>
                 </div>
-                <img 
-                    src={imagePath} 
-                    alt={organism} 
-                    style={{width: "12%", height: "auto", borderRadius:"50%"}}
-                />
+                {
+                    imagePath &&
+                    <img 
+                        src={imagePath} 
+                        alt={organism} 
+                        style={{width: "12%", height: "auto", borderRadius:"50%"}}
+                    />
+                }
             </div>
             <div style={{marginTop: "20px"}}>
                 <h4>About</h4>
@@ -48,8 +72,8 @@ const OrganismProfile = ({ organism }) => {
             <div style={{marginTop: "20px"}}>
                 <h4>Tissues</h4>
                 <div style={{display: "flex", flexWrap: "wrap"}}>
-                {apiOrgans.organs.map(o => (
-                    <div key={o} style={{width: '16.66%', textAlign: 'center', margin: '5px 0'}}>
+                {apiOrgans.organs && apiOrgans.organs.map(o => (
+                    <div key={o} style={{ textAlign: 'center', margin: '0px 0'}}>
                         {o}
                     </div>
                 ))}
