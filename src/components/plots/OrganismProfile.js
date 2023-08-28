@@ -4,14 +4,18 @@ import atlasapprox from "@fabilab/atlasapprox";
 
 
 const OrganismProfile = ({ organism }) => {
-    const [tissues, setTissues] = useState([]);
-
+    const [apiOrgans, setOrgans] = useState({ organs: [] });
     useEffect(() => {
-        const fetchTissues = async () => {
-            const result = await atlasapprox.organs(organism);
-            setTissues(result);
+        const fetchData = async () => {
+            try {
+                const result = await atlasapprox.organs(organism);
+                setOrgans(result);
+            } catch (error) {
+                console.error("Error fetching tissues:", error);
+            }
         };
-        fetchTissues();
+
+        fetchData();
     }, [organism]);
 
     let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
@@ -23,7 +27,6 @@ const OrganismProfile = ({ organism }) => {
     // Extracting link text and URL from the dataSource string
     const linkText = dataSource.match(/\[(.*?)\]/)?.[1];
     const url = dataSource.match(/\((.*?)\)/)?.[1];
-    console.log(tissues.organs)
     return (
         <div style={{ padding: "3%", width: "85%", boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'}}>
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
@@ -45,9 +48,9 @@ const OrganismProfile = ({ organism }) => {
             <div style={{marginTop: "20px"}}>
                 <h4>Tissues</h4>
                 <div style={{display: "flex", flexWrap: "wrap"}}>
-                {tissues.organs.map(tissue => (
-                    <div key={tissue} style={{width: '16.66%', textAlign: 'center', margin: '5px 0'}}>
-                        {tissue}
+                {apiOrgans.organs.map(o => (
+                    <div key={o} style={{width: '16.66%', textAlign: 'center', margin: '5px 0'}}>
+                        {o}
                     </div>
                 ))}
             </div>

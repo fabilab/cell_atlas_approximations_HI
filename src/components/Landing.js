@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
-import search from '../asset/search.png';
+import search from '../asset/icon.png';
 const { Title } = Typography;
 const { Text } = Typography;
 
