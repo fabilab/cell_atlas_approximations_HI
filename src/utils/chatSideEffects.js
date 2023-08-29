@@ -138,6 +138,12 @@ export const updateChat = async (response, plotState) => {
     apiData = await callAPI(endpoint, params);
     answer = buildAnswer(intent, apiData);
   }
+
+  else if (intent === "organisms.chromatinAccessibility") {
+    params['measurement_type'] = 'chromatin_accessibility';
+    apiData = await callAPI(endpoint, params);
+    answer = buildAnswer(intent, apiData);
+  }
   
   else {
     apiData = await callAPI(endpoint, params);

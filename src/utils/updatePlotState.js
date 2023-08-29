@@ -210,10 +210,17 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     setPlotState(newPlotState);
   };
 
-  const organismsIntent = async () => {
+  const organismsIntent = async (subIntent) => {
+    let apiResponse;
+    if (subIntent === 'chromatinAccessibility') {
+      apiResponse = await atlasapprox.organisms("chromatin_accessibility");
+    } 
+    console.log(apiResponse.organisms);
     plotType = "showOrganisms";
     newPlotState = {
       plotType,
+      subIntent,
+      organisms: apiResponse.organisms || null,
     }
     setPlotState(newPlotState);
   };
@@ -253,7 +260,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       similarCelltypes();
       break;
     case "organisms":
-      organismsIntent();
+      organismsIntent(subIntent);
 			break;
     default:
       break;

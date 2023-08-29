@@ -67,9 +67,12 @@ const PlotBox = ({ state }) => {
       />
     )
   } else if (state.plotType === "showOrganisms") {
+    console.log(state.organisms);
+    console.log(state.subIntent);
     return (
       <TableOrganisms
-        state={state}
+        subIntent={state.subIntent}
+        organisms={state.organisms}
       />
     )
   } else if (state.plotType === 'organismProfile') {
