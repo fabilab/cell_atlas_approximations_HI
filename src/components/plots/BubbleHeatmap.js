@@ -62,6 +62,16 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
       tickvals: yTickVals,
     },
     title: `<b>Bubble heatmap showing gene expression and fraction in ${organism} ${organ}</b>`,
+    annotations: [
+      {
+        x: 0.5,  // Adjust the x-coordinate as needed
+        y: 1, // Adjust the y-coordinate as needed
+        showarrow: false,
+        text: 'Dot size represents a value', // Add your explanation here
+        xref: 'paper',
+        yref: 'paper',
+      },
+    ],
   };
 
   const desired_maximum_marker_size = 6.2;

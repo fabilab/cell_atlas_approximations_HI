@@ -2,8 +2,8 @@ import React from 'react';
 import { downloadSVG } from '../../utils/downLoadSvg';
 import Plot from 'react-plotly.js';
 
-const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, features }) => {
-  
+const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, features, unit }) => {
+  console.log(unit)
   let xValue = celltypesOrgan;
   let yValue = average.map((x) => Number(x.toFixed(2)));
 
@@ -33,7 +33,10 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
     yLabel = 'Distance';
   } else if (intent === "highest_measurement.geneExpression") {
     title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
-    yLabel = 'Counts per ten thousand';
+    yLabel = unit;
+  } else if (intent === "highest_measurement.chromatinAccessibility" ) {
+    title = `<b>Highest expressor of ${features} in ${organism}</b>`;
+    yLabel = unit;
   }
 
 

@@ -24,6 +24,7 @@ const Landing = () => {
     'Show 10 genes similar to Col1a1 in mouse lung.',
     'Show 10 markers of fibroblast in the mouse lung.',
     'What cell types are present in each organ of mouse?',
+    'list highest accessibility of chr1:9955-10355 in human.',
     'What cell type is the highest expressor of PECAM1 in human?',
     // 'Compare expression of CD19 in fibroblast across organs in mouse.',
     'What is the chromatin accessibility of chr1:9955-10355 in human lung?',

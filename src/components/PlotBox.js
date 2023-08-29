@@ -56,6 +56,7 @@ const PlotBox = ({ state }) => {
           average={state.data.average}
           organism={state.organism}
           features={state.features}
+          unit={state.data.unit}
         />
       </div>
     )
@@ -72,7 +73,6 @@ const PlotBox = ({ state }) => {
       />
     )
   } else if (state.plotType === 'organismProfile') {
-    console.log(state);
     return (
       <div style={plotStyle}>
         <OrganismProfile

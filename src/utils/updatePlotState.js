@@ -6,7 +6,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
   let subIntent = intent.split(".")[1];
-  console.log(subIntent);
   let newPlotState = null;
   let average, fractions;
   let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
@@ -71,7 +70,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   }
   const markersIntent = async () => {
-    console.log(features = response.data);
     features = response.data.markers.join(",");
     fractionsIntent();
   };
@@ -147,17 +145,23 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     makeBarChart(targetCelltype, organ, celltypesOrgan, apiSimilarCelltypes.distances);
   }
 
-  const measureIntent = async () => {
-    const highestResponse = await atlasapprox.highest_measurement(organism, features, 10);
-    let organs = highestResponse.organs;
-    let celltypes = highestResponse.celltypes;
+  const measureIntent = async (subIntent) => {
+    let apiResponse;
+    if (subIntent === 'chromatinAccessibility') {
+      apiResponse = await atlasapprox.highest_measurement(organism, features, 10, "chromatin_accessibility");
+    } else {
+      apiResponse = await atlasapprox.highest_measurement(organism, features, 10);
+    }
+    let organs = apiResponse.organs;
+    let celltypes = apiResponse.celltypes;
     const celltypesOrgan = celltypes.map((c, index) => {
       return c + " (" + organs[index] + ")";
     });
-    makeBarChart(null,organs, celltypesOrgan, highestResponse.average);
+    makeBarChart(null,organs, celltypesOrgan, apiResponse.average, apiResponse.unit);
   };
 
-  function makeBarChart(targetCelltype,organs, xaxis, yaxis) {
+
+  function makeBarChart(targetCelltype,organs, xaxis, yaxis, unit) {
 
     plotType = "barChart";
     newPlotState = {
@@ -174,7 +178,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         yaxis: yaxis,
         average: yaxis,
         fractions: null,
-        valueUnit: "counts per ten thousand",
+        unit: unit,
       },
     };
     setPlotState(newPlotState);
@@ -182,7 +186,6 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
 
   const similarGenes = async () => {
     // Generate a heatmap by default
-    console.log(response.data);
     let similarFeatures = response.data.similar_features
     similarFeatures.unshift(features);
     features = similarFeatures.join(",");
@@ -238,7 +241,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       fractionsIntent();
       break;
     case "highest_measurement":
-      measureIntent();
+      measureIntent(subIntent);
       break;
     case "similar_features":
       similarGenes();

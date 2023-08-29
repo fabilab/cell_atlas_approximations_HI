@@ -43,6 +43,7 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "";
   let apiData;
+  console.log(intent)
 
   if (intent === "None") {
     return {
@@ -60,8 +61,6 @@ export const updateChat = async (response, plotState) => {
   }
 
   const { endpoint, params } = buildAPIParams(intent, entities);
-  console.log(endpoint);
-  console.log(params);
   if (checkGenesIntents.includes(mainIntent) && subIntent === "geneExpression") {
     // check and remove invalid genes before generate plots
 
@@ -79,7 +78,6 @@ export const updateChat = async (response, plotState) => {
     }
 
     let checkFeatures = await callAPI('has_features', params);
-    console.log(checkFeatures);
     let geneFound = [];
     let geneNotFound = [];
     checkFeatures.features.map((feature,index) => {
@@ -130,14 +128,22 @@ export const updateChat = async (response, plotState) => {
     apiData = await callAPI(endpoint, params);
     answer = buildAnswer(intent, apiData);
   } 
+
+  else if (intent === "highest_measurement.chromatinAccessibility") {
+    console.log("params is ==== " + params);
+    params['feature'] = params['features'];
+    params['number'] = '10';
+    delete params['features'];
+    params['measurement_type'] = 'chromatin_accessibility';
+    apiData = await callAPI(endpoint, params);
+    answer = buildAnswer(intent, apiData);
+  }
   
   else {
     apiData = await callAPI(endpoint, params);
-    console.log(apiData);
     answer += buildAnswer(intent, apiData);
   }
 
-  console.log(params);
   return {
     hasData: true,
     params: params,
