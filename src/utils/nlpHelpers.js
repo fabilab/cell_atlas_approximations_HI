@@ -50,7 +50,7 @@ const buildAnswer = (intent, data) => {
           case "across_organs":
             switch (sIntent) {
               case "geneExpression":
-                answer = "The average expression of " + data.features + " in " + data.organism + " " + data.celltype + " is shown in the plot.";
+                answer = "The average expression of " + data.features + " in " + data.organism + " " + data.celltype + " across various organs is shown in the plot.";
                 break;
               case "chromatinAccessibility":
                 answer = "The average accessibility of " + data.features + " in " + data.organism + " " + data.celltype + " is shown in the plot.";

@@ -1,4 +1,5 @@
 import atlasapprox from "@fabilab/atlasapprox";
+import transpose from "./math";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
   console.log(response);
@@ -6,6 +7,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
   let subIntent = intent.split(".")[1];
+  let dataCategory = intent.split(".")[2] || "";
   let newPlotState = null;
   let average, fractions;
   let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
@@ -74,25 +76,40 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     fractionsIntent();
   };
 
-  const averageIntent = async (subIntent) => {
-
+  const averageIntent = async (subIntent, dataCategory) => {
+    console.log(dataCategory);
     let apiResponse;
+    let xAxis;
     if (subIntent === 'chromatinAccessibility') {
       apiResponse = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
+      xAxis = apiResponse.celltypes;
     } else {
-      apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
+      if (dataCategory === "across_organs") {
+        apiResponse = await atlasapprox.average(organism, features, null, response.params.celltype, "gene_expression");
+        xAxis = apiResponse.organs;
+        //  the data structure here is different from others, need to transpose x and y axis.
+        apiResponse.average = transpose(apiResponse.average)
+      } else {
+        apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
+        xAxis = apiResponse.celltypes;
+        console.log(apiResponse.average);
+      }
     }
-
+    console.log(response);
     plotType = "heatmap";
     newPlotState = {
       intent: "average",
+      mainIntent,
+      subIntent,
+      dataCategory,
       plotType,
       organism,
       organ,
       features,
+      celltype:response.params.celltype,
       data: {
         type: "matrix",
-        xaxis: apiResponse.celltypes,
+        xaxis: xAxis,
         yaxis: apiResponse.features,
         average: apiResponse.average,
         fractions: null,
@@ -242,7 +259,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       markersIntent();
       break;
     case "average":
-      averageIntent(subIntent);
+      averageIntent(subIntent, dataCategory);
       break;
     case "fraction_detected":
       fractionsIntent();
