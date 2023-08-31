@@ -43,7 +43,6 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "";
   let apiData;
-  console.log(intent)
 
   if (intent === "None") {
     return {
@@ -121,7 +120,6 @@ export const updateChat = async (response, plotState) => {
   } 
     
   else if (intent === "highest_measurement.geneExpression") {
-    console.log(params);
     params['feature'] = params['features'];
     params['number'] = '10';
     delete params['features'];
@@ -130,7 +128,6 @@ export const updateChat = async (response, plotState) => {
   } 
 
   else if (intent === "highest_measurement.chromatinAccessibility") {
-    console.log("params is ==== " + params);
     params['feature'] = params['features'];
     params['number'] = '10';
     delete params['features'];

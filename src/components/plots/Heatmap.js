@@ -6,10 +6,6 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
-  console.log(xaxis);
-  console.log(yaxis);
-  console.log(values);
-
 
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -58,7 +54,7 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     }
   
     // Calculate suitable cell size
-    const pxCell = 15; // Adjust this value as needed
+    const pxCell = 17; // Adjust this value as needed
     const ncelltypes = xaxis.length;
     const nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
 
@@ -71,7 +67,7 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     let title = "";
     if (subIntent === 'geneExpression') {
       if (dataCategory === "across_organs") {
-        title = `<b>Gene Expression Variation in ${celltype} Across ${organism} Organs<b>`
+        title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
       } else {
         title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
       }

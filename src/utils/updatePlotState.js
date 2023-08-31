@@ -3,7 +3,6 @@ import transpose from "./math";
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
   console.log(response);
-  console.log("Updating plot !!!!=====");
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
   let subIntent = intent.split(".")[1];
@@ -14,8 +13,13 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   let organ = (response.params && response.params.organ) || (plotState && plotState.organ) || "";
   // For some intents, params have features instead of feature
   let features = response.params.features || response.params.feature;
-  let apiCelltypes = await atlasapprox.celltypes(organism, organ);
-  let celltypes = apiCelltypes.celltypes;
+  let apiCelltypes;
+  let celltypes;
+  if (organ !== "") {
+    apiCelltypes = await atlasapprox.celltypes(organism, organ);
+    celltypes = apiCelltypes.celltypes;
+  }
+    
   let hasLog = plotState.hasLog;
   let plotType;
 
@@ -77,7 +81,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
   };
 
   const averageIntent = async (subIntent, dataCategory) => {
-    console.log(dataCategory);
+
     let apiResponse;
     let xAxis;
     if (subIntent === 'chromatinAccessibility') {
@@ -92,10 +96,9 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       } else {
         apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
         xAxis = apiResponse.celltypes;
-        console.log(apiResponse.average);
       }
     }
-    console.log(response);
+
     plotType = "heatmap";
     newPlotState = {
       intent: "average",
@@ -232,7 +235,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     if (subIntent === 'chromatinAccessibility') {
       apiResponse = await atlasapprox.organisms("chromatin_accessibility");
     } 
-    console.log(apiResponse.organisms);
+
     plotType = "showOrganisms";
     newPlotState = {
       plotType,

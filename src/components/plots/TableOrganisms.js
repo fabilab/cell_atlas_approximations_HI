@@ -23,7 +23,6 @@ const { Meta } = Card;
 
 const TableOrganisms = ({subIntent, organisms}) => {
 
-  console.log(typeof(organisms));
   const organismImages = [
     { src: a_queenslandica, title: 'Amphimedon queenslandica' },
     { src: c_elegans, title: 'Caenorhabditis elegans' },
