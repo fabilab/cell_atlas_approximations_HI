@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card, Row, Col, Typography } from 'antd';
 import { Fade } from 'react-awesome-reveal';
+import classnames from 'classnames';
+
 import a_queenslandica from '../../asset/organisms/a_queenslandica.jpeg';
 import c_elegans from '../../asset/organisms/c_elegans.jpeg';
 import d_melanogaster from '../../asset/organisms/d_melanogaster.jpeg';
@@ -19,12 +21,7 @@ import x_laevis from '../../asset/organisms/x_laevis.jpeg';
 const { Title } = Typography;
 const { Meta } = Card;
 
-const TableOrganisms = () => {
-  const [showImages, setShowImages] = useState(false);
-
-  useEffect(() => {
-    setShowImages(true);
-  }, []);
+const TableOrganisms = ({subIntent, organisms}) => {
 
   const organismImages = [
     { src: a_queenslandica, title: 'Amphimedon queenslandica' },
@@ -35,7 +32,7 @@ const TableOrganisms = () => {
     { src: h_sapiens, title: 'Homo sapiens (human)' },
     { src: m_leidyi, title: 'Mnemiopsis leidyi (warty comb jelly)' },
     { src: m_musculus, title: 'Mus musculus (house mouse)' },
-    { src: m_myoxinus, title: 'Microcebus myoxinus (pygmy mouse lemur)' },
+    { src: m_myoxinus, title: 'Microcebus myoxinus (mouse lemur)' },
     { src: s_lacustris, title: 'Spongilla lacustris' },
     { src: s_mansoni, title: 'Schistosoma mansoni' },
     { src: s_mediterranea, title: 'Schmidtea mediterranea'},
@@ -59,7 +56,13 @@ const TableOrganisms = () => {
           {row.map((image, innerIndex) => (
             <Col key={innerIndex} xs={24} sm={12} md={8} lg={6}>
               <Fade>
-                <Card style={{ width: '100%', margin: '10px' }}>
+                {/*  check if src has a sub string that is the same as organism */}
+                <Card style={{ 
+                  width: '100%', 
+                  margin: '10px', 
+                  backgroundColor: organisms.some(org => image.src.includes(org)) ? '#73d13d' : 'white', 
+                  opacity: organisms.some(org => image.src.includes(org)) ? '1' : '0.3',
+                  }}>
                   <div
                     style={{
                       height: 80,

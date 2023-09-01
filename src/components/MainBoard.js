@@ -14,7 +14,6 @@ const MainBoard = () => {
   // const [currentMessage, setCurrentMessage] = useState(firstQuery);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  console.log(currentResponse);
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);

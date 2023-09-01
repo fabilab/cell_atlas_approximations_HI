@@ -58,12 +58,10 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       let nlp = new AtlasApproxNlp(chatContext);
       await nlp.initialise();
       let response = await nlp.ask(text);
-      console.log(response);
       setChatContext(nlp.context);
 
       try {
         const updateObject = await updateChat(response,plotState)
-        console.log(updateObject);
         response.hasData = updateObject.hasData;
         if (updateObject.hasData) {
           response.data = updateObject.data;
@@ -124,7 +122,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
             // allowClear
               autoSize={{ minRows: 4, maxRows: 5 }}
               value={localMessage}
-              onChange={(e) => setLocalMessage(e.target.value.replace(/(\\r\\n|\\n|\\r)/gm, ""))}
+              onChange={(e) => setLocalMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
               onKeyDown={handleKeyDown}
               onPressEnter={() => handleSubmit(localMessage)}
               className="chat-input"

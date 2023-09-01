@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
-import search from '../asset/search.png';
+import search from '../asset/icon.png';
 const { Title } = Typography;
 const { Text } = Typography;
 
@@ -24,10 +24,12 @@ const Landing = () => {
     'Show 10 genes similar to Col1a1 in mouse lung.',
     'Show 10 markers of fibroblast in the mouse lung.',
     'What cell types are present in each organ of mouse?',
+    'list highest accessibility of chr1:9955-10355 in human.',
     'What cell type is the highest expressor of PECAM1 in human?',
     // 'Compare expression of CD19 in fibroblast across organs in mouse.',
     'What is the chromatin accessibility of chr1:9955-10355 in human lung?',
     'What is the chromatin accessibility of chr10:122199710-122200110 in human lung?',
+    'what is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE across organs in human fibroblast?',
     'What is the fraction of TP53, APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
     'What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
   ];
