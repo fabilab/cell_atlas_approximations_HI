@@ -55,9 +55,9 @@ This query provides information about the different cell types present in each o
 
 #### Gene Expression Profile
 
-Query: "What is the expression of Tp53,Mettl14,Apoe,Cd8a,Cd19,Mettl14,Hdac8,Mtor,Hnrnpl,Lancl2 in the mouse lung?"
+Query: "What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?"
 
-This query retrieves the average expression of the a list of specified genes in the mouse lung.
+This query retrieves the average expression of the a list of specified genes in the human lung.
 
 ![geneExpression](./demo/average-expression.png)
 
@@ -69,16 +69,21 @@ This query provides the fraction of cells that express each of the specified gen
 
 ![fraction](./demo/fraction-expression.png)
 
-### Highest Expressor
+#### Highest Expressor
 Query: what cell type is the highest expressor of Apoe in mouse?
 
 ![highestExpressor](./demo/highest-expressor.png)
 
-#### marker genes
+#### Marker genes
 
-Query: "Show 10 markers of fibroblast in the mouse lung"
+Query: "Show 10 markers of fibroblast in the mouse lung."
 
 This query identifies 10 marker genes for the fibroblast cell type in the mouse lung.
+
 ![markerGene](./demo//marker-genes.png)
 
+#### Similar genes
 
+Query: "Show 10 genes similar to Col1a1 in mouse lung."
+
+![simiarGenes](./demo/similar-genes.png)

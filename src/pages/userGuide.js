@@ -16,7 +16,7 @@ const UserGuide = () => {
 
   const components = {
     img({node, ...props}) {
-      return <img {...props} alt="images" style={{ width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
+      return <img {...props} alt="images" style={{ width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto', border: '0.5px solid #4a4a4a' }} />
     }
   }
   
@@ -27,7 +27,7 @@ const markdownStyle = {
   lineHeight: '1.6',
   maxWidth: '800px',
   margin: '0 auto',
-  padding: '20px'
+  padding: '20px',
 }
 
 return (
