@@ -1,288 +1,291 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import transpose from "./math";
 
-export const updatePlotState = async (response, plotState, setPlotState) => {
-  console.log(response);
-  let intent = response.intent;
-  let mainIntent = intent.split(".")[0];
-  let subIntent = intent.split(".")[1];
-  let dataCategory = intent.split(".")[2] || "";
-  let newPlotState = null;
-  let average, fractions;
-  let organism = (response.params && response.params.organism) || (plotState && plotState.organism) || "";
-  let organ = (response.params && response.params.organ) || (plotState && plotState.organ) || "";
-  // For some intents, params have features instead of feature
-  let features = response.params.features || response.params.feature;
-  let apiCelltypes;
-  let celltypes;
-  if (organ !== "") {
-    apiCelltypes = await atlasapprox.celltypes(organism, organ);
-    celltypes = apiCelltypes.celltypes;
-  }
+const exploreOrganism = (context) => {
+    return {
+        plotType: "organismProfile",
+        organism: context.organism,
+    };
+};
+
+const addGenes = async (context) => {
+    // Extract required parameters from context within the function
+    let features = `${context.plotState.features},${context.features}`;
+    if (!context.plotState.data.fractions) {
+        return await updateAverage({ ...context, features });
+    } else {
+        return await updateFractions({ ...context, features });
+    }
+};
+
+const removeGenes = async (context) => {
+    let featuresToRemove = context.features.split(",").map(fea => fea.toLowerCase());
+    let features = context.plotState.features.split(',').filter(g => !featuresToRemove.includes(g.toLowerCase())).join(',');
+
+    if (!context.plotState.data.fractions) {
+        return await updateAverage({ ...context, features });
+    } else {
+        return await updateFractions({ ...context, features });
+    }
+};
+
+const toggleLog = async (context) => {
+  
+    let hasLog = !context.plotState.hasLog;
+    const newPlotState = { ...context.plotState, hasLog };
+    context.plotState = newPlotState;
+
+    if (!context.plotState.data.fractions) {
+        return await updateAverage(context);
+    } else {
+        return await updateFractions(context);
+    }
+};
+
+const updateMarkers = async (context) => {
+    let features = context.response.data.markers.join(",");
+    return await updateFractions({ ...context, features });
+};
+
+const updateAverage = async (context) => {
+
+    let apiResponse, xAxis;
     
-  let hasLog = plotState.hasLog;
-  let plotType;
-
-  const exploreOrganism = () => {
-    plotType = "organismProfile";
-    newPlotState = {
-      plotType,
-      organism,
-    }
-    setPlotState(newPlotState);
-  };
-
-  const addGenes = () => {
-    
-    // Update parameter for average/fraction plots
-    features = plotState.features + "," + features;
-    organism = plotState.organism;
-    organ = plotState.organ;
-    celltypes = plotState.data.xaxis;
-    // add to a dotplot or heatmap?
-    if (!plotState.data.fractions) {
-      averageIntent();
-    } else {
-      fractionsIntent();
-    }
-  };
-
-  const removeGenes = () => {
-
-    let featuresLowerCase = features.split(",").map((fea) => (fea.toLowerCase()));
-    features = plotState.features.split(',').filter(g => !featuresLowerCase.includes(g.toLowerCase())).join(',');
-    organism = plotState.organism;
-    organ = plotState.organ;
-    celltypes = plotState.data.xaxis;
-    // Check if add command is applied to average or fraction
-    if (!plotState.data.fractions) {
-      averageIntent();
-    } else {
-      fractionsIntent();
-    }
-  };
-
-  const toggleLog = () => {
-    hasLog = !hasLog;
-    features = plotState.features;
-    organism = plotState.organism;
-    organ = plotState.organ;
-    celltypes = plotState.data.xaxis;
-    if (!plotState.data.fractions) {
-      averageIntent();
-    } else {
-      fractionsIntent();
-    }
-
-  }
-  const markersIntent = async () => {
-    features = response.data.markers.join(",");
-    fractionsIntent();
-  };
-
-  const averageIntent = async (subIntent, dataCategory) => {
-
-    let apiResponse;
-    let xAxis;
-    if (subIntent === 'chromatinAccessibility') {
-      apiResponse = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
-      xAxis = apiResponse.celltypes;
-    } else {
-      if (dataCategory === "across_organs") {
-        apiResponse = await atlasapprox.average(organism, features, null, response.params.celltype, "gene_expression");
-        xAxis = apiResponse.organs;
-        //  the data structure here is different from others, need to transpose x and y axis.
-        apiResponse.average = transpose(apiResponse.average)
-      } else {
-        apiResponse = await atlasapprox.average(organism, features, organ, null, "gene_expression");
+    if (context.subIntent === 'chromatinAccessibility') {
+        apiResponse = await atlasapprox.average(context.organism, context.features, context.organ, null, "chromatin_accessibility");
         xAxis = apiResponse.celltypes;
-      }
+    } else {
+        if (context.dataCategory === "across_organs") {
+            apiResponse = await atlasapprox.average(context.organism, context.features, null, context.response.params.celltype, "gene_expression");
+            xAxis = apiResponse.organs;
+            apiResponse.average = transpose(apiResponse.average);
+        } else {
+            apiResponse = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
+            xAxis = apiResponse.celltypes;
+        }
     }
 
-    plotType = "heatmap";
-    newPlotState = {
-      intent: "average",
-      mainIntent,
-      subIntent,
-      dataCategory,
-      plotType,
-      organism,
-      organ,
-      features,
-      celltype:response.params.celltype,
-      data: {
-        type: "matrix",
-        xaxis: xAxis,
-        yaxis: apiResponse.features,
-        average: apiResponse.average,
-        fractions: null,
-        valueUnit: apiResponse.unit,
-        measurementType: apiResponse.measurement_type,
-      },
-      hasLog: hasLog
+    return {
+        intent: "average",
+        mainIntent: context.mainIntent,
+        subIntent: context.subIntent,
+        dataCategory: context.dataCategory,
+        plotType: "heatmap",
+        organism: context.organism,
+        organ: context.organ,
+        features: context.features,
+        celltype: context.response.params.celltype,
+        data: {
+            type: "matrix",
+            xaxis: xAxis,
+            yaxis: apiResponse.features,
+            average: apiResponse.average,
+            fractions: null,
+            valueUnit: apiResponse.unit,
+            measurementType: apiResponse.measurement_type,
+        },
+        hasLog: context.plotState.hasLog
     };
-    setPlotState(newPlotState);
-  };
+};
 
-  const fractionsIntent = async () => {
-    let apiFraction = await atlasapprox.fraction_detected(organism, features, organ, null, "gene_expression")
-    let apiAverage = await atlasapprox.average(organism, features, organ, null, "gene_expression");
-    // let average_chromo = await atlasapprox.average(organism, features, organ, null, "chromatin_accessibility");
+const updateFractions = async (context) => {
 
-    fractions = apiFraction.fraction_detected;
-    average = apiAverage.average;
-    plotType = "bubbleHeatmap";
+    const apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
+    const apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
+    let apiCelltypes;
+    if (context.organ !== "" && context.organism !== "") {
+      apiCelltypes = await atlasapprox.celltypes(context.organism, context.organ);
+    }
 
-    newPlotState = {
-      intent,
-      plotType,
-      organism,
-      organ,
-      features,
-      data: {
-        type: "matrix",
-        xaxis: celltypes,
-        yaxis: apiFraction.features,
-        average: average,
-        fractions: fractions,
-        valueUnit: apiAverage.unit,
-      },
-      hasLog: hasLog
+    return {
+        intent: context.intent,
+        plotType: "bubbleHeatmap",
+        organism: context.organism,
+        organ: context.organ,
+        features: context.features,
+        data: {
+            type: "matrix",
+            xaxis: apiCelltypes.celltypes,
+            yaxis: apiFraction.features,
+            average: apiAverage.average,
+            fractions: apiFraction.fraction_detected,
+            valueUnit: apiAverage.unit,
+        },
+        hasLog: context.plotState.hasLog
     };
-    setPlotState(newPlotState);
-  };
+};
 
-  const similarCelltypes = async () => {
-    let targetCelltype = response.params.celltype;
-    let nCelltypes = response.params.number;
-    const apiSimilarCelltypes = await atlasapprox.similar_celltypes(organism, organ, targetCelltype, features, nCelltypes, "correlation");
+const similarCelltypes = async (context) => {
+    let targetCelltype = context.response.params.celltype;
+    let nCelltypes = context.response.params.number;
+    const apiSimilarCelltypes = await atlasapprox.similar_celltypes(context.organism, context.organ, targetCelltype, context.features, nCelltypes, "correlation");
     let similarCelltypes = apiSimilarCelltypes.similar_celltypes;
     let similarOrgans = apiSimilarCelltypes.similar_organs;
     const celltypesOrgan = similarCelltypes.map((c, index) => {
-      return c + " (" + similarOrgans[index] + ")";
+        return c + " (" + similarOrgans[index] + ")";
     });
 
-    makeBarChart(targetCelltype, organ, celltypesOrgan, apiSimilarCelltypes.distances);
-  }
+    return {
+        intent: context.intent,
+        plotType: "barChart",
+        targetCelltype: targetCelltype,
+        organism: context.organism,
+        organs: context.organs,
+        celltypes: context.celltypes,
+        features: context.features,
+        data: {
+            type: "matrix",
+            celltypesOrgan: celltypesOrgan,
+            yaxis: apiSimilarCelltypes.distances,
+            average: apiSimilarCelltypes.distances,
+            fractions: null,
+            unit: apiSimilarCelltypes.unit
+        }
+    };
+};
 
-  const measureIntent = async (subIntent) => {
+const measureIntent = async (context) => {
     let apiResponse;
-    if (subIntent === 'chromatinAccessibility') {
-      apiResponse = await atlasapprox.highest_measurement(organism, features, 10, "chromatin_accessibility");
+    if (context.subIntent === 'chromatinAccessibility') {
+        apiResponse = await atlasapprox.highest_measurement(context.organism, context.features, 10, "chromatin_accessibility");
     } else {
-      apiResponse = await atlasapprox.highest_measurement(organism, features, 10);
+        apiResponse = await atlasapprox.highest_measurement(context.organism, context.features, 10);
     }
     let organs = apiResponse.organs;
     let celltypes = apiResponse.celltypes;
     const celltypesOrgan = celltypes.map((c, index) => {
-      return c + " (" + organs[index] + ")";
+        return c + " (" + organs[index] + ")";
     });
-    makeBarChart(null,organs, celltypesOrgan, apiResponse.average, apiResponse.unit);
-  };
 
-
-  function makeBarChart(targetCelltype,organs, xaxis, yaxis, unit) {
-
-    plotType = "barChart";
-    newPlotState = {
-      intent,
-      plotType,
-      targetCelltype,
-      organism,
-      organs,
-      celltypes,
-      features,
-      data: {
-        type: "matrix",
-        celltypesOrgan: xaxis,
-        yaxis: yaxis,
-        average: yaxis,
-        fractions: null,
-        unit: unit,
-      },
+    return {
+        intent: context.intent,
+        plotType: "barChart",
+        organism: context.organism,
+        organs: organs,
+        celltypes: celltypesOrgan,
+        features: context.features,
+        data: {
+            type: "matrix",
+            celltypesOrgan: celltypesOrgan,
+            yaxis: apiResponse.average,
+            average: apiResponse.average,
+            fractions: null,
+            unit: apiResponse.unit
+        }
     };
-    setPlotState(newPlotState);
-  }
+};
 
-  const similarGenes = async () => {
-    // Generate a heatmap by default
-    let similarFeatures = response.data.similar_features
-    similarFeatures.unshift(features);
-    features = similarFeatures.join(",");
 
-    fractionsIntent();
-  }
+const similarGenes = async (context) => {
 
-  const cellxorganIntent = async () => {
-    plotType = "table";
-    let apiOrgans = await atlasapprox.organs(organism, "gene_expression");
+    let similarFeatures = context.response.data.similar_features;
+    similarFeatures.unshift(context.features);
+
+    let updatedFeatures = [...new Set(similarFeatures)];
+    let features = updatedFeatures.join(",");
+
+    return await updateFractions({ ...context, features });
+};
+
+
+const cellsXorgans = async (context) => {
+    let apiOrgans = await atlasapprox.organs(context.organism, "gene_expression");
     let organs = apiOrgans.organs;
-    let apiCellxOrgans = await atlasapprox.celltypexorgan(organism, organs, "gene_expression");
-    let detected = apiCellxOrgans.detected;
-    let celltypes = apiCellxOrgans.celltypes;
-    newPlotState = {
-      plotType,
-      organism,
-      organs,
-      celltypes,
-      detected,
-    }
-    setPlotState(newPlotState);
-  };
+    let apiCellxOrgans = await atlasapprox.celltypexorgan(context.organism, organs, "gene_expression");
 
-  const organismsIntent = async (subIntent) => {
+    return {
+        plotType: "table",
+        organism: context.organism,
+        organs: organs,
+        celltypes: apiCellxOrgans.celltypes,
+        detected: apiCellxOrgans.detected
+    };
+};
+
+
+const availaleOrganisms = async (context) => {
     let apiResponse;
-    if (subIntent === 'chromatinAccessibility') {
-      apiResponse = await atlasapprox.organisms("chromatin_accessibility");
-    } 
 
-    plotType = "showOrganisms";
-    newPlotState = {
-      plotType,
-      subIntent,
-      organisms: apiResponse.organisms || null,
+    if (context.subIntent === 'chromatinAccessibility') {
+        apiResponse = await atlasapprox.organisms("chromatin_accessibility");
     }
-    setPlotState(newPlotState);
-  };
 
-  switch (mainIntent) {
-    case "explore":
-      exploreOrganism();
-      break;
-    case "add":
-      addGenes();
-      break;
-    case "remove":
-      removeGenes();
-      break;
-    case "plot":
-      toggleLog();
-    break;
-    case "markers":
-      markersIntent();
-      break;
-    case "average":
-      averageIntent(subIntent, dataCategory);
-      break;
-    case "fraction_detected":
-      fractionsIntent();
-      break;
-    case "highest_measurement":
-      measureIntent(subIntent);
-      break;
-    case "similar_features":
-      similarGenes();
-      break;
-    case "celltypexorgan":
-      cellxorganIntent();
-      break;
-    case "similar_celltypes":
-      similarCelltypes();
-      break;
-    case "organisms":
-      organismsIntent(subIntent);
-			break;
-    default:
-      break;
+    let availaleOrganisms = null;
+
+    if (apiResponse && apiResponse.organisms) {
+      availaleOrganisms = apiResponse.organisms;
   }
+
+    return {
+        plotType: "showOrganisms",
+        subIntent: context.subIntent,
+        organisms: availaleOrganisms,
+    };
+};
+
+
+export const updatePlotState = async (response, plotState, setPlotState) => {
+
+    let intent = response.intent;
+    let mainIntent = intent.split(".")[0];
+    let subIntent = intent.split(".")[1];
+    let dataCategory = intent.split(".")[2] || "";
+    let newPlotState = null;
+    
+    plotState.hasLog = plotState.hasLog || false;
+
+    const context = {
+      intent: intent,
+      mainIntent: mainIntent,
+      subIntent: subIntent,
+      features: response.params.features || response.params.feature || plotState.features,
+      organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
+      organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
+      dataCategory: dataCategory,
+      plotState: plotState,
+      response: response,
+    };
+
+    switch (mainIntent) {
+        case "explore":
+            newPlotState = exploreOrganism(context);
+            break;
+        case "add":
+            newPlotState = await addGenes(context);
+            break;
+        case "remove":
+            newPlotState = await removeGenes(context);
+            break;
+        case "plot":
+            newPlotState = await toggleLog(context);
+            break;
+        case "markers":
+            newPlotState = await updateMarkers(context);
+            break;
+        case "average":
+            newPlotState = await updateAverage(context);
+            break;
+        case "fraction_detected":
+            newPlotState = await updateFractions(context);
+            break;
+        case "highest_measurement":
+            newPlotState = await measureIntent(context);
+            break;
+        case "similar_features":
+            newPlotState = await similarGenes(context);
+            break;
+        case "celltypexorgan":
+            newPlotState = await cellsXorgans(context);
+            break;
+        case "similar_celltypes":
+            newPlotState = await similarCelltypes(context);
+            break;
+        case "organisms":
+            newPlotState = await availaleOrganisms(context);
+            break;
+        default:
+            break;
+    }
+
+    setPlotState(newPlotState);
 };

@@ -51,7 +51,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
         },
         standoff: 20,
       },
-      tickangle: 90,
+      tickangle: 45,
     },
     yaxis: {
       title: {
@@ -127,7 +127,6 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
         data={data}
         layout={layout}
         config={config}
-        // responsive={true}
       />
   );
 };
