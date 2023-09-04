@@ -36,6 +36,7 @@ export const triggersPlotUpdate = ((response) => {
 });
 
 export const updateChat = async (response, plotState) => {
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -61,6 +62,7 @@ export const updateChat = async (response, plotState) => {
 
   const { endpoint, params } = buildAPIParams(intent, entities);
   if (checkGenesIntents.includes(mainIntent) && subIntent === "geneExpression") {
+
     // check and remove invalid genes before generate plots
 
     // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
@@ -77,12 +79,12 @@ export const updateChat = async (response, plotState) => {
     }
 
     let checkFeatures = await callAPI('has_features', params);
+
     let geneFound = [];
     let geneNotFound = [];
     checkFeatures.features.map((feature,index) => {
       checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
     })
-    
     // if none of the genes were valid
     if (geneFound.length < 1) {
       answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
@@ -96,7 +98,9 @@ export const updateChat = async (response, plotState) => {
     if (geneNotFound.length > 0) {
       let geneNotFoundString = geneNotFound.join(', ');
       answer = `Removed invalid genes: ${geneNotFoundString}.`;
-      params.features = params.features.split(',').filter(item => !geneNotFound.includes(item)).join(',');
+      params.features = params.features.split(',')
+        .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
+        .join(',');
     }
 
       // handle duplicate gene names in user input list
@@ -154,3 +158,4 @@ export const updateChat = async (response, plotState) => {
     message: answer,
   };
 };
+
