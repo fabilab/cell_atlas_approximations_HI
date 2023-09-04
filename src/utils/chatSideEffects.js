@@ -44,6 +44,7 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "";
   let apiData;
+  let endpoint, params;
 
   if (intent === "None") {
     return {
@@ -60,95 +61,105 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
-  const { endpoint, params } = buildAPIParams(intent, entities);
-  if (checkGenesIntents.includes(mainIntent) && subIntent === "geneExpression") {
+  try {
+    ({ endpoint, params } = buildAPIParams(intent, entities));
+    if (checkGenesIntents.includes(mainIntent) && (subIntent === "geneExpression" || subIntent === "features")) {
 
-    // check and remove invalid genes before generate plots
+      // check and remove invalid genes before generate plots
+      // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
+      if (mainIntent === 'add') {
+        params['organism'] = plotState.organism; 
+        params['organ'] = plotState.organ;
 
-    // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
-    if (mainIntent === 'add') {
-      params['organism'] = plotState.organism; 
-      params['organ'] = plotState.organ;
-  
-      if (params.features && plotState.features) {
-        const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+        if (params.features && plotState.features) {
+          const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+          params.features = params.features.split(',')
+            .filter(gene => !plotStateGenes.includes(gene.trim()))
+            .join(',');
+        }
+
+      }
+
+
+      let checkFeatures = await callAPI('has_features', params);
+
+      let geneFound = [];
+      let geneNotFound = [];
+      checkFeatures.features.map((feature,index) => {
+        checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
+      })
+      // if none of the genes were valid
+      if (geneFound.length < 1) {
+        answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
+        return {
+          hasData: false,
+          message: answer,
+        }
+      }
+
+      // if there is at least one invalid gene
+      if (geneNotFound.length > 0) {
+        let geneNotFoundString = geneNotFound.join(', ');
+        answer = `Removed invalid genes: ${geneNotFoundString}.`;
         params.features = params.features.split(',')
-          .filter(gene => !plotStateGenes.includes(gene.trim()))
+          .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
           .join(',');
       }
+
+        // handle duplicate gene names in user input list
+        params.features = [...new Set(params.features.split(','))].join(',');
+
+        apiData = await callAPI(endpoint, params);
+        answer += buildAnswer(intent, apiData);
     }
 
-    let checkFeatures = await callAPI('has_features', params);
-
-    let geneFound = [];
-    let geneNotFound = [];
-    checkFeatures.features.map((feature,index) => {
-      checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
-    })
-    // if none of the genes were valid
-    if (geneFound.length < 1) {
-      answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
-      return {
-        hasData: false,
-        message: answer,
-      }
-    }
-
-    // if there is at least one invalid gene
-    if (geneNotFound.length > 0) {
-      let geneNotFoundString = geneNotFound.join(', ');
-      answer = `Removed invalid genes: ${geneNotFoundString}.`;
-      params.features = params.features.split(',')
-        .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
-        .join(',');
-    }
-
-      // handle duplicate gene names in user input list
-      params.features = [...new Set(params.features.split(','))].join(',');
-
+    else if (intent === "average.chromatinAccessibility") {
+      params['measurement_type'] = 'chromatin_accessibility';
       apiData = await callAPI(endpoint, params);
       answer += buildAnswer(intent, apiData);
-  }
+    }
 
-  else if (intent === "average.chromatinAccessibility") {
-    params['measurement_type'] = 'chromatin_accessibility';
-    apiData = await callAPI(endpoint, params);
-    answer += buildAnswer(intent, apiData);
-  }
+    else if (intent === "similar_features.geneExpression") {
+      params['feature'] = params['features'];
+      delete params['features'];
+      apiData = await callAPI(endpoint, params);
+      answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
+    } 
+      
+    else if (intent === "highest_measurement.geneExpression") {
+      params['feature'] = params['features'];
+      params['number'] = '10';
+      delete params['features'];
+      apiData = await callAPI(endpoint, params);
+      answer = buildAnswer(intent, apiData);
+    } 
 
-  else if (intent === "similar_features.geneExpression") {
-    params['feature'] = params['features'];
-    delete params['features'];
-    apiData = await callAPI(endpoint, params);
-    answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
-  } 
+    else if (intent === "highest_measurement.chromatinAccessibility") {
+      params['feature'] = params['features'];
+      params['number'] = '10';
+      delete params['features'];
+      params['measurement_type'] = 'chromatin_accessibility';
+      apiData = await callAPI(endpoint, params);
+      answer = buildAnswer(intent, apiData);
+    }
+
+    else if (intent === "organisms.chromatinAccessibility") {
+      params['measurement_type'] = 'chromatin_accessibility';
+      apiData = await callAPI(endpoint, params);
+      answer = buildAnswer(intent, apiData);
+    }
     
-  else if (intent === "highest_measurement.geneExpression") {
-    params['feature'] = params['features'];
-    params['number'] = '10';
-    delete params['features'];
-    apiData = await callAPI(endpoint, params);
-    answer = buildAnswer(intent, apiData);
-  } 
+    else {
+      apiData = await callAPI(endpoint, params);
+      answer += buildAnswer(intent, apiData);
+    }
 
-  else if (intent === "highest_measurement.chromatinAccessibility") {
-    params['feature'] = params['features'];
-    params['number'] = '10';
-    delete params['features'];
-    params['measurement_type'] = 'chromatin_accessibility';
-    apiData = await callAPI(endpoint, params);
-    answer = buildAnswer(intent, apiData);
-  }
-
-  else if (intent === "organisms.chromatinAccessibility") {
-    params['measurement_type'] = 'chromatin_accessibility';
-    apiData = await callAPI(endpoint, params);
-    answer = buildAnswer(intent, apiData);
-  }
-  
-  else {
-    apiData = await callAPI(endpoint, params);
-    answer += buildAnswer(intent, apiData);
+  } catch (error) {
+    console.error("An error occurred:", error);
+      return {
+        hasData: false,
+        message: "Sorry, something went wrong. Please try again later.",
+      };
   }
 
   return {
