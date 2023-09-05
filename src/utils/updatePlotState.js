@@ -90,8 +90,9 @@ const updateAverage = async (context) => {
 
 const updateFractions = async (context) => {
 
-    const apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
-    const apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
+    let apiFraction, apiAverage;
+    apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
+    apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
     let apiCelltypes;
     if (context.organ !== "" && context.organism !== "") {
       apiCelltypes = await atlasapprox.celltypes(context.organism, context.organ);

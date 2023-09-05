@@ -30,7 +30,7 @@ export const triggersPlotUpdate = ((response) => {
     return false;
   if (!response.hasData)
     return false;
-
+  console.log(response);
   const mainIntent = response.intent.split(".")[0];
   return updatePlotIntents.includes(mainIntent);
 });

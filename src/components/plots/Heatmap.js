@@ -8,6 +8,7 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
 
+
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   
