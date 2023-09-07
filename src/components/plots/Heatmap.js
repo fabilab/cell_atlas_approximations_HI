@@ -3,9 +3,11 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, organ, celltype, unit, measurementType, hasLog }) => {
+  
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
+
 
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;

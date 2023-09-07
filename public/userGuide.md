@@ -10,25 +10,24 @@ AtlasApprox aims to democratise accessibility to single cell analysis by buildin
 ![about](./demo/about.png)
 
 ### Data Source
-**Homo sapiens**: - RNA: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896) - ATAC: [Zhang et al. 2021](https://doi.org/10.1016/j.cell.2021.10.024)
 
-**Mus musculus**: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
+Our platform integrates data from various reputable sources. Below are the species and their corresponding data references:
+- **Homo sapiens**: RNA - [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896) | ATAC - [Zhang et al. 2021](https://doi.org/10.1016/j.cell.2021.10.024)
+- **Mus musculus**: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
+- **Mus myoxinus**: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- **Caenorhabditis elegans**: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
+- **Danio rerio**: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
+- **Spongilla lacustris**: [Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
+- **Amphimedon queenslandica**, **Mnemiopsis leidyi**, **Trichoplax adhaerens**: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
+- **Xenopus laevis**: [Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)
+- **Schmidtea mediterranea**: [Plass et al 2018](https://www.science.org/doi/10.1126/science.aaq1723#sec-10)
 
-**Mus myoxinus**: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
-
-**Caenorhabditis elegans**: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
-
-**Danio rerio**: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
-
-**Spongilla lacustris**: [Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
-
-**Amphimedon queenslandica**, **Mnemiopsis leidyi**, and **Trichoplax adhaerens**: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
-
-**Xenopus laevis**: [Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)
-
-**Schmidtea mediterranea**: [Plass et al 2018](https://www.science.org/doi/10.1126/science.aaq1723#sec-10)
 
 ### Landing page
+
+The landing page serves as the gateway to exploring the intricate world of cell atlas approximations. With an intuitive interface, users are prompted to either input their specific queries or get inspired by clicking on pre-defined sample questions. Equipped with a friendly bot assistant, the platform ensures that all users, regardless of their expertise, find the exploration process seamless, engaging, and informative. The design of the page empowers users to dive deep into the data, fostering curiosity and facilitating discovery.
+
+![landing](./demo/landing-page.png)
 
 ### Data exploration dashboard
 
@@ -56,28 +55,35 @@ This query provides information about the different cell types present in each o
 
 #### Gene Expression Profile
 
-Query: "What is the expression of Tp53,Mettl14,Apoe,Cd8a,Cd19,Mettl14,Hdac8,Mtor,Hnrnpl,Lancl2 in the mouse lung?"
+Query: "What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?"
 
-This query retrieves the average expression of the a list of specified genes in the mouse lung.
+This query retrieves the average expression of the a list of specified genes in the human lung.
 
 ![geneExpression](./demo/average-expression.png)
 
 #### Gene Presence Ratio
 
-Query: What is the fraction of Aqp1,Slc12a1,Slc22a8,Umod,Podxl,Wt1,Pax2,Slc34a1,Nphs2,Slc12a3,Pkd1,Pkd2,Sglt2,Ren1,Agtr1a,Agtr2 in the mouse kidney?
+Query: What is the fraction of Aqp1,Slc12a1,Slc22a8,Umod,Podxl,Wt1,Pax2,Slc34a1,Nphs2,Slc12a3,Pkd1,Pkd2,Ren1,Agtr1a,Agtr2 in the mouse kidney?
 
 This query provides the fraction of cells that express each of the specified genes in the mouse kidney.
 
-### Highest Expressor
+![fraction](./demo/fraction-expression.png)
+
+#### Highest Expressor
 Query: what cell type is the highest expressor of Apoe in mouse?
 
 ![highestExpressor](./demo/highest-expressor.png)
 
-#### marker genes
+#### Marker genes
 
-Query: "Show 10 markers of fibroblast in the mouse lung"
+Query: "Show 10 markers of fibroblast in the mouse lung."
 
 This query identifies 10 marker genes for the fibroblast cell type in the mouse lung.
+
 ![markerGene](./demo//marker-genes.png)
 
+#### Similar genes
 
+Query: "Show 10 genes similar to Col1a1 in mouse lung."
+
+![simiarGenes](./demo/similar-genes.png)

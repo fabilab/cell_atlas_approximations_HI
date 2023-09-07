@@ -96,6 +96,20 @@ const organismMapping = {
     dataSource: "[Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)",
     about: "",
     genesFromPaper: "",
+    organs: {
+      "Heart": {
+          coords: "1415,535,1272,649,1240,779,1299,912,1378,962,1617,1036,1797,978,1850,848,1792,673,1709,543,1548,504",
+          cellTypes: [
+              "mast", "macrophage", "erythrocyte", "B", "T", "glia", "melanocyte", 
+              "capillary", "fibroblast", "chondrocyte", "cardiomyocyte", 
+              "smooth muscle", "stromal", "delta"
+          ],
+      },
+      "Lung": {
+          coords: "1314,1072,1227,1186,1290,1326,1417,1430,1622,1472,1751,1411,1733,1286,1873,1220,1887,1159,1463,1040,1357,992",
+          cellTypes: [],  // Add cell types for Lung or leave as an empty array if unknown
+      }
+    }
   }
 };
 

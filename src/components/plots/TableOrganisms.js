@@ -22,7 +22,7 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({subIntent, organisms}) => {
-
+  
   const organismImages = [
     { src: a_queenslandica, title: 'Amphimedon queenslandica' },
     { src: c_elegans, title: 'Caenorhabditis elegans' },
@@ -45,6 +45,23 @@ const TableOrganisms = ({subIntent, organisms}) => {
     rows.push(organismImages.slice(i, i + 4));
   }
 
+  const cardBackgroundColor = (imageSrc) => {
+    // If organisms is null or not specified, return white
+    if (!organisms) {
+      return 'white';
+    }
+  
+    // If organisms has an entry that matches the image source, return green. Otherwise, return white.
+    return organisms.some(org => imageSrc.includes(org)) ? '#73d13d' : 'white';
+  };
+  
+  const cardOpacity = (imageSrc) => {
+    if (!organisms || organisms.some(org => imageSrc.includes(org))) {
+      return '1';
+    }
+    return '0.3';
+  };
+
   return (
     <div>
       <Title level={3} style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '5vh' }}>
@@ -60,8 +77,8 @@ const TableOrganisms = ({subIntent, organisms}) => {
                 <Card style={{ 
                   width: '100%', 
                   margin: '10px', 
-                  backgroundColor: organisms.some(org => image.src.includes(org)) ? '#73d13d' : 'white', 
-                  opacity: organisms.some(org => image.src.includes(org)) ? '1' : '0.3',
+                  backgroundColor: cardBackgroundColor(image.src),
+                  opacity: cardOpacity(image.src)
                   }}>
                   <div
                     style={{

@@ -4,6 +4,21 @@ import Plot from 'react-plotly.js';
 
 const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, features, unit }) => {
   let xValue = celltypesOrgan;
+  let scaleFactor = 1000000; // data is too small for a bar chart, multiplying by 10^6
+
+  let title = '';
+  let yLabel = '';
+  if (intent === "similar_celltypes.geneExpression") {
+    average = average.map((x) => x * scaleFactor);
+    title = `<b>Cell type similarity to ${targetCelltype} via gene expression correlation</b>`;
+    yLabel = `Distance (x${scaleFactor})`;
+  } else if (intent === "highest_measurement.geneExpression") {
+    title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
+    yLabel = unit;
+  } else if (intent === "highest_measurement.chromatinAccessibility" ) {
+    title = `<b>Highest expressor of ${features} in ${organism}</b>`;
+    yLabel = unit;
+  }
   let yValue = average.map((x) => Number(x.toFixed(2)));
 
   let trace1 = {
@@ -25,20 +40,6 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
 
   let data = [trace1];
 
-  let title = '';
-  let yLabel = '';
-  if (intent === "similar_celltypes.geneExpression") {
-    title = `<b>Gene Expression Correlation Analysis for Cell Type Similarity to ${targetCelltype}</b>`;
-    yLabel = 'Distance';
-  } else if (intent === "highest_measurement.geneExpression") {
-    title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
-    yLabel = unit;
-  } else if (intent === "highest_measurement.chromatinAccessibility" ) {
-    title = `<b>Highest expressor of ${features} in ${organism}</b>`;
-    yLabel = unit;
-  }
-
-
   let layout = {
     width: '100%',
     height: '100%',
@@ -51,7 +52,7 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
         },
         standoff: 20,
       },
-      tickangle: 90,
+      tickangle: 45,
     },
     yaxis: {
       title: {
@@ -127,7 +128,6 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
         data={data}
         layout={layout}
         config={config}
-        // responsive={true}
       />
   );
 };
