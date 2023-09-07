@@ -56,7 +56,7 @@ const Message = (props) => {
                 }}
                 onInit={(typewriter) => {
                   typewriter
-                    .pauseFor(pause ? 300 : 0)
+                    .pauseFor(pause ? 5 : 0)
                     .typeString(formattedMessage)
                     .start()
                 }}

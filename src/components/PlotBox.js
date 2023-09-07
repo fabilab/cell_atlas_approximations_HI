@@ -44,8 +44,10 @@ const PlotBox = ({ state }) => {
           fractions={state.data.fractions}
           organism={state.organism}
           organ={state.organ}
+          celltype={state.celltype}
           unit={state.data.valueUnit}
           hasLog={state.hasLog}
+          dataCategory={state.dataCategory}
         />
       </div>
     );

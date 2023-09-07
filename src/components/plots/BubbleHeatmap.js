@@ -2,7 +2,14 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit, hasLog }) => {
+const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
+  console.log(xaxis);
+  console.log(yaxis);
+  console.log(average);
+  console.log(fractions);
+  console.log(organism);
+  console.log(organ);
+  console.log(dataCategory)
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -47,6 +54,13 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
   let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
   let graphHeight = nfeatures * 6 + xtickMargin;
 
+  let title = "";
+  if (dataCategory === "across_organs") {
+    title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+  } else {
+    title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
+  }
+
   let layout = {
     width: graphWidth,
     height: graphHeight,
@@ -60,11 +74,10 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
       ticktext: yTickTexts,
       tickvals: yTickVals,
     },
-    title: `<b>Bubble heatmap showing gene expression and fraction in ${organism} ${organ}</b>`,
+    title: title ,
   };
 
   const desired_maximum_marker_size = 6.2;
-
 
   if(hasLog) {
     all_color = all_color.map(value => Math.log(value));

@@ -34,7 +34,7 @@ const toggleLog = async (context) => {
     let hasLog = !context.plotState.hasLog;
     const newPlotState = { ...context.plotState, hasLog };
     context.plotState = newPlotState;
-
+    console.log(context);
     if (!context.plotState.data.fractions) {
         return await updateAverage(context);
     } else {
@@ -90,23 +90,32 @@ const updateAverage = async (context) => {
 
 const updateFractions = async (context) => {
 
-    let apiFraction, apiAverage;
-    apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
-    apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
-    let apiCelltypes;
-    if (context.organ !== "" && context.organism !== "") {
-      apiCelltypes = await atlasapprox.celltypes(context.organism, context.organ);
+    let apiFraction, apiAverage, xAxis;
+    console.log(context);
+    if (context.dataCategory === "across_organs") {
+        apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
+        apiAverage = await atlasapprox.average(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
+        xAxis = apiAverage.organs;
+        apiAverage.average = transpose(apiAverage.average);
+        apiFraction.fraction_detected = transpose(apiFraction.fraction_detected);
+    } else {
+        apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
+        apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
+        xAxis = apiAverage.celltypes;
+
     }
 
     return {
         intent: context.intent,
         plotType: "bubbleHeatmap",
+        dataCategory: context.dataCategory,
         organism: context.organism,
         organ: context.organ,
         features: context.features,
+        celltype: context.response.params.celltype,
         data: {
             type: "matrix",
-            xaxis: apiCelltypes.celltypes,
+            xaxis: xAxis,
             yaxis: apiFraction.features,
             average: apiAverage.average,
             fractions: apiFraction.fraction_detected,
