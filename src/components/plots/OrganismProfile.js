@@ -1,17 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import organismMapping from '../../utils/organismMapping.js';
 import atlasapprox from "@fabilab/atlasapprox";
-
+import ImageMapper from 'react-img-mapper';
 
 const OrganismProfile = ({ organism }) => {
-
-    const [apiOrgans, setOrgans] = useState({ organs: [] });
     const [error, setError] = useState(null);
-    
+    const [organs, setOrgans] = useState({});
+
+    const handleOrganClick = (organ) => {
+        console.log(`Console log: You clicked on the ${organ.name}`);
+        alert(`Alert: You clicked on the ${organ.name}`);
+    };
+
+    const renderImageMap = () => {
+        if (!organismMapping[organism]?.organs) return null;
+
+        const areas = Object.keys(organismMapping[organism].organs).map(organ => ({
+            name: organ,
+            shape: 'poly',
+            coords: organismMapping[organism].organs[organ].coords.split(',').map(Number),
+            preFillColor: "transparent",
+            fillColor: "yellow"
+        }));
+        console.log("Rendered areas:", areas);
+
+        return (
+            <ImageMapper 
+                src={anatomyImage}
+                map={{ name: `${organism}-map`, areas: areas }}
+                onClick={area => handleOrganClick(area)}
+                width={600}
+                style={{ border: '1px solid red' }}  // just to visualize its boundaries
+            />
+        );
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             if (!organism) {
-                setError('Organism is unknown.'); // Handling undefined organism
+                setError('Organism is unknown.');
                 return;
             }
             try {
@@ -25,29 +52,17 @@ const OrganismProfile = ({ organism }) => {
         fetchData();
     }, [organism]);
 
-    if (error) {
-        return (
-            <div style={{ padding: "3%", width: "85%", boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'}}>
-                <p>{error}</p>
-            </div>
-        );
-    }
+    let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
+    let anatomyImage = require(`../../asset/anatomy/${organism}.jpeg`);
 
-    let imagePath = null;
-    try {
-        imagePath = require(`../../asset/organisms/${organism}.jpeg`);
-    } catch (error) {
-        
-    }
-    
     let biologicalName = organismMapping[organism]?.biologicalName || "Unknown";
     let commonName = organismMapping[organism]?.commonName || "Unknown";
     let dataSource = organismMapping[organism]?.dataSource || "Data source not available";
-    let description = organismMapping[organism]?.about || "desciption not available";
+    let description = organismMapping[organism]?.about || "description not available";
 
-    // Extracting link text and URL from the dataSource string
     const linkText = dataSource.match(/\[(.*?)\]/)?.[1];
     const url = dataSource.match(/\((.*?)\)/)?.[1];
+
     return (
         <div style={{ padding: "3%", width: "85%", boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'}}>
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
@@ -72,12 +87,8 @@ const OrganismProfile = ({ organism }) => {
             <div style={{marginTop: "20px"}}>
                 <h4>Tissues</h4>
                 <div style={{display: "flex", flexWrap: "wrap"}}>
-                {apiOrgans.organs && apiOrgans.organs.map(o => (
-                    <div key={o} style={{ textAlign: 'center', margin: '0px 0'}}>
-                        {o}
-                    </div>
-                ))}
-            </div>
+                    {renderImageMap()}
+                </div>
             </div>
         </div>
     );
