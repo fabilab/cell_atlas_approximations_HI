@@ -6,30 +6,54 @@ import ImageMapper from 'react-img-mapper';
 const OrganismProfile = ({ organism }) => {
     const [error, setError] = useState(null);
     const [organs, setOrgans] = useState({});
+    const [scalingFactors, setScalingFactors] = useState({ width: 0.508, height: 0.508 });  // Added state for scaling factors
 
     const handleOrganClick = (organ) => {
         console.log(`Console log: You clicked on the ${organ.name}`);
         alert(`Alert: You clicked on the ${organ.name}`);
     };
 
+    const handleImageLoad = (event) => {
+        const naturalWidth = event?.target?.naturalWidth;
+        const naturalHeight = event?.target?.naturalHeight;
+        const renderedWidth = event?.target?.width;
+        const renderedHeight = event?.target?.height;
+        
+        if (naturalWidth && naturalHeight && renderedWidth && renderedHeight) {
+            const widthFactor = renderedWidth / naturalWidth;
+            const heightFactor = renderedHeight / naturalHeight;
+            
+            setScalingFactors({ width: widthFactor, height: heightFactor });
+        }
+    };
+
     const renderImageMap = () => {
         if (!organismMapping[organism]?.organs) return null;
 
-        const areas = Object.keys(organismMapping[organism].organs).map(organ => ({
-            id: organ,
-            name: organ,
-            shape: 'poly',
-            coords: organismMapping[organism].organs[organ].coords.split(',').map(Number),
-            preFillColor: "transparent",
-            fillColor: "yellow"
-        }));
+        const areas = Object.keys(organismMapping[organism].organs).map(organ => {
+            const coords = organismMapping[organism].organs[organ].coords.split(',').map(Number);
+            
+            // Adjust the coordinates using the scaling factors
+            const adjustedCoords = coords.map((coord, index) => 
+                index % 2 === 0 ? coord * scalingFactors.width : coord * scalingFactors.height
+            );
+
+            return {
+                id: organ,
+                name: organ,
+                shape: 'poly',
+                coords: adjustedCoords,
+                preFillColor: "transparent",
+                fillColor: "yellow"
+            };
+        });
 
         return (
             <ImageMapper 
                 src={anatomyImage}
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
-                natural={true}
+                onLoad={handleImageLoad}  // Added onLoad event to compute scaling factors
                 width={600}
                 style={{ border: '1px solid red' }}  // just to visualize its boundaries
             />
@@ -87,7 +111,6 @@ const OrganismProfile = ({ organism }) => {
             </div>
             <div style={{marginTop: "20px"}}>
                 <h4>Tissues</h4>
-                {/* Organism's image  */}
                 <div style={{display: "flex", flexWrap: "wrap"}}>
                     {renderImageMap()}
                 </div>
