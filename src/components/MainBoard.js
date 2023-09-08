@@ -8,7 +8,7 @@ import { updatePlotState } from '../utils/updatePlotState';
 const MainBoard = () => {
   const location = useLocation();
   const firstQuery = location.state;
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState(null);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState({"hasLog": false});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

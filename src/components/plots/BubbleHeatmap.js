@@ -3,13 +3,7 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
-  console.log(xaxis);
-  console.log(yaxis);
-  console.log(average);
-  console.log(fractions);
-  console.log(organism);
-  console.log(organ);
-  console.log(dataCategory)
+
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);

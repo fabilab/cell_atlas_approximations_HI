@@ -34,7 +34,6 @@ const toggleLog = async (context) => {
     let hasLog = !context.plotState.hasLog;
     const newPlotState = { ...context.plotState, hasLog };
     context.plotState = newPlotState;
-    console.log(context);
     if (!context.plotState.data.fractions) {
         return await updateAverage(context);
     } else {
@@ -91,7 +90,6 @@ const updateAverage = async (context) => {
 const updateFractions = async (context) => {
 
     let apiFraction, apiAverage, xAxis;
-    console.log(context);
     if (context.dataCategory === "across_organs") {
         apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
         apiAverage = await atlasapprox.average(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
@@ -126,9 +124,16 @@ const updateFractions = async (context) => {
 };
 
 const similarCelltypes = async (context) => {
+    console.log(context);
+
     let targetCelltype = context.response.params.celltype;
     let nCelltypes = context.response.params.number;
-    const apiSimilarCelltypes = await atlasapprox.similar_celltypes(context.organism, context.organ, targetCelltype, context.features, nCelltypes, "correlation");
+    let apiSimilarCelltypes;
+    if (context.subIntent === "chromatinAccessibility") {
+        apiSimilarCelltypes = await atlasapprox.similar_celltypes(context.organism, context.organ, targetCelltype, context.features, nCelltypes, "correlation", "chromatin_accessibility");
+    } else {
+        apiSimilarCelltypes = await atlasapprox.similar_celltypes(context.organism, context.organ, targetCelltype, context.features, nCelltypes, "correlation");
+    }
     let similarCelltypes = apiSimilarCelltypes.similar_celltypes;
     let similarOrgans = apiSimilarCelltypes.similar_organs;
     const celltypesOrgan = similarCelltypes.map((c, index) => {

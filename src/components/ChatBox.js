@@ -42,6 +42,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   };
 
   const handleSubmit = async (text) => {
+
     const newMessage = { message: text, index: messageHistory.length };
     setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
     setHistoryIndex([...messageHistory, newMessage].length);
@@ -55,7 +56,12 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       return '';
     } else {
       setCurrentMessage(localMessage); 
-      let nlp = new AtlasApproxNlp(chatContext);
+      let nlp;
+      if (chatHistory) {
+        nlp = new AtlasApproxNlp(chatContext);
+      } else {
+        nlp = new AtlasApproxNlp({});
+      }
       await nlp.initialise();
       let response = await nlp.ask(text);
       setChatContext(nlp.context);
@@ -67,19 +73,19 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
           response.data = updateObject.data;
           response.params = updateObject.params;
         }
-
-        // update parent response state
-        setCurrentResponse(response);
-
         // update parent chat state
         setLocalMessage('');
         
-        const instructions = [...chatHistory]; // this will become the new set of instructions
+        // update parent response state
+        setCurrentResponse(response);
+
+        const instructions = chatHistory ? [...chatHistory] : []; // this will become the new set of instructions
         const today = new Date();
         const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         instructions.push({ role: 'user', message: text, time: time });
         instructions.push({ role: 'system', message: updateObject.message, time: time });
         setChatHistory(instructions);
+        
       } catch (error) {
         console.error("Error occurred during updateChat:", error);
       }
@@ -103,7 +109,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       }}>
       <div style={{ width: "100%", overflow: "scroll", height:`${window.innerHeight*0.75}px`, paddingTop:"3vh"}} ref={chatboxRef}>
-          {chatHistory.length !== 0 &&
+          {chatHistory && chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message
                 key={`${m.role}-${m.time}`}

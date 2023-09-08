@@ -16,19 +16,20 @@ const OrganismProfile = ({ organism }) => {
         if (!organismMapping[organism]?.organs) return null;
 
         const areas = Object.keys(organismMapping[organism].organs).map(organ => ({
+            id: organ,
             name: organ,
             shape: 'poly',
             coords: organismMapping[organism].organs[organ].coords.split(',').map(Number),
             preFillColor: "transparent",
             fillColor: "yellow"
         }));
-        console.log("Rendered areas:", areas);
 
         return (
             <ImageMapper 
                 src={anatomyImage}
                 map={{ name: `${organism}-map`, areas: areas }}
-                onClick={area => handleOrganClick(area)}
+                onClick={(area, index, event) => handleOrganClick(area)}
+                natural={true}
                 width={600}
                 style={{ border: '1px solid red' }}  // just to visualize its boundaries
             />
@@ -86,6 +87,7 @@ const OrganismProfile = ({ organism }) => {
             </div>
             <div style={{marginTop: "20px"}}>
                 <h4>Tissues</h4>
+                {/* Organism's image  */}
                 <div style={{display: "flex", flexWrap: "wrap"}}>
                     {renderImageMap()}
                 </div>
