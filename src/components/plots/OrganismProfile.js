@@ -1,16 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import organismMapping from '../../utils/organismMapping.js';
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
+import { Col, Row, List, Divider, Typography } from 'antd';
 
 const OrganismProfile = ({ organism }) => {
     const [error, setError] = useState(null);
     const [organs, setOrgans] = useState({});
-    const [scalingFactors, setScalingFactors] = useState({ width: 0.508, height: 0.508 });  // Added state for scaling factors
-
+    const imageRef = useRef(null);
+    const [imageHeight, setImageHeight] = useState(0);
+    const [scalingFactors, setScalingFactors] = useState({ width: 0.508, height: 0.508 });  // scaling factors, inspect webpage page and update here if the image size has changed
+    const [cellTypes, setCellTypes] = useState([]);
+    const [organName, setOrganName] = useState(null);
+    
     const handleOrganClick = (organ) => {
-        console.log(`Console log: You clicked on the ${organ.name}`);
-        alert(`Alert: You clicked on the ${organ.name}`);
+        let currentOrgan = (organ.name.split('-')[0]);
+        setOrganName(currentOrgan);
+
+        const fetchCellTypes = async () => {
+            try {
+                let apiCelltypes = await atlasapprox.celltypes(organism, currentOrgan, "gene_expression");
+                setCellTypes(apiCelltypes.celltypes);
+            } catch (error) {
+                console.error("Error fetching cell types:", error);
+            }
+        };
+        
+        fetchCellTypes();  // Invoke the function here.
     };
 
     const handleImageLoad = (event) => {
@@ -18,12 +34,15 @@ const OrganismProfile = ({ organism }) => {
         const naturalHeight = event?.target?.naturalHeight;
         const renderedWidth = event?.target?.width;
         const renderedHeight = event?.target?.height;
-        
+
         if (naturalWidth && naturalHeight && renderedWidth && renderedHeight) {
             const widthFactor = renderedWidth / naturalWidth;
             const heightFactor = renderedHeight / naturalHeight;
             
             setScalingFactors({ width: widthFactor, height: heightFactor });
+        }
+        if (imageRef.current) {
+            setImageHeight(imageRef.current.offsetHeight);
         }
     };
 
@@ -44,12 +63,13 @@ const OrganismProfile = ({ organism }) => {
                 shape: 'poly',
                 coords: adjustedCoords,
                 preFillColor: "transparent",
-                fillColor: "yellow"
+                fillColor: "rgb(255,255,0,0.5)"
             };
         });
 
         return (
             <ImageMapper 
+                ref={imageRef}
                 src={anatomyImage}
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
@@ -109,10 +129,24 @@ const OrganismProfile = ({ organism }) => {
                 <h4>About</h4>
                 <p style={{textAlign: "justify"}}>{description}</p>
             </div>
-            <div style={{marginTop: "20px"}}>
+            <div style={{ marginTop: "20px" }}>
                 <h4>Tissues</h4>
-                <div style={{display: "flex", flexWrap: "wrap"}}>
-                    {renderImageMap()}
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ flex: 1.5, overflow: 'auto', marginRight: '10px' }}>
+                        {renderImageMap()}
+                    </div>
+                    <div style={{ flex: 1, overflow: 'auto' }}>
+                        <List
+                            style={{ maxHeight: `${imageHeight}px` }}
+                            header={<h3>Cell Types Detected in {organName}</h3>}
+                            dataSource={cellTypes}
+                            renderItem={(item) => (
+                                <List.Item>
+                                    <Typography.Text mark></Typography.Text> {item}
+                                </List.Item>
+                            )}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
