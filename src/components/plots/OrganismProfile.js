@@ -8,26 +8,47 @@ const OrganismProfile = ({ organism }) => {
     const [error, setError] = useState(null);
     const [organs, setOrgans] = useState({});
     const imageRef = useRef(null);
+    const [detectedValues, setDetectedValues] = useState([]);
     const [imageHeight, setImageHeight] = useState(0);
     const [scalingFactors, setScalingFactors] = useState({ width: 0.508, height: 0.508 });  // scaling factors, inspect webpage page and update here if the image size has changed
     const [cellTypes, setCellTypes] = useState([]);
-    const [organName, setOrganName] = useState(null);
+    const [clickedOrgan, setClickedOrgan] = useState(null);
     
-    const handleOrganClick = (organ) => {
-        let currentOrgan = (organ.name.split('-')[0]);
-        setOrganName(currentOrgan);
-
+    const handleOrganClick = (area) => {
+        let tempOrgan = area.name.split('-')[0]
+        setClickedOrgan(tempOrgan);
+        console.log(clickedOrgan);
         const fetchCellTypes = async () => {
             try {
-                let apiCelltypes = await atlasapprox.celltypes(organism, currentOrgan, "gene_expression");
+                let apiCelltypes = await atlasapprox.celltypes(organism, tempOrgan, "gene_expression");
                 setCellTypes(apiCelltypes.celltypes);
             } catch (error) {
                 console.error("Error fetching cell types:", error);
             }
         };
-        
-        fetchCellTypes();  // Invoke the function here.
+
+        const fetchCellOrganData = async () => {
+            try {
+                let apiCellOrgan = await atlasapprox.celltypexorgan(organism, null, "gene_expression");
+                console.log(clickedOrgan);
+                let organIndex = apiCellOrgan.organs.indexOf(clickedOrgan);
+                if (organIndex === -1) {
+                    console.error("Organ not found in the data.");
+                    return;
+                }
+                const values = apiCellOrgan.detected.map(cellTypeData => cellTypeData[organIndex]);
+                setDetectedValues(values); // Update state with the detected values
+            } catch (error) {
+                console.error("Error fetching cell types:", error);
+            }
+        };
+        fetchCellTypes(); 
+        fetchCellOrganData();
     };
+
+    useEffect(() => {
+        console.log(detectedValues);
+    }, [detectedValues]);
 
     const handleImageLoad = (event) => {
         const naturalWidth = event?.target?.naturalWidth;
@@ -63,7 +84,7 @@ const OrganismProfile = ({ organism }) => {
                 shape: 'poly',
                 coords: adjustedCoords,
                 preFillColor: "transparent",
-                fillColor: "rgb(255,255,0,0.5)"
+                fillColor: "rgb(255,255,0,0.8)",
             };
         });
 
@@ -74,8 +95,9 @@ const OrganismProfile = ({ organism }) => {
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
                 onLoad={handleImageLoad}  // Added onLoad event to compute scaling factors
-                width={600}
-                style={{ border: '1px solid red' }}  // just to visualize its boundaries
+                width={350}
+                stayHighlighted={true}
+                height={450}
             />
         );
     };
@@ -105,48 +127,38 @@ const OrganismProfile = ({ organism }) => {
     let dataSource = organismMapping[organism]?.dataSource || "Data source not available";
     let description = organismMapping[organism]?.about || "description not available";
 
-    const linkText = dataSource.match(/\[(.*?)\]/)?.[1];
     const url = dataSource.match(/\((.*?)\)/)?.[1];
 
     return (
-        <div style={{ padding: "3%", width: "85%", boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'}}>
-            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
-                <div>
-                    <h2>{biologicalName} Cell Atlas</h2>
-                    <p>Common name: {commonName}</p>
-                    <p>Data source / Paper: <a href={url} style={{color: 'blue'}} target="_blank" rel="noopener noreferrer">{linkText}</a></p>
-                </div>
+
+        <div style={{  width: "inherit"}}>
+            <div style={{display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 5%"}}>
                 {
                     imagePath &&
                     <img 
                         src={imagePath} 
                         alt={organism} 
-                        style={{width: "12%", height: "auto", borderRadius:"50%"}}
+                        style={{width: "9%", height: "auto", paddingRight: "8%"}}
                     />
                 }
+                <div>
+                    <h2 style={{fontSize: "1.3em"}}>{biologicalName} Cell Atlas</h2>
+                    <h5>Common name: {commonName}</h5>
+                    <h5>Data source: <a href={url} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></h5>
+                </div>
             </div>
-            <div style={{marginTop: "20px"}}>
-                <h4>About</h4>
-                <p style={{textAlign: "justify"}}>{description}</p>
+            <div style={{padding: "1% 5%"}}>
+                <h3>About</h3>
+                <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description}</p>
             </div>
-            <div style={{ marginTop: "20px" }}>
-                <h4>Tissues</h4>
+            <div style={{padding: "1% 5%", backgroundColor:"lavender"}}>
+                <h3>Tissue Anatomy</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ flex: 1.5, overflow: 'auto', marginRight: '10px' }}>
                         {renderImageMap()}
                     </div>
-                    <div style={{ flex: 1, overflow: 'auto' }}>
-                        <List
-                            style={{ maxHeight: `${imageHeight}px` }}
-                            header={<h3>Cell Types Detected in {organName}</h3>}
-                            dataSource={cellTypes}
-                            renderItem={(item) => (
-                                <List.Item>
-                                    <Typography.Text mark></Typography.Text> {item}
-                                </List.Item>
-                            )}
-                        />
-                    </div>
+                    
+                    
                 </div>
             </div>
         </div>

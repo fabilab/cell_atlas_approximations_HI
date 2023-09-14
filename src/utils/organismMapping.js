@@ -94,7 +94,7 @@ const organismMapping = {
     biologicalName: "Xenopus Laevis",
     commonName: "African Clawed Frog",
     dataSource: "[Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)",
-    about: "",
+    about: "Xenopus laevis, commonly known as the African clawed frog, is a pivotal model organism in evolutionary biology. Leveraging advanced single-cell RNA sequencing technology, researchers have crafted an intricate Xenopus cell landscape, capturing the cellular heterogeneity across both larval and adult stages. This rich landscape offers unprecedented insights into the amphibian's metamorphic journey, bridging critical gaps in our understanding of vertebrate development and evolution. This comprehensive cellular atlas stands as a testament to the complex tapestry of life at the cellular level and serves as a beacon for future genetic and evolutionary studies.",
     genesFromPaper: "",
     organs : {
       "Liver-left": {
