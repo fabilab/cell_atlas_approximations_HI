@@ -3,21 +3,24 @@ import organismMapping from '../../utils/organismMapping.js';
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
 import { Col, Row, List, Divider, Typography } from 'antd';
+import OrganCellChart from './OrganCellChart.js';
 
 const OrganismProfile = ({ organism }) => {
     const [error, setError] = useState(null);
     const [organs, setOrgans] = useState({});
     const imageRef = useRef(null);
-    const [detectedValues, setDetectedValues] = useState([]);
     const [imageHeight, setImageHeight] = useState(0);
-    const [scalingFactors, setScalingFactors] = useState({ width: 0.508, height: 0.508 });  // scaling factors, inspect webpage page and update here if the image size has changed
+    const [scalingFactors, setScalingFactors] = useState({ width: 0.4447, height: 0.4286 });  // scaling factors, rendered width/intrinsic width
     const [cellTypes, setCellTypes] = useState([]);
     const [clickedOrgan, setClickedOrgan] = useState(null);
+    const [apiCellOrgan, setApiCellOrgan] = useState(null);
     
     const handleOrganClick = (area) => {
         let tempOrgan = area.name.split('-')[0]
-        setClickedOrgan(tempOrgan);
+        console.log("area clicked:" + area);
+        console.log(area);
         console.log(clickedOrgan);
+        setClickedOrgan(tempOrgan);
         const fetchCellTypes = async () => {
             try {
                 let apiCelltypes = await atlasapprox.celltypes(organism, tempOrgan, "gene_expression");
@@ -29,27 +32,19 @@ const OrganismProfile = ({ organism }) => {
 
         const fetchCellOrganData = async () => {
             try {
-                let apiCellOrgan = await atlasapprox.celltypexorgan(organism, null, "gene_expression");
-                console.log(clickedOrgan);
-                let organIndex = apiCellOrgan.organs.indexOf(clickedOrgan);
-                if (organIndex === -1) {
-                    console.error("Organ not found in the data.");
-                    return;
-                }
-                const values = apiCellOrgan.detected.map(cellTypeData => cellTypeData[organIndex]);
-                setDetectedValues(values); // Update state with the detected values
+                let apiResponse = await atlasapprox.celltypexorgan(organism, null, "gene_expression");
+                setApiCellOrgan(apiResponse);
             } catch (error) {
                 console.error("Error fetching cell types:", error);
             }
         };
+        
         fetchCellTypes(); 
         fetchCellOrganData();
     };
 
-    useEffect(() => {
-        console.log(detectedValues);
-    }, [detectedValues]);
-
+    console.log(clickedOrgan);
+    console.log(apiCellOrgan);
     const handleImageLoad = (event) => {
         const naturalWidth = event?.target?.naturalWidth;
         const naturalHeight = event?.target?.naturalHeight;
@@ -128,6 +123,7 @@ const OrganismProfile = ({ organism }) => {
     let description = organismMapping[organism]?.about || "description not available";
 
     const url = dataSource.match(/\((.*?)\)/)?.[1];
+    console.log(apiCellOrgan)
 
     return (
 
@@ -151,14 +147,16 @@ const OrganismProfile = ({ organism }) => {
                 <h3>About</h3>
                 <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description}</p>
             </div>
-            <div style={{padding: "1% 5%", backgroundColor:"lavender"}}>
+            <div style={{padding: "1% 5%"}}>
                 <h3>Tissue Anatomy</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ flex: 1.5, overflow: 'auto', marginRight: '10px' }}>
                         {renderImageMap()}
                     </div>
-                    
-                    
+                    <div>
+                    {/* Render the chart for a specific organ, say "Heart" */}
+                        {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
+                    </div>
                 </div>
             </div>
         </div>
