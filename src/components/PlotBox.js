@@ -80,7 +80,7 @@ const PlotBox = ({ state }) => {
     )
   } else if (state.plotType === 'organismProfile') {
     return (
-      <div style={plotStyle}>
+      <div>
         <OrganismProfile
           organism={state.organism}
         />

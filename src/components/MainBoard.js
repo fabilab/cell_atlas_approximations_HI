@@ -41,7 +41,7 @@ const MainBoard = () => {
           setCurrentResponse={setCurrentResponse}
           plotState={plotState}
         />
-      <div style={{ flex: 1, margin:'10px', overflow: 'auto'}}>
+      <div style={{ flex: 1, overflow: 'auto'}}>
         {plotState && <PlotBox state={plotState} />}
       </div>
     </div>

@@ -4,6 +4,7 @@ import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
 import { Col, Row, List, Divider, Typography } from 'antd';
 import OrganCellChart from './OrganCellChart.js';
+const { Text } = Typography;
 
 const OrganismProfile = ({ organism }) => {
     const [error, setError] = useState(null);
@@ -79,7 +80,7 @@ const OrganismProfile = ({ organism }) => {
                 shape: 'poly',
                 coords: adjustedCoords,
                 preFillColor: "transparent",
-                fillColor: "rgb(255,255,0,0.8)",
+                fillColor: "rgb(64, 145, 199, 0.9)",
             };
         });
 
@@ -134,29 +135,27 @@ const OrganismProfile = ({ organism }) => {
                     <img 
                         src={imagePath} 
                         alt={organism} 
-                        style={{width: "9%", height: "auto", paddingRight: "8%"}}
+                        style={{width: "8%", height: "auto", paddingRight: "8%"}}
                     />
                 }
                 <div>
                     <h2 style={{fontSize: "1.3em"}}>{biologicalName} Cell Atlas</h2>
-                    <h5>Common name: {commonName}</h5>
-                    <h5>Data source: <a href={url} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></h5>
+                    <p >Common name: {commonName}</p>
+                    <p>Data source: <a href={url} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></p>
                 </div>
             </div>
             <div style={{padding: "1% 5%"}}>
                 <h3>About</h3>
                 <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description}</p>
             </div>
-            <div style={{padding: "1% 5%"}}>
-                <h3>Tissue Anatomy</h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div style={{ flex: 1.5, overflow: 'auto', marginRight: '10px' }}>
-                        {renderImageMap()}
-                    </div>
-                    <div>
+            <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
+                    {renderImageMap()}
+                    <Text>Hover over and click on organs to view more detail</Text>
+                </div>
+                <div style={{ flex: 1.5, overflow: 'auto', minWidth: '0' }}>
                     {/* Render the chart for a specific organ, say "Heart" */}
-                        {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
-                    </div>
+                    {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
                 </div>
             </div>
         </div>

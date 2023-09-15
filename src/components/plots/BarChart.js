@@ -29,10 +29,10 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
     textposition: 'auto',
     hoverinfo: 'none',
     marker: {
-      color: 'rgb(158,202,225)',
+      color: 'rgb(64, 145, 199)',
       opacity: 0.9,
       line: {
-        color: 'rgb(8,48,107)',
+        color: 'rgb(204,204,204)',
         width: 1,
       },
     },
