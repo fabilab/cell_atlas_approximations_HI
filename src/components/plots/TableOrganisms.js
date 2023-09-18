@@ -1,16 +1,16 @@
 import React from 'react';
 import { Card, Row, Col, Typography } from 'antd';
 import { Fade } from 'react-awesome-reveal';
-import * as orgMeta from '../../utils/organismMetadata.js'; 
+import orgMeta from '../../utils/organismMetadata.js'; 
 
 const { Title } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ organisms}) => {
 
-  const organismImages = Object.keys(orgMeta.default).map(org => ({
-    src: orgMeta.default[org].imagePath,
-    title: orgMeta.default[org].bioName
+  const organismImages = Object.keys(orgMeta).map(org => ({
+    src: orgMeta[org].imagePath,
+    title: orgMeta[org].bioName
   }));
 
   const rows = [];

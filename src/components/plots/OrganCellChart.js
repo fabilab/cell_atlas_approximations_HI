@@ -3,9 +3,10 @@ import Plot from 'react-plotly.js';
 
 
 const OrganCellChart = ({ apiCellOrgan, organName }) => {
-    // Find the index of the organ
-    const organIndex = apiCellOrgan.organs.indexOf(organName);
-    console.log(apiCellOrgan);
+  console.log(apiCellOrgan);
+  console.log(organName);
+    // Find the index of the organ, organ cases are different in species
+    const organIndex = apiCellOrgan.organs.findIndex(organ => organ.toLowerCase() === organName.toLowerCase());
 
     // Filter the celltypes and detected values for non-zero values
     const nonZeroData = apiCellOrgan.celltypes.map((cellType, index) => ({

@@ -3,7 +3,8 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, organ, celltype, unit, measurementType, hasLog }) => {
-  
+  console.log(subIntent);
+  console.log(dataCategory);
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);

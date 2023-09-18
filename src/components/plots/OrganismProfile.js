@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as orgMeta from '../../utils/organismMetadata.js';
+import orgMeta from '../../utils/organismMetadata.js'; 
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
 import { Typography } from 'antd';
@@ -7,6 +7,7 @@ import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ organism }) => {
+    console.log(organism);
     const [error, setError] = useState(null);
     // const [organs, setOrgans] = useState({});
     const imageRef = useRef(null);
@@ -18,7 +19,6 @@ const OrganismProfile = ({ organism }) => {
     
     const handleOrganClick = (area) => {
         let tempOrgan = area.name.split('-')[0]
-
         setClickedOrgan(tempOrgan);
         const fetchCellTypes = async () => {
             try {
@@ -113,14 +113,13 @@ const OrganismProfile = ({ organism }) => {
 
     let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
     let anatomyImage = require(`../../asset/anatomy/${organism}.jpeg`);
-
+    console.log(anatomyImage);
     let bioName = orgMeta[organism]?.bioName || "Unknown";
     let commonName = orgMeta[organism]?.commonName || "Unknown";
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let description = orgMeta[organism]?.about || "description not available";
 
     const url = dataSource.match(/\((.*?)\)/)?.[1];
-    console.log(apiCellOrgan)
 
     return (
 

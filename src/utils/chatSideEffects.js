@@ -35,8 +35,7 @@ export const triggersPlotUpdate = ((response) => {
 });
 
 export const updateChat = async (response, plotState) => {
-  console.log("calling updateChat");
-  console.log(response);
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];

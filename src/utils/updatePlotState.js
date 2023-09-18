@@ -49,7 +49,7 @@ const updateMarkers = async (context) => {
 const updateAverage = async (context) => {
 
     let apiResponse, xAxis;
-    
+    console.log(context);
     if (context.subIntent === 'chromatinAccessibility') {
         apiResponse = await atlasapprox.average(context.organism, context.features, context.organ, null, "chromatin_accessibility");
         xAxis = apiResponse.celltypes;
@@ -124,7 +124,6 @@ const updateFractions = async (context) => {
 };
 
 const similarCelltypes = async (context) => {
-    console.log(context);
 
     let targetCelltype = context.response.params.celltype;
     let nCelltypes = context.response.params.number;

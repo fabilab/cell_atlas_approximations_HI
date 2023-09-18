@@ -30,6 +30,11 @@ const organismMetadata = {
     about: "Embryonic development is a transformative process where pluripotent cells evolve into varied, specialized entities. Employing single-cell RNA sequencing, eminent research teams, including Wagner, Farrell, and Briggs, have made groundbreaking contributions. Specifically, Wagner's team sequenced the transcriptomes of over 90,000 cells throughout zebrafish development, shedding profound light on cell differentiation. In parallel, Farrell's group elucidated a trajectory towards 25 unique zebrafish cell types, emphasizing the nuances of gene expression evolution. Briggs' study meticulously mapped cellular dynamics in frog embryos. Collectively, this research sets a robust framework for delving deeper into transcriptional landscapes in developmental biology.",
     genesFromPaper: "epcam, si, krt18, krt8, cldnb, elavl3, krt4, tfap2a, LOC100537766, cldnh, six1b, LOC100006216, myt1a, dlb, sox19a, actc1a, pfn1, cxcl12b, pax6b ",
     imagePath: require("../asset/organisms/d_rerio.jpeg"),
+    organs: {
+      "Whole": {
+          coords: "247,35,203,70,177,131,175,159,162,228,173,300,199,370,228,422,342,426,408,415,412,346,395,264,358,176,310,109,287,67"
+      },
+    },
   },
   "h_miamia": {
     bioName: "Hofstenia Miamia",
@@ -63,6 +68,17 @@ const organismMetadata = {
     about: "",
     genesFromPaper: "",
     imagePath: require("../asset/organisms/m_musculus.jpeg"),
+    organs: {
+      "Heart": {
+          coords: "132,173,128,179,130,187,131,200,137,213,148,218,155,213,156,199,148,183"
+      },
+      "Lung": {
+          coords: "162,194,179,195,195,184,201,172,204,149,212,134,203,130,179,138,157,147,142,154,133,164,136,173"
+      },
+      "Tongue": {
+        coords: "63,180,44,194,34,205,26,215,27,221,47,216,65,210,78,201,84,193,75,185"
+      },
+    },
   },
   "m_myoxinus": {
     bioName: "Microcebus Myoxinus",
