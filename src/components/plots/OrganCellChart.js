@@ -40,6 +40,9 @@ const OrganCellChart = ({ apiCellOrgan, organName }) => {
           },
         },
         title: `<b>Cell Type Distribution in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
+        yaxis: {
+          automargin: true,
+        }
       };
 
     return (
