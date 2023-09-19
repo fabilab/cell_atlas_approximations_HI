@@ -42,26 +42,23 @@ const OrganismProfile = ({ organism }) => {
         fetchCellOrganData();
     };
 
-    const handleImageLoad = (event) => {
-        const naturalWidth = event?.target?.naturalWidth;
-        const naturalHeight = event?.target?.naturalHeight;
-        const renderedWidth = event?.target?.width;
-        const renderedHeight = event?.target?.height;
-
+    const handleImageLoad = (imageRef, parentDimensions) => {
+        const naturalWidth = imageRef.naturalWidth;
+        const naturalHeight = imageRef.naturalHeight;
+        const renderedWidth = parentDimensions.width;
+        const renderedHeight = parentDimensions.height;
+    
         if (naturalWidth && naturalHeight && renderedWidth && renderedHeight) {
             const widthFactor = renderedWidth / naturalWidth;
             const heightFactor = renderedHeight / naturalHeight;
             
             setScalingFactors({ width: widthFactor, height: heightFactor });
         }
-        if (imageRef.current) {
-            setImageHeight(imageRef.current.offsetHeight);
-        }
     };
 
     const renderImageMap = () => {
         if (!orgMeta[organism]?.organs) return null;
-
+    
         const areas = Object.keys(orgMeta[organism].organs).map(organ => {
             const coords = orgMeta[organism].organs[organ].coords.split(',').map(Number);
             
@@ -69,7 +66,7 @@ const OrganismProfile = ({ organism }) => {
             const adjustedCoords = coords.map((coord, index) => 
                 index % 2 === 0 ? coord * scalingFactors.width : coord * scalingFactors.height
             );
-
+    
             return {
                 id: organ,
                 name: organ,
@@ -79,20 +76,21 @@ const OrganismProfile = ({ organism }) => {
                 fillColor: "yellow",
             };
         });
-
+    
         return ( 
             <ImageMapper 
                 ref={imageRef}
                 src={anatomyImage}
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
-                onLoad={handleImageLoad}  // Added onLoad event to compute scaling factors
+                onLoad={handleImageLoad}
                 width={350}
                 stayHighlighted={true}
                 height={450}
             />
         );
     };
+    
 
     // useEffect(() => {
     //     const fetchData = async () => {
@@ -113,11 +111,12 @@ const OrganismProfile = ({ organism }) => {
 
     let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
     let anatomyImage = require(`../../asset/anatomy/${organism}.jpeg`);
-    console.log(anatomyImage);
+
     let bioName = orgMeta[organism]?.bioName || "Unknown";
     let commonName = orgMeta[organism]?.commonName || "Unknown";
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let description = orgMeta[organism]?.about || "description not available";
+    let descriptionHyperlink = orgMeta[organism]?.descriptionHyperlink || "hyperlink unavailable";
 
     const url = dataSource.match(/\((.*?)\)/)?.[1];
 
@@ -141,7 +140,7 @@ const OrganismProfile = ({ organism }) => {
             </div>
             <div style={{padding: "1% 5%"}}>
                 <h3>About</h3>
-                <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description}</p>
+                <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description} <a href={descriptionHyperlink} target="_blank">"From Wikipedia"</a></p>
             </div>
             <div style={{padding: "1% 5%"}}>
                 <h3>Organ Cell Insight</h3>

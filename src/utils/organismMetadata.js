@@ -124,9 +124,10 @@ const organismMetadata = {
     bioName: "Xenopus Laevis",
     commonName: "African Clawed Frog",
     dataSource: "[Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)",
-    about: "Xenopus laevis, commonly known as the African clawed frog, is a pivotal model organism in evolutionary biology. Leveraging advanced single-cell RNA sequencing technology, researchers have crafted an intricate Xenopus cell landscape, capturing the cellular heterogeneity across both larval and adult stages. This rich landscape offers unprecedented insights into the amphibian's metamorphic journey, bridging critical gaps in our understanding of vertebrate development and evolution. This comprehensive cellular atlas stands as a testament to the complex tapestry of life at the cellular level and serves as a beacon for future genetic and evolutionary studies.",
+    about: "The African clawed frog (Xenopus laevis), also known as simply Xenopus, African clawed toad, African claw-toed frog or the Platanna) is a species of African aquatic frog of the family Pipidae. Its name is derived from the short black claws on its feet. The word Xenopus means 'strange foot' and laevis means 'smooth'. The species is found throughout much of Sub-Saharan Africa (Nigeria and Sudan to South Africa),[2] and in isolated, introduced populations in North America, South America, Europe, and Asia.[1] All species of the family Pipidae are tongueless, toothless and completely aquatic. They use their hands to shove food in their mouths and down their throats and a hyobranchial pump to draw or suck things in their mouth. Pipidae have powerful legs for swimming and lunging after food. They also use the claws on their feet to tear pieces of large food. They have no external eardrums, but instead subcutaneous cartilaginous disks that serve the same function.[3] They use their sensitive fingers and sense of smell to find food. Pipidae are scavengers and will eat almost anything living, dying, or dead and any type of organic waste.",
     genesFromPaper: "",
     imagePath: require("../asset/organisms/x_laevis.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/African_clawed_frog",
     organs: {
       "Brain": {
           coords: "383,83,371,91,364,101,359,114,358,125,358,132,360,142,367,145,375,147,383,152,394,150,402,145,406,137,416,141,429,127,430,111,420,96,402,83"
@@ -145,7 +146,13 @@ const organismMetadata = {
       },
       "Eye": {
         coords: "350,64,332,81,319,91,318,97,319,107,329,100"
-    }
+      },
+      "Muscle-left": {
+        coords: "226,517,173,549,111,601,84,637,56,667,95,678,139,671,192,658,261,638,296,613,319,610,270,574"
+      },
+      "Muscle-right": {
+        coords: "455,625,504,666,559,693,636,714,692,712,671,657,632,603,590,566,563,532,524,581"
+      }
     }
   }
 };

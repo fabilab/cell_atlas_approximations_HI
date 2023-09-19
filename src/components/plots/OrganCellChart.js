@@ -39,6 +39,8 @@ const OrganCellChart = ({ apiCellOrgan, organName }) => {
             },
             standoff: 20,
           },
+          type: "log",
+          range: [0, 4],
         },
         title: `<b>Cell Type Distribution in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
         yaxis: {
