@@ -29,8 +29,8 @@ const Landing = () => {
     'What is the chromatin accessibility of chr1:9955-10355 in human lung?',
     'What is the chromatin accessibility of chr10:122199710-122200110 in human lung?',
     // 'show 5 cell types with similar chromatin peaks to lung fibroblast in human.',
-    'what is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE across organs in human fibroblast?',
     'Compare expression of APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1 in fibroblast across organs in human',
+    'Compare fraction of cells expressing APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1 in fibroblast across organs in human.',
     'What is the fraction of TP53, APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
     'What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
   ];

@@ -40,13 +40,14 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
     longestYlabel = Math.max(longestYlabel, yaxis[i].length);
   }
 
+  let pxCell = 17, pxChar = 10;
   let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
   let ncelltypes = xaxis.length;
-  let pxCell = 17, pxChar = 10;
-  let ytickMargin = pxChar * longestYlabel;
-  let xtickMargin = pxChar * longestXlabel;
+
+  let ytickMargin = 100;
+  let xtickMargin = 100;
   let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-  let graphHeight = nfeatures * 6 + xtickMargin;
+  let graphHeight = nfeatures * pxCell * 0.6 + xtickMargin;
 
   let title = "";
   if (dataCategory === "across_organs") {

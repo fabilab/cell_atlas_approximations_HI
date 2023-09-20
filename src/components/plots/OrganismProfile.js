@@ -105,13 +105,17 @@ const OrganismProfile = ({ organism }) => {
     //             setError('API call failed.');
     //         }
     //     };
-
     //     fetchData();
     // }, [organism]);
 
     let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
-    let anatomyImage = require(`../../asset/anatomy/${organism}.jpeg`);
-
+    let anatomyImage
+    try {
+        anatomyImage = require(`../../asset/anatomy/${organism}.jpeg`);
+    } catch(error) {
+        anatomyImage = require(`../../asset/anatomy/temp.jpeg`);
+    }
+    
     let bioName = orgMeta[organism]?.bioName || "Unknown";
     let commonName = orgMeta[organism]?.commonName || "Unknown";
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
