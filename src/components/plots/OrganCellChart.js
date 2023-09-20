@@ -27,6 +27,11 @@ const OrganCellChart = ({ apiCellOrgan, organName }) => {
               width: 1,
             },
         },
+        transforms: [{
+          type: 'sort',
+          target: nonZeroData.map(item => item.value),
+          order: 'ascending'
+        }]
     }];
 
     let layout = {

@@ -1,11 +1,22 @@
-# Introduction 
- 
+# Welcome to AtlasApprox! 
 
-### About
+AtlasApprox is your gateway to a world of single-cell atlas data. As a dedicated platform, we curate and present a vast collection of cellular data, streamlining the exploration process for you. Here's what sets AtlasApprox apart:
 
-In the last decade, single cell omics have revolutionised biology and medicine, enabling researchers to gain biomedical insight with extreme detail and precision. Nonetheless, new researchers picking up single cell analysis are met with a high entry barrier: months of training in coding, data science, package installation, and so on, resulting is a dramatic slowdown of biomedical research. 
+### What Makes AtlasApprox Unique?
 
-AtlasApprox aims to democratise accessibility to single cell analysis by building a software environment that runs in the user's web browser and delivers biomedical insights within minutes without any requirement for programming literacy. The candidate will achieve this goal by encapsulating fundamental single cell analysis tools in a browser environment using web assembly (WASM) technologies and orchestrating them client-side in Python and JavaScript. Network analysis, high-dimentional data sciene, and deep learning will be combined as required.
+#### Diverse Organism 
+DataDive deep into a range of organisms, from Drosophila melanogaster to Homo sapiens. Explore a comprehensive view of cell types and their gene expressions at your fingertips.
+
+#### Interactive Visualizations
+Our dynamic visualizations, powered by Plotly.js, allow you to seamlessly navigate through heatmaps, dot plots, bar charts, and more.
+
+#### Intelligent Chatbot Assistance
+Have a query? Interact with our AI-driven chatbot that understands and responds to your questions, guiding you through the data exploration process.
+
+#### Zero Technical Barriers
+No setups. No installations. No code. Just open your browser and start exploring the vast world of single-cell data.
+
+Whether you're looking to compare gene expressions across different organs or want insights into specific cell types, AtlasApprox provides the tools and interface to make your exploration intuitive and insightful.
 
 ![about](./demo/about.png)
 
