@@ -64,8 +64,8 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     // Calculate graph width and height
     const ytickMargin = 100;
     const xtickMargin = 100;
-    const graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-    const graphHeight = nfeatures * pxCell * 0.6 + xtickMargin;
+    const graphWidth = ytickMargin + pxCell * ncelltypes + 450;
+    const graphHeight = nfeatures * pxCell * 0.50 + xtickMargin;
     
     let title = "";
     if (subIntent === 'geneExpression') {
@@ -84,12 +84,26 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
       xaxis: {
         autorange: true,
         automargin: true,
+        // title: {
+        //   text: 'Cell Types',
+        //   font: {
+        //     size: 16,
+        //   },
+        //   standoff: 20,
+        // },
       },
       yaxis: {
         automargin: true,
         tickmode: 'array',
         ticktext: yTickTexts,
         tickvals: yTickVals,
+        // title: {
+        //   text: 'Genes',
+        //   font: {
+        //     size: 16,
+        //   },
+        //   standoff: 20,
+        // },
       },
       title: title,
     };

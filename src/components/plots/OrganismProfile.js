@@ -92,22 +92,6 @@ const OrganismProfile = ({ organism }) => {
     };
     
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         if (!organism) {
-    //             setError('Organism is unknown.');
-    //             return;
-    //         }
-    //         try {
-    //             const result = await atlasapprox.organs(organism);
-    //             setOrgans(result);
-    //         } catch (error) {
-    //             setError('API call failed.');
-    //         }
-    //     };
-    //     fetchData();
-    // }, [organism]);
-
     let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
     let anatomyImage
     try {

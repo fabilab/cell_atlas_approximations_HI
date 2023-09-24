@@ -47,13 +47,13 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
   let ytickMargin = 100;
   let xtickMargin = 100;
   let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-  let graphHeight = nfeatures * pxCell * 0.6 + xtickMargin;
+  let graphHeight = nfeatures * pxCell * 0.5 + xtickMargin;
 
   let title = "";
   if (dataCategory === "across_organs") {
     title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
   } else {
-    title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
+    title = `<b>Gene Expression Levels and Cell Fraction in ${organism} ${organ} by Cell Type</b>`;
   }
 
   let layout = {
@@ -62,12 +62,26 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
     xaxis: {
       automargin: true,
       tickangle: 90,
+      title: {
+        text: 'Cell Types',
+        font: {
+          size: 16,
+        },
+        standoff: 20,
+      },
     },
     yaxis: {
       automargin: true,
       tickmode: 'array',
       ticktext: yTickTexts,
       tickvals: yTickVals,
+      title: {
+        text: 'Genes',
+        font: {
+          size: 16,
+        },
+        standoff: 20,
+      },
     },
     title: title ,
   };
