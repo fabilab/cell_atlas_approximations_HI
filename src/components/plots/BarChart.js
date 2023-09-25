@@ -46,13 +46,13 @@ const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, f
     xaxis: {
       automargin: true,
       title: {
-        text: 'Cell types / Organs',
+        text: 'Cell types(Organs)',
         font: {
           size: 16,
         },
         standoff: 20,
       },
-      tickangle: 45,
+      tickangle: 270,
     },
     yaxis: {
       title: {

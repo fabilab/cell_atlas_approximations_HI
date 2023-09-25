@@ -61,27 +61,13 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
     height: graphHeight,
     xaxis: {
       automargin: true,
-      tickangle: 90,
-      title: {
-        text: 'Cell Types',
-        font: {
-          size: 16,
-        },
-        standoff: 20,
-      },
+      tickangle: 270,
     },
     yaxis: {
       automargin: true,
       tickmode: 'array',
       ticktext: yTickTexts,
       tickvals: yTickVals,
-      title: {
-        text: 'Genes',
-        font: {
-          size: 16,
-        },
-        standoff: 20,
-      },
     },
     title: title ,
   };

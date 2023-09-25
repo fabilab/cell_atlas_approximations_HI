@@ -33,7 +33,8 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
         x: xaxis,
         y: yaxis,
         type: 'heatmap',
-        colorscale: 'Reds',
+        colorscale: 'YlGnBu',
+        reversescale: true,
         // get unit from API call
         colorbar: {
           title: {
@@ -82,28 +83,14 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
       width: graphWidth,
       height: `${graphHeight}`,
       xaxis: {
-        autorange: true,
         automargin: true,
-        // title: {
-        //   text: 'Cell Types',
-        //   font: {
-        //     size: 16,
-        //   },
-        //   standoff: 20,
-        // },
+        tickangle: 270,
       },
       yaxis: {
         automargin: true,
         tickmode: 'array',
         ticktext: yTickTexts,
         tickvals: yTickVals,
-        // title: {
-        //   text: 'Genes',
-        //   font: {
-        //     size: 16,
-        //   },
-        //   standoff: 20,
-        // },
       },
       title: title,
     };
