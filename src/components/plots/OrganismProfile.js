@@ -105,8 +105,7 @@ const OrganismProfile = ({ organism }) => {
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let description = orgMeta[organism]?.about || "description not available";
     let descriptionHyperlink = orgMeta[organism]?.descriptionHyperlink || "hyperlink unavailable";
-
-    const url = dataSource.match(/\((.*?)\)/)?.[1];
+    let paperHyperlink = orgMeta[organism]?.paperHyperlink || "hyperlink unavailable";
 
     return (
 
@@ -121,9 +120,9 @@ const OrganismProfile = ({ organism }) => {
                     />
                 }
                 <div>
-                    <h2 style={{fontSize: "1.3em"}}>{bioName} Cell Atlas</h2>
+                    <h2 style={{fontSize: "1.3em"}}>{bioName}</h2>
                     <p >Common name: {commonName}</p>
-                    <p>Data source: <a href={url} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></p>
+                    <p>Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></p>
                 </div>
             </div>
             <div style={{padding: "1% 5%"}}>
@@ -131,7 +130,7 @@ const OrganismProfile = ({ organism }) => {
                 <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description} <a href={descriptionHyperlink} target="_blank">"From Wikipedia"</a></p>
             </div>
             <div style={{padding: "1% 5%"}}>
-                <h3>Organ Cell Insight</h3>
+                <h3>Organ Map</h3>
                 <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
                         {renderImageMap()}
