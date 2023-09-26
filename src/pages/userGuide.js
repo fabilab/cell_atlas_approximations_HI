@@ -1,19 +1,21 @@
 import React,{ useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import orgMeta from '../utils/organismMetadata'
-import { Row, Col, Tabs } from 'antd';
+import { Row, Col, Tabs, Collapse } from 'antd';
 import imgIllustration from '../demo/temp_diagram.png';
 import geneExpHeatmap from '../demo/geneExpHeatmap.png';
 import orgProfile from '../demo/organismProfile.png';
 import fractionExp from '../demo/fractionExp.png';
 import markers from '../demo/markers.png';
 import cellxOrgan from '../demo/cellxOrgan.png';
+import highestExpressor from '../demo/highest_expressor.png';
 import {
   InfoCircleOutlined,
   CodeOutlined,
   CustomerServiceOutlined,
 } from '@ant-design/icons';
 const { TabPane } = Tabs;
+const { Panel } = Collapse;
 const UserGuide = () => {
   
   const [userGuideMd, setuserGuideMd] = useState('');
@@ -141,40 +143,39 @@ return (
           </Col>
         </Row>
       </div> */}
-      {/* <h3>Feature Showcase</h3>
-      <Tabs defaultActiveKey="1" centered type='card'>
-        <TabPane tab="Organism Profile" key="1">
-          <h3>Sample Query:</h3>
-          <p style={{color: "#3d5afe", fontWeight: 'bold'}}>Explore frog</p>
+      <h3>Feature Showcase</h3>
+      <Collapse defaultActiveKey={['1']} destroyInactivePanel>
+        <Panel header="Organism Profile" key="1">
+          <h4>Sample Query:</h4>
+          <p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Explore frog"</p>
           <img src={orgProfile} style={imageStyle} />
-        </TabPane>
-        <TabPane tab="Gene Expression Heatmap" key="2">
-          <h3>Sample Query:</h3>
+        </Panel>
+        <Panel header="Gene Expression Heatmap" key="2">
+          <h4>Sample Query:</h4>
           <p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
           <img src={geneExpHeatmap} style={imageStyle}/>
-        </TabPane>
-        <TabPane tab="Cell Fraction Bubble Map" key="3">
-          <h4>Content of Tab Pane 3</h4>
+        </Panel>
+        <Panel header="Cell Fraction Bubble Map" key="3">
+          <h4>Sample Query:</h4>
+          <p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the fraction of cells expressing MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
           <img src={fractionExp} style={imageStyle}/>
-        </TabPane>
-        <TabPane tab="Marker Genes" key="4">
-          <h4>Content of Tab Pane 4</h4>
+        </Panel>
+        <Panel header="Marker Genes" key="4">
+          <h4>Sample Query:</h4>
+          <p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Show 12 markers of dendritic in the m_myoxinus pancreas."</p>
           <img src={markers} style={imageStyle}/>
-        </TabPane>
-        <TabPane tab="Cell Type Distribution" key="5">
-          <h4>Content of Tab Pane 4</h4>
+        </Panel>
+        <Panel header="Cell Type Distribution" key="5">
+          <h4>Sample Query:</h4>
+          <p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What cell types are present in each organ of fly?"</p>
           <img src={cellxOrgan} style={imageStyle}/>
-        </TabPane>
-        <TabPane tab="Cross-Organ Gene Expression" key="6">
-          Content of Tab Pane 3
-        </TabPane>
-        <TabPane tab="Cell Type Distribution" key="7">
-          Content of Tab Pane 2
-        </TabPane>
-        <TabPane tab="Cross-Organ Gene Expression" key="8">
-          Content of Tab Pane 3
-        </TabPane>
-      </Tabs> */}
+        </Panel>
+        <Panel header="Highest expressor" key="6">
+          <h4>Sample Query:</h4>
+          <p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What cell type is the highest expressor of PECAM1 in human?"</p>
+          <img src={highestExpressor} style={imageStyle}/>
+        </Panel>
+      </Collapse>
       {/* <h3>Data Source</h3>
       <p>Our platform integrates data from various reputable sources. Below are the species and their corresponding data references:</p>
       <p>pending ...........</p> */}
