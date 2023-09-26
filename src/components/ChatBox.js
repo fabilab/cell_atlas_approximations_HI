@@ -142,8 +142,10 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
             className="send-button"
           />
         </div>
-        <p style={{ margin: '3px', color: "#666", fontSize: "10.5px" }}>
-          Press 'Enter' to send a message. Key up to navigate command history.
+        <p style={{ margin: '3px', color: "#666s", fontSize: "11px" }}>
+          Press 'Enter' to send a message.
+          <br/>
+          Press up arrow '↑' to navigate command history.
         </p>
       </Row>
     </div>

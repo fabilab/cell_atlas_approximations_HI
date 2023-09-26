@@ -53,6 +53,7 @@ const Message = (props) => {
               <Typewriter
                 options={{
                   delay: 10,
+                  cursor: ""
                 }}
                 onInit={(typewriter) => {
                   typewriter
