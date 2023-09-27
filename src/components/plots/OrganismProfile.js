@@ -84,7 +84,7 @@ const OrganismProfile = ({ organism }) => {
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
                 onLoad={handleImageLoad}
-                width={350}
+                width={600}
                 stayHighlighted={true}
                 height={450}
             />
@@ -92,12 +92,15 @@ const OrganismProfile = ({ organism }) => {
     };
     
 
-    let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
-    let anatomyImage
+    let imagePath;
+    let anatomyImage;
+
     try {
-        anatomyImage = require(`../../asset/anatomy/${organism}.jpeg`);
+        imagePath = require(`../../asset/organisms/${organism}.jpeg`);
+        anatomyImage = require(`../../asset/anatomy/${organism}.png`);
     } catch(error) {
         anatomyImage = require(`../../asset/anatomy/temp.jpeg`);
+        imagePath = require(`../../asset/anatomy/temp.jpeg`);
     }
     
     let bioName = orgMeta[organism]?.bioName || "Unknown";
@@ -132,11 +135,11 @@ const OrganismProfile = ({ organism }) => {
             <div style={{padding: "1% 5%"}}>
                 <h3>Organ Map</h3>
                 <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
+                    <div style={{ flex: 2, overflow: 'auto', minWidth: '0' }}>
                         {renderImageMap()}
                         <Text>Hover over and click on organs to view more detail</Text>
                     </div>
-                    <div style={{ flex: 1.5, overflow: 'auto', minWidth: '0' }}>
+                    <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
                         {/* Render the chart for a specific organ, say "Heart" */}
                         {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
                     </div>

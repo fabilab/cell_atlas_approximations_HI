@@ -15,7 +15,7 @@ const Message = (props) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopyStatus('copied');
-      setTimeout(() => setCopyStatus('not-copied'), 1500);
+      setTimeout(() => setCopyStatus('not-copied'), 2000);
     } catch (err) {
       console.error("Failed to copy text: ", err);
     }
