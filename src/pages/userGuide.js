@@ -86,13 +86,6 @@ return (
         </Panel>
 
       </Collapse>
-
-
-
-          {/* <p><b>1. Discover Atlas Data:</b> Start by asking, "What species are available in AtlasApprox?"</p>
-          <p><b>2. Choose an Organism:</b> Send a query to the chatbot like, "Explore Mouse."</p>
-          <p><b>3. Deep Dive into the Organism:</b> View the organism profile and interact with the visual interface. Hover over organs on the display map.</p>
-          <p><b>4. Experiment with Queries:</b> Use suggested queries as a starting point and begin your exploration.</p> */}
         </TabPane>
         <TabPane tab="Example 2: Focus on one organism and tissue" key="3">
           <h3>User Story</h3>
@@ -114,7 +107,7 @@ return (
         </TabPane>
       </Tabs>
       <Divider orientation="left">List of queries</Divider>
-      <Collapse defaultActiveKey={['1']} destroyInactivePanel>
+      <Collapse destroyInactivePanel>
         <Panel header="Organism Profile" key="1" style={{fontWeight:"bold"}}>
           <h4>Sample Query:</h4>
           <p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Explore frog"</p>
@@ -146,16 +139,6 @@ return (
           <img src={highestExpressor} style={imageStyle}/>
         </Panel>
       </Collapse>
-      {/* <h3>Data Source</h3>
-      <p>Our platform integrates data from various reputable sources. Below are the species and their corresponding data references:</p>
-      <p>pending ...........</p> */}
-      {/* <div>
-        {Object.values(orgMeta).map((organism, index) => (
-          <div key={index}>
-            <p>{organism.bioName} Source: {organism.dataSource}</p>
-          </div>
-        ))}
-      </div> */}
     </div>
   </>
 );

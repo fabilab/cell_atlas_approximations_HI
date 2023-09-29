@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import orgMeta from '../../utils/organismMetadata.js'; 
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
-import { Typography } from 'antd';
+import { Divider, Typography } from 'antd';
 import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
@@ -84,9 +84,9 @@ const OrganismProfile = ({ organism }) => {
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
                 onLoad={handleImageLoad}
-                width={600}
+                width={480}
                 stayHighlighted={true}
-                height={450}
+                height={480}
             />
         );
     };
@@ -97,7 +97,7 @@ const OrganismProfile = ({ organism }) => {
 
     try {
         imagePath = require(`../../asset/organisms/${organism}.jpeg`);
-        anatomyImage = require(`../../asset/anatomy/${organism}.png`);
+        anatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
     } catch(error) {
         anatomyImage = require(`../../asset/anatomy/temp.jpeg`);
         imagePath = require(`../../asset/anatomy/temp.jpeg`);
@@ -113,7 +113,7 @@ const OrganismProfile = ({ organism }) => {
     return (
 
         <div style={{  width: "inherit"}}>
-            <div style={{display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 5%"}}>
+            <div style={{display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 3%"}}>
                 {
                     imagePath &&
                     <img 
@@ -128,26 +128,22 @@ const OrganismProfile = ({ organism }) => {
                     <p>Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></p>
                 </div>
             </div>
-            <div style={{padding: "1% 5%"}}>
+            <div style={{padding: "1% 3%"}}>
                 <h3>About</h3>
                 <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description} <a href={descriptionHyperlink} target="_blank">"From Wikipedia"</a></p>
             </div>
-            <div style={{padding: "1% 5%"}}>
+            <div style={{ padding: "1% 3%" }}>
                 <h3>Organ Map</h3>
                 <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ flex: 2, overflow: 'auto', minWidth: '0' }}>
+                    <div style={{ flex: 1, overflow: 'auto', minWidth: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         {renderImageMap()}
-                        <Text>Hover over and click on organs to view more detail</Text>
+                        <Text style={{ alignSelf: 'center' }}>Hover over and click on organs to view more detail</Text>
                     </div>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
                         {/* Render the chart for a specific organ, say "Heart" */}
                         {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
                     </div>
                 </div>
-            </div>
-            <div style={{padding: "1% 5%"}}>
-                <h3>Suggested Query</h3>
-                
             </div>
         </div>
     );

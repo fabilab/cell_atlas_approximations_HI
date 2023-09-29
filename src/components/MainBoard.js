@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ChatProvider } from './ChatContext'; 
 import { useLocation } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
@@ -24,7 +25,6 @@ const MainBoard = () => {
     };
   }, []);
 
-
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
@@ -32,19 +32,21 @@ const MainBoard = () => {
   }, [currentResponse]);
 
   return (
-    <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
-        <ChatBox
-          style={{ height:'100%' }}
-          initialMessage={firstQuery}
-          chatHistory={chatHistory}
-          setChatHistory={setChatHistory}
-          setCurrentResponse={setCurrentResponse}
-          plotState={plotState}
-        />
-        <div style={{ flex: 1, overflow: 'auto'}}>
-          {plotState && <PlotBox state={plotState} />}
-        </div>
-    </div>
+    <ChatProvider>
+      <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
+          <ChatBox
+            style={{ height:'100%' }}
+            initialMessage={firstQuery}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            setCurrentResponse={setCurrentResponse}
+            plotState={plotState}
+          />
+          <div style={{ flex: 1, overflow: 'auto'}}>
+            {plotState && <PlotBox state={plotState} />}
+          </div>
+      </div>
+    </ChatProvider>
   );
 };
 

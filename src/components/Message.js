@@ -29,8 +29,8 @@ const Message = (props) => {
   };
 
   const profileStyle = {
-    width: '26px',
-    height: '26px',
+    width: '23px',
+    height: '23px',
     margin: '0px',
   }
 
@@ -59,8 +59,8 @@ const Message = (props) => {
       gutter={[0, 10]} 
       style={{ 
         marginBottom: '1.5em', 
-        marginRight: '1em', 
-        marginLeft: '1em', 
+        marginRight: '0.8em', 
+        marginLeft: '0.8em', 
       }}
     >
       {(role !== 'user') && <Col span={2}><img src={bot} alt="Bot Icon" style={profileStyle} /></Col>}

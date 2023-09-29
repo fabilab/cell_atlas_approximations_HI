@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useChat } from './ChatContext'
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Layout, Row, Input } from "antd";
@@ -6,12 +7,12 @@ import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
-  const [currentMessage, setCurrentMessage] = useState(initialMessage || '');
+  const [currentMessage, setCurrentMessage] = useState('');
   const [chatContext, setChatContext] = useState({});
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const [localMessage, setLocalMessage] = useState(initialMessage || '');
-
+  // const [localMessage, setLocalMessage] = useState(initialMessage || '');
+  const { localMessage, setLocalMessage } = useChat();
   const chatboxRef = useRef(null);
   useEffect(() => {
     // Function to scroll the chatbox to the bottom
@@ -89,18 +90,18 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       } catch (error) {
         console.error("Error occurred during updateChat:", error);
       }
-    } // else
-  }; //handleSubmit
+    } 
+  };
 
   useEffect(() => {
     if (!chatHistory || chatHistory.length === 0) {
-      handleSubmit(localMessage);
+      handleSubmit(initialMessage);
     }
   }, [chatHistory]);
 
   return (
     <div style={{ 
-        width: "26%",
+        width: "23%",
         display: 'flex',
         flexDirection: 'column',
         gap: '30px',
