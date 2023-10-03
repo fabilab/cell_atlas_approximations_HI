@@ -5,8 +5,7 @@ import Plot from 'react-plotly.js';
 
 const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
   const { setLocalMessage } = useChat();
-  console.log(apiCellOrgan);
-  console.log(organName);
+
   // Find the index of the organ, organ cases are different in species
   const organIndex = apiCellOrgan.organs.findIndex(organ => organ.toLowerCase() === organName.toLowerCase());
 

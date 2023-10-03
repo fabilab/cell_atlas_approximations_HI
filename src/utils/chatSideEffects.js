@@ -1,5 +1,6 @@
 import callAPI from "./callAPI.js";
 import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
+import atlasapprox from "@fabilab/atlasapprox";
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
@@ -36,7 +37,6 @@ export const triggersPlotUpdate = ((response) => {
 
 export const updateChat = async (response, plotState) => {
 
-  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -45,7 +45,6 @@ export const updateChat = async (response, plotState) => {
   let answer = "";
   let apiData;
   let endpoint, params;
-
   if (intent === "None") {
     return {
       hasData: false,
@@ -60,6 +59,14 @@ export const updateChat = async (response, plotState) => {
       message: response.followUpQuestion,
     };
   }
+
+  // console.log(response.data);
+  // try {
+  //   let apiOrgans = atlasapprox.organs(response.params.organism);
+  //   console.log(apiOrgans);
+  // } catch(error) {
+  //   console.error("Error fecthing organs: ", error);
+  // }
 
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
@@ -104,11 +111,22 @@ export const updateChat = async (response, plotState) => {
           .join(',');
       }
 
-        // handle duplicate gene names in user input list
-        params.features = [...new Set(params.features.split(','))].join(',');
+      // handle duplicate gene names in user input list
+      params.features = [...new Set(params.features.split(','))].join(',');
 
-        apiData = await callAPI(endpoint, params);
-        answer += buildAnswer(intent, apiData);
+      let apiOrgans = await atlasapprox.organs(params.organism);
+      if (!apiOrgans.organs.map(x => x.toLowerCase()).includes(params.organ.toLowerCase())) {
+        answer = `Oops! ${params.organ} is not found in ${params.organism}`;
+        return {
+          hasData: false,
+          message: answer,
+        }
+
+      }
+
+      apiData = await callAPI(endpoint, params);
+      answer += buildAnswer(intent, apiData);
+
     }
 
     else if (intent === "average.chromatinAccessibility") {

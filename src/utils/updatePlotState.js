@@ -11,7 +11,6 @@ const exploreOrganism = (context) => {
 const addGenes = async (context) => {
     // Extract required parameters from context within the function
     let features = `${context.plotState.features},${context.features}`;
-    console.log(context);
     let mainIntent = context.plotState.mainIntent;
     let subIntent = context.plotState.subIntent;
     if (!context.plotState.data.fractions) {
@@ -52,7 +51,6 @@ const updateMarkers = async (context) => {
 const updateAverage = async (context) => {
 
     let apiResponse, xAxis;
-    console.log(context);
     if (context.subIntent === 'chromatinAccessibility') {
         apiResponse = await atlasapprox.average(context.organism, context.features, context.organ, null, "chromatin_accessibility");
         xAxis = apiResponse.celltypes;
@@ -244,7 +242,6 @@ const availaleOrganisms = async (context) => {
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
     console.log(response);
-    console.log(plotState);
     let intent = response.intent;
     let mainIntent = intent.split(".")[0];
     let subIntent = intent.split(".")[1];

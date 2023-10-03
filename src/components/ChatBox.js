@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useChat } from './ChatContext'
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
-import { Button, Layout, Row, Input } from "antd";
+import { Button, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
 
@@ -68,6 +68,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       setChatContext(nlp.context);
 
       try {
+        console.log(response)
         const updateObject = await updateChat(response,plotState)
         response.hasData = updateObject.hasData;
         if (updateObject.hasData) {

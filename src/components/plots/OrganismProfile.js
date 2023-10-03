@@ -7,7 +7,7 @@ import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ organism }) => {
-    console.log(organism);
+
     const [error, setError] = useState(null);
     // const [organs, setOrgans] = useState({});
     const imageRef = useRef(null);
