@@ -40,20 +40,20 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
     longestYlabel = Math.max(longestYlabel, yaxis[i].length);
   }
 
-  let pxCell = 17, pxChar = 10;
-  let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
+  let nfeatures = yaxis.length;
   let ncelltypes = xaxis.length;
 
-  let ytickMargin = 100;
-  let xtickMargin = 100;
-  let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-  let graphHeight = nfeatures * pxCell * 0.5 + xtickMargin;
+  let ytickMargin = (nfeatures < 10) ? 250 : 200;
+  let xtickMargin = (ncelltypes < 15) ? 400 : 170;
+
+  let graphWidth = ncelltypes * 30 + xtickMargin;
+  let graphHeight = nfeatures * 30 + ytickMargin;
 
   let title = "";
   if (dataCategory === "across_organs") {
     title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
   } else {
-    title = `<b>Gene Expression Levels and Cell Fraction in ${organism} ${organ} by Cell Type</b>`;
+    title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
   }
 
   let layout = {
@@ -69,7 +69,12 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
       ticktext: yTickTexts,
       tickvals: yTickVals,
     },
-    title: title ,
+    title: {
+      text: title,
+      font: {
+        size: 16
+      },
+    },
   };
 
   const desired_maximum_marker_size = 6.2;
@@ -90,8 +95,10 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
       reversescale: true,
       colorbar: {title: {
         text: unit,
-        titleside: "bottom"
-      }},
+        titleside: "bottom",
+      },
+      len: 1
+      },
     },
     text: all_hovertext,
     hoverinfo: 'text',

@@ -38,7 +38,7 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
 
   let layout = {
       width: 520,
-      height: 400,
+      height: 500,
       xaxis: {
         automargin: true,
         title: {
@@ -53,10 +53,10 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
       },
       title: {
         text: `<b>Detected cell type distribution in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
-      },
         font: {
-          size: 10
+          size: 14
         },
+      },
       yaxis: {
         automargin: true,
       }
