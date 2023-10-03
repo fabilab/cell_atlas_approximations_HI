@@ -3,8 +3,8 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, organ, celltype, unit, measurementType, hasLog }) => {
-  console.log(subIntent);
-  console.log(dataCategory);
+  console.log("subIntent is: " + subIntent);
+  console.log("data category is: " + dataCategory);
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
@@ -58,15 +58,14 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     }
   
     // Calculate suitable cell size
-    const pxCell = 17; // Adjust this value as needed
     const ncelltypes = xaxis.length;
-    const nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
+    const nfeatures = yaxis.length;
 
     // Calculate graph width and height
-    const ytickMargin = 100;
-    const xtickMargin = 100;
-    const graphWidth = ytickMargin + pxCell * ncelltypes + 450;
-    const graphHeight = nfeatures * pxCell * 0.50 + xtickMargin;
+    let ytickMargin = (nfeatures < 10) ? 250 : 200;
+    let xtickMargin = (ncelltypes < 15) ? 400 : 170;
+    let graphWidth = ncelltypes * 30 + xtickMargin;
+    let graphHeight = nfeatures * 30 + ytickMargin;
     
     let title = "";
     if (subIntent === 'geneExpression') {
