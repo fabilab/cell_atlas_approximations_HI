@@ -97,7 +97,7 @@ export const updateChat = async (response, plotState) => {
       // if there is at least one invalid gene
       if (geneNotFound.length > 0) {
         let geneNotFoundString = geneNotFound.join(', ');
-        answer = `Removed invalid genes: ${geneNotFoundString}.`;
+        answer = `Removed invalid genes: ${geneNotFoundString}. <br><br>`;
         params.features = params.features.split(',')
           .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
           .join(',');
@@ -116,9 +116,12 @@ export const updateChat = async (response, plotState) => {
 
       }
 
+      let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
+      let numCelltypes = apiCelltypes.celltypes.length;
+      let numGenes = params.features.split(",").length;
       apiData = await callAPI(endpoint, params);
       answer += buildAnswer(intent, apiData);
-
+      answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
     }
 
     else if (intent === "average.chromatinAccessibility") {
