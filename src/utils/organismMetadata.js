@@ -10,7 +10,7 @@ const organismMetadata = {
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
   },
   "c_elegans": {
-    bioName: "Caenorhabditis qlegans",
+    bioName: "Caenorhabditis elegans",
     commonName: "Nematode",
     dataSource: "[Cao et al. 2017](Comprehensive single-cell transcriptional profiling of a multicellular organism)",
     about: "Caenorhabditis elegans is a free-living transparent nematode about 1 mm in length that lives in temperate soil environments. Caenorhabditis Elegans is an unsegmented pseudocoelomate and lacks respiratory or circulatory systems.",
@@ -60,6 +60,28 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/h_sapiens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
     paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896"
+    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
+  },
+  "i_pulchra": {
+    bioName: " Isodiametra pulchra",
+    commonName: "Acoel",
+    dataSource: "N/A",
+    about: "Acoela, or the acoels, is an order of small and simple invertebrates in the subphylum Acoelomorpha of phylum Xenacoelomorpha, a deep branching bilaterian group of animals, which resemble flatworms. Historically they were treated as an order of turbellarian flatworms.",
+    genesFromPaper: "",
+    imagePath: require("../asset/organisms/i_pulchra.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Acoela",
+    paperHyperlink:"N/A"
+    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
+  },
+  "l_minuta": {
+    bioName: "Lemna minuta",
+    commonName: "Least duckweed",
+    dataSource: "N/A",
+    about: "Lemna minuta is a species of duckweed known by the common name least duckweed. It is the smallest Lemna species. It is native to parts of the Americas, and naturalized in others; the exact native range is not known. It is found on other continents as a non-native introduction as well.",
+    genesFromPaper: "",
+    imagePath: require("../asset/organisms/l_minuta.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Lemna_minuta",
+    paperHyperlink:"N/A"
     // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "m_leidyi": {

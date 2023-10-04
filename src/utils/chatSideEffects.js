@@ -60,14 +60,6 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
-  // console.log(response.data);
-  // try {
-  //   let apiOrgans = atlasapprox.organs(response.params.organism);
-  //   console.log(apiOrgans);
-  // } catch(error) {
-  //   console.error("Error fecthing organs: ", error);
-  // }
-
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
     if (checkGenesIntents.includes(mainIntent) && (subIntent === "geneExpression" || subIntent === "features")) {

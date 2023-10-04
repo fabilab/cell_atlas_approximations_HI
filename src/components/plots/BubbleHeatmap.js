@@ -43,8 +43,8 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
   let nfeatures = yaxis.length;
   let ncelltypes = xaxis.length;
 
-  let ytickMargin = (nfeatures < 10) ? 250 : 200;
-  let xtickMargin = (ncelltypes < 15) ? 400 : 170;
+  let ytickMargin = (nfeatures <= 10) ? 250 : 200;
+  let xtickMargin = (ncelltypes <= 20) ? 380 : 170;
 
   let graphWidth = ncelltypes * 30 + xtickMargin;
   let graphHeight = nfeatures * 30 + ytickMargin;
