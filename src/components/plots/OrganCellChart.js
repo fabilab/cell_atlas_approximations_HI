@@ -1,6 +1,8 @@
 import React from 'react';
 import { useChat } from '../ChatContext'; 
 import Plot from 'react-plotly.js';
+import {selectAll} from "d3";
+
 
 
 const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
@@ -59,18 +61,29 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
       yaxis: {
         automargin: true,
       }
-    };
+  };
 
+  const yAxisLabelClick = (event) => {
+    const clickedCellType = event.target.textContent;
+    // console.log(`clicking cell type ${cellType}`);
+    let message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
+    setLocalMessage(message);
+  };
+
+  
   return (
       <Plot 
           data={data}
           layout={layout}
-          onClick={(e) => {
-            if (e.points && e.points.length > 0) {
-              let clickedCellType = e.points[0].y;
-              let message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
-              setLocalMessage(message);
-            }
+          // after the plot is complete
+          // onAfterPlot={() => attachYAxisClickEvent()}
+          onAfterPlot={() => {
+            // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
+            document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
+
+            selectAll(".yaxislayer-above").selectAll('text')
+            .on("click", (event) => yAxisLabelClick(event));
           }}
       />
   );

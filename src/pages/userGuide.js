@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Navbar from '../components/Navbar';
 import orgMeta from '../utils/organismMetadata';
 import { Row, Col, Tabs, Collapse, Divider } from 'antd';
@@ -9,17 +9,11 @@ import fractionExp from '../demo/fractionExp.png';
 import markers from '../demo/markers.png';
 import cellxOrgan from '../demo/cellxOrgan.png';
 import highestExpressor from '../demo/highest_expressor.png';
-import {
-  InfoCircleOutlined,
-  CodeOutlined,
-  CustomerServiceOutlined,
-} from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
 const UserGuide = () => {
-  const [userGuideMd, setuserGuideMd] = useState('');
 
   const markdownStyle = {
     fontFamily: 'Arial, sans-serif',
@@ -65,22 +59,22 @@ const UserGuide = () => {
 							<Panel header="1. Discover atlas data" key="1" style={{fontWeight:"bold"}}>
 								Start by asking:
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What species are available in AtlasApprox?"</p>
-								<img src={orgProfile} style={imageStyle} />
+								<img src={orgProfile} style={imageStyle} alt='organism profile' />
 							</Panel>
 							<Panel header="2. Choose an organism" key="2" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-								<img src={geneExpHeatmap} style={imageStyle}/>
+								<img src={geneExpHeatmap} style={imageStyle} alt='gene expression'/>
 							</Panel>
 							<Panel header="3. Dive into organs" key="3" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-								<img src={geneExpHeatmap} style={imageStyle}/>
+								<img src={geneExpHeatmap} style={imageStyle} alt='expression profile'/>
 							</Panel>
 							<Panel header="4. Experiment with queries" key="4" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-								<img src={geneExpHeatmap} style={imageStyle}/>
+								<img src={geneExpHeatmap} style={imageStyle} alt='heatmap'/>
 							</Panel>
 						</Collapse>
           </TabPane>
@@ -108,32 +102,32 @@ const UserGuide = () => {
 					<Panel header="Organism Profile" key="1" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
 						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Explore frog"</p>
-						<img src={orgProfile} style={imageStyle} />
+						<img src={orgProfile} style={imageStyle} alt='organism profile'/>
 					</Panel>
 					<Panel header="Gene Expression Heatmap" key="2" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
 						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-						<img src={geneExpHeatmap} style={imageStyle}/>
+						<img src={geneExpHeatmap} style={imageStyle} alt='gene expression heatmap'/>
 					</Panel>
 					<Panel header="Cell Fraction Bubble Map" key="3" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
 						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the fraction of cells expressing MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-						<img src={fractionExp} style={imageStyle}/>
+						<img src={fractionExp} style={imageStyle} alt='cell fraction visualisation'/>
 					</Panel>
 					<Panel header="Marker Genes" key="4" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
 						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Show 12 markers of dendritic in the m_myoxinus pancreas."</p>
-						<img src={markers} style={imageStyle}/>
+						<img src={markers} style={imageStyle} alt='marker genes expression profile'/>
 					</Panel>
 					<Panel header="Cell Type Distribution" key="5" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
 						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What cell types are present in each organ of fly?"</p>
-						<img src={cellxOrgan} style={imageStyle}/>
+						<img src={cellxOrgan} style={imageStyle} alt='celltype x organ table'/>
 					</Panel>
 					<Panel header="Highest expressor" key="6" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
 						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What cell type is the highest expressor of PECAM1 in human?"</p>
-						<img src={highestExpressor} style={imageStyle}/>
+						<img src={highestExpressor} style={imageStyle} alt='highest expressor'/>
 					</Panel>
         </Collapse>
       </div>
