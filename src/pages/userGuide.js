@@ -59,43 +59,69 @@ const UserGuide = () => {
 							<Panel header="1. Discover atlas data" key="1" style={{fontWeight:"bold"}}>
 								Start by asking:
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What species are available in AtlasApprox?"</p>
-								<img src={orgProfile} style={imageStyle} alt='organism profile' />
 							</Panel>
 							<Panel header="2. Choose an organism" key="2" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-								<img src={geneExpHeatmap} style={imageStyle} alt='gene expression'/>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Explore frog</p>
+								<img src={orgProfile} style={imageStyle} alt='organism profile' />
 							</Panel>
 							<Panel header="3. Dive into organs" key="3" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-								<img src={geneExpHeatmap} style={imageStyle} alt='expression profile'/>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What cell types are present in each organ of frog?</p>
 							</Panel>
 							<Panel header="4. Experiment with queries" key="4" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
-								<img src={geneExpHeatmap} style={imageStyle} alt='heatmap'/>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Show 10 markers of erythrocyte in frog Liver.</p>
 							</Panel>
 						</Collapse>
           </TabPane>
-          <TabPane tab="Example 2: Focus on one organism and tissue" key="3">
+          <TabPane tab="Example 2: Focus on one organism and tissue" key="2">
 						<p>As a biologist or researcher, I'm interested in specific organisms, genes, and cell types. I need tools that can help me discover and analyze these features.</p>
-						<h3>Journey:</h3>
-						<p><b>Specify Research Interest:</b>Initiate your exploration with a targeted question such as "what cell types are present in each organ of the mouse?".</p>
-						<p><b>Data Visulatisation:</b>Utilize AtlasApprox's diverse visualization tools, such as heatmaps and bubble charts, to better understand gene expressions and cell fractions.</p>
-						<p><i>Example:</i>"What are the top 10 marker genes of Fibroblast in the mouse lung?"</p>
+						<h3>Journey</h3>
+						<p>This journey has four steps..........</p>
+						<Collapse ghost destroyInactivePanel>
+							<Panel header="1. Choose an organism" key="1" style={{fontWeight:"bold"}}>
+								Initiate your exploration with a targeted question:
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Explore mouse"</p>
+							</Panel>
+							<Panel header="2. Quick overview of the organism" key="2" style={{fontWeight:"bold"}}>
+								<h4>Have a clear outlook of your organism of interest</h4>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>what cell types are present in each organ of the mouse?</p>
+							</Panel>
+							<Panel header="3. Dive into organs" key="3" style={{fontWeight:"bold"}}>
+								<h4>Data visulatisation and sample query:</h4>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What cell type is the highest expressor of Col2a1 in mouse?</p>
+							</Panel>
+							<Panel header="4. Experiment with queries" key="4" style={{fontWeight:"bold"}}>
+								<h4>Sample Query:</h4>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of Col1a1, Cnn1, Alk, Col2a1, Cd19 in mouse lung?</p>
+							</Panel>
+						</Collapse>
           </TabPane>
-          <TabPane tab="Example 3: Advanced usage" key="2">
-						<p>Equipped with knowledge in single-cell atlases. I have the ability to process data but would like to have access to an advanced platform to quickly surf cell atlases that are already published. </p>
-						<h3>Journey:</h3>
-						<p><b>Complex Data Queries:</b>Delve deep with queries like, "What is the average expression of gene A, gene B, gene C in a particular mouse organ?"</p>
-						<p><b>Comparative Analysis:</b>Use the platform's tools including bubble charts to compare gene expressions or cell distributions across various organisms or organs.</p>
-						<p><b>Interactive Data Manipulation: </b>Take advantage of features like zoom, pan, and interactive legends to focus on specific data points within visualizations.</p>
-						<p><b>Collaborate and Discuss: </b>Use integrated collaboration tools or forums (if available) to discuss findings with peers or seek expert opinions.</p>
-						<p><b>Export for External Analysis: </b>Download intricate data sets as SVG or CSV for analysis in external tools or software to further your research.</p>
-          </TabPane>
+          <TabPane tab="Example 3: Advanced data exploration" key="3">
+						<p>As an advanced user with expertise in single-cell atlases, I'm looking for a robust platform to navigate, compare, and extract detailed insights from published cell atlases efficiently.</p>
+						<h3>Journey</h3>
+						<p>This journey outlines a series of advanced functionalities and how to harness them for in-depth analysis:</p>
+						<Collapse ghost destroyInactivePanel>
+							<Panel header="1. Complex data queries" key="1" style={{fontWeight:"bold"}}>
+								Begin with a detailed query to extract precise data: look into average gene expression
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?"</p>
+							</Panel>
+							<Panel header="2. Cell fraction analysis" key="2" style={{fontWeight:"bold"}}>
+								Look into cell fraction
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the fraction of TP53, APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
+							</Panel>
+							<Panel header="3. Interactive data manipulation" key="3" style={{fontWeight:"bold"}}>
+								<h4>Compare data across multiple organs or cell types within a species:</h4>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Compare fraction of cells expressing APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1 in fibroblast across organs in human.</p>
+							</Panel>
+							<Panel header="4. Export for external analysis" key="4" style={{fontWeight:"bold"}}>
+								<h4>Extend your research beyond:</h4>
+								Download detailed data sets in formats like SVG or CSV. Analyze them using external tools or specialized software, furthering the scope of your research.
+							</Panel>
+						</Collapse>
+				</TabPane>
         </Tabs>
-
         <h2 style={{ color: "rgb(48, 49, 49)" }}>List of queries</h2>
         <Divider style={{ borderTopWidth: "1px", borderColor: "rgb(48, 49, 49, 0.5)" }}></Divider>
         <Collapse destroyInactivePanel>
