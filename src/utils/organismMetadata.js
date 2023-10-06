@@ -125,6 +125,15 @@ const organismMetadata = {
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Pygmy_mouse_lemur",
     paperHyperlink:"https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2",
   },
+  "n_vectensis": {
+    bioName: "Nematostella vectensis",
+    commonName: "Starlet sea anemone",
+    dataSource: "[Steger et al 2022](Single-cell transcriptomics identifies conserved regulators of neuroglandular lineages)",
+    about: "The starlet sea anemone is a species of small sea anemone in the family Edwardsiidae native to the east coast of the United States, with introduced populations along the coast of southeast England and the west coast of the United States. Populations have also been located in Nova Scotia, Canada",
+    imagePath: require("../asset/organisms/n_vectensis.jpeg"),
+    descriptionHyperlink:"https://en.wikipedia.org/wiki/Starlet_sea_anemone",
+    paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S2211124722012025?via%3Dihub",
+  },
   "s_lacustris": {
     bioName: "Spongilla lacustris",
     commonName: "Freshwater sponge",

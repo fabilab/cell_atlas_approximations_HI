@@ -123,6 +123,13 @@ export const updateChat = async (response, plotState) => {
       answer += buildAnswer(intent, apiData);
       answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
     }
+    else if (intent === "organisms.geneExpression") {
+      let apiOrganisms = await atlasapprox.organisms("gene_expression");
+      let numOrganisms = apiOrganisms.organisms.length;
+      answer += `There are ${numOrganisms} organisms available:<br>`;
+      apiData = await callAPI(endpoint, params);
+      answer += buildAnswer(intent, apiData);
+    }
 
     else if (intent === "average.chromatinAccessibility") {
       params['measurement_type'] = 'chromatin_accessibility';

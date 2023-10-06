@@ -27,7 +27,7 @@ const buildAnswer = (intent, data) => {
         answer = "The available measurement types are: " + _chainList(data.measurement_types, ", ", ".");
         break;
       case "organisms":
-        answer = "The available organisms are: " + _chainList(data.organisms, ", ", ".");
+        answer = _chainList(data.organisms, ", <br>", ".");
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");

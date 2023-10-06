@@ -82,8 +82,9 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
             document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
             document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
 
-            selectAll(".yaxislayer-above").selectAll('text')
-            .on("click", (event) => yAxisLabelClick(event));
+            selectAll(".yaxislayer-above")
+              .selectAll('text')
+              .on("click", (event) => yAxisLabelClick(event));
           }}
       />
   );
