@@ -11,12 +11,19 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
   // Find the index of the organ, organ cases are different in species
   const organIndex = apiCellOrgan.organs.findIndex(organ => organ.toLowerCase() === organName.toLowerCase());
 
-  // Filter the celltypes and detected values for non-zero values
-  const nonZeroData = apiCellOrgan.celltypes.map((cellType, index) => ({
+  // Get cell types and abundances
+  let nonZeroData = apiCellOrgan.celltypes.map((cellType, index) => ({
       name: cellType,
       value: apiCellOrgan.detected[index][organIndex]
-  })).filter(item => item.value > 0);
+  }));
 
+  // Restrict to nonzero cell types (necessary because it comes from celltype x organ)
+  nonZeroData = nonZeroData.filter(item => item.value > 0);
+
+  // Sort by decreasing abundance
+  nonZeroData.sort((item1, item2) => item1.value - item2.value);
+
+  // Prepare for plotly
   const data = [{
       type: 'bar',
       y: nonZeroData.map(item => item.name),
@@ -30,16 +37,11 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
             width: 1,
           },
       },
-      transforms: [{
-        type: 'sort',
-        target: nonZeroData.map(item => item.value),
-        order: 'ascending'
-      }]
   }];
 
   let layout = {
       width: 520,
-      height: 500,
+      height: 170 + 14.7 * nonZeroData.length,
       xaxis: {
         automargin: true,
         title: {
@@ -53,13 +55,15 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
         range: [0, 4],
       },
       title: {
-        text: `<b>Detected cell type distribution in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
+        text: `<b>Maasured cell type abundance in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
         font: {
           size: 14
         },
       },
       yaxis: {
         automargin: true,
+        showticklabels: true,
+        type: "category",
       }
   };
 
