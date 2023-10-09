@@ -16,6 +16,7 @@ const updatePlotIntents = [
   "similar_celltypes",
   "plot",
   "explore",
+  "feature_sequence",
 ];
 
 // check is all genes requested are found in our database
@@ -36,7 +37,7 @@ export const triggersPlotUpdate = ((response) => {
 });
 
 export const updateChat = async (response, plotState) => {
-
+  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -164,6 +165,15 @@ export const updateChat = async (response, plotState) => {
     else if (intent === "organisms.chromatinAccessibility") {
       params['measurement_type'] = 'chromatin_accessibility';
       apiData = await callAPI(endpoint, params);
+      answer = buildAnswer(intent, apiData);
+    }
+
+    else if (intent === "feature_sequences.geneExpression") {
+      console.log(endpoint);
+      endpoint = "sequences";
+      console.log(endpoint);
+      apiData = await callAPI(endpoint, params);
+      console.log(apiData);
       answer = buildAnswer(intent, apiData);
     }
     

@@ -161,6 +161,15 @@ const buildAnswer = (intent, data) => {
               answer = "Done";
           }
           break;
+        case "feature_sequences":
+        switch (sIntent) {
+          case "geneExpression":
+            answer = "The sequences of " + data.feature + " in " + data.organism + " are shown in the plot";
+            break;
+          default:
+            answer = "Done";
+        }
+        break;
       default:
         answer = "Sorry, I have no answer to that.";
     };

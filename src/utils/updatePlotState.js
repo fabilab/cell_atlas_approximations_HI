@@ -239,6 +239,17 @@ const availaleOrganisms = async (context) => {
     };
 };
 
+const featureSequences = async(context) => {
+    let apiResponse = await atlasapprox.sequences(context.organism, context.features);
+    return {
+        plotType: "featureSequences",
+        organism: context.organism,
+        features: apiResponse.features,
+        sequences: apiResponse.sequences,
+        type: apiResponse.type,
+    }
+}
+
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
     console.log(response);
@@ -298,6 +309,9 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
             break;
         case "organisms":
             newPlotState = await availaleOrganisms(context);
+            break;
+        case "feature_sequences":
+            newPlotState = await featureSequences(context);
             break;
         default:
             break;
