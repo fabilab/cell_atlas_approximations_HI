@@ -19,11 +19,11 @@ const headerStyle = {
   width: '100%',
   zIndex: 100, // Ensures the header is above other content
   backgroundColor: '#1D2531',
-  // backgroundColor: 'lightblue',
   opacity: '96%',
   color: 'white',
   fontFamily: 'Arial, sans-serif',
-  height:'55px'
+  height:'55px',
+  boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.1)',
 }
 
 const navItemStyle = {

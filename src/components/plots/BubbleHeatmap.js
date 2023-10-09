@@ -2,9 +2,9 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit, hasLog }) => {
-  const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
+const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
 
+  const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
     return `<a href="${link}" target="_blank">${gene}</a>`;
@@ -40,20 +40,28 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
     longestYlabel = Math.max(longestYlabel, yaxis[i].length);
   }
 
-  let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
+  let nfeatures = yaxis.length;
   let ncelltypes = xaxis.length;
-  let pxCell = 17, pxChar = 10;
-  let ytickMargin = pxChar * longestYlabel;
-  let xtickMargin = pxChar * longestXlabel;
-  let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-  let graphHeight = nfeatures * 6 + xtickMargin;
+
+  let ytickMargin = (nfeatures <= 10) ? 250 : 200;
+  let xtickMargin = (ncelltypes <= 20) ? 380 : 170;
+
+  let graphWidth = ncelltypes * 30 + xtickMargin;
+  let graphHeight = nfeatures * 30 + ytickMargin;
+
+  let title = "";
+  if (dataCategory === "across_organs") {
+    title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+  } else {
+    title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
+  }
 
   let layout = {
     width: graphWidth,
     height: graphHeight,
     xaxis: {
       automargin: true,
-      tickangle: 90,
+      tickangle: 270,
     },
     yaxis: {
       automargin: true,
@@ -61,11 +69,15 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
       ticktext: yTickTexts,
       tickvals: yTickVals,
     },
-    title: `<b>Bubble heatmap showing gene expression and fraction in ${organism} ${organ}</b>`,
+    title: {
+      text: title,
+      font: {
+        size: 16
+      },
+    },
   };
 
   const desired_maximum_marker_size = 6.2;
-
 
   if(hasLog) {
     all_color = all_color.map(value => Math.log(value));
@@ -83,8 +95,10 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, unit
       reversescale: true,
       colorbar: {title: {
         text: unit,
-        titleside: "bottom"
-      }},
+        titleside: "bottom",
+      },
+      len: 1
+      },
     },
     text: all_hovertext,
     hoverinfo: 'text',

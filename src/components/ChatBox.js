@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useChat } from './ChatContext'
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
-import { Button, Layout, Row, Input } from "antd";
+import { Button, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
 
-const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessage, setCurrentResponse, plotState }) => {
+const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
+  const [currentMessage, setCurrentMessage] = useState('');
   const [chatContext, setChatContext] = useState({});
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
-
+  // const [localMessage, setLocalMessage] = useState(initialMessage || '');
+  const { localMessage, setLocalMessage } = useChat();
   const chatboxRef = useRef(null);
   useEffect(() => {
     // Function to scroll the chatbox to the bottom
@@ -25,21 +28,22 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
     if (e.key === 'ArrowUp') {
       if (historyIndex > 0) {
         const previousMessage = messageHistory[historyIndex - 1].message;
-        setCurrentMessage(previousMessage);
+        setLocalMessage(previousMessage);
         setHistoryIndex(historyIndex - 1);
       }
     } else if (e.key === 'ArrowDown') {
       if (historyIndex < messageHistory.length - 1) {
         const nextMessage = messageHistory[historyIndex + 1].message;
-        setCurrentMessage(nextMessage);
+        setLocalMessage(nextMessage);
         setHistoryIndex(historyIndex + 1);
       } else if (historyIndex === messageHistory.length - 1) {
-        setCurrentMessage('');
+        setLocalMessage('');
       }
     }
   };
 
   const handleSubmit = async (text) => {
+
     const newMessage = { message: text, index: messageHistory.length };
     setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
     setHistoryIndex([...messageHistory, newMessage].length);
@@ -52,47 +56,53 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
       setCurrentMessage('');
       return '';
     } else {
-      let nlp = new AtlasApproxNlp(chatContext);
+      setCurrentMessage(localMessage); 
+      let nlp;
+      if (chatHistory) {
+        nlp = new AtlasApproxNlp(chatContext);
+      } else {
+        nlp = new AtlasApproxNlp({});
+      }
       await nlp.initialise();
       let response = await nlp.ask(text);
       setChatContext(nlp.context);
 
       try {
+        console.log(response)
         const updateObject = await updateChat(response,plotState)
-        console.log(updateObject);
         response.hasData = updateObject.hasData;
         if (updateObject.hasData) {
           response.data = updateObject.data;
           response.params = updateObject.params;
         }
-
+        // update parent chat state
+        setLocalMessage('');
+        
         // update parent response state
         setCurrentResponse(response);
 
-        // update parent chat state
-        setCurrentMessage('');
-        
-        const instructions = [...chatHistory]; // this will become the new set of instructions
+        const instructions = chatHistory ? [...chatHistory] : []; // this will become the new set of instructions
         const today = new Date();
         const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         instructions.push({ role: 'user', message: text, time: time });
         instructions.push({ role: 'system', message: updateObject.message, time: time });
         setChatHistory(instructions);
+        
       } catch (error) {
         console.error("Error occurred during updateChat:", error);
       }
-    } // else
-  }; //handleSubmit
+    } 
+  };
 
   useEffect(() => {
-    if (chatHistory.length === 0) {
-      handleSubmit(currentMessage);
+    if (!chatHistory || chatHistory.length === 0) {
+      handleSubmit(initialMessage);
     }
   }, [chatHistory]);
 
   return (
     <div style={{ 
-        width: "26%",
+        width: "23%",
         display: 'flex',
         flexDirection: 'column',
         gap: '30px',
@@ -101,7 +111,7 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       }}>
       <div style={{ width: "100%", overflow: "scroll", height:`${window.innerHeight*0.75}px`, paddingTop:"3vh"}} ref={chatboxRef}>
-          {chatHistory.length !== 0 &&
+          {chatHistory && chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message
                 key={`${m.role}-${m.time}`}
@@ -119,10 +129,10 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             id="chatBoxInput"
             // allowClear
               autoSize={{ minRows: 4, maxRows: 5 }}
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+              value={localMessage}
+              onChange={(e) => setLocalMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
               onKeyDown={handleKeyDown}
-              onPressEnter={() => handleSubmit(currentMessage)}
+              onPressEnter={() => handleSubmit(localMessage)}
               className="chat-input"
           />
           <Button 
@@ -130,12 +140,14 @@ const ChatBox = ({ chatHistory, setChatHistory, currentMessage, setCurrentMessag
             icon={<SendOutlined
               style={{ color: currentMessage.length > 0 ? '#1890ff' : 'grey' }}
             />} 
-            onClick={() => handleSubmit(currentMessage)}
+            onClick={() => handleSubmit(localMessage)}
             className="send-button"
           />
         </div>
-        <p style={{ margin: '3px', color: "#666", fontSize: "10.5px" }}>
-          Press 'Enter' to send a message. Key up to navigate command history.
+        <p style={{ margin: '3px', color: "#666s", fontSize: "11px" }}>
+          Press 'Enter' to send a message.
+          <br/>
+          Press up arrow '↑' to navigate command history.
         </p>
       </Row>
     </div>

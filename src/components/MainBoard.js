@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ChatProvider } from './ChatContext'; 
 import { useLocation } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
@@ -8,12 +9,9 @@ import { updatePlotState } from '../utils/updatePlotState';
 const MainBoard = () => {
   const location = useLocation();
   const firstQuery = location.state;
-
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState(null);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState({"hasLog": false});
-  const [showLanding, setShowLanding] = useState(true);
-  const [currentMessage, setCurrentMessage] = useState(firstQuery);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -27,34 +25,28 @@ const MainBoard = () => {
     };
   }, []);
 
-
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
-      console.log("here's the current response, which triggers a plot update:");
-      console.log(currentResponse);
       updatePlotState(currentResponse, plotState, setPlotState);
-      setShowLanding(false);
-    } else {
-      console.log("here's the current response, which does not trigger a plot update:");
-      console.log(currentResponse);
-    }
+    } 
   }, [currentResponse]);
 
   return (
-    <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
-        <ChatBox
-          style={{ height:'100%' }}
-          chatHistory={chatHistory}
-          setChatHistory={setChatHistory}
-          currentMessage={currentMessage}
-          setCurrentMessage={setCurrentMessage}
-          setCurrentResponse={setCurrentResponse}
-          plotState={plotState}
-        />
-      <div style={{ flex: 1, margin:'10px', overflow: 'auto'}}>
-        {plotState && <PlotBox state={plotState} />}
+    <ChatProvider>
+      <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
+          <ChatBox
+            style={{ height:'100%' }}
+            initialMessage={firstQuery}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            setCurrentResponse={setCurrentResponse}
+            plotState={plotState}
+          />
+          <div style={{ flex: 1, overflow: 'auto'}}>
+            {plotState && <PlotBox state={plotState} />}
+          </div>
       </div>
-    </div>
+    </ChatProvider>
   );
 };
 

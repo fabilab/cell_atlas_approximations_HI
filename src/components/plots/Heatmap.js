@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
+const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, organ, celltype, unit, measurementType, hasLog }) => {
+
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
+
 
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -23,13 +25,15 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
       values = values.map(subArray => subArray.map(value => Math.log(value)));
       unit = "log( " + unit + " )";
     } 
+
     let data = [
       {
         z: values,
         x: xaxis,
         y: yaxis,
         type: 'heatmap',
-        colorscale: 'Reds',
+        colorscale: 'YlGnBu',
+        reversescale: true,
         // get unit from API call
         colorbar: {
           title: {
@@ -52,20 +56,33 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
       longestYlabel = Math.max(longestYlabel, yaxis[i].length);
     }
   
-    let nfeatures = yaxis.reduce((acc, a) => acc + a.length, 0);
-    let ncelltypes = xaxis.length;
-    let pxCell = 17, pxChar = 10;
-    let ytickMargin = pxChar * longestYlabel;
-    let xtickMargin = pxChar * longestXlabel;
-    let graphWidth = ytickMargin + pxCell * ncelltypes + 400;
-    let graphHeight = nfeatures * 7.3 + xtickMargin;
+    // Calculate suitable cell size
+    const ncelltypes = xaxis.length;
+    const nfeatures = yaxis.length;
+
+    // Calculate graph width and height
+    let ytickMargin = (nfeatures < 10) ? 250 : 200;
+    let xtickMargin = (ncelltypes < 15) ? 400 : 170;
+    let graphWidth = ncelltypes * 30 + xtickMargin;
+    let graphHeight = nfeatures * 30 + ytickMargin;
     
+    let title = "";
+    if (subIntent === 'geneExpression') {
+      if (dataCategory === "across_organs") {
+        title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+      } else {
+        title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
+      }
+    } else {
+      title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
+    }
+
     let layout = {
       width: graphWidth,
       height: `${graphHeight}`,
       xaxis: {
-        autorange: true,
         automargin: true,
+        tickangle: 270,
       },
       yaxis: {
         automargin: true,
@@ -73,7 +90,7 @@ const Heatmap = ({ xaxis, yaxis, values, organism, organ, unit, hasLog }) => {
         ticktext: yTickTexts,
         tickvals: yTickVals,
       },
-      title: `<b>Heatmap of gene expression in ${organism} ${organ}</b>`,
+      title: title,
     };
   
     let cameraRetro= {

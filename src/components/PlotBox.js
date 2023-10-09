@@ -4,6 +4,7 @@ import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';
 import CellxOrganTable from './plots/CellxOrganTable';
 import TableOrganisms from './plots/TableOrganisms';
+import OrganismProfile from './plots/OrganismProfile';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -18,12 +19,16 @@ const PlotBox = ({ state }) => {
     return (
       <div style={plotStyle}>
         <Heatmap
+          subIntent={state.subIntent}
+          dataCategory={state.dataCategory}
           xaxis={state.data.xaxis}
           yaxis={state.data.yaxis}
           values={state.data.average}
           organism={state.organism}
           organ={state.organ}
+          celltype={state.celltype}
           unit={state.data.valueUnit}
+          measurementType={state.data.measurementType}
           hasLog={state.hasLog}
         />
       </div>
@@ -39,8 +44,10 @@ const PlotBox = ({ state }) => {
           fractions={state.data.fractions}
           organism={state.organism}
           organ={state.organ}
+          celltype={state.celltype}
           unit={state.data.valueUnit}
           hasLog={state.hasLog}
+          dataCategory={state.dataCategory}
         />
       </div>
     );
@@ -54,6 +61,7 @@ const PlotBox = ({ state }) => {
           average={state.data.average}
           organism={state.organism}
           features={state.features}
+          unit={state.data.unit}
         />
       </div>
     )
@@ -66,8 +74,16 @@ const PlotBox = ({ state }) => {
   } else if (state.plotType === "showOrganisms") {
     return (
       <TableOrganisms
-        state={state}
+        organisms={state.organisms}
       />
+    )
+  } else if (state.plotType === 'organismProfile') {
+    return (
+      <div>
+        <OrganismProfile
+          organism={state.organism}
+        />
+      </div>
     )
   }
 };
