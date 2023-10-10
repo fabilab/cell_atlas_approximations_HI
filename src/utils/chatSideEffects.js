@@ -16,7 +16,7 @@ const updatePlotIntents = [
   "similar_celltypes",
   "plot",
   "explore",
-  "feature_sequence",
+  "feature_sequences",
 ];
 
 // check is all genes requested are found in our database

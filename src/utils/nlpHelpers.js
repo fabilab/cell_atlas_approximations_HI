@@ -164,7 +164,7 @@ const buildAnswer = (intent, data) => {
         case "feature_sequences":
         switch (sIntent) {
           case "geneExpression":
-            answer = "The sequences of " + data.feature + " in " + data.organism + " are shown in the plot";
+            answer = "The sequences of " + data.features + " in " + data.organism + " are shown in the plot";
             break;
           default:
             answer = "Done";

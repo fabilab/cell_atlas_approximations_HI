@@ -46,18 +46,6 @@ const FeatureSequences = ({ organism, features, sequences, type }) => {
 
   return (
     <div style={{ width: "inherit" }}>
-      <div style={{ display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 3%" }}>
-        {imagePath && (
-          <img
-            src={imagePath}
-            alt={organism}
-            style={{ width: "8%", height: "auto", paddingRight: "8%" }}
-          />
-        )}
-        <div>
-          <h2 style={{ fontSize: "1.3em" }}>Selected gene sequences of {bioName}</h2>
-        </div>
-      </div>
       <div style={{ 
         padding: "1% 3%"
       }}>
@@ -65,7 +53,7 @@ const FeatureSequences = ({ organism, features, sequences, type }) => {
           <Card key={index} style={{ 
             marginBottom: '15px' 
           }}>
-            <h3 style={{ color: "#2962ff" }}>&gt; {feature}</h3>
+            <h3 style={{ color: "#2962ff" }}>{feature}</h3>
             <pre style={sequenceStyle}>{sequences[index]}</pre>
             {copyStatus === 'copied' ? 
               <Tooltip title={renderTooltipContent()}>

@@ -241,6 +241,7 @@ const availaleOrganisms = async (context) => {
 
 const featureSequences = async(context) => {
     let apiResponse = await atlasapprox.sequences(context.organism, context.features);
+    console.log(apiResponse);
     return {
         plotType: "featureSequences",
         organism: context.organism,
@@ -259,7 +260,9 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
     let dataCategory = intent.split(".")[2] || "";
     let newPlotState = null;
     
-    plotState.hasLog = plotState.hasLog || false;
+    if (plotState) {
+        plotState.hasLog = plotState.hasLog || false;
+    }
 
     const context = {
       intent: intent,
