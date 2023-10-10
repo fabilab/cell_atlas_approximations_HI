@@ -5,7 +5,7 @@ import { CopyOutlined } from '@ant-design/icons';
 
 
 const FeatureSequences = ({ organism, features, sequences, type }) => {
-    console.log("calling feature sequences ===");
+
   const [copyStatus, setCopyStatus] = useState('not-copied');
   // https://stackoverflow.com/questions/62723863/css-overflow-wrap-does-not-work-in-react-js
   const sequenceStyle = {

@@ -241,7 +241,6 @@ const availaleOrganisms = async (context) => {
 
 const featureSequences = async(context) => {
     let apiResponse = await atlasapprox.sequences(context.organism, context.features);
-    console.log(apiResponse);
     return {
         plotType: "featureSequences",
         organism: context.organism,

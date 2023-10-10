@@ -1,6 +1,7 @@
 import callAPI from "./callAPI.js";
 import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import atlasapprox from "@fabilab/atlasapprox";
+import { downloadFasta } from "./downloadFasta";
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
@@ -38,6 +39,7 @@ export const triggersPlotUpdate = ((response) => {
 
 export const updateChat = async (response, plotState) => {
   console.log(response);
+  console.log(plotState);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -59,6 +61,22 @@ export const updateChat = async (response, plotState) => {
       hasData: false,
       message: response.followUpQuestion,
     };
+  }
+
+  if (intent === "download") {
+    if (!plotState) {
+      return {
+        message: "Sorry, there is no data to be downloaded"
+      }
+    } 
+    try {
+      downloadFasta(plotState)
+      return {
+        message: "Data has been downloaded successfully"
+      }
+    } catch (err) {
+      console.error("Failed to download data ", err);
+    }
   }
 
   try {
@@ -169,14 +187,11 @@ export const updateChat = async (response, plotState) => {
     }
 
     else if (intent === "feature_sequences.geneExpression") {
-      console.log(endpoint);
       endpoint = "sequences";
-      console.log(endpoint);
       apiData = await callAPI(endpoint, params);
-      console.log(apiData);
       answer = buildAnswer(intent, apiData);
     }
-    
+
     else {
       apiData = await callAPI(endpoint, params);
       answer += buildAnswer(intent, apiData);
