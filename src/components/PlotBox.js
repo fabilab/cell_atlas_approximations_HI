@@ -5,6 +5,7 @@ import BarChart from './plots/BarChart';
 import CellxOrganTable from './plots/CellxOrganTable';
 import TableOrganisms from './plots/TableOrganisms';
 import OrganismProfile from './plots/OrganismProfile';
+import FeatureSequences from './plots/FeatureSequences';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -85,7 +86,17 @@ const PlotBox = ({ state }) => {
         />
       </div>
     )
+  } else if (state.plotType === 'featureSequences') {
+    return (
+      <FeatureSequences
+        organism = {state.organism}
+        features={state.features}
+        sequences={state.sequences}
+        type={state.type}
+      />
+    )
   }
+
 };
 
 export default PlotBox;
