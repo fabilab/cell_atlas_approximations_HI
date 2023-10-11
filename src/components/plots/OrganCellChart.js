@@ -55,7 +55,7 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
         range: [0, 4],
       },
       title: {
-        text: `<b>Maasured cell type abundance in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
+        text: `<b>Measured cell type abundance in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
         font: {
           size: 14
         },

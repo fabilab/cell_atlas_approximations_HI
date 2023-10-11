@@ -9,7 +9,6 @@ const { Text } = Typography;
 const OrganismProfile = ({ organism }) => {
 
     const [error, setError] = useState(null);
-    // const [organs, setOrgans] = useState({});
     const imageRef = useRef(null);
     const [imageHeight, setImageHeight] = useState(0);
     const [scalingFactors, setScalingFactors] = useState({ width: 0.4447, height: 0.4286 });  // scaling factors, rendered width/intrinsic width
