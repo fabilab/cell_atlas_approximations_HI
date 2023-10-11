@@ -69,7 +69,6 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
 
   const yAxisLabelClick = (event) => {
     const clickedCellType = event.target.textContent;
-    // console.log(`clicking cell type ${cellType}`);
     let message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
     setLocalMessage(message);
   };
