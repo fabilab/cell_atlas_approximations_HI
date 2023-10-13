@@ -8,7 +8,13 @@ import orgProfile from '../demo/organismProfile.png';
 import fractionExp from '../demo/fractionExp.png';
 import markers from '../demo/markers.png';
 import cellxOrgan from '../demo/cellxOrgan.png';
+import cellxOrganFrog from '../demo/cellxOrganFrog.png';
 import highestExpressor from '../demo/highest_expressor.png';
+import markersMouse from '../demo/markers_mouse.png';
+import highestMouse from '../demo/highest_exp_mouse.png';
+import similarGenes from '../demo/similar-genes.png';
+import acrossOrgans from '../demo/across-organs.png';
+import chromatinAcc from '../demo/chromatin-acc.png';
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -24,7 +30,7 @@ const UserGuide = () => {
   }
 
   const imageStyle = {
-    width: '100%',
+    width: '90%',
     display: 'block',
     margin: '0 auto',
     boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.25), 0px 6px 6px rgba(0, 0, 0, 0.10)', // Shadow effect
@@ -71,10 +77,12 @@ const UserGuide = () => {
 							<Panel header="3. Dive into organs" key="3" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What cell types are present in each organ of frog?</p>
+								<img src={cellxOrganFrog} style={imageStyle} alt='cell type x organ (frog)' />
 							</Panel>
 							<Panel header="4. Experiment with queries" key="4" style={{fontWeight:"bold"}}>
 								<h4>Sample Query:</h4>
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Show 10 markers of erythrocyte in frog liver.</p>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Show 20 markers of erythrocyte in frog liver.</p>
+								<img src={markers} style={imageStyle} alt='markers (frog)' />
 							</Panel>
 						</Collapse>
           </TabPane>
@@ -89,15 +97,18 @@ const UserGuide = () => {
 							</Panel>
 							<Panel header="2. Dot plot of a list of genes" key="2" style={{fontWeight:"bold"}}>
                 To get the plot, you can type:
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What is the fraction of cells expressing Ptprc,Cd3e,Ms4a1 in mouse lung?"</p>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What is the fraction of cells expressing Ms4a1,Col1a1,Col2a1,Ptprc,Cd3e,Tgfbi,Cd19,Tp53 in mouse lung?"</p>
+								<img src={fractionExp} style={imageStyle} alt='cell fraction example (mouse)' />
 							</Panel>
 							<Panel header="3. Cell type markers" key="3" style={{fontWeight:"bold"}}>
 								<h4>To get a list and plot of marker genes, type the following:</h4>
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Show the top 10 marker genes of pericyte in mouse lung</p>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Show the top 10 marker genes of pericyte in mouse lung"</p>
+								<img src={markersMouse} style={imageStyle} alt='marker genes (mouse)' />
 							</Panel>
 							<Panel header="4. Track a gene of interest across organs" key="4" style={{fontWeight:"bold"}}>
 								<h4>To check who is expressing that one gene, type:</h4>
-								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>Who is the highest expressor of Ms4a1 in mouse?</p>
+								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Who is the highest expressor of Ms4a1 in mouse?"</p>
+								<img src={highestMouse} style={imageStyle} alt='highest expressor (mouse)' />
 							</Panel>
 						</Collapse>
           </TabPane>
@@ -107,18 +118,21 @@ const UserGuide = () => {
 						<p>This journey outlines a series of advanced functionalities and how to harness them for in-depth analysis:</p>
 						<Collapse ghost destroyInactivePanel>
 							<Panel header="1. Correlated/similar features" key="1" style={{fontWeight:"bold"}}>
-								One you find a gene of interest, you can chase the white rabbit using correlation analysis. Type:
+								Once you find a gene of interest, you can chase the white rabbit using correlation analysis. Type:
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Show 10 genes similar to Ms4a1 in mouse lung."</p>
                 Hey! - our friend Cd19 is there, as expected.
+								<img src={similarGenes} style={imageStyle} alt='similar genes' />
 							</Panel>
 							<Panel header="2. Compare a cell type across multiple organs" key="2" style={{fontWeight:"bold"}}>
                 Are lung fibroblasts the same as heart fibroblasts? Well, to know the answer, type:
               <p style={{color: "#3d5afe", fontWeight: 'bold'}}>"Compare expression of APOE, CD19, COL1A1, TGFBI, EPCAM, COL2A1, COL13A1 in fibroblast across organs in human."</p>
               (Hint: They are not... are they?)
+			  				<img src={acrossOrgans} style={imageStyle} alt='compare fibroblast across organs' />
 							</Panel>
 							<Panel header="3. Delve into the mysterious world of gene regulation" key="3" style={{fontWeight:"bold"}}>
 								<h4>To explore chromatin accessibility data, type:</h4>
 								<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"List highest accessibility of chr1:9955-10355 in human."</p>
+								<img src={chromatinAcc} style={imageStyle} alt='chromatin accessibility' />
 							</Panel>
 							<Panel header="4. Export and beautify" key="4" style={{fontWeight:"bold"}}>
 								<h4>For each plot, you can export the data as a CSV, or the plot itself as a vector (SVG) or raster (PNG) figure, using the bar above the plot. Extend your analysis beyond the web application!</h4>
@@ -140,12 +154,12 @@ const UserGuide = () => {
 					</Panel>
 					<Panel header="Gene Expression Heatmap" key="2" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
-						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
+						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What is the expression of MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?"</p>
 						<img src={geneExpHeatmap} style={imageStyle} alt='gene expression heatmap'/>
 					</Panel>
 					<Panel header="Cell Fraction Bubble Map" key="3" style={{fontWeight:"bold"}}>
 						<h4>Sample Query:</h4>
-						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>What is the fraction of cells expressing MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?</p>
+						<p style={{color: "#3d5afe", fontWeight: 'bold'}}>"What is the fraction of cells expressing MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?"</p>
 						<img src={fractionExp} style={imageStyle} alt='cell fraction visualisation'/>
 					</Panel>
 					<Panel header="Marker Genes" key="4" style={{fontWeight:"bold"}}>

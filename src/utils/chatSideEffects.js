@@ -125,22 +125,19 @@ export const updateChat = async (response, plotState) => {
       // handle duplicate gene names in user input list
       params.features = [...new Set(params.features.split(','))].join(',');
 
-      let apiOrgans = await atlasapprox.organs(params.organism);
-      if (!apiOrgans.organs.map(x => x.toLowerCase()).includes(params.organ.toLowerCase())) {
-        answer = `Oops! ${params.organ} is not found in ${params.organism}`;
-        return {
-          hasData: false,
-          message: answer,
-        }
-
+      if (params.organ) {
+        let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
+        let numCelltypes = apiCelltypes.celltypes.length;
+        let numGenes = params.features.split(",").length;
+        apiData = await callAPI(endpoint, params);
+        answer += buildAnswer(intent, apiData);
+        answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
       }
 
-      let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
-      let numCelltypes = apiCelltypes.celltypes.length;
-      let numGenes = params.features.split(",").length;
-      apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
-      answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
+      else {
+        apiData = await callAPI(endpoint, params);
+        answer += buildAnswer(intent, apiData);
+      }
     }
     else if (intent === "organisms.geneExpression") {
       let apiOrganisms = await atlasapprox.organisms("gene_expression");
