@@ -61,7 +61,170 @@ const organismMetadata = {
     genesFromPaper: "",
     imagePath: require("../asset/organisms/h_sapiens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
-    paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896"
+    paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896",
+    organs: {
+      "bladder": {
+        coords: "649,806,649,832,670,832,670,807"
+      },
+      "bladder-label": {
+        coords: "44,779,243,834",
+        shape: "rect"
+      },
+      "blood": {
+        coords: "555,1083,563,1157,576,1154,570,1096"
+      },
+      "blood-label": {
+        coords: "55,1078,244,1124",
+        shape: "rect"
+      },
+      "colon": {
+        coords: "718,677,707,648,719,626,740,615,762,621,752,662,756,696,758,736,741,779,722,760,725,736,723,700"
+      },
+      "colon-label": {
+        coords: "1089,645,1309,689",
+        shape: "rect"
+      },
+      "eye": {
+        coords: "629,131,647,124,662,135,652,139,638,137"
+      },
+      "eye-label": {
+        coords: "381,150,245,107",
+        shape: "rect"
+      },
+      "fat": {
+        coords: "549,956,539,1022,551,1072,575,1095,590,1058,581,1005"
+      },
+      "fat-label": {
+        coords: "55,1013,244,1057",
+        shape: "rect"
+      },
+      "gut": {
+        coords: "626,676,626,758,717,759,715,676"
+      },
+      "gut-label": {
+        coords: "1089,703,1259,748",
+        shape: "rect"
+      },
+      "heart": {
+        coords: "662,434,664,463,676,465,673,456,694,465,713,471,732,468,739,452,732,422,727,405,697,398"
+      },
+      "heart-label": {
+        coords: "1091,427,1312,474",
+        shape: "rect"
+      },
+      "kidney": {
+        coords: "634,587,619,586,606,595,601,612,601,628,608,638,618,643,630,638,635,616,642,599"
+      },
+      "kidney-label": {
+        coords: "52,580,244,628",
+        shape: "rect"
+      },
+      "liver": {
+        coords: "594,575,588,540,592,518,605,504,628,503,646,492,689,498,711,508,703,521,674,542,644,551,624,555,607,573"
+      },
+      "liver-label": {
+        coords: "50,506,243,552",
+        shape: "rect"
+      },
+      "lung": {
+        coords: "666,364,660,330,642,319,617,337,589,377,577,419,571,457,584,491,605,504,626,503,647,491,666,466,655,431,655,396"
+      },
+      "lung-label": {
+        coords: "46,338,243,384",
+        shape: "rect"
+      },
+      "lymphnode": {
+        coords: "683,254,697,254,700,281,685,283"
+      },
+      "lymphnode-label": {
+        coords: "1091,239,1359,288",
+        shape: "rect"
+      },
+      "mammary": {
+        coords: "578,441,624,441,624,483,580,483"
+      },
+      "mammary-label": {
+        coords: "7,424,243,476",
+        shape: "rect"
+      },
+      "marrow": {
+        coords: "600,1256,605,1350,618,1350,614,1256"
+      },
+      "marrow-label": {
+        coords: "39,1269,242,1321",
+        shape: "rect"
+      },
+      "muscle": {
+        coords: "826,721,753,791,701,866,688,911,688,994,703,1080,700,1157,719,1235,810,1234,809,1170,818,1109,834,1057,845,956,842,852"
+      },
+      "muscle-label": {
+        coords: "1092,1011,1306,1059",
+        shape: "rect"
+      },
+      "pancreas": {
+        coords: "744,607,711,618,690,622,673,628,656,618,660,602,673,595,697,593,731,599"
+      },
+      "pancreas-label": {
+        coords: "6,668,243,717",
+        shape: "rect"
+      },
+      "prostate": {
+        coords: "670,814,694,814,694,839,670,839"
+      },
+      "prostate-label": {
+        coords: "1090,821,1310,864",
+        shape: "rect"
+      },
+      "salivary": {
+        coords: "673,183,688,183,688,191,673,191"
+      },
+      "salivary-label": {
+        coords: "1091,162,1315,211",
+        shape: "rect"
+      },
+      "skin": {
+        coords: "536,885,576,946,601,1009,611,1069,602,1107,582,1123,577,1096,592,1059,582,1003,551,956,543,986,537,1023,555,1082,546,1099,531,1053,521,956"
+      },
+      "skin-label": {
+        coords: "54,936,243,984",
+        shape: "rect"
+      },
+      "spleen": {
+        coords: "726,589,739,580,753,578,765,589,766,606,751,612,739,600"
+      },
+      "spleen-label": {
+        coords: "1090,570,1311,617",
+        shape: "rect"
+      },
+      "thymus": {
+        coords: "681,356,666,353,655,396,656,435,671,427,691,408,694,398,727,403,711,372,696,351"
+      },
+      "thymus-label": {
+        coords: "1091,344,1312,392",
+        shape: "rect"
+      },
+      "tongue": {
+        coords: "662,197,682,194,701,197,694,209,682,215,670,208"
+      },
+      "tongue-label": {
+        coords: "243,230,46,176",
+        shape: "rect"
+      },
+      "trachea": {
+        coords: "671,240,672,347,693,343,690,282,684,270,684,252,691,252,690,240"
+      },
+      "trachea-label": {
+        coords: "44,251,242,301",
+        shape: "rect"
+      },
+      "uterus": {
+        coords: "628,766,729,765,730,804,628,806"
+      },
+      "uterus-label": {
+        coords: "1089,756,1311,799",
+        shape: "rect"
+      }
+    }
     // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "i_pulchra": {
