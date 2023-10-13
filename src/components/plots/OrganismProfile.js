@@ -9,7 +9,6 @@ const { Text } = Typography;
 const OrganismProfile = ({ organism }) => {
 
     const [error, setError] = useState(null);
-    // const [organs, setOrgans] = useState({});
     const imageRef = useRef(null);
     const [imageHeight, setImageHeight] = useState(0);
     const [scalingFactors, setScalingFactors] = useState({ width: 0.4447, height: 0.4286 });  // scaling factors, rendered width/intrinsic width
@@ -61,6 +60,9 @@ const OrganismProfile = ({ organism }) => {
     
         const areas = Object.keys(orgMeta[organism].organs).map(organ => {
             const coords = orgMeta[organism].organs[organ].coords.split(',').map(Number);
+            const shape = orgMeta[organism].organs[organ].shape || 'poly';
+            
+            let isOrganLabel = organ.split("-")[1] === "label";
             
             // Adjust the coordinates using the scaling factors
             const adjustedCoords = coords.map((coord, index) => 
@@ -70,10 +72,11 @@ const OrganismProfile = ({ organism }) => {
             return {
                 id: organ,
                 name: organ,
-                shape: 'poly',
+                shape: shape,
                 coords: adjustedCoords,
                 preFillColor: "transparent",
-                fillColor: "yellow",
+                fillColor: isOrganLabel ? "rgba(255,250,0, 0.4)" : "yellow",
+                strokeColor: "transparent",
             };
         });
     
@@ -137,10 +140,9 @@ const OrganismProfile = ({ organism }) => {
                 <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         {renderImageMap()}
-                        <Text style={{ alignSelf: 'center' }}>Hover over and click on organs to view more detail</Text>
+                        <Text style={{ alignSelf: 'center' }}>Hover over any organ or its label, then click for detailed information.</Text>
                     </div>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
-                        {/* Render the chart for a specific organ, say "Heart" */}
                         {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
                     </div>
                 </div>

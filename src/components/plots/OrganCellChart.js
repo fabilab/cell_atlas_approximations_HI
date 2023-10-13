@@ -55,7 +55,7 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
         range: [0, 4],
       },
       title: {
-        text: `<b>Maasured cell type abundance in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
+        text: `<b>Measured cell type abundance in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
         font: {
           size: 14
         },
@@ -69,7 +69,6 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
 
   const yAxisLabelClick = (event) => {
     const clickedCellType = event.target.textContent;
-    // console.log(`clicking cell type ${cellType}`);
     let message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
     setLocalMessage(message);
   };
