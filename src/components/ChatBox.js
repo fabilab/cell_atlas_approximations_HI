@@ -102,7 +102,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
 
   return (
     <div style={{ 
-        width: "23%",
+        width: "25%",
         display: 'flex',
         flexDirection: 'column',
         gap: '30px',
