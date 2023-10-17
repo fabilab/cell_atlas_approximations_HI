@@ -1,4 +1,3 @@
-import callAPI from "./callAPI.js";
 import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import atlasapprox from "@fabilab/atlasapprox";
 import { downloadFasta } from "./downloadFasta";
@@ -97,66 +96,69 @@ export const updateChat = async (response, plotState) => {
         }
       }
 
-      let checkFeatures = await callAPI('has_features', params);
+      // let checkFeatures = await callAPI('has_features', params);
 
-      let geneFound = [];
-      let geneNotFound = [];
-      checkFeatures.features.map((feature,index) => {
-        checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
-      })
-      // if none of the genes were valid
-      if (geneFound.length < 1) {
-        answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
-        return {
-          hasData: false,
-          message: answer,
-        }
-      }
+      // let geneFound = [];
+      // let geneNotFound = [];
+      // checkFeatures.features.map((feature,index) => {
+      //   checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
+      // })
+      // // if none of the genes were valid
+      // if (geneFound.length < 1) {
+      //   answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
+      //   return {
+      //     hasData: false,
+      //     message: answer,
+      //   }
+      // }
 
-      // if there is at least one invalid gene
-      if (geneNotFound.length > 0) {
-        let geneNotFoundString = geneNotFound.join(', ');
-        answer = `Removed invalid genes: ${geneNotFoundString}. <br><br>`;
-        params.features = params.features.split(',')
-          .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
-          .join(',');
-      }
+      // // if there is at least one invalid gene
+      // if (geneNotFound.length > 0) {
+      //   let geneNotFoundString = geneNotFound.join(', ');
+      //   answer = `Removed invalid genes: ${geneNotFoundString}. <br><br>`;
+      //   params.features = params.features.split(',')
+      //     .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
+      //     .join(',');
+      // }
 
-      // handle duplicate gene names in user input list
-      params.features = [...new Set(params.features.split(','))].join(',');
+      // // handle duplicate gene names in user input list
+      // params.features = [...new Set(params.features.split(','))].join(',');
 
       if (params.organ) {
         let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
         let numCelltypes = apiCelltypes.celltypes.length;
         let numGenes = params.features.split(",").length;
-        apiData = await callAPI(endpoint, params);
+        apiData = await atlasapprox.average(params.organism, params.features, params.organ, null);
+
         answer += buildAnswer(intent, apiData);
         answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
       }
 
+      // average exp across organs
       else {
-        apiData = await callAPI(endpoint, params);
+        apiData = await atlasapprox.average(params.organism, params.features, null, params.celltype);
         answer += buildAnswer(intent, apiData);
       }
     }
+    
     else if (intent === "organisms.geneExpression") {
       let apiOrganisms = await atlasapprox.organisms("gene_expression");
       let numOrganisms = apiOrganisms.organisms.length;
       answer += `There are ${numOrganisms} organisms available:<br>`;
-      apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
+      answer += buildAnswer(intent, apiOrganisms);
     }
 
     else if (intent === "average.chromatinAccessibility") {
       params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await callAPI(endpoint, params);
+      apiData = await atlasapprox.average(params.organism, params.features, params.organ, null, params.measurement_type);
       answer += buildAnswer(intent, apiData);
     }
 
     else if (intent === "similar_features.geneExpression") {
       params['feature'] = params['features'];
       delete params['features'];
-      apiData = await callAPI(endpoint, params);
+    
+      apiData =  await atlasapprox.similar_features(params.organism, params.organ, params.feature, params.number)
       answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } 
       
@@ -164,7 +166,7 @@ export const updateChat = async (response, plotState) => {
       params['feature'] = params['features'];
       params['number'] = '10';
       delete params['features'];
-      apiData = await callAPI(endpoint, params);
+      apiData = await atlasapprox.highest_measurement(params.organism, params.feature, params.number);
       answer = buildAnswer(intent, apiData);
     } 
 
@@ -173,25 +175,32 @@ export const updateChat = async (response, plotState) => {
       params['number'] = '10';
       delete params['features'];
       params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await callAPI(endpoint, params);
+      apiData = await atlasapprox.highest_measurement(params.organism, params.feature, params.number,params.measurement_type);
       answer = buildAnswer(intent, apiData);
     }
 
     else if (intent === "organisms.chromatinAccessibility") {
       params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await callAPI(endpoint, params);
+      apiData = await atlasapprox.organisms(params.measurement_type);
       answer = buildAnswer(intent, apiData);
     }
 
     else if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
-      apiData = await callAPI(endpoint, params);
+      apiData = await atlasapprox[endpoint](params.organism, params.features);
+      answer = buildAnswer(intent, apiData);
+    }
+
+    else if (intent === "markers.geneExpression") {
+      apiData = await atlasapprox.markers(params.organism, params.organ, params.celltype, params.number)
+      console.log(apiData);
       answer = buildAnswer(intent, apiData);
     }
 
     else {
-      apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
+      // apiData = await callAPI(endpoint, params);
+      // answer += buildAnswer(intent, apiData);
+      console.log("debugging");
     }
 
   } catch (error) {
@@ -201,6 +210,8 @@ export const updateChat = async (response, plotState) => {
         message: "Sorry, something went wrong. Please try again later.",
       };
   }
+
+  console.log(apiData);
 
   return {
     hasData: true,

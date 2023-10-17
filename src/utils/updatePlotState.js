@@ -2,6 +2,7 @@ import atlasapprox from "@fabilab/atlasapprox";
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
+    console.log(context);
     return {
         plotType: "organismProfile",
         organism: context.organism,
@@ -44,7 +45,8 @@ const toggleLog = async (context) => {
 };
 
 const updateMarkers = async (context) => {
-    let features = context.response.data.markers.join(",");
+    console.log(context);
+    let features = context.markers.join(",");
     return await updateFractions({ ...context, features });
 };
 
@@ -52,16 +54,13 @@ const updateAverage = async (context) => {
 
     let apiResponse, xAxis;
     if (context.subIntent === 'chromatinAccessibility') {
-        apiResponse = await atlasapprox.average(context.organism, context.features, context.organ, null, "chromatin_accessibility");
-        xAxis = apiResponse.celltypes;
+        xAxis = context.response.data.celltypes;
     } else {
         if (context.dataCategory === "across_organs") {
-            apiResponse = await atlasapprox.average(context.organism, context.features, null, context.response.params.celltype, "gene_expression");
-            xAxis = apiResponse.organs;
-            apiResponse.average = transpose(apiResponse.average);
+            xAxis = context.response.data.organs;
+            context.response.data.average = transpose(context.response.data.average);
         } else {
-            apiResponse = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
-            xAxis = apiResponse.celltypes;
+            xAxis = context.response.data.celltypes;
         }
     }
 
@@ -79,32 +78,36 @@ const updateAverage = async (context) => {
         data: {
             type: "matrix",
             xaxis: xAxis,
-            yaxis: apiResponse.features,
-            average: apiResponse.average,
+            yaxis: context.response.data.features,
+            average: context.response.data.average,
             fractions: null,
-            valueUnit: apiResponse.unit,
-            measurementType: apiResponse.measurement_type,
+            valueUnit: context.response.data.unit,
+            measurementType: context.response.data.measurement_type,
         },
         hasLog: context.plotState.hasLog
     };
 };
 
 const updateFractions = async (context) => {
-
+    console.log(context);
     let apiFraction, apiAverage, xAxis;
     if (context.dataCategory === "across_organs") {
         apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
-        apiAverage = await atlasapprox.average(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
-        xAxis = apiAverage.organs;
-        apiAverage.average = transpose(apiAverage.average);
+        xAxis = context.response.data.organs;
+        context.response.data.average = transpose(context.response.data.average);
         apiFraction.fraction_detected = transpose(apiFraction.fraction_detected);
     } else {
         apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
-        apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression");
-        xAxis = apiAverage.celltypes;
-
+        if (context.intent === 'similar_features.geneExpression' || context.intent === 'markers.geneExpression') {
+            apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression")
+            context.response.data.average = apiAverage.average
+            xAxis = apiAverage.celltypes;
+        } else {
+            xAxis = context.response.data.celltypes;
+        }
     }
 
+    console.log(xAxis);
     return {
         intent: context.intent,
         plotType: "bubbleHeatmap",
@@ -117,27 +120,19 @@ const updateFractions = async (context) => {
             type: "matrix",
             xaxis: xAxis,
             yaxis: apiFraction.features,
-            average: apiAverage.average,
+            average: context.response.data.average,
             fractions: apiFraction.fraction_detected,
-            valueUnit: apiAverage.unit,
+            valueUnit: context.response.data.unit,
         },
         hasLog: context.plotState.hasLog
     };
 };
 
 const similarCelltypes = async (context) => {
-
     let targetCelltype = context.response.params.celltype;
-    let nCelltypes = context.response.params.number;
-    let apiSimilarCelltypes;
-    if (context.subIntent === "chromatinAccessibility") {
-        apiSimilarCelltypes = await atlasapprox.similar_celltypes(context.organism, context.organ, targetCelltype, context.features, nCelltypes, "correlation", "chromatin_accessibility");
-    } else {
-        apiSimilarCelltypes = await atlasapprox.similar_celltypes(context.organism, context.organ, targetCelltype, context.features, nCelltypes, "correlation");
-    }
-    let similarCelltypes = apiSimilarCelltypes.similar_celltypes;
-    let similarOrgans = apiSimilarCelltypes.similar_organs;
-    const celltypesOrgan = similarCelltypes.map((c, index) => {
+    let similarCelltypes = context.response.data.similar_celltypes;
+    let similarOrgans = context.response.data.similar_organs;
+    const celltypesOrgan = similarCelltypes?.map((c, index) => {
         return c + " (" + similarOrgans[index] + ")";
     });
 
@@ -152,24 +147,18 @@ const similarCelltypes = async (context) => {
         data: {
             type: "matrix",
             celltypesOrgan: celltypesOrgan,
-            yaxis: apiSimilarCelltypes.distances,
-            average: apiSimilarCelltypes.distances,
+            yaxis: context.response.data.distances,
+            average: context.response.data.distances,
             fractions: null,
-            unit: apiSimilarCelltypes.unit
+            unit: context.response.data.unit
         }
     };
 };
 
 const measureIntent = async (context) => {
-    let apiResponse;
-    if (context.subIntent === 'chromatinAccessibility') {
-        apiResponse = await atlasapprox.highest_measurement(context.organism, context.features, 10, "chromatin_accessibility");
-    } else {
-        apiResponse = await atlasapprox.highest_measurement(context.organism, context.features, 10);
-    }
-    let organs = apiResponse.organs;
-    let celltypes = apiResponse.celltypes;
-    const celltypesOrgan = celltypes.map((c, index) => {
+    let organs = context.response.data.organs;
+    let celltypes = context.response.data.celltypes;
+    const celltypesOrgan = celltypes?.map((c, index) => {
         return c + " (" + organs[index] + ")";
     });
 
@@ -183,10 +172,10 @@ const measureIntent = async (context) => {
         data: {
             type: "matrix",
             celltypesOrgan: celltypesOrgan,
-            yaxis: apiResponse.average,
-            average: apiResponse.average,
+            yaxis: context.response.data.average,
+            average: context.response.data.average,
             fractions: null,
-            unit: apiResponse.unit
+            unit: context.response.data.unit
         }
     };
 };
@@ -205,16 +194,16 @@ const similarGenes = async (context) => {
 
 
 const cellsXorgans = async (context) => {
-    let apiOrgans = await atlasapprox.organs(context.organism, "gene_expression");
-    let organs = apiOrgans.organs;
-    let apiCellxOrgans = await atlasapprox.celltypexorgan(context.organism, organs, "gene_expression");
+    // let apiOrgans = await atlasapprox.organs(context.organism, "gene_expression");
+    // let organs = context.response.data.organs;
+    // let apiCellxOrgans = await atlasapprox.celltypexorgan(context.organism, organs, "gene_expression");
 
     return {
         plotType: "table",
         organism: context.organism,
-        organs: organs,
-        celltypes: apiCellxOrgans.celltypes,
-        detected: apiCellxOrgans.detected
+        organs: context.response.data.organs,
+        celltypes: context.response.data.celltypes,
+        detected: context.response.data.detected
     };
 };
 
@@ -229,8 +218,8 @@ const availaleOrganisms = async (context) => {
     let availaleOrganisms = null;
 
     if (apiResponse && apiResponse.organisms) {
-      availaleOrganisms = apiResponse.organisms;
-  }
+        availaleOrganisms = apiResponse.organisms;
+    }
 
     return {
         plotType: "showOrganisms",
@@ -240,19 +229,20 @@ const availaleOrganisms = async (context) => {
 };
 
 const featureSequences = async(context) => {
-    let apiResponse = await atlasapprox.sequences(context.organism, context.features);
+    // let apiResponse = await atlasapprox.sequences(context.organism, context.features);
     return {
         plotType: "featureSequences",
         organism: context.organism,
-        features: apiResponse.features,
-        sequences: apiResponse.sequences,
-        type: apiResponse.type,
+        features: context.response.data.features,
+        sequences: context.response.data.sequences,
+        type: context.response.data.type,
     }
 }
 
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
-    console.log(response);
+    console.log(response.data);
+    console.log(response.params);
     let intent = response.intent;
     let mainIntent = intent.split(".")[0];
     let subIntent = intent.split(".")[1];
@@ -268,6 +258,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       mainIntent: mainIntent,
       subIntent: subIntent,
       features: response.params.features || response.params.feature || plotState.features,
+      markers: response.data.markers || "",
       organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
       organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
       dataCategory: dataCategory,

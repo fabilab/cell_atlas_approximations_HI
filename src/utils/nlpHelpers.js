@@ -1,5 +1,6 @@
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, data) => {
+
     function _chainList(list, sep, end) {
         let text = "";
         for (let i=0; i < list.length; i++) {
