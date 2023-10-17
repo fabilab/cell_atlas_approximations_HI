@@ -45,8 +45,8 @@ export const updateChat = async (response, plotState) => {
   let subIntent = intent.split('.')[1] || null;
   let complete = response.complete;
   let answer = "";
-  let apiData;
-  let endpoint, params;
+  let apiData, endpoint, params;
+
   if (intent === "None") {
     return {
       hasData: false,
@@ -87,42 +87,15 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'add') {
         params['organism'] = plotState.organism; 
         params['organ'] = plotState.organ;
+        console.log(plotState);
 
         if (params.features && plotState.features) {
           const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
-          params.features = params.features.split(',')
-            .filter(gene => !plotStateGenes.includes(gene.trim()))
-            .join(',');
+          const uniqueGenes = [...new Set([...params.features.split(','), ...plotStateGenes])];
+          params.features = uniqueGenes.join(',');
         }
+        console.log(params);
       }
-
-      // let checkFeatures = await callAPI('has_features', params);
-
-      // let geneFound = [];
-      // let geneNotFound = [];
-      // checkFeatures.features.map((feature,index) => {
-      //   checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
-      // })
-      // // if none of the genes were valid
-      // if (geneFound.length < 1) {
-      //   answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
-      //   return {
-      //     hasData: false,
-      //     message: answer,
-      //   }
-      // }
-
-      // // if there is at least one invalid gene
-      // if (geneNotFound.length > 0) {
-      //   let geneNotFoundString = geneNotFound.join(', ');
-      //   answer = `Removed invalid genes: ${geneNotFoundString}. <br><br>`;
-      //   params.features = params.features.split(',')
-      //     .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
-      //     .join(',');
-      // }
-
-      // // handle duplicate gene names in user input list
-      // params.features = [...new Set(params.features.split(','))].join(',');
 
       if (params.organ) {
         let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
@@ -193,15 +166,19 @@ export const updateChat = async (response, plotState) => {
 
     else if (intent === "markers.geneExpression") {
       apiData = await atlasapprox.markers(params.organism, params.organ, params.celltype, params.number)
-      console.log(apiData);
       answer = buildAnswer(intent, apiData);
     }
 
-    else {
-      // apiData = await callAPI(endpoint, params);
-      // answer += buildAnswer(intent, apiData);
-      console.log("debugging");
+    else if (intent === "celltypexorgan.geneExpression") {
+      console.log(params);
+      apiData = await atlasapprox.celltypexorgan(params.organism)
+      answer = buildAnswer(intent, apiData);
     }
+    // else {
+    //   apiData = await callAPI(endpoint, params);
+    //   answer += buildAnswer(intent, apiData);
+    //   console.log("debugging");
+    // }
 
   } catch (error) {
     console.error("An error occurred:", error);
@@ -210,8 +187,6 @@ export const updateChat = async (response, plotState) => {
         message: "Sorry, something went wrong. Please try again later.",
       };
   }
-
-  console.log(apiData);
 
   return {
     hasData: true,

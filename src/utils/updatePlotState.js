@@ -194,9 +194,6 @@ const similarGenes = async (context) => {
 
 
 const cellsXorgans = async (context) => {
-    // let apiOrgans = await atlasapprox.organs(context.organism, "gene_expression");
-    // let organs = context.response.data.organs;
-    // let apiCellxOrgans = await atlasapprox.celltypexorgan(context.organism, organs, "gene_expression");
 
     return {
         plotType: "table",
@@ -258,7 +255,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
       mainIntent: mainIntent,
       subIntent: subIntent,
       features: response.params.features || response.params.feature || plotState.features,
-      markers: response.data.markers || "",
+      markers: (response.data && response.data.markers) || "",
       organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
       organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
       dataCategory: dataCategory,
