@@ -46,7 +46,8 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "";
   let answer_extra = ""
-  let apiData, endpoint, params;
+  let apiData, averageExpressionData, endpoint, params;
+  let extraEndpointsToCall = [];
 
   if (intent === "None") {
     return {
@@ -79,8 +80,18 @@ export const updateChat = async (response, plotState) => {
     }
   }
 
+  
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
+    console.log(endpoint);
+
+    if (endpoint === 'markers' || endpoint === 'similar_features') {
+      extraEndpointsToCall.push('average');
+      extraEndpointsToCall.push('fraction_detected');
+    } else if (endpoint === 'fraction_detected') {
+      extraEndpointsToCall.push('average');
+    }
+
     if (checkGenesIntents.includes(mainIntent) && (subIntent === "geneExpression" || subIntent === "features")) {
 
       // check and remove invalid genes before generate plots
@@ -88,6 +99,13 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'add') {
         params['organism'] = plotState.organism; 
         params['organ'] = plotState.organ;
+
+        if (plotState.data.fractions) {
+          endpoint = 'fraction_detected';
+          extraEndpointsToCall = ['average'];
+        } else {
+          endpoint = 'average'
+        }
 
         if (params.features && plotState.features) {
           const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
@@ -101,12 +119,6 @@ export const updateChat = async (response, plotState) => {
         let numCelltypes = apiCelltypes.celltypes.length;
         let numGenes = params.features.split(",").length;
         answer_extra += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
-      }
-
-      // average exp across organs
-      else {
-        apiData = await atlasapprox.average(params);
-        answer += buildAnswer(intent, apiData);
       }
     }
     
@@ -146,20 +158,35 @@ export const updateChat = async (response, plotState) => {
       endpoint = "sequences";
     }
 
-    console.log(intent);
     apiData = await atlasapprox[endpoint](params);
-    console.log(apiData);
     answer += buildAnswer(intent, apiData);
     if (answer_extra) {
       answer += answer_extra;
     }
-    console.log("debugging");
 
-  } catch (error) {
-    console.error("An error occurred:", error);
+    console.log(endpoint, extraEndpointsToCall)
+
+    for (const e of extraEndpointsToCall) {
+      // console.log(params);
+      // console.log(e);
+      if (endpoint === 'similar_features' || endpoint === 'markers') {
+        params.features = [...apiData[endpoint]];
+        endpoint === 'similar_features' && params.features.push(params.feature);
+        delete params['celltype']
+      }
+      let extraApiData = await atlasapprox[e](params);
+      // console.log(extraApiData);
+      apiData = {...apiData, ...extraApiData};
+    }
+
+    // console.log(apiData)
+
+  } catch ({ status, message, error }) {
+      // console.error("An error occurred:");
+      // console.log(status, message, error);
       return {
         hasData: false,
-        message: "Sorry, something went wrong. Please try again later.",
+        message,
       };
   }
 

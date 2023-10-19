@@ -15,9 +15,9 @@ const addGenes = async (context) => {
     let mainIntent = context.plotState.mainIntent;
     let subIntent = context.plotState.subIntent;
     if (!context.plotState.data.fractions) {
-        return await updateAverage({ ...context, features, mainIntent, subIntent });
+        return updateAverage({ ...context, features, mainIntent, subIntent });
     } else {
-        return await updateFractions({ ...context, features });
+        return updateFractions({ ...context, features });
     }
 };
 
@@ -44,14 +44,14 @@ const toggleLog = async (context) => {
     }
 };
 
-const updateMarkers = async (context) => {
+const updateMarkers = (context) => {
     console.log(context);
     let features = context.markers.join(",");
-    return await updateFractions({ ...context, features });
+    return updateFractions({ ...context, features });
 
 };
 
-const updateAverage = async (context) => {
+const updateAverage = (context) => {
 
     let xAxis;
     if (context.subIntent === 'chromatinAccessibility') {
@@ -89,28 +89,16 @@ const updateAverage = async (context) => {
     };
 };
 
-const updateFractions = async (context) => {
+const updateFractions = (context) => {
     console.log(context);
 
-    let apiFraction, apiAverage, xAxis;
+    let xAxis;
     if (context.dataCategory === "across_organs") {
-        apiFraction = await atlasapprox.fraction_detected(context);
-        xAxis = context.response.data.organs;
         context.response.data.average = transpose(context.response.data.average);
-        apiFraction.fraction_detected = transpose(apiFraction.fraction_detected);
+        context.response.data.fraction_detected = transpose(context.response.data.fraction_detected);
+        xAxis = context.response.data.organs;
     } else {
-        apiFraction = await atlasapprox.fraction_detected(context);
-        if (context.intent === 'similar_features.geneExpression' || context.intent === 'markers.geneExpression') {
-            console.log("here");
-            apiAverage = await atlasapprox.average(context);
-            console.log(apiAverage);
-            context.response.data.average = apiAverage.average
-            xAxis = apiAverage.celltypes;
-        } else {
-            apiAverage = await atlasapprox.average(context);
-            context.response.data.average = apiAverage.average
-            xAxis = apiAverage.celltypes;
-        }
+        xAxis = context.response.data.celltypes;
     }
     console.log(xAxis);
     return {
@@ -124,9 +112,9 @@ const updateFractions = async (context) => {
         data: {
             type: "matrix",
             xaxis: xAxis,
-            yaxis: apiFraction.features,
+            yaxis: context.response.data.features,
             average: context.response.data.average,
-            fractions: apiFraction.fraction_detected,
+            fractions: context.response.data.fraction_detected,
             valueUnit: context.response.data.unit,
         },
         hasLog: context.plotState.hasLog
@@ -186,7 +174,7 @@ const measureIntent = async (context) => {
 };
 
 
-const similarGenes = async (context) => {
+const similarGenes = (context) => {
 
     let similarFeatures = context.response.data.similar_features;
     similarFeatures.unshift(context.features);
@@ -194,7 +182,7 @@ const similarGenes = async (context) => {
     let updatedFeatures = [...new Set(similarFeatures)];
     let features = updatedFeatures.join(",");
 
-    return await updateFractions({ ...context, features });
+    return updateFractions({ ...context, features });
 };
 
 
@@ -282,19 +270,19 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
             newPlotState = await toggleLog(context);
             break;
         case "markers":
-            newPlotState = await updateMarkers(context);
+            newPlotState = updateMarkers(context);
             break;
         case "average":
-            newPlotState = await updateAverage(context);
+            newPlotState = updateAverage(context);
             break;
         case "fraction_detected":
-            newPlotState = await updateFractions(context);
+            newPlotState = updateFractions(context);
             break;
         case "highest_measurement":
             newPlotState = await measureIntent(context);
             break;
         case "similar_features":
-            newPlotState = await similarGenes(context);
+            newPlotState = similarGenes(context);
             break;
         case "celltypexorgan":
             newPlotState = await cellsXorgans(context);
