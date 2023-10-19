@@ -45,6 +45,7 @@ export const updateChat = async (response, plotState) => {
   let subIntent = intent.split('.')[1] || null;
   let complete = response.complete;
   let answer = "";
+  let answer_extra = ""
   let apiData, endpoint, params;
 
   if (intent === "None") {
@@ -87,29 +88,24 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'add') {
         params['organism'] = plotState.organism; 
         params['organ'] = plotState.organ;
-        console.log(plotState);
 
         if (params.features && plotState.features) {
           const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
           const uniqueGenes = [...new Set([...params.features.split(','), ...plotStateGenes])];
           params.features = uniqueGenes.join(',');
         }
-        console.log(params);
       }
 
       if (params.organ) {
-        let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
+        let apiCelltypes = await atlasapprox.celltypes(params);
         let numCelltypes = apiCelltypes.celltypes.length;
         let numGenes = params.features.split(",").length;
-        apiData = await atlasapprox.average(params.organism, params.features, params.organ, null);
-
-        answer += buildAnswer(intent, apiData);
-        answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
+        answer_extra += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
       }
 
       // average exp across organs
       else {
-        apiData = await atlasapprox.average(params.organism, params.features, null, params.celltype);
+        apiData = await atlasapprox.average(params);
         answer += buildAnswer(intent, apiData);
       }
     }
@@ -117,30 +113,22 @@ export const updateChat = async (response, plotState) => {
     else if (intent === "organisms.geneExpression") {
       let apiOrganisms = await atlasapprox.organisms("gene_expression");
       let numOrganisms = apiOrganisms.organisms.length;
-      answer += `There are ${numOrganisms} organisms available:<br>`;
-      answer += buildAnswer(intent, apiOrganisms);
+      answer = `There are ${numOrganisms} organisms available:<br>`;
     }
 
     else if (intent === "average.chromatinAccessibility") {
       params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await atlasapprox.average(params.organism, params.features, params.organ, null, params.measurement_type);
-      answer += buildAnswer(intent, apiData);
     }
 
     else if (intent === "similar_features.geneExpression") {
       params['feature'] = params['features'];
       delete params['features'];
-    
-      apiData =  await atlasapprox.similar_features(params.organism, params.organ, params.feature, params.number)
-      answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
     } 
       
     else if (intent === "highest_measurement.geneExpression") {
       params['feature'] = params['features'];
       params['number'] = '10';
       delete params['features'];
-      apiData = await atlasapprox.highest_measurement(params.organism, params.feature, params.number);
-      answer = buildAnswer(intent, apiData);
     } 
 
     else if (intent === "highest_measurement.chromatinAccessibility") {
@@ -148,37 +136,24 @@ export const updateChat = async (response, plotState) => {
       params['number'] = '10';
       delete params['features'];
       params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await atlasapprox.highest_measurement(params.organism, params.feature, params.number,params.measurement_type);
-      answer = buildAnswer(intent, apiData);
     }
 
     else if (intent === "organisms.chromatinAccessibility") {
       params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await atlasapprox.organisms(params.measurement_type);
-      answer = buildAnswer(intent, apiData);
     }
 
     else if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
-      apiData = await atlasapprox[endpoint](params.organism, params.features);
-      answer = buildAnswer(intent, apiData);
     }
 
-    else if (intent === "markers.geneExpression") {
-      apiData = await atlasapprox.markers(params.organism, params.organ, params.celltype, params.number)
-      answer = buildAnswer(intent, apiData);
+    console.log(intent);
+    apiData = await atlasapprox[endpoint](params);
+    console.log(apiData);
+    answer += buildAnswer(intent, apiData);
+    if (answer_extra) {
+      answer += answer_extra;
     }
-
-    else if (intent === "celltypexorgan.geneExpression") {
-      console.log(params);
-      apiData = await atlasapprox.celltypexorgan(params.organism)
-      answer = buildAnswer(intent, apiData);
-    }
-    // else {
-    //   apiData = await callAPI(endpoint, params);
-    //   answer += buildAnswer(intent, apiData);
-    //   console.log("debugging");
-    // }
+    console.log("debugging");
 
   } catch (error) {
     console.error("An error occurred:", error);

@@ -48,11 +48,12 @@ const updateMarkers = async (context) => {
     console.log(context);
     let features = context.markers.join(",");
     return await updateFractions({ ...context, features });
+
 };
 
 const updateAverage = async (context) => {
 
-    let apiResponse, xAxis;
+    let xAxis;
     if (context.subIntent === 'chromatinAccessibility') {
         xAxis = context.response.data.celltypes;
     } else {
@@ -90,23 +91,27 @@ const updateAverage = async (context) => {
 
 const updateFractions = async (context) => {
     console.log(context);
+
     let apiFraction, apiAverage, xAxis;
     if (context.dataCategory === "across_organs") {
-        apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, null, context.response.data.celltype, "gene_expression");
+        apiFraction = await atlasapprox.fraction_detected(context);
         xAxis = context.response.data.organs;
         context.response.data.average = transpose(context.response.data.average);
         apiFraction.fraction_detected = transpose(apiFraction.fraction_detected);
     } else {
-        apiFraction = await atlasapprox.fraction_detected(context.organism, context.features, context.organ, null, "gene_expression");
+        apiFraction = await atlasapprox.fraction_detected(context);
         if (context.intent === 'similar_features.geneExpression' || context.intent === 'markers.geneExpression') {
-            apiAverage = await atlasapprox.average(context.organism, context.features, context.organ, null, "gene_expression")
+            console.log("here");
+            apiAverage = await atlasapprox.average(context);
+            console.log(apiAverage);
             context.response.data.average = apiAverage.average
             xAxis = apiAverage.celltypes;
         } else {
-            xAxis = context.response.data.celltypes;
+            apiAverage = await atlasapprox.average(context);
+            context.response.data.average = apiAverage.average
+            xAxis = apiAverage.celltypes;
         }
     }
-
     console.log(xAxis);
     return {
         intent: context.intent,
