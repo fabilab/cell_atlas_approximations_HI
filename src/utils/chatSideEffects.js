@@ -4,19 +4,19 @@ import { downloadFasta } from "./downloadFasta";
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
-  "markers",
-  "highest_measurement",
-  "average",
-  "fraction_detected",
-  "similar_features",
   "add",
-  "remove",
-  "celltypexorgan",
-  "organisms",
-  "similar_celltypes",
   "plot",
+  "remove",
   "explore",
+  "average",
+  "markers",
+  "organisms",
+  "celltypexorgan",
+  "similar_features",
   "feature_sequences",
+  "fraction_detected",
+  "similar_celltypes",
+  "highest_measurement",
 ];
 
 // check is all genes requested are found in our database
@@ -25,8 +25,10 @@ const checkGenesIntents = [
 	"average",
 	"fraction_detected",
   "add",
+  "remove",
 ]
 
+// Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
   if (!response)
     return false;
@@ -36,6 +38,7 @@ export const triggersPlotUpdate = ((response) => {
   return updatePlotIntents.includes(mainIntent);
 });
 
+// Generate bot response and get data
 export const updateChat = async (response, plotState) => {
   console.log(response);
   console.log(plotState);
@@ -44,10 +47,10 @@ export const updateChat = async (response, plotState) => {
   let mainIntent = intent.split('.')[0];
   let subIntent = intent.split('.')[1] || null;
   let complete = response.complete;
-  let answer = "";
-  let answer_extra = ""
-  let apiData, averageExpressionData, endpoint, params;
+  let answer = "", answer_extra = "", apiData, averageExpressionData, endpoint, params;
   let extraEndpointsToCall = [];
+  console.log(mainIntent);
+  console.log(subIntent);
 
   if (intent === "None") {
     return {
@@ -57,7 +60,6 @@ export const updateChat = async (response, plotState) => {
   }
 
   if (!complete) {
-    // forward the followup question to chatbox
     return {
       hasData: false,
       message: response.followUpQuestion,
@@ -65,26 +67,37 @@ export const updateChat = async (response, plotState) => {
   }
 
   if (intent === "download") {
-    if (!plotState) {
-      return {
-        message: "Sorry, there is no data to be downloaded"
-      }
-    } 
     try {
       downloadFasta(plotState)
       return {
-        message: "Data has been downloaded successfully"
+        message: "Data has been downloaded successfully."
       }
     } catch (err) {
-      console.error("Failed to download data ", err);
+      return {
+        message: "Sorry, data is not available for download."
+      }
     }
   }
 
   
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
-    console.log(endpoint);
 
+    // params and endpoint clean up:
+    if (subIntent === "chromatinAccessibility") {
+      params['measurement_type'] = 'chromatin_accessibility';
+    }
+
+    if (mainIntent === "similar_features" || mainIntent === "highest_measurement") {
+      params['feature'] = params['features'];
+      delete params['features'];
+    } 
+
+    else if (intent === "feature_sequences.geneExpression") {
+      endpoint = "sequences";
+    }
+
+    // for intents that without actual data, we need to make extra api calls
     if (endpoint === 'markers' || endpoint === 'similar_features') {
       extraEndpointsToCall.push('average');
       extraEndpointsToCall.push('fraction_detected');
@@ -92,10 +105,9 @@ export const updateChat = async (response, plotState) => {
       extraEndpointsToCall.push('average');
     }
 
+    // Feature validation
     if (checkGenesIntents.includes(mainIntent) && (subIntent === "geneExpression" || subIntent === "features")) {
-
-      // check and remove invalid genes before generate plots
-      // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
+      
       if (mainIntent === 'add') {
         params['organism'] = plotState.organism; 
         params['organ'] = plotState.organ;
@@ -109,10 +121,27 @@ export const updateChat = async (response, plotState) => {
 
         if (params.features && plotState.features) {
           const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
-          const uniqueGenes = [...new Set([...params.features.split(','), ...plotStateGenes])];
-          params.features = uniqueGenes.join(',');
+          params.features = [...new Set([...params.features.split(','), ...plotStateGenes])].join(',');
         }
       }
+
+      else if (mainIntent === 'remove') {
+        params['organism'] = plotState.organism; 
+        params['organ'] = plotState.organ;
+
+        if (plotState.data.fractions) {
+          endpoint = 'fraction_detected';
+          extraEndpointsToCall = ['average'];
+        } else {
+          endpoint = 'average'
+        }
+
+        if (params.features && plotState.features) {
+          let geneArrayA = params.features.split(",");
+          let geneArrayB = plotState.features.split(",");
+          params.features = geneArrayB.filter(gene => !geneArrayA .includes(gene)).join(",");
+        }
+      } 
 
       if (params.organ) {
         let apiCelltypes = await atlasapprox.celltypes(params);
@@ -128,62 +157,28 @@ export const updateChat = async (response, plotState) => {
       answer = `There are ${numOrganisms} organisms available:<br>`;
     }
 
-    else if (intent === "average.chromatinAccessibility") {
-      params['measurement_type'] = 'chromatin_accessibility';
-    }
-
-    else if (intent === "similar_features.geneExpression") {
-      params['feature'] = params['features'];
-      delete params['features'];
-    } 
-      
-    else if (intent === "highest_measurement.geneExpression") {
-      params['feature'] = params['features'];
-      params['number'] = '10';
-      delete params['features'];
-    } 
-
-    else if (intent === "highest_measurement.chromatinAccessibility") {
-      params['feature'] = params['features'];
-      params['number'] = '10';
-      delete params['features'];
-      params['measurement_type'] = 'chromatin_accessibility';
-    }
-
-    else if (intent === "organisms.chromatinAccessibility") {
-      params['measurement_type'] = 'chromatin_accessibility';
-    }
-
-    else if (intent === "feature_sequences.geneExpression") {
-      endpoint = "sequences";
-    }
-
+    //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
     answer += buildAnswer(intent, apiData);
     if (answer_extra) {
       answer += answer_extra;
     }
 
-    console.log(endpoint, extraEndpointsToCall)
 
+    // for intent like "add and remove"
     for (const e of extraEndpointsToCall) {
-      // console.log(params);
-      // console.log(e);
       if (endpoint === 'similar_features' || endpoint === 'markers') {
         params.features = [...apiData[endpoint]];
         endpoint === 'similar_features' && params.features.push(params.feature);
         delete params['celltype']
       }
       let extraApiData = await atlasapprox[e](params);
-      // console.log(extraApiData);
       apiData = {...apiData, ...extraApiData};
     }
 
-    // console.log(apiData)
-
   } catch ({ status, message, error }) {
-      // console.error("An error occurred:");
-      // console.log(status, message, error);
+      // display the api error message to user
+      console.log(status, message, error);
       return {
         hasData: false,
         message,

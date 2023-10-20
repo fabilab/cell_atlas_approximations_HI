@@ -10,8 +10,9 @@ const exploreOrganism = (context) => {
 };
 
 const addGenes = async (context) => {
+    console.log(context);
     // Extract required parameters from context within the function
-    let features = `${context.plotState.features},${context.features}`;
+    let features = context.features;
     let mainIntent = context.plotState.mainIntent;
     let subIntent = context.plotState.subIntent;
     if (!context.plotState.data.fractions) {
@@ -22,9 +23,8 @@ const addGenes = async (context) => {
 };
 
 const removeGenes = async (context) => {
-    let featuresToRemove = context.features.split(",").map(fea => fea.toLowerCase());
-    let features = context.plotState.features.split(',').filter(g => !featuresToRemove.includes(g.toLowerCase())).join(',');
-
+    console.log(context);
+    let features = context.features;
     if (!context.plotState.data.fractions) {
         return await updateAverage({ ...context, features });
     } else {
