@@ -16,13 +16,19 @@ const OrganismProfile = ({ organism }) => {
     const [cellTypes, setCellTypes] = useState([]);
     const [clickedOrgan, setClickedOrgan] = useState(null);
     const [apiCellOrgan, setApiCellOrgan] = useState(null);
+    let params = {};
     
     const handleOrganClick = (area) => {
         let tempOrgan = area.name.split('-')[0]
         setClickedOrgan(tempOrgan);
         const fetchCellTypes = async () => {
             try {
-                let apiCelltypes = await atlasapprox.celltypes(organism, tempOrgan, "gene_expression");
+                params = {
+                    organism: organism,
+                    organ: tempOrgan,
+                    measurement_type: "gene_expression"
+                }
+                let apiCelltypes = await atlasapprox.celltypes(params);
                 setCellTypes(apiCelltypes.celltypes);
             } catch (error) {
                 console.error("Error fetching cell types:", error);
@@ -31,7 +37,12 @@ const OrganismProfile = ({ organism }) => {
 
         const fetchCellOrganData = async () => {
             try {
-                let apiResponse = await atlasapprox.celltypexorgan(organism, null, "gene_expression");
+                params = {
+                    organism: organism,
+                    organ: null,
+                    measurement_type: "gene_expression"
+                }
+                let apiResponse = await atlasapprox.celltypexorgan(params);
                 setApiCellOrgan(apiResponse);
             } catch (error) {
                 console.error("Error fetching cell types:", error);

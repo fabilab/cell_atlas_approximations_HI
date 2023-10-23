@@ -40,8 +40,8 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
+
   console.log(response);
-  console.log(plotState);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -49,8 +49,6 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", answer_extra = "", apiData, averageExpressionData, endpoint, params;
   let extraEndpointsToCall = [];
-  console.log(mainIntent);
-  console.log(subIntent);
 
   if (intent === "None") {
     return {
@@ -78,10 +76,19 @@ export const updateChat = async (response, plotState) => {
       }
     }
   }
-
   
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
+
+    if (mainIntent === "explore") {
+      answer += `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${params.organism} atlas`
+      console.log(params);
+      return {
+        hasData: true,
+        params: params,
+        message: answer,
+      };
+    }
 
     // params and endpoint clean up:
     if (subIntent === "chromatinAccessibility") {
