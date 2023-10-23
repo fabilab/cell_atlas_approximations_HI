@@ -28,6 +28,10 @@ const checkGenesIntents = [
   "remove",
 ]
 
+const fetchFromAPI = () => {
+
+}
+
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
   if (!response)
@@ -41,13 +45,12 @@ export const triggersPlotUpdate = ((response) => {
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
 
-  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
   let subIntent = intent.split('.')[1] || null;
   let complete = response.complete;
-  let answer = "", answer_extra = "", apiData, averageExpressionData, endpoint, params;
+  let answer = "", answer_extra = "", apiData = null, averageExpressionData, endpoint, params;
   let extraEndpointsToCall = [];
 
   if (intent === "None") {
@@ -80,6 +83,7 @@ export const updateChat = async (response, plotState) => {
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
 
+    console.log(params);
     if (mainIntent === "explore") {
       answer += `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${params.organism} atlas`
       console.log(params);
@@ -91,7 +95,7 @@ export const updateChat = async (response, plotState) => {
     }
 
     // params and endpoint clean up:
-    if (subIntent === "chromatinAccessibility") {
+    if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
 
@@ -99,8 +103,8 @@ export const updateChat = async (response, plotState) => {
       params['feature'] = params['features'];
       delete params['features'];
     } 
-
-    else if (intent === "feature_sequences.geneExpression") {
+    
+    if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
     }
 
@@ -108,71 +112,52 @@ export const updateChat = async (response, plotState) => {
     if (endpoint === 'markers' || endpoint === 'similar_features') {
       extraEndpointsToCall.push('average');
       extraEndpointsToCall.push('fraction_detected');
-    } else if (endpoint === 'fraction_detected') {
+    } 
+    
+    if (endpoint === 'fraction_detected') {
       extraEndpointsToCall.push('average');
     }
 
-    // Feature validation
-    if (checkGenesIntents.includes(mainIntent) && (subIntent === "geneExpression" || subIntent === "features")) {
-      
-      if (mainIntent === 'add') {
-        params['organism'] = plotState.organism; 
-        params['organ'] = plotState.organ;
+    if (['add', 'remove'].includes(mainIntent)) {
+      params['organism'] = plotState.organism; 
+      params['organ'] = plotState.organ;
 
-        if (plotState.data.fractions) {
-          endpoint = 'fraction_detected';
-          extraEndpointsToCall = ['average'];
-        } else {
-          endpoint = 'average'
-        }
-
-        if (params.features && plotState.features) {
-          const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
-          params.features = [...new Set([...params.features.split(','), ...plotStateGenes])].join(',');
-        }
+      if (plotState.data.fractions) {
+        endpoint = 'fraction_detected';
+        extraEndpointsToCall = ['average'];
+      } else {
+        endpoint = 'average'
       }
 
-      else if (mainIntent === 'remove') {
-        params['organism'] = plotState.organism; 
-        params['organ'] = plotState.organ;
-
-        if (plotState.data.fractions) {
-          endpoint = 'fraction_detected';
-          extraEndpointsToCall = ['average'];
-        } else {
-          endpoint = 'average'
-        }
-
-        if (params.features && plotState.features) {
-          let geneArrayA = params.features.split(",");
-          let geneArrayB = plotState.features.split(",");
-          params.features = geneArrayB.filter(gene => !geneArrayA .includes(gene)).join(",");
-        }
-      } 
-
-      if (params.organ) {
-        let apiCelltypes = await atlasapprox.celltypes(params);
-        let numCelltypes = apiCelltypes.celltypes.length;
-        let numGenes = params.features.split(",").length;
-        answer_extra += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
+      if (mainIntent === 'add' && params.features && plotState.features) {
+        const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+        params.features = [...new Set([...params.features.split(','), ...plotStateGenes])].join(',');
       }
-    }
-    
-    else if (intent === "organisms.geneExpression") {
-      let apiOrganisms = await atlasapprox.organisms("gene_expression");
-      let numOrganisms = apiOrganisms.organisms.length;
-      answer = `There are ${numOrganisms} organisms available:<br>`;
+
+      if (mainIntent === 'remove' && params.features && plotState.features) {
+        let geneArrayA = params.features.split(",");
+        let geneArrayB = plotState.features.split(",");
+        params.features = geneArrayB.filter(gene => !geneArrayA .includes(gene)).join(",");
+      }
+
     }
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
+    
+    if (intent === "organisms.geneExpression") {
+      let numOrganisms = apiData.organisms.length;
+      answer = `There are ${numOrganisms} organisms available:<br>`;
+    }
+    
     answer += buildAnswer(intent, apiData);
-    if (answer_extra) {
-      answer += answer_extra;
+
+    if (params.organ) {
+      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
     }
 
 
-    // for intent like "add and remove"
+    // for intent like "marker, fraction, similar celltypes"
     for (const e of extraEndpointsToCall) {
       if (endpoint === 'similar_features' || endpoint === 'markers') {
         params.features = [...apiData[endpoint]];
@@ -184,19 +169,37 @@ export const updateChat = async (response, plotState) => {
     }
 
   } catch ({ status, message, error }) {
-      // display the api error message to user
       console.log(status, message, error);
-      return {
-        hasData: false,
-        message,
-      };
+
+      // invalid gene, we can auto remvoe it and re-call api
+      if (error.type === 'invalid_parameter' && error[error.type] === 'features') {
+        let invalid_gene_name_regex = new RegExp(`^(${Array.isArray(error.invalid_value) ? error.invalid_value.join('|') : error.invalid_value})$`, 'i');;
+        
+        params.features = params.features.split(',').filter(feature => !invalid_gene_name_regex.test(feature)).join(',');
+        
+        if (params.features.length !== 0) {
+          apiData = await atlasapprox[endpoint](params);
+          answer = 'Some invalid features are found, and they are auto-removed.<br><br>';
+          answer += buildAnswer(intent, apiData);
+          answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
+        } else {
+          answer = 'None of the features are valid. ';
+        }
+      
+      // cannot recall api
+      } else {
+        answer = message
+      }
+
+  } finally {
+    return {
+      hasData: apiData !== null,
+      params: apiData ? params : null,
+      data: apiData || null,
+      message: answer,
+    };
   }
 
-  return {
-    hasData: true,
-    params: params,
-    data: apiData,
-    message: answer,
-  };
+  
 };
 
