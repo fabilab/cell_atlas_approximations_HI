@@ -38,7 +38,8 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
         colorbar: {
           title: {
             text: unit,
-          }
+          },
+          len: 1.2,
         },
         hovertemplate:
           "Gene: %{y} <br>" +

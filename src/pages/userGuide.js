@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import orgMeta from '../utils/organismMetadata';
 import { Row, Col, Tabs, Collapse, Divider } from 'antd';
-import imgIllustration from '../demo/temp_diagram.png';
+import imgIllustration from '../demo/illu.png';
 import geneExpHeatmap from '../demo/geneExpHeatmap.png';
 import orgProfile from '../demo/organismProfile.png';
 import fractionExp from '../demo/fractionExp.png';
@@ -24,13 +24,13 @@ const UserGuide = () => {
   const markdownStyle = {
     fontFamily: 'Arial, sans-serif',
     lineHeight: '1.6',
-    maxWidth: '70vw',
+    maxWidth: '90vw',
     margin: '0 auto',
     padding: '20px',
   }
 
   const imageStyle = {
-    width: '90%',
+    width: '85%',
     display: 'block',
     margin: '0 auto',
     boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.25), 0px 6px 6px rgba(0, 0, 0, 0.10)', // Shadow effect
@@ -57,8 +57,9 @@ const UserGuide = () => {
           </Row>
         </div>
 
-        <h2 style={{ color: "rgb(48, 49, 49)" }}>What kind of cell diversity are you into?</h2>
-        <Divider style={{ borderTopWidth: "1px", borderColor: "rgb(48, 49, 49, 0.5)" }}></Divider>
+        <h2 style={{ color: "rgb(48, 49, 49)" }}>What kind of cell diversity are you into? <img src='https://images.emojiterra.com/google/noto-emoji/unicode-15/animated/1f984.gif' style={{width:"35px"}}></img>
+</h2>
+		<Divider style={{ borderTopWidth: "1px", borderColor: "rgb(48, 49, 49, 0.5)" }}></Divider>
         <Tabs defaultActiveKey="1" centered type='card'>
           <TabPane tab="Beginner: Basic exploration" key="1">
 						<p>As a newcomer to the field of cell atlases, I want to understand what atlas approximations are and get an overview of cell diversity across the tree of life.</p>

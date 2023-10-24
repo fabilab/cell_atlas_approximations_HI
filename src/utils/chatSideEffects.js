@@ -28,10 +28,6 @@ const checkGenesIntents = [
   "remove",
 ]
 
-const fetchFromAPI = () => {
-
-}
-
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
   if (!response)
@@ -83,10 +79,8 @@ export const updateChat = async (response, plotState) => {
   try {
     ({ endpoint, params } = buildAPIParams(intent, entities));
 
-    console.log(params);
     if (mainIntent === "explore") {
       answer += `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${params.organism} atlas`
-      console.log(params);
       return {
         hasData: true,
         params: params,
@@ -109,13 +103,13 @@ export const updateChat = async (response, plotState) => {
     }
 
     // for intents that without actual data, we need to make extra api calls
-    if (endpoint === 'markers' || endpoint === 'similar_features') {
-      extraEndpointsToCall.push('average');
-      extraEndpointsToCall.push('fraction_detected');
+    if (mainIntent === 'markers' || mainIntent === 'similar_features') {
+      extraEndpointsToCall.push('dotplot');
+      
     } 
     
-    if (endpoint === 'fraction_detected') {
-      extraEndpointsToCall.push('average');
+    if (mainIntent === 'fraction_detected') {
+      endpoint = "dotplot";
     }
 
     if (['add', 'remove'].includes(mainIntent)) {
@@ -126,7 +120,8 @@ export const updateChat = async (response, plotState) => {
         endpoint = 'fraction_detected';
         extraEndpointsToCall = ['average'];
       } else {
-        endpoint = 'average'
+        endpoint = 'average';
+
       }
 
       if (mainIntent === 'add' && params.features && plotState.features) {
@@ -149,17 +144,16 @@ export const updateChat = async (response, plotState) => {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
     }
-    
     answer += buildAnswer(intent, apiData);
 
-    if (params.organ) {
-      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
+    if (params.organ && apiData.celltypes) {
+      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
     }
 
 
     // for intent like "marker, fraction, similar celltypes"
     for (const e of extraEndpointsToCall) {
-      if (endpoint === 'similar_features' || endpoint === 'markers') {
+      if (mainIntent === 'similar_features' || mainIntent === 'markers') {
         params.features = [...apiData[endpoint]];
         endpoint === 'similar_features' && params.features.push(params.feature);
         delete params['celltype']
@@ -169,19 +163,18 @@ export const updateChat = async (response, plotState) => {
     }
 
   } catch ({ status, message, error }) {
-      console.log(status, message, error);
 
-      // invalid gene, we can auto remvoe it and re-call api
-      if (error.type === 'invalid_parameter' && error[error.type] === 'features') {
-        let invalid_gene_name_regex = new RegExp(`^(${Array.isArray(error.invalid_value) ? error.invalid_value.join('|') : error.invalid_value})$`, 'i');;
-        
-        params.features = params.features.split(',').filter(feature => !invalid_gene_name_regex.test(feature)).join(',');
+      // invalid gene, we can auto remove it and re-call api
+      if (error.type === 'invalid_parameter' && (error.invalid_parameter === 'feature' || error.invalid_parameter === 'features')) {
+
+        let invalid_genes = error.invalid_value;
+        params.features = params.features.split(',').filter(feature => !invalid_genes.includes(feature.toLowerCase())).join(',');
         
         if (params.features.length !== 0) {
           apiData = await atlasapprox[endpoint](params);
-          answer = 'Some invalid features are found, and they are auto-removed.<br><br>';
+          answer = `Invalid features detected: ${invalid_genes}. These have been automatically excluded<br><br>`;
           answer += buildAnswer(intent, apiData);
-          answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
+          answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
         } else {
           answer = 'None of the features are valid. ';
         }

@@ -45,7 +45,6 @@ const toggleLog = async (context) => {
 };
 
 const updateMarkers = (context) => {
-    console.log(context);
     let features = context.markers.join(",");
     return updateFractions({ ...context, features });
 
@@ -67,7 +66,6 @@ const updateAverage = (context) => {
 
     return {
         intent: "average",
-        // mainIntent: (context.mainIntent === 'add' || context.mainIntent === 'remove') ? context.plotState.mainIntent : context.mainIntent,
         mainIntent: context.mainIntent,
         subIntent: context.subIntent,
         dataCategory: context.dataCategory,
@@ -100,7 +98,7 @@ const updateFractions = (context) => {
     } else {
         xAxis = context.response.data.celltypes;
     }
-    console.log(xAxis);
+    console.log(context.response.data.average);
     return {
         intent: context.intent,
         plotType: "bubbleHeatmap",
@@ -219,7 +217,6 @@ const availaleOrganisms = async (context) => {
 };
 
 const featureSequences = async(context) => {
-    // let apiResponse = await atlasapprox.sequences(context.organism, context.features);
     return {
         plotType: "featureSequences",
         organism: context.organism,
