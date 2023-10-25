@@ -28,7 +28,7 @@ const PlotBox = ({ state }) => {
           organism={state.organism}
           organ={state.organ}
           celltype={state.celltype}
-          unit={state.data.valueUnit}
+          unit={state.data.unit}
           measurementType={state.data.measurementType}
           hasLog={state.hasLog}
         />
@@ -46,7 +46,7 @@ const PlotBox = ({ state }) => {
           organism={state.organism}
           organ={state.organ}
           celltype={state.celltype}
-          unit={state.data.valueUnit}
+          unit={state.data.unit}
           hasLog={state.hasLog}
           dataCategory={state.dataCategory}
         />

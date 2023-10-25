@@ -34,10 +34,8 @@ const toggleLog = (context) => {
     const newPlotState = { ...context.plotState, hasLog };
     context.plotState = newPlotState;
     if (!context.plotState.data.fractions) {
-        console.log("average");
         return updateAverage(context);
     } else {
-        console.log("fraction");
         return updateFractions(context);
     }
 };
@@ -49,7 +47,7 @@ const updateMarkers = (context) => {
 };
 
 const updateAverage = (context) => {
-    console.log(context);
+
     let xAxis;
     if (context.subIntent === 'chromatinAccessibility') {
         xAxis = context.response.data.celltypes;
@@ -61,8 +59,8 @@ const updateAverage = (context) => {
             xAxis = context.response.data.celltypes || context.plotState.data.xaxis;
         }
     }
-    let yAxis = context.response.data.features ||context.plotState.data.yaxis; 
-
+    let yAxis = context.response.data.features || context.plotState.data.yaxis; 
+    let unit = context.response.data.unit || context.plotState.data.unit;
     return {
         intent: "average",
         mainIntent: context.mainIntent,
@@ -79,7 +77,7 @@ const updateAverage = (context) => {
             yaxis: yAxis,
             average: context.response.data.average,
             fractions: null,
-            valueUnit: context.response.data.unit,
+            unit: unit,
             measurementType: context.response.data.measurement_type,
         },
         hasLog: context.plotState.hasLog
@@ -87,17 +85,20 @@ const updateAverage = (context) => {
 };
 
 const updateFractions = (context) => {
-    console.log(context);
-
     let xAxis;
     if (context.dataCategory === "across_organs") {
         context.response.data.average = transpose(context.response.data.average);
         context.response.data.fraction_detected = transpose(context.response.data.fraction_detected);
         xAxis = context.response.data.organs;
     } else {
-        xAxis = context.response.data.celltypes;
+        xAxis = context.response.data.celltypes || context.plotState.data.xaxis;
     }
-    console.log(context.response.data.average);
+
+    let yAxis = context.response.data.features || context.plotState.data.yaxis; 
+    let fractions = context.response.data.fraction_detected || context.plotState.data.fractions;
+    let average = context.response.data.average || context.plotState.data.average;
+    let unit = context.response.data.unit || context.plotState.data.unit;
+    
     return {
         intent: context.intent,
         plotType: "bubbleHeatmap",
@@ -109,10 +110,10 @@ const updateFractions = (context) => {
         data: {
             type: "matrix",
             xaxis: xAxis,
-            yaxis: context.response.data.features,
-            average: context.response.data.average,
-            fractions: context.response.data.fraction_detected,
-            valueUnit: context.response.data.unit,
+            yaxis: yAxis,
+            average: average,
+            fractions: fractions,
+            unit: unit,
         },
         hasLog: context.plotState.hasLog
     };
@@ -228,7 +229,6 @@ const featureSequences = async(context) => {
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
     console.log(response);
-    console.log(response.params);
     let intent = response.intent;
     let mainIntent = intent.split(".")[0];
     let subIntent = intent.split(".")[1];

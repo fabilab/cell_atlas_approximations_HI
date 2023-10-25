@@ -30,7 +30,6 @@ const checkGenesIntents = [
 
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
-  console.log(response);
   if (!response)
     return false;
   if (!response.hasData)
@@ -41,8 +40,7 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
-  console.log(response);
-  console.log(plotState);
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
