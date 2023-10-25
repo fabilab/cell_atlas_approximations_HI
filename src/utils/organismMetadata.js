@@ -321,7 +321,7 @@ const organismMetadata = {
   },
   "s_pistillata": {
     bioName: "Stylophora pistillata",
-    commonName: "smooth cauliflower coral",
+    commonName: "Stony coral",
     dataSource: "[Levi et al. 2021](A stony coral cell atlas illuminates the molecular and cellular basis of coral symbiosis, calcification, and immunity)",
     about: "",
     imagePath: require("../asset/organisms/s_pistillata.jpeg"),
