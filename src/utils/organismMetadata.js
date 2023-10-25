@@ -329,6 +329,16 @@ const organismMetadata = {
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S0092867421004402",
 
   },
+  "c_hemisphaerica": {
+    bioName: "Clytia hemisphaerica",
+    commonName: "Jellyfish",
+    dataSource: "[Chari et al. 2021](Whole-animal multiplexed single-cell RNA-seq reveals transcriptional shifts across Clytia medusa cell types)",
+    about: "",
+    imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
+    descriptionHyperlink: "",
+    paperHyperlink: "https://www.science.org/doi/10.1126/sciadv.abh1683",
+
+  },
   "s_mediterranea": {
     bioName: "Schmidtea mediterranea",
     commonName: "Planarian worm",

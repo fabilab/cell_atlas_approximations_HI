@@ -19,14 +19,6 @@ const updatePlotIntents = [
   "highest_measurement",
 ];
 
-// check is all genes requested are found in our database
-// check if the requested list of genes has duplications
-const checkGenesIntents = [
-	"average",
-	"fraction_detected",
-  "add",
-  "remove",
-]
 
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
