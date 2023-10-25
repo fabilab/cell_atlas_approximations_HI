@@ -319,6 +319,16 @@ const organismMetadata = {
     paperHyperlink: "https://www.nature.com/articles/s41467-020-20794-w",
 
   },
+  "s_pistillata": {
+    bioName: "Stylophora pistillata",
+    commonName: "smooth cauliflower coral",
+    dataSource: "[Levi et al. 2021](A stony coral cell atlas illuminates the molecular and cellular basis of coral symbiosis, calcification, and immunity)",
+    about: "",
+    imagePath: require("../asset/organisms/s_pistillata.jpeg"),
+    descriptionHyperlink: "",
+    paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S0092867421004402",
+
+  },
   "s_mediterranea": {
     bioName: "Schmidtea mediterranea",
     commonName: "Planarian worm",
