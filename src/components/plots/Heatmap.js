@@ -68,14 +68,14 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     let graphHeight = nfeatures * 30 + ytickMargin;
     
     let title = "";
-    if (subIntent === 'geneExpression') {
+    if (subIntent === 'chromatinAccessibility') {
+      title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
+    } else{
       if (dataCategory === "across_organs") {
         title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
       } else {
         title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
       }
-    } else {
-      title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
     }
 
     let layout = {

@@ -30,6 +30,7 @@ const checkGenesIntents = [
 
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
+  console.log(response);
   if (!response)
     return false;
   if (!response.hasData)
@@ -40,7 +41,8 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
-
+  console.log(response);
+  console.log(plotState);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -49,6 +51,9 @@ export const updateChat = async (response, plotState) => {
   let answer = "", answer_extra = "", apiData = null, averageExpressionData, endpoint, params;
   let extraEndpointsToCall = [];
 
+  ({ endpoint, params } = buildAPIParams(intent, entities));
+
+  // Intents that do not require API calls
   if (intent === "None") {
     return {
       hasData: false,
@@ -75,20 +80,30 @@ export const updateChat = async (response, plotState) => {
       }
     }
   }
+
+  if (mainIntent === "explore") {
+    answer += `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${params.organism} atlas`
+    return {
+      hasData: true,
+      params: params,
+      message: answer,
+    };
+  }
+
+  if (mainIntent === "plot") {
+    answer += "Data modified as requested";
+    return {
+      hasData: true,
+      params: params,
+      data: plotState.data,
+      message: answer,
+    };
+  }
   
+
+  // Intents that requires api call & error handling
   try {
-    ({ endpoint, params } = buildAPIParams(intent, entities));
 
-    if (mainIntent === "explore") {
-      answer += `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${params.organism} atlas`
-      return {
-        hasData: true,
-        params: params,
-        message: answer,
-      };
-    }
-
-    // params and endpoint clean up:
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
@@ -117,8 +132,7 @@ export const updateChat = async (response, plotState) => {
       params['organ'] = plotState.organ;
 
       if (plotState.data.fractions) {
-        endpoint = 'fraction_detected';
-        extraEndpointsToCall = ['average'];
+        endpoint = "dotplot";
       } else {
         endpoint = 'average';
 

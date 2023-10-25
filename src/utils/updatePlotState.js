@@ -2,7 +2,6 @@ import atlasapprox from "@fabilab/atlasapprox";
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
-    console.log(context);
     return {
         plotType: "organismProfile",
         organism: context.organism,
@@ -10,7 +9,6 @@ const exploreOrganism = (context) => {
 };
 
 const addGenes = async (context) => {
-    console.log(context);
     // Extract required parameters from context within the function
     let features = context.features;
     let mainIntent = context.plotState.mainIntent;
@@ -23,7 +21,6 @@ const addGenes = async (context) => {
 };
 
 const removeGenes = async (context) => {
-    console.log(context);
     let features = context.features;
     if (!context.plotState.data.fractions) {
         return await updateAverage({ ...context, features });
@@ -32,15 +29,16 @@ const removeGenes = async (context) => {
     }
 };
 
-const toggleLog = async (context) => {
-  
+const toggleLog = (context) => {
     let hasLog = !context.plotState.hasLog;
     const newPlotState = { ...context.plotState, hasLog };
     context.plotState = newPlotState;
     if (!context.plotState.data.fractions) {
-        return await updateAverage(context);
+        console.log("average");
+        return updateAverage(context);
     } else {
-        return await updateFractions(context);
+        console.log("fraction");
+        return updateFractions(context);
     }
 };
 
@@ -51,7 +49,7 @@ const updateMarkers = (context) => {
 };
 
 const updateAverage = (context) => {
-
+    console.log(context);
     let xAxis;
     if (context.subIntent === 'chromatinAccessibility') {
         xAxis = context.response.data.celltypes;
@@ -60,9 +58,10 @@ const updateAverage = (context) => {
             xAxis = context.response.data.organs;
             context.response.data.average = transpose(context.response.data.average);
         } else {
-            xAxis = context.response.data.celltypes;
+            xAxis = context.response.data.celltypes || context.plotState.data.xaxis;
         }
     }
+    let yAxis = context.response.data.features ||context.plotState.data.yaxis; 
 
     return {
         intent: "average",
@@ -77,7 +76,7 @@ const updateAverage = (context) => {
         data: {
             type: "matrix",
             xaxis: xAxis,
-            yaxis: context.response.data.features,
+            yaxis: yAxis,
             average: context.response.data.average,
             fractions: null,
             valueUnit: context.response.data.unit,
@@ -228,7 +227,7 @@ const featureSequences = async(context) => {
 
 
 export const updatePlotState = async (response, plotState, setPlotState) => {
-    console.log(response.data);
+    console.log(response);
     console.log(response.params);
     let intent = response.intent;
     let mainIntent = intent.split(".")[0];
@@ -264,7 +263,7 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
             newPlotState = await removeGenes(context);
             break;
         case "plot":
-            newPlotState = await toggleLog(context);
+            newPlotState = toggleLog(context);
             break;
         case "markers":
             newPlotState = updateMarkers(context);
