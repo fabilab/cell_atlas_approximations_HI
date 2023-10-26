@@ -18,6 +18,15 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
   let all_size = [];
   let all_hovertext = [];
 
+  let title = "";
+  let yHover = "cell type";
+  if (dataCategory === "across_organs") {
+    yHover = "organ";
+    title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+  } else {
+    title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
+  }
+
   for (let i = 0; i < yaxis.length; i++) {
     all_x = all_x.concat(xaxis);
     all_y = all_y.concat(Array(xaxis.length).fill(yaxis[i]));
@@ -25,7 +34,7 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
     all_size = all_size.concat(fractions[i].map((x) => x.toPrecision(3) * 100));
 
     const text = xaxis.map((celltype, index) => {
-      return `Gene: ${yaxis[i]}<br>Cell Type: ${celltype}<br>Avg Exp: ${average[i][index].toPrecision(3)}<br>Proportion: ${fractions[i][index].toPrecision(3) * 100}%`;
+      return `Gene: ${yaxis[i]}<br>${yHover}: ${celltype}<br>Avg Exp: ${average[i][index].toPrecision(3)}<br>Proportion: ${fractions[i][index].toPrecision(3) * 100}%`;
     });
 
     all_hovertext = all_hovertext.concat(text);
@@ -49,12 +58,6 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
   let graphWidth = ncelltypes * 30 + xtickMargin;
   let graphHeight = nfeatures * 30 + ytickMargin;
 
-  let title = "";
-  if (dataCategory === "across_organs") {
-    title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
-  } else {
-    title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
-  }
 
   let layout = {
     width: graphWidth,

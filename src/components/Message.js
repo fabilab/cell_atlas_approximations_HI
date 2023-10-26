@@ -49,8 +49,8 @@ const Message = (props) => {
 
   const iconStyle = {
     position: 'absolute',
-    top: '5px',     // Adjust as needed
-    right: '5px',    // Adjust as needed
+    top: '5px',
+    right: '5px',
     fontSize:'12px'
   };
 

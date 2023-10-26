@@ -25,29 +25,6 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
       values = values.map(subArray => subArray.map(value => Math.log(value)));
       unit = "log( " + unit + " )";
     } 
-
-    let data = [
-      {
-        z: values,
-        x: xaxis,
-        y: yaxis,
-        type: 'heatmap',
-        colorscale: 'YlGnBu',
-        reversescale: true,
-        // get unit from API call
-        colorbar: {
-          title: {
-            text: unit,
-          },
-          len: 1.2,
-        },
-        hovertemplate:
-          "Gene: %{y} <br>" +
-          "Cell type: %{x} <br>" +
-          "Expression: %{z}" +
-          "<extra></extra>"
-      }
-    ];
   
     let longestXlabel = 0, longestYlabel = 0;
     for (let i = 0; i < xaxis.length; i++) {
@@ -68,15 +45,42 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     let graphHeight = nfeatures * 30 + ytickMargin;
     
     let title = "";
+    let featureHover = "Gene";
+    let xHover = "cell type";
     if (subIntent === 'chromatinAccessibility') {
       title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
+      featureHover = "peaks"
     } else{
       if (dataCategory === "across_organs") {
+        xHover = "organ";
         title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
       } else {
         title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
       }
     }
+
+    let data = [
+      {
+        z: values,
+        x: xaxis,
+        y: yaxis,
+        type: 'heatmap',
+        colorscale: 'YlGnBu',
+        reversescale: true,
+        // get unit from API call
+        colorbar: {
+          title: {
+            text: unit,
+          },
+          len: 1.2,
+        },
+        hovertemplate:
+          featureHover + ": %{y} <br>" +
+          xHover + ": %{x} <br>" +
+          "Expression: %{z}" +
+          "<extra></extra>"
+      }
+    ];
 
     let layout = {
       width: graphWidth,
