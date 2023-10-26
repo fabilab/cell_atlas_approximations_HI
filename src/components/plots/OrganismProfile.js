@@ -1,22 +1,62 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import orgMeta from '../../utils/organismMetadata.js'; 
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
-import { Divider, Typography } from 'antd';
+import { Typography } from 'antd';
 import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ organism }) => {
-    
-    const [error, setError] = useState(null);
+    console.log(organism);
     const imageRef = useRef(null);
-    const [imageHeight, setImageHeight] = useState(0);
-    const [scalingFactors, setScalingFactors] = useState({ width: 0.4447, height: 0.4286 });  // scaling factors, rendered width/intrinsic width
+    const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
     const [cellTypes, setCellTypes] = useState([]);
     const [clickedOrgan, setClickedOrgan] = useState(null);
     const [apiCellOrgan, setApiCellOrgan] = useState(null);
+    const [imagePath, setImagePath] = useState(null);
+    const [anatomyImage, setAnatomyImage] = useState(null);
+    const [bioName, setBioName] = useState("Unknown");
+    const [commonName, setCommonName] = useState("Unknown");
+    const [dataSource, setDataSource] = useState("Data source not available");
+    const [description, setDescription] = useState("Description not available");
+    const [descriptionHyperlink, setDescriptionHyperlink] = useState("Hyperlink unavailable");
+    const [paperHyperlink, setPaperHyperlink] = useState("Hyperlink unavailable");
+    const [loading, setLoading] = useState(true);
     let params = {};
-    
+
+    useEffect(() => {
+        if (organism) {
+            setLoading(true); // Set loading to true when organism changes
+            setClickedOrgan(null); // Clear previous clicked organ
+            setApiCellOrgan(null); // Clear previous API data
+            try {
+                const organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
+                setImagePath(organismImagePath);
+            } catch(error) {
+                const tempAnatomyImage = require(`../../asset/anatomy/temp.jpeg`);
+                setImagePath(tempAnatomyImage);
+            }
+            
+            setBioName(orgMeta[organism]?.bioName || "Unknown");
+            setCommonName(orgMeta[organism]?.commonName || "Unknown");
+            setDataSource(orgMeta[organism]?.dataSource || "Data source not available");
+            setDescription(orgMeta[organism]?.about || "Description not available");
+            setDescriptionHyperlink(orgMeta[organism]?.descriptionHyperlink || "Hyperlink unavailable");
+            setPaperHyperlink(orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable");
+            
+            const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
+            if (intrinsicDimensions) {
+                const renderedSize = 480; // Since you've set width and height of ImageMapper to 480
+                setScalingFactors({
+                    width: renderedSize / intrinsicDimensions.width,
+                    height: renderedSize / intrinsicDimensions.height,
+                });
+            }
+
+            setLoading(false);
+        }
+    }, [organism]);
+
     const handleOrganClick = (area) => {
         let tempOrgan = area.name.split('-')[0]
         setClickedOrgan(tempOrgan);
@@ -61,20 +101,29 @@ const OrganismProfile = ({ organism }) => {
         if (naturalWidth && naturalHeight && renderedWidth && renderedHeight) {
             const widthFactor = renderedWidth / naturalWidth;
             const heightFactor = renderedHeight / naturalHeight;
-            
+            console.log(renderedHeight);
+            console.log(naturalHeight)
             setScalingFactors({ width: widthFactor, height: heightFactor });
+        }
+
+        try {
+            const organismAnatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
+            imageRef.src = organismAnatomyImage;
+        } catch (error) {
+            console.error("Error updating image:", error);
+            const tempAnatomyImage = require(`../../asset/anatomy/temp.jpeg`);
+            imageRef.src = tempAnatomyImage;
         }
     };
 
     const renderImageMap = () => {
-        if (!orgMeta[organism]?.organs) return null;
+        if (loading || !orgMeta[organism]?.organs) return null;
     
         const areas = Object.keys(orgMeta[organism].organs).map(organ => {
             const coords = orgMeta[organism].organs[organ].coords.split(',').map(Number);
             const shape = orgMeta[organism].organs[organ].shape || 'poly';
             
             let isOrganLabel = organ.split("-")[1] === "label";
-            
             // Adjust the coordinates using the scaling factors
             const adjustedCoords = coords.map((coord, index) => 
                 index % 2 === 0 ? coord * scalingFactors.width : coord * scalingFactors.height
@@ -94,7 +143,6 @@ const OrganismProfile = ({ organism }) => {
         return ( 
             <ImageMapper 
                 ref={imageRef}
-                src={anatomyImage}
                 map={{ name: `${organism}-map`, areas: areas }}
                 onClick={(area, index, event) => handleOrganClick(area)}
                 onLoad={handleImageLoad}
@@ -104,28 +152,8 @@ const OrganismProfile = ({ organism }) => {
             />
         );
     };
-    
-
-    let imagePath;
-    let anatomyImage;
-
-    try {
-        imagePath = require(`../../asset/organisms/${organism}.jpeg`);
-        anatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
-    } catch(error) {
-        anatomyImage = require(`../../asset/anatomy/temp.jpeg`);
-        imagePath = require(`../../asset/anatomy/temp.jpeg`);
-    }
-    
-    let bioName = orgMeta[organism]?.bioName || "Unknown";
-    let commonName = orgMeta[organism]?.commonName || "Unknown";
-    let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
-    let description = orgMeta[organism]?.about || "description not available";
-    let descriptionHyperlink = orgMeta[organism]?.descriptionHyperlink || "hyperlink unavailable";
-    let paperHyperlink = orgMeta[organism]?.paperHyperlink || "hyperlink unavailable";
 
     return (
-
         <div style={{  width: "inherit"}}>
             <div style={{display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 3%"}}>
                 {

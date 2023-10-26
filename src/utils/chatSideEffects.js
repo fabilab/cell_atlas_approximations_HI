@@ -38,7 +38,7 @@ export const updateChat = async (response, plotState) => {
   let mainIntent = intent.split('.')[0];
   let subIntent = intent.split('.')[1] || null;
   let complete = response.complete;
-  let answer = "", answer_extra = "", apiData = null, averageExpressionData, endpoint, params;
+  let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
 
   ({ endpoint, params } = buildAPIParams(intent, entities));
