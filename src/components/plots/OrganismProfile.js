@@ -175,7 +175,7 @@ const OrganismProfile = ({ organism }) => {
                 <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         {renderImageMap()}
-                        <Text style={{ alignSelf: 'center' }}>Hover over any organ or its label, then click for detailed information.</Text>
+                        <Text style={{ alignSelf: 'center' }}>Click on an organ for cell type information.</Text>
                     </div>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
                         {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}

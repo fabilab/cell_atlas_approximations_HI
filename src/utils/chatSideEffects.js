@@ -20,6 +20,12 @@ const updatePlotIntents = [
 ];
 
 
+const mainIntentNotRequiresApi = [
+  "download",
+  "explore",
+  "plot"
+];
+
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
   if (!response)
@@ -51,6 +57,7 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
+  // If incomplete, follow up question
   if (!complete) {
     return {
       hasData: false,
@@ -58,40 +65,44 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
-  if (intent === "download") {
-    try {
-      downloadFasta(plotState)
-      return {
-        message: "Data has been downloaded successfully."
-      }
-    } catch (err) {
-      return {
-        message: "Sorry, data is not available for download."
-      }
+  // If the intent does not require an API, just build the answer
+  if (mainIntentNotRequiresApi.includes(mainIntent)) {
+    switch (mainIntent) {
+      case "download":
+        let downloadAvailable = true;
+        try {
+          downloadFasta(plotState)
+        } catch (err) {
+          downloadAvailable = false;
+        }
+        answer = buildAnswer(intent, { success: downloadAvailable });
+        return {
+          message: answer,
+        }
+      case "explore":
+        answer = buildAnswer(intent, { organism: params.organism });
+        return {
+          hasData: true,
+          params: params,
+          message: answer,
+        };
+      case "plot":
+        answer = buildAnswer(intent);
+        return {
+          hasData: true,
+          params: params,
+          data: plotState.data,
+          message: answer,
+        };
+      default:
+        answer = buildAnswer(intent);
+        return {
+          message: answer,
+        }
     }
   }
 
-  if (mainIntent === "explore") {
-    answer += `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${params.organism} atlas`
-    return {
-      hasData: true,
-      params: params,
-      message: answer,
-    };
-  }
-
-  if (mainIntent === "plot") {
-    answer += "Data modified as requested";
-    return {
-      hasData: true,
-      params: params,
-      data: plotState.data,
-      message: answer,
-    };
-  }
-  
-
-  // Intents that requires api call & error handling
+  // Intents that requires API calls & error handling
   try {
 
     if (subIntent === "chromatinAccessibility") { 
@@ -110,7 +121,6 @@ export const updateChat = async (response, plotState) => {
     // for intents that without actual data, we need to make extra api calls
     if (mainIntent === 'markers' || mainIntent === 'similar_features') {
       extraEndpointsToCall.push('dotplot');
-      
     } 
     
     if (mainIntent === 'fraction_detected') {
@@ -125,7 +135,6 @@ export const updateChat = async (response, plotState) => {
         endpoint = "dotplot";
       } else {
         endpoint = 'average';
-
       }
 
       if (mainIntent === 'add' && params.features && plotState.features) {
@@ -138,7 +147,6 @@ export const updateChat = async (response, plotState) => {
         let geneArrayB = plotState.features.split(",");
         params.features = geneArrayB.filter(gene => !geneArrayA .includes(gene)).join(",");
       }
-
     }
 
     //  Finally, generate bot response and api data for the given intent

@@ -1,5 +1,5 @@
 // Construct an answer given the API has provided the requested information
-const buildAnswer = (intent, data) => {
+const buildAnswer = (intent, data = null) => {
 
     function _chainList(list, sep, end) {
         let text = "";
@@ -153,23 +153,29 @@ const buildAnswer = (intent, data) => {
             answer = "Done";
         }
         break;
-        case "explore":
-          switch (sIntent) {
-            case "organism":
-              answer = "Hello! Our Explore Organisms page is currently in development. We appreciate your patience. Thank you!";
-              break;
-            default:
-              answer = "Done";
-          }
-          break;
-        case "feature_sequences":
+      case "explore":
         switch (sIntent) {
-          case "geneExpression":
-            answer = "The sequences of " + data.features + " in " + data.organism + " are shown in the plot";
+          case "organism":
+            answer = `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${data.organism} atlas`
             break;
           default:
             answer = "Done";
         }
+        break;
+      case "feature_sequences":
+        switch (sIntent) {
+          case "geneExpression":
+            answer = "The sequences of " + data.features + " in " + data.organism + " are shown. Type \"download\" to get a FASTA file of them all.";
+            break;
+          default:
+            answer = "Done";
+        }
+        break;
+      case "download":
+        if (data.success)
+          answer = "Data can be downloaded using the pop-up window.";
+        else
+          answer = "Sorry, you cannot download data from this page.";
         break;
       default:
         answer = "Sorry, I have no answer to that.";
