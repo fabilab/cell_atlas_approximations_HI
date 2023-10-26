@@ -7,14 +7,12 @@ import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ organism }) => {
-    console.log(organism);
     const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
     const [cellTypes, setCellTypes] = useState([]);
     const [clickedOrgan, setClickedOrgan] = useState(null);
     const [apiCellOrgan, setApiCellOrgan] = useState(null);
     const [imagePath, setImagePath] = useState(null);
-    const [anatomyImage, setAnatomyImage] = useState(null);
     const [bioName, setBioName] = useState("Unknown");
     const [commonName, setCommonName] = useState("Unknown");
     const [dataSource, setDataSource] = useState("Data source not available");
@@ -101,8 +99,6 @@ const OrganismProfile = ({ organism }) => {
         if (naturalWidth && naturalHeight && renderedWidth && renderedHeight) {
             const widthFactor = renderedWidth / naturalWidth;
             const heightFactor = renderedHeight / naturalHeight;
-            console.log(renderedHeight);
-            console.log(naturalHeight)
             setScalingFactors({ width: widthFactor, height: heightFactor });
         }
 

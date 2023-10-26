@@ -167,23 +167,32 @@ export const updateChat = async (response, plotState) => {
     }
 
   } catch ({ status, message, error }) {
-
+    console.log(error);
       // invalid gene, we can auto remove it and re-call api
-      if (error.type === 'invalid_parameter' && (error.invalid_parameter === 'feature' || error.invalid_parameter === 'features')) {
-
-        let invalid_genes = error.invalid_value;
-        params.features = params.features.split(',').filter(feature => !invalid_genes.includes(feature.toLowerCase())).join(',');
+      let errorValue = error.invalid_value;
+      let errorParam = error['invalid_parameter']
+      if (error.type === 'invalid_parameter'){
+        if (errorParam === 'features') {
+          params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
         
-        if (params.features.length !== 0) {
-          apiData = await atlasapprox[endpoint](params);
-          answer = `Invalid features detected: ${invalid_genes}. These have been automatically excluded<br><br>`;
-          answer += buildAnswer(intent, apiData);
-          answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
-        } else {
-          answer = 'None of the features are valid. ';
+          if (params.features.length !== 0) {
+            apiData = await atlasapprox[endpoint](params);
+            answer = `Invalid features detected: "${errorValue}". These have been automatically excluded<br><br>`;
+            answer += buildAnswer(intent, apiData);
+            answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
+          } else {
+            answer = `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
+          }
+        } 
+        else if (errorParam === 'feature') {
+          answer += `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
         }
-      
-      // cannot recall api
+        else if (errorParam === 'organ') {
+          answer += `I'm sorry, but the organ "${errorValue}" is not available in our current dataset for this query. Please specify a different organ.`;
+        } 
+        else if (errorParam === 'celltype') {
+          answer += `I'm sorry, but the celltype "${errorValue}" is not available in our current dataset for this query. Please specify a different celltype.`;
+        }
       } else {
         answer = message
       }
