@@ -4,7 +4,6 @@ const organismMetadata = {
     commonName: "Sponge",
     dataSource: "[Sebé-Pedrós et al. 2018](Early metazoan cell type diversity and the evolution of multicellular gene regulation)",
     about: "Amphimedon queenslandica is a sponge native to the Great Barrier Reef in Australia. It is a model organism for metazoan development and evolution.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/a_queenslandica.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Amphimedon_queenslandica",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
@@ -14,7 +13,6 @@ const organismMetadata = {
     commonName: "Nematode",
     dataSource: "[Cao et al. 2017](Comprehensive single-cell transcriptional profiling of a multicellular organism)",
     about: "Caenorhabditis elegans is a free-living transparent nematode (roundworm) that lives in temperate soil environments. It is a model organism for development and neuroscience, with a fixed cell type ontology.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/c_elegans.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Caenorhabditis_elegans",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.aam8940"
@@ -24,7 +22,6 @@ const organismMetadata = {
     commonName: "Fruit fly",
     dataSource: "[Li et al. 2022](Fly Cell Atlas: A single-nucleus transcriptomic atlas of the adult fruit fly)",
     about: "Drosophila Melanogaster or fruit fly is a flying insect that inhabits all continents. It is a model organism for genetics and development.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/d_melanogaster.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Drosophila_melanogaster",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.abk2432"
@@ -48,7 +45,6 @@ const organismMetadata = {
     commonName: "Three-banded panther worm",
     dataSource: "[Hulett et al. 2023](Aciel single-cell atlas reveals expression dynamics and heterogeneity of adult pluripotent stem cells)",
     about: "Hofstenia miamia is an acoel (related to flatworms), a deep-diverging bilaterian lineage. It is an emerging model system to study bilaterian evolution.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/h_miamia.jpeg"),
     descriptionHyperlink: "https://pubmed.ncbi.nlm.nih.gov/34196362/",
     paperHyperlink: "https://www.nature.com/articles/s41467-023-38016-4"
@@ -58,10 +54,10 @@ const organismMetadata = {
     commonName: "Human",
     dataSource: "RNA: [Tabula Sapiens 2022](The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans)",
     about: "Homo sapiens or human is a primate that inhabits all continents. But you know that.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/h_sapiens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
     paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896",
+    intrinsicDimensions: { width: 1361, height: 1361 },
     organs: {
       "bladder": {
         coords: "649,806,649,832,670,832,670,807"
@@ -228,11 +224,10 @@ const organismMetadata = {
     // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "i_pulchra": {
-    bioName: " Isodiametra pulchra",
+    bioName: "Isodiametra pulchra",
     commonName: "Acoel",
     dataSource: "[Duruz et al. 2020](Acoel Single-Cell Transcriptomics: Cell Type Analysis of a Deep Branching Bilaterian)",
     about: "Acoela, or the acoels, is an order of small and simple invertebrates in the subphylum Acoelomorpha of phylum Xenacoelomorpha, a deep branching bilaterian group of animals, which resemble flatworms. Historically they were treated as an order of turbellarian flatworms.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/i_pulchra.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Acoela",
     paperHyperlink:"https://academic.oup.com/mbe/article/38/5/1888/6045962"
@@ -243,7 +238,6 @@ const organismMetadata = {
     commonName: "Least duckweed",
     dataSource: "[Abramson et al. 2021](The genome and preliminary single-nuclei transcriptome of Lemna minuta reveals mechanisms of invasiveness)",
     about: "Lemna minuta is a species of duckweed native to parts of the Americas. It is studied as an example of an invasive plant species in genetics and ecology.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/l_minuta.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Lemna_minuta",
     paperHyperlink:"https://academic.oup.com/plphys/article/188/2/879/6454113"
@@ -254,7 +248,6 @@ const organismMetadata = {
     commonName: "Comb jelly",
     dataSource: "[Sebé-Pedrós et al 2018](Early metazoan cell type diversity and the evolution of multicellular gene regulation)",
     about: "Mnemiopsis leidyi is a species of tentaculate ctenophore (comb jelly) native to western Atlantic coastal waters. It is studied as an example of a marine invasive species.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/m_leidyi.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Mnemiopsis",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
@@ -264,7 +257,6 @@ const organismMetadata = {
     commonName: "House mouse",
     dataSource: "[Tabula Muris Senis 2020](A single-cell transcriptomic atlas characterizes ageing tissues in the mouse)",
     about: "Mus musculis or house mouse is a small rodent that lives both in wild temperate climates and in close proximity to humans (e.g. cities). It is a very widely used model organism to study disease, development, genetics, evolution, and other topics.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/m_musculus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/House_mouse",
     paperHyperlink: "https://www.nature.com/articles/s41586-020-2496-1",
@@ -285,7 +277,6 @@ const organismMetadata = {
     commonName: "Mouse lemur",
     dataSource: "[Tabula Microcebus 2023](Tabula Microcebus: A transcriptomic cell atlas of mouse lemur, an emerging primate model organism)",
     about: "Microbebus murinus or mouse lemur is a primate that lives in Madagascar. Is is a model organism for comparative genetics and cell biology and to study primate evolution.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/m_murinus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Gray_mouse_lemur",
     paperHyperlink:"https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2",
@@ -313,10 +304,29 @@ const organismMetadata = {
     commonName: "Blood fluke",
     dataSource: "[Li et al. 2021](Single-cell analysis of Schistosoma mansoni identifies a conserved genetic program controlling germline stem cell fate)",
     about: "Schistosoma mansoni is a water-borne parasite of humans. It is studied as the etiological cause of schistosomiasis.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/s_mansoni.jpeg"),
     descriptionHyperlink: "",
     paperHyperlink: "https://www.nature.com/articles/s41467-020-20794-w",
+
+  },
+  "s_pistillata": {
+    bioName: "Stylophora pistillata",
+    commonName: "Stony coral",
+    dataSource: "[Levi et al. 2021](A stony coral cell atlas illuminates the molecular and cellular basis of coral symbiosis, calcification, and immunity)",
+    about: "",
+    imagePath: require("../asset/organisms/s_pistillata.jpeg"),
+    descriptionHyperlink: "",
+    paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S0092867421004402",
+
+  },
+  "c_hemisphaerica": {
+    bioName: "Clytia hemisphaerica",
+    commonName: "Jellyfish",
+    dataSource: "[Chari et al. 2021](Whole-animal multiplexed single-cell RNA-seq reveals transcriptional shifts across Clytia medusa cell types)",
+    about: "",
+    imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
+    descriptionHyperlink: "",
+    paperHyperlink: "https://www.science.org/doi/10.1126/sciadv.abh1683",
 
   },
   "s_mediterranea": {
@@ -324,7 +334,6 @@ const organismMetadata = {
     commonName: "Planarian worm",
     dataSource: "[Plass et al 2018](Cell type atlas and lineage tree of a whole complex animal by single-cell transcriptomics)",
     about: "Schmidtea mediterranea is a planarian found in Europe. It is studied because of its ability to regenerate lost body parts thanks to a large reservoir of stem-like cells.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/s_mediterranea.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Schistosoma_mansoni",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.aaq1723",
@@ -334,7 +343,6 @@ const organismMetadata = {
     commonName: "Placozoan",
     dataSource: "[Sebé-Pedrós et al 2018](Early metazoan cell type diversity and the evolution of multicellular gene regulation)",
     about: "Trichoplax adhaerens is an organism in the phylum Placozoa, a basal group of multicellular animals, possible relatives of Cnidaria. They are studied as a comparative outgroup for multicellular organismal evolution, cell biology, and genetics.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/t_adhaerens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Trichoplax",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
@@ -345,9 +353,9 @@ const organismMetadata = {
     dataSource: "[Liao et al 2022](Cell landscape of larval and adult Xenopus laevis at single-cell resolution)",
     paperHyperlink: "https://www.nature.com/articles/s41467-022-31949-2",
     about: "Xenopus laevis is a species of African aquatic frog. It is a model organism for cell biology and development.",
-    genesFromPaper: "",
     imagePath: require("../asset/organisms/x_laevis.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/African_clawed_frog",
+    intrinsicDimensions: { width: 1110, height: 1115 },
     organs: {
       "heart": {
         coords: "531,263,520,273,527,285,527,291,512,309,506,332,509,352,513,369,528,381,544,381,556,374,570,358,574,342,577,324,573,305,563,297,574,288,571,274,559,277,544,294"

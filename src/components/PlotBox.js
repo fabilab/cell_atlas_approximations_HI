@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Heatmap from "./plots/Heatmap"
 import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';
@@ -28,7 +28,7 @@ const PlotBox = ({ state }) => {
           organism={state.organism}
           organ={state.organ}
           celltype={state.celltype}
-          unit={state.data.valueUnit}
+          unit={state.data.unit}
           measurementType={state.data.measurementType}
           hasLog={state.hasLog}
         />
@@ -46,7 +46,7 @@ const PlotBox = ({ state }) => {
           organism={state.organism}
           organ={state.organ}
           celltype={state.celltype}
-          unit={state.data.valueUnit}
+          unit={state.data.unit}
           hasLog={state.hasLog}
           dataCategory={state.dataCategory}
         />

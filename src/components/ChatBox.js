@@ -57,18 +57,12 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       return '';
     } else {
       setCurrentMessage(localMessage); 
-      let nlp;
-      if (chatHistory) {
-        nlp = new AtlasApproxNlp(chatContext);
-      } else {
-        nlp = new AtlasApproxNlp({});
-      }
+      let nlp = new AtlasApproxNlp(chatContext || {});
       await nlp.initialise();
       let response = await nlp.ask(text);
       setChatContext(nlp.context);
 
       try {
-        console.log(response)
         const updateObject = await updateChat(response,plotState)
         response.hasData = updateObject.hasData;
         if (updateObject.hasData) {
@@ -95,8 +89,11 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   };
 
   useEffect(() => {
+    const firstSubmit = async () => {
+      await handleSubmit(initialMessage);
+    }
     if (!chatHistory || chatHistory.length === 0) {
-      handleSubmit(initialMessage);
+      firstSubmit();
     }
   }, [chatHistory]);
 

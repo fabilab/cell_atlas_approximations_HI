@@ -1,33 +1,32 @@
-import callAPI from "./callAPI.js";
 import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import atlasapprox from "@fabilab/atlasapprox";
 import { downloadFasta } from "./downloadFasta";
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
-  "markers",
-  "highest_measurement",
-  "average",
-  "fraction_detected",
-  "similar_features",
   "add",
-  "remove",
-  "celltypexorgan",
-  "organisms",
-  "similar_celltypes",
   "plot",
+  "remove",
   "explore",
+  "average",
+  "markers",
+  "organisms",
+  "celltypexorgan",
+  "similar_features",
   "feature_sequences",
+  "fraction_detected",
+  "similar_celltypes",
+  "highest_measurement",
 ];
 
-// check is all genes requested are found in our database
-// check if the requested list of genes has duplications
-const checkGenesIntents = [
-	"average",
-	"fraction_detected",
-  "add",
-]
 
+const mainIntentNotRequiresApi = [
+  "download",
+  "explore",
+  "plot"
+];
+
+// Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
   if (!response)
     return false;
@@ -37,17 +36,20 @@ export const triggersPlotUpdate = ((response) => {
   return updatePlotIntents.includes(mainIntent);
 });
 
+// Generate bot response and get data
 export const updateChat = async (response, plotState) => {
-  console.log(response);
-  console.log(plotState);
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
   let subIntent = intent.split('.')[1] || null;
   let complete = response.complete;
-  let answer = "";
-  let apiData;
-  let endpoint, params;
+  let answer = "", apiData = null, endpoint, params;
+  let extraEndpointsToCall = [];
+
+  ({ endpoint, params } = buildAPIParams(intent, entities));
+
+  // Intents that do not require API calls
   if (intent === "None") {
     return {
       hasData: false,
@@ -55,158 +57,163 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
+  // If incomplete, follow up question
   if (!complete) {
-    // forward the followup question to chatbox
     return {
       hasData: false,
       message: response.followUpQuestion,
     };
   }
 
-  if (intent === "download") {
-    if (!plotState) {
-      return {
-        message: "Sorry, there is no data to be downloaded"
-      }
-    } 
-    try {
-      downloadFasta(plotState)
-      return {
-        message: "Data has been downloaded successfully"
-      }
-    } catch (err) {
-      console.error("Failed to download data ", err);
-    }
-  }
-
-  try {
-    ({ endpoint, params } = buildAPIParams(intent, entities));
-    if (checkGenesIntents.includes(mainIntent) && (subIntent === "geneExpression" || subIntent === "features")) {
-
-      // check and remove invalid genes before generate plots
-      // when intent is add gene, params = {features: 'newGene'}, we need to find a way to get the organism/organ, otherwise callAPI will fail
-      if (mainIntent === 'add') {
-        params['organism'] = plotState.organism; 
-        params['organ'] = plotState.organ;
-
-        if (params.features && plotState.features) {
-          const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
-          params.features = params.features.split(',')
-            .filter(gene => !plotStateGenes.includes(gene.trim()))
-            .join(',');
+  // If the intent does not require an API, just build the answer
+  if (mainIntentNotRequiresApi.includes(mainIntent)) {
+    switch (mainIntent) {
+      case "download":
+        let downloadAvailable = true;
+        try {
+          downloadFasta(plotState)
+        } catch (err) {
+          downloadAvailable = false;
         }
-      }
-
-      let checkFeatures = await callAPI('has_features', params);
-
-      let geneFound = [];
-      let geneNotFound = [];
-      checkFeatures.features.map((feature,index) => {
-        checkFeatures.found[index] === true ? geneFound.push(feature) : geneNotFound.push(feature)  
-      })
-      // if none of the genes were valid
-      if (geneFound.length < 1) {
-        answer = `Oops! It looks like there are some invalid gene names in your input. Please ensure that human genes are written in ALL CAPITAL CASE (e.g., COL1A1), and for other species, use the appropriate capitalization (e.g., Col1a1)`;
+        answer = buildAnswer(intent, { success: downloadAvailable });
         return {
-          hasData: false,
           message: answer,
         }
-      }
-
-      // if there is at least one invalid gene
-      if (geneNotFound.length > 0) {
-        let geneNotFoundString = geneNotFound.join(', ');
-        answer = `Removed invalid genes: ${geneNotFoundString}. <br><br>`;
-        params.features = params.features.split(',')
-          .filter(item => !geneNotFound.includes(item.toLowerCase()))  // Case-insensitive comparison, there is a case different between user input and has_feature api return value
-          .join(',');
-      }
-
-      // handle duplicate gene names in user input list
-      params.features = [...new Set(params.features.split(','))].join(',');
-
-      if (params.organ) {
-        let apiCelltypes = await atlasapprox.celltypes(params.organism, params.organ);
-        let numCelltypes = apiCelltypes.celltypes.length;
-        let numGenes = params.features.split(",").length;
-        apiData = await callAPI(endpoint, params);
-        answer += buildAnswer(intent, apiData);
-        answer += `<br><br>It includes ${numCelltypes} cell types and ${numGenes} genes.`
-      }
-
-      else {
-        apiData = await callAPI(endpoint, params);
-        answer += buildAnswer(intent, apiData);
-      }
+      case "explore":
+        answer = buildAnswer(intent, { organism: params.organism });
+        return {
+          hasData: true,
+          params: params,
+          message: answer,
+        };
+      case "plot":
+        answer = buildAnswer(intent);
+        return {
+          hasData: true,
+          params: params,
+          data: plotState.data,
+          message: answer,
+        };
+      default:
+        answer = buildAnswer(intent);
+        return {
+          message: answer,
+        }
     }
-    else if (intent === "organisms.geneExpression") {
-      let apiOrganisms = await atlasapprox.organisms("gene_expression");
-      let numOrganisms = apiOrganisms.organisms.length;
-      answer += `There are ${numOrganisms} organisms available:<br>`;
-      apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
-    }
-
-    else if (intent === "average.chromatinAccessibility") {
-      params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
-    }
-
-    else if (intent === "similar_features.geneExpression") {
-      params['feature'] = params['features'];
-      delete params['features'];
-      apiData = await callAPI(endpoint, params);
-      answer += `Genes similar to ${params['feature']}: ${apiData['similar_features']}`;
-    } 
-      
-    else if (intent === "highest_measurement.geneExpression") {
-      params['feature'] = params['features'];
-      params['number'] = '10';
-      delete params['features'];
-      apiData = await callAPI(endpoint, params);
-      answer = buildAnswer(intent, apiData);
-    } 
-
-    else if (intent === "highest_measurement.chromatinAccessibility") {
-      params['feature'] = params['features'];
-      params['number'] = '10';
-      delete params['features'];
-      params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await callAPI(endpoint, params);
-      answer = buildAnswer(intent, apiData);
-    }
-
-    else if (intent === "organisms.chromatinAccessibility") {
-      params['measurement_type'] = 'chromatin_accessibility';
-      apiData = await callAPI(endpoint, params);
-      answer = buildAnswer(intent, apiData);
-    }
-
-    else if (intent === "feature_sequences.geneExpression") {
-      endpoint = "sequences";
-      apiData = await callAPI(endpoint, params);
-      answer = buildAnswer(intent, apiData);
-    }
-
-    else {
-      apiData = await callAPI(endpoint, params);
-      answer += buildAnswer(intent, apiData);
-    }
-
-  } catch (error) {
-    console.error("An error occurred:", error);
-      return {
-        hasData: false,
-        message: "Sorry, something went wrong. Please try again later.",
-      };
   }
 
-  return {
-    hasData: true,
-    params: params,
-    data: apiData,
-    message: answer,
-  };
+  // Intents that requires API calls & error handling
+  try {
+
+    if (subIntent === "chromatinAccessibility") { 
+      params['measurement_type'] = 'chromatin_accessibility';
+    }
+
+    if (mainIntent === "similar_features" || mainIntent === "highest_measurement") {
+      params['feature'] = params['features'];
+      delete params['features'];
+    } 
+    
+    if (intent === "feature_sequences.geneExpression") {
+      endpoint = "sequences";
+    }
+
+    // for intents that without actual data, we need to make extra api calls
+    if (mainIntent === 'markers' || mainIntent === 'similar_features') {
+      extraEndpointsToCall.push('dotplot');
+    } 
+    
+    if (mainIntent === 'fraction_detected') {
+      endpoint = "dotplot";
+    }
+
+    if (['add', 'remove'].includes(mainIntent)) {
+      params['organism'] = plotState.organism; 
+      params['organ'] = plotState.organ;
+
+      if (plotState.data.fractions) {
+        endpoint = "dotplot";
+      } else {
+        endpoint = 'average';
+      }
+
+      if (mainIntent === 'add' && params.features && plotState.features) {
+        const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+        params.features = [...new Set([...params.features.split(','), ...plotStateGenes])].join(',');
+      }
+
+      if (mainIntent === 'remove' && params.features && plotState.features) {
+        let geneArrayA = params.features.split(",");
+        let geneArrayB = plotState.features.split(",");
+        params.features = geneArrayB.filter(gene => !geneArrayA .includes(gene)).join(",");
+      }
+    }
+
+    //  Finally, generate bot response and api data for the given intent
+    apiData = await atlasapprox[endpoint](params);
+    
+    if (intent === "organisms.geneExpression") {
+      let numOrganisms = apiData.organisms.length;
+      answer = `There are ${numOrganisms} organisms available:<br>`;
+    }
+    answer += buildAnswer(intent, apiData);
+
+    if (params.organ && apiData.celltypes) {
+      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
+    }
+
+
+    // for intent like "marker, fraction, similar celltypes"
+    for (const e of extraEndpointsToCall) {
+      if (mainIntent === 'similar_features' || mainIntent === 'markers') {
+        params.features = [...apiData[endpoint]];
+        endpoint === 'similar_features' && params.features.push(params.feature);
+        delete params['celltype']
+      }
+      let extraApiData = await atlasapprox[e](params);
+      apiData = {...apiData, ...extraApiData};
+    }
+
+  } catch ({ status, message, error }) {
+    console.log(error);
+      // invalid gene, we can auto remove it and re-call api
+      let errorValue = error.invalid_value;
+      let errorParam = error['invalid_parameter']
+      if (error.type === 'invalid_parameter'){
+        if (errorParam === 'features') {
+          params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+        
+          if (params.features.length !== 0) {
+            apiData = await atlasapprox[endpoint](params);
+            answer = `Invalid features detected: "${errorValue}". These have been automatically excluded<br><br>`;
+            answer += buildAnswer(intent, apiData);
+            answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
+          } else {
+            answer = `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
+          }
+        } 
+        else if (errorParam === 'feature') {
+          answer += `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
+        }
+        else if (errorParam === 'organ') {
+          answer += `I'm sorry, but the organ "${errorValue}" is not available in our current dataset for this query. Please specify a different organ.`;
+        } 
+        else if (errorParam === 'celltype') {
+          answer += `I'm sorry, but the celltype "${errorValue}" is not available in our current dataset for this query. Please specify a different celltype.`;
+        }
+      } else {
+        answer = message
+      }
+
+  } finally {
+    return {
+      hasData: apiData !== null,
+      params: apiData ? params : null,
+      data: apiData || null,
+      message: answer,
+    };
+  }
+
+  
 };
 

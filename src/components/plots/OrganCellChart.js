@@ -41,7 +41,7 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
 
   let layout = {
       width: 520,
-      height: 170 + 14.7 * nonZeroData.length,
+      height: 170 + 14.7 * nonZeroData.length, //14.7
       xaxis: {
         automargin: true,
         title: {
@@ -64,6 +64,7 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
         automargin: true,
         showticklabels: true,
         type: "category",
+        autorange: true
       }
   };
 
@@ -82,6 +83,14 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
           // onAfterPlot={() => attachYAxisClickEvent()}
           onAfterPlot={() => {
             // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
+            document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
+
+            selectAll(".yaxislayer-above")
+              .selectAll('text')
+              .on("click", (event) => yAxisLabelClick(event));
+          }}
+          onInitialized={(figure, graphDiv)=>{
             document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
             document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
 
