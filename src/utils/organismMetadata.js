@@ -224,7 +224,7 @@ const organismMetadata = {
     // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "i_pulchra": {
-    bioName: " Isodiametra pulchra",
+    bioName: "Isodiametra pulchra",
     commonName: "Acoel",
     dataSource: "[Duruz et al. 2020](Acoel Single-Cell Transcriptomics: Cell Type Analysis of a Deep Branching Bilaterian)",
     about: "Acoela, or the acoels, is an order of small and simple invertebrates in the subphylum Acoelomorpha of phylum Xenacoelomorpha, a deep branching bilaterian group of animals, which resemble flatworms. Historically they were treated as an order of turbellarian flatworms.",

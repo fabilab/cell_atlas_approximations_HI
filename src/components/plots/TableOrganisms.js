@@ -8,10 +8,27 @@ const { Meta } = Card;
 
 const TableOrganisms = ({ organisms}) => {
 
-  const organismImages = Object.keys(orgMeta).map(org => ({
+  let organismImages = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
-    title: orgMeta[org].bioName
+    title: orgMeta[org].bioName,
+    id: org
   }));
+
+  // Sort by name
+  // Code from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+  organismImages.sort((a, b) => {
+    const nameA = a.id.toLowerCase(); // ignore upper and lowercase
+    const nameB = b.id.toLowerCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+  
+    // names must be equal
+    return 0;
+  });
 
   const rows = [];
   for (let i = 0; i < organismImages.length; i += 4) {
