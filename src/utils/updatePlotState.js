@@ -197,22 +197,15 @@ const cellsXorgans = async (context) => {
 
 
 const availaleOrganisms = async (context) => {
-    let apiResponse;
 
-    if (context.subIntent === 'chromatinAccessibility') {
-        apiResponse = await atlasapprox.organisms("chromatin_accessibility");
+    let validSpecies = null;
+    if (context.intent === "organisms.chromatinAccessibility") {
+        validSpecies = context.response.data.organisms;
     }
-
-    let availaleOrganisms = null;
-
-    if (apiResponse && apiResponse.organisms) {
-        availaleOrganisms = apiResponse.organisms;
-    }
-
     return {
         plotType: "showOrganisms",
         subIntent: context.subIntent,
-        organisms: availaleOrganisms,
+        organisms: validSpecies,
     };
 };
 
