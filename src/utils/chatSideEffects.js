@@ -38,7 +38,7 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
-
+  
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -46,8 +46,6 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
-
-  ({ endpoint, params } = buildAPIParams(intent, entities));
 
   // Intents that do not require API calls
   if (intent === "None") {
@@ -64,6 +62,8 @@ export const updateChat = async (response, plotState) => {
       message: response.followUpQuestion,
     };
   }
+
+  ({ endpoint, params } = buildAPIParams(intent, entities));
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
