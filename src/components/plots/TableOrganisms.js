@@ -7,7 +7,7 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ organisms}) => {
-
+  console.log(organisms);
   let organismImages = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
     title: orgMeta[org].bioName,
