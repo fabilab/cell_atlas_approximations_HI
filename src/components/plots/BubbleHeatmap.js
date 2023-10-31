@@ -2,8 +2,11 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
-
+const BubbleHeatmap = ({ mainIntent, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
+  console.log(mainIntent);
+  console.log(fractions);
+  console.log(xaxis);
+  console.log(average);
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -20,11 +23,16 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
 
   let title = "";
   let yHover = "cell type";
-  if (dataCategory === "across_organs") {
-    yHover = "organ";
-    title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+
+  if (mainIntent === "neighborhood") {
+    yHover = "cell state"
   } else {
-    title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
+    if (dataCategory === "across_organs") {
+      yHover = "organ";
+      title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+    } else {
+      title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
+    }
   }
 
   for (let i = 0; i < yaxis.length; i++) {

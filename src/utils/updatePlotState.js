@@ -126,11 +126,13 @@ const updateNeighbor = (context) => {
         plotType: "neighborhood",
         organism: context.organism,
         organ: context.organ,
-        features: context.features,
+        features: context.features.split(","),
         celltypes: context.response.data.celltypes,
         nCells: transpose(context.response.data.ncells),
         boundaries: context.response.data.boundaries,
         centroids: context.response.data.centroids,
+        average: context.response.data.average,
+        fractions: context.response.data.fraction_detected,
         hasLog: context.plotState.hasLog,
     };
 };

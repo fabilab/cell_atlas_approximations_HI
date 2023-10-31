@@ -153,6 +153,10 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
+    console.log(mainIntent);
+    console.log(endpoint);
+    console.log(params);
+    console.log(apiData);
   
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;

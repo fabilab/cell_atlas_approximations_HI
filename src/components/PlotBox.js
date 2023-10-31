@@ -108,6 +108,8 @@ const PlotBox = ({ state }) => {
           nCells={state.nCells}
           boundaries={state.boundaries}
           centroids={state.centroids}
+          average={state.average}
+          fractions={state.fractions}
           hasLog={state.hasLog}
         />
       </div>
