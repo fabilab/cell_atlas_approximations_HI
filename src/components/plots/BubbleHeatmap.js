@@ -26,6 +26,7 @@ const BubbleHeatmap = ({ mainIntent, xaxis, yaxis, average, fractions, organism,
 
   if (mainIntent === "neighborhood") {
     yHover = "cell state"
+    title = `<b>Fraction and average expression variation in ${organism} across cell states<b>`
   } else {
     if (dataCategory === "across_organs") {
       yHover = "organ";
@@ -60,7 +61,7 @@ const BubbleHeatmap = ({ mainIntent, xaxis, yaxis, average, fractions, organism,
   let nfeatures = yaxis.length;
   let ncelltypes = xaxis.length;
 
-  let ytickMargin = (nfeatures <= 10) ? 250 : 200;
+  let ytickMargin = (nfeatures <= 10) ? 200 : 200;
   let xtickMargin = (ncelltypes <= 20) ? 380 : 170;
 
   let graphWidth = ncelltypes * 30 + xtickMargin;

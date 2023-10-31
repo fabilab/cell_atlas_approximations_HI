@@ -66,6 +66,7 @@ export const updateChat = async (response, plotState) => {
   }
 
   ({ endpoint, params } = buildAPIParams(intent, entities));
+  console.log(params);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -107,6 +108,7 @@ export const updateChat = async (response, plotState) => {
   // Intents that requires API calls & error handling
   try {
 
+    console.log("here ====");
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
@@ -153,10 +155,8 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
-    console.log(mainIntent);
-    console.log(endpoint);
-    console.log(params);
     console.log(apiData);
+    console.log(mainIntent);
   
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
@@ -164,7 +164,7 @@ export const updateChat = async (response, plotState) => {
     }
     answer += buildAnswer(intent, apiData);
 
-    if (params.organ && apiData.celltypes) {
+    if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {
       answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Heatmap from './Heatmap';
-import ClusterPlot from './ClusterPlot';
+import CellStatePlot from './CellStatePlot';
 import BubbleHeatmap from './BubbleHeatmap';
 
 const Neighborhood = ({
@@ -17,25 +17,16 @@ const Neighborhood = ({
   hasLog
 }) => {
   console.log(nCells.length);
-  const xaxis = [];
+  const cellStates = [];
   for (let i = 1; i <= nCells[1].length; i++) {
-    xaxis.push(`cell state ${i}`);
+    cellStates.push(`cell state ${i}`);
   } 
 
   return (
     <div style={{alignItems: "center", padding: "0% 5%"}}>
-      {/* <Heatmap
-        mainIntent={mainIntent}
-        xaxis={xaxis}
-        yaxis={celltypes}
-        values={nCells}
-        organism={organism}
-        organ={organ}
-        hasLog={hasLog}
-      /> */}
       <BubbleHeatmap
         mainIntent={mainIntent}
-        xaxis={xaxis}
+        xaxis={cellStates}
         yaxis={features}
         average={average}
         fractions={fractions}
@@ -43,7 +34,7 @@ const Neighborhood = ({
         organ={organ}
         hasLog={hasLog}
       />
-      <ClusterPlot
+      <CellStatePlot
         organism={organism}
         organ={organ}
         centroids={centroids}

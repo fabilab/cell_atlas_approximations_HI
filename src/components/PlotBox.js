@@ -98,8 +98,8 @@ const PlotBox = ({ state }) => {
     )
   } else if (state.plotType === 'neighborhood') {
     return (
-      <div>
-        <Neighborhood
+      <div style={plotStyle}>
+        <Neighborhood 
           mainIntent={state.mainIntent}
           organism={state.organism}
           organ={state.organ}

@@ -42,7 +42,6 @@ const buildAnswer = (intent, data = null) => {
         if (data.organs.length === 0) {
           answer = "The cell type " + data.celltype + " was not detected in any organ of " + data.organism + ".";
         } else {
-          // answer = "The cell type " + data.celltype + " was detected in" + data.organism + " are: " + _chainList(data.organs, ", ", ".");
           answer = "In " + data.organism + ", " + data.celltype + " cells were detected within the " + _chainList(data.organs, ", ", ".");
         }
         break;
@@ -176,6 +175,15 @@ const buildAnswer = (intent, data = null) => {
           answer = "Data can be downloaded using the pop-up window.";
         else
           answer = "Sorry, you cannot download data from this page.";
+        break;
+      case "neighborhood":
+        switch (sIntent) {
+          case "geneExpression":
+            answer = `The average expression and cell fractions of ${data.features} across cell states are shown in the plot `
+            break;
+          default:
+            answer = "Done";
+        }
         break;
       default:
         answer = "Sorry, I have no answer to that.";

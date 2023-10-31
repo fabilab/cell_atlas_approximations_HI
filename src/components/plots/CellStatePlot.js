@@ -1,7 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-const ClusterPlot = ({ organism, organ, centroids, boundaries }) => {
+const CellStatePlot = ({ organism, organ, centroids, boundaries }) => {
   
   let cellStateLabels = centroids.map((_,index) =>  `${index + 1}`);
 
@@ -52,4 +52,4 @@ const ClusterPlot = ({ organism, organ, centroids, boundaries }) => {
   );
 };
 
-export default ClusterPlot;
+export default CellStatePlot;
