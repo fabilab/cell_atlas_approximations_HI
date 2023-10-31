@@ -6,6 +6,7 @@ import CellxOrganTable from './plots/CellxOrganTable';
 import TableOrganisms from './plots/TableOrganisms';
 import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
+import Neighborhood from './plots/Neighborhood';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -95,8 +96,23 @@ const PlotBox = ({ state }) => {
         type={state.type}
       />
     )
-  }
-
+  } else if (state.plotType === 'neighborhood') {
+    return (
+      <div>
+        <Neighborhood
+          mainIntent={state.mainIntent}
+          organism={state.organism}
+          organ={state.organ}
+          features={state.features}
+          celltypes={state.celltypes}
+          nCells={state.nCells}
+          boundaries={state.boundaries}
+          centroids={state.centroids}
+          hasLog={state.hasLog}
+        />
+      </div>
+    )
+    }
 };
 
 export default PlotBox;

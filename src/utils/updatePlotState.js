@@ -8,7 +8,7 @@ const exploreOrganism = (context) => {
     };
 };
 
-const addGenes = async (context) => {
+const addGenes = (context) => {
     // Extract required parameters from context within the function
     let features = context.features;
     let mainIntent = context.plotState.mainIntent;
@@ -20,12 +20,12 @@ const addGenes = async (context) => {
     }
 };
 
-const removeGenes = async (context) => {
+const removeGenes = (context) => {
     let features = context.features;
     if (!context.plotState.data.fractions) {
-        return await updateAverage({ ...context, features });
+        return updateAverage({ ...context, features });
     } else {
-        return await updateFractions({ ...context, features });
+        return updateFractions({ ...context, features });
     }
 };
 
@@ -119,7 +119,23 @@ const updateFractions = (context) => {
     };
 };
 
-const similarCelltypes = async (context) => {
+const updateNeighbor = (context) => {
+    console.log(context);
+    return {
+        mainIntent: context.mainIntent,
+        plotType: "neighborhood",
+        organism: context.organism,
+        organ: context.organ,
+        features: context.features,
+        celltypes: context.response.data.celltypes,
+        nCells: transpose(context.response.data.ncells),
+        boundaries: context.response.data.boundaries,
+        centroids: context.response.data.centroids,
+        hasLog: context.plotState.hasLog,
+    };
+};
+
+const similarCelltypes = (context) => {
     let targetCelltype = context.response.params.celltype;
     let similarCelltypes = context.response.data.similar_celltypes;
     let similarOrgans = context.response.data.similar_organs;
@@ -146,7 +162,7 @@ const similarCelltypes = async (context) => {
     };
 };
 
-const measureIntent = async (context) => {
+const measureIntent = (context) => {
     let organs = context.response.data.organs;
     let celltypes = context.response.data.celltypes;
     const celltypesOrgan = celltypes?.map((c, index) => {
@@ -184,7 +200,7 @@ const similarGenes = (context) => {
 };
 
 
-const cellsXorgans = async (context) => {
+const cellsXorgans = (context) => {
 
     return {
         plotType: "table",
@@ -196,7 +212,7 @@ const cellsXorgans = async (context) => {
 };
 
 
-const availaleOrganisms = async (context) => {
+const availaleOrganisms = (context) => {
 
     let validSpecies = null;
     if (context.intent === "organisms.chromatinAccessibility") {
@@ -209,7 +225,7 @@ const availaleOrganisms = async (context) => {
     };
 };
 
-const featureSequences = async(context) => {
+const featureSequences = (context) => {
     return {
         plotType: "featureSequences",
         organism: context.organism,
@@ -220,7 +236,7 @@ const featureSequences = async(context) => {
 }
 
 
-export const updatePlotState = async (response, plotState, setPlotState) => {
+export const updatePlotState = (response, plotState, setPlotState) => {
     console.log(response);
     let intent = response.intent;
     let mainIntent = intent.split(".")[0];
@@ -250,10 +266,10 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
             newPlotState = exploreOrganism(context);
             break;
         case "add":
-            newPlotState = await addGenes(context);
+            newPlotState = addGenes(context);
             break;
         case "remove":
-            newPlotState = await removeGenes(context);
+            newPlotState = removeGenes(context);
             break;
         case "plot":
             newPlotState = toggleLog(context);
@@ -264,26 +280,29 @@ export const updatePlotState = async (response, plotState, setPlotState) => {
         case "average":
             newPlotState = updateAverage(context);
             break;
+        case "neighborhood":
+            newPlotState = updateNeighbor(context);
+            break;
         case "fraction_detected":
             newPlotState = updateFractions(context);
             break;
         case "highest_measurement":
-            newPlotState = await measureIntent(context);
+            newPlotState = measureIntent(context);
             break;
         case "similar_features":
             newPlotState = similarGenes(context);
             break;
         case "celltypexorgan":
-            newPlotState = await cellsXorgans(context);
+            newPlotState = cellsXorgans(context);
             break;
         case "similar_celltypes":
-            newPlotState = await similarCelltypes(context);
+            newPlotState = similarCelltypes(context);
             break;
         case "organisms":
-            newPlotState = await availaleOrganisms(context);
+            newPlotState = availaleOrganisms(context);
             break;
         case "feature_sequences":
-            newPlotState = await featureSequences(context);
+            newPlotState = featureSequences(context);
             break;
         default:
             break;
