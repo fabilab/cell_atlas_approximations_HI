@@ -179,7 +179,9 @@ const buildAnswer = (intent, data = null) => {
       case "neighborhood":
         switch (sIntent) {
           case "geneExpression":
-            answer = `The average expression and cell fractions of ${data.features} across cell states are shown in the plot `
+            answer = `The average expression and cell fractions of ${data.features} across cell states are shown in the plot.`
+            answer += "<br><br>Hover over the blobs in the embedding for cell type composition information."
+            answer += "<br><br>Type \"zoom out\" to look at cell type averages."
             break;
           default:
             answer = "Done";

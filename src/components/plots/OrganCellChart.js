@@ -79,8 +79,6 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
       <Plot 
           data={data}
           layout={layout}
-          // after the plot is complete
-          // onAfterPlot={() => attachYAxisClickEvent()}
           onAfterPlot={() => {
             // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
             document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';

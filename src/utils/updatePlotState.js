@@ -120,7 +120,7 @@ const updateFractions = (context) => {
 };
 
 const updateNeighbor = (context) => {
-    console.log(context);
+
     return {
         mainIntent: context.mainIntent,
         plotType: "neighborhood",
@@ -134,6 +134,7 @@ const updateNeighbor = (context) => {
         average: context.response.data.average,
         fractions: context.response.data.fraction_detected,
         hasLog: context.plotState.hasLog,
+        unit: context.response.data.unit,
     };
 };
 
@@ -239,7 +240,7 @@ const featureSequences = (context) => {
 
 
 export const updatePlotState = (response, plotState, setPlotState) => {
-    console.log(response);
+
     let intent = response.intent;
     let mainIntent = intent.split(".")[0];
     let subIntent = intent.split(".")[1];

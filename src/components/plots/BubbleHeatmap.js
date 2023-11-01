@@ -3,10 +3,7 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const BubbleHeatmap = ({ mainIntent, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
-  console.log(mainIntent);
-  console.log(fractions);
-  console.log(xaxis);
-  console.log(average);
+
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -25,8 +22,8 @@ const BubbleHeatmap = ({ mainIntent, xaxis, yaxis, average, fractions, organism,
   let yHover = "cell type";
 
   if (mainIntent === "neighborhood") {
-    yHover = "cell state"
-    title = `<b>Fraction and average expression variation in ${organism} across cell states<b>`
+    yHover = "cell state";
+    title = "";
   } else {
     if (dataCategory === "across_organs") {
       yHover = "organ";

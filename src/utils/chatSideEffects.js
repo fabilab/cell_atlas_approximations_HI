@@ -6,6 +6,7 @@ import { downloadFasta } from "./downloadFasta";
 const updatePlotIntents = [
   "add",
   "plot",
+  "zoom",
   "remove",
   "explore",
   "average",
@@ -29,7 +30,6 @@ const mainIntentNotRequiresApi = [
 
 // Update the plot only when there is new data coming
 export const triggersPlotUpdate = ((response) => {
-  console.log(response);
   if (!response)
     return false;
   if (!response.hasData)
@@ -126,7 +126,35 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === 'markers' || mainIntent === 'similar_features') {
       extraEndpointsToCall.push('dotplot');
     } 
-    
+
+    if ((intent === 'zoom.out.neighborhood') && (plotState.mainIntent === 'neighborhood')) {
+        // FIXME: figure out measurement type from plot state (needs some implementing)
+        response.intent = intent = 'fraction_detected.geneExpression';
+        mainIntent = "fraction_detected";
+        params = {
+          organ: plotState.organ,
+          organism: plotState.organism,
+          features: plotState.features,
+          // FIXME: see above
+          measurement_type: "gene_expression",
+        };
+    }
+
+    // FIXME: record full intent in plotState, because we cannot zoom in if the subIntent is "across_organs"
+    console.log(plotState);
+    if ((intent === 'zoom.in.neighborhood') && ((plotState.intent === 'fraction_detected.geneExpression') || (plotState.intent === 'average.geneExpression'))) {
+      // FIXME: figure out measurement type from plot state (needs some implementing)
+      response.intent = intent = 'neighborhood.geneExpression';
+      mainIntent = endpoint = "neighborhood";
+      params = {
+        organ: plotState.organ,
+        organism: plotState.organism,
+        features: plotState.features.join(","),
+        // FIXME: see above
+        measurement_type: "gene_expression",
+      };
+  }
+
     if (mainIntent === 'fraction_detected') {
       endpoint = "dotplot";
     }
@@ -154,9 +182,11 @@ export const updateChat = async (response, plotState) => {
     }
 
     //  Finally, generate bot response and api data for the given intent
+    console.log(params);
+    console.log(endpoint);
     apiData = await atlasapprox[endpoint](params);
     console.log(apiData);
-    console.log(mainIntent);
+
   
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
@@ -179,7 +209,7 @@ export const updateChat = async (response, plotState) => {
       let extraApiData = await atlasapprox[e](params);
       apiData = {...apiData, ...extraApiData};
     }
-
+    
   } catch ({ status, message, error }) {
     console.log(error);
       // invalid gene, we can auto remove it and re-call api

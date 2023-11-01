@@ -98,7 +98,7 @@ const PlotBox = ({ state }) => {
     )
   } else if (state.plotType === 'neighborhood') {
     return (
-      <div style={plotStyle}>
+      <div>
         <Neighborhood 
           mainIntent={state.mainIntent}
           organism={state.organism}
@@ -111,6 +111,7 @@ const PlotBox = ({ state }) => {
           average={state.average}
           fractions={state.fractions}
           hasLog={state.hasLog}
+          unit={state.unit}
         />
       </div>
     )

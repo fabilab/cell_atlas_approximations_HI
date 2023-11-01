@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
+import * as d3 from 'd3';
 
-const CellStatePlot = ({ organism, organ, centroids, boundaries }) => {
+const CellStatePlot = ({ organism, organ, centroids, boundaries, onCellStateClick }) => {
   
+   
   let cellStateLabels = centroids.map((_,index) =>  `${index + 1}`);
 
   let centroidTrace = {
@@ -10,9 +12,9 @@ const CellStatePlot = ({ organism, organ, centroids, boundaries }) => {
     mode: 'markers+text',
     x: centroids.map(point => point[0]),
     y: centroids.map(point => point[1]),
-    marker: { color: 'red', size: 8 },
+    marker: { color: 'black', size: 12, symbol: 'star' },
     text: cellStateLabels,
-    textposition: 'bottom',
+    textposition: 'top',
     name: 'Centroids',
     hovertemplate: '%{text}<extra></extra>',
     hoverinfo: 'text'
@@ -32,24 +34,54 @@ const CellStatePlot = ({ organism, organ, centroids, boundaries }) => {
   }));
 
   let layout = {
-    title: `<b>Approximated cell distribution of ${organism} in organ ${organ}</b>`,
     showlegend: false,
-    height: 550,
-  };
-
-  const handleCentroidClick = (event) => {
-    if (event.points && event.points[0] && event.points[0].fullData.name === 'Centroids') {
-      console.log('Centroid clicked:', event.points[0].text);
+    height: 450,
+    width: 450,
+    xaxis: {
+      zeroline: false,
+      showticklabels: false,
+    },
+    yaxis: {
+      zeroline: false,
+      showticklabels: false,
+    },
+    margin: {
+      t: 10,
+      b: 10,
+      l: 5,
+      r: 5,
     }
   };
+
+
+  const handleCentroidClick = (event) => {
+    console.log(event);
+    const clickedText = event.target.textContent;
+    onCellStateClick(clickedText);
+    console.log("Clicking centroid: " + clickedText);
+  };
+
+  // Make centroid text clickable: Code from "https://chat.openai.com/"
+  useEffect(() => {
+    const labels = document.querySelectorAll('.scatterlayer .text text');
+
+    labels.forEach((label) => {
+      label.style.cursor = 'pointer';
+      label.style['pointer-events'] = 'all';
+      label.addEventListener('click', (event) => {
+        handleCentroidClick(event);
+      });
+    });
+  }, []);
 
   return (
     <Plot
       data={[centroidTrace, ...boundaryTraces]}
       layout={layout}
-      onPlotlyClick={handleCentroidClick}
+      config={{ displayModeBar: false }}
     />
   );
 };
 
 export default CellStatePlot;
+
