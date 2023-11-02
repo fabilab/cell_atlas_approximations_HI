@@ -58,7 +58,7 @@ const Neighborhood = ({
               boundaries={boundaries}
               onCellStateHover={handleCellStateClick}
             />
-            <Text style={{ alignSelf: 'center' }}>* Click on the centroid (cell state) for cell type abundance information.</Text>
+            <Text style={{ alignSelf: 'center' }}>* Hover over the cell states for cell type abundance information.</Text>
           </div>
           <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
             {clickedCellState !== null &&

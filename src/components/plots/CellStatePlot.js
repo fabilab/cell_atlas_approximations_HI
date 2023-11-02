@@ -58,8 +58,7 @@ const CellStatePlot = ({ centroids, boundaries, onCellStateHover }) => {
     onCellStateHover(clickedText);
   };
 
-  useEffect(() => {
-
+  const loadEventListeners = () => {
     const fills = document.querySelectorAll('.scatterlayer .fills g path');
     fills.forEach((f, key)=>{
       f.setAttribute('id', key+1);
@@ -73,10 +72,14 @@ const CellStatePlot = ({ centroids, boundaries, onCellStateHover }) => {
         handleCellStateHover(event);
       });
     });
-  }, []);
+  }
 
   return (
-    <Plot data={[centroidTrace, ...boundaryTraces]} layout={layout} />
+    <Plot 
+      data={[centroidTrace, ...boundaryTraces]} 
+      layout={layout} 
+      onInitialized={(figure, graphDiv) => loadEventListeners()}
+    />
   );
 };
 
