@@ -1,39 +1,38 @@
 import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
-import * as d3 from 'd3';
 
-const CellStatePlot = ({ organism, organ, centroids, boundaries, onCellStateClick }) => {
-  
-   
-  let cellStateLabels = centroids.map((_,index) =>  `${index + 1}`);
+const CellStatePlot = ({ centroids, boundaries, onCellStateClick }) => {
+  const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
 
-  let centroidTrace = {
+  const centroidTrace = {
     type: 'scatter',
     mode: 'markers+text',
-    x: centroids.map(point => point[0]),
-    y: centroids.map(point => point[1]),
+    x: centroids.map((point) => point[0]),
+    y: centroids.map((point) => point[1]),
     marker: { color: 'black', size: 12, symbol: 'star' },
     text: cellStateLabels,
     textposition: 'top',
     name: 'Centroids',
     hovertemplate: '%{text}<extra></extra>',
-    hoverinfo: 'text'
+    hoverinfo: 'text',
   };
-  
 
-  let boundaryTraces = boundaries.map((boundary, index) => ({
-    type: 'scatter',
-    mode: 'lines+markers',
-    x: boundary.map(point => point[0]).concat([boundary[0][0]]), // Close the boundary
-    y: boundary.map(point => point[1]).concat([boundary[0][1]]),
-    marker: { size: 1 },
-    line: { shape: 'spline', smoothing: 1.3 },
-    fill: 'toself',
-    opacity: 0.5,
-    hoverinfo: 'none'
-  }));
+  const boundaryTraces = boundaries.map((boundary, index) => {
+    return {
+      type: 'scatter',
+      mode: 'lines+markers',
+      x: boundary.map((point) => point[0]).concat([boundary[0][0]]),
+      y: boundary.map((point) => point[1]).concat([boundary[0][1]]),
+      marker: { size: 1 },
+      line: { shape: 'spline', smoothing: 1.3 },
+      fill: 'toself',
+      opacity: 0.5,
+      hoverinfo: 'none',
+      ids: Array(boundary.length).fill(cellStateLabels[index]),
+    };
+  });
 
-  let layout = {
+  const layout = {
     showlegend: false,
     height: 450,
     width: 450,
@@ -50,21 +49,25 @@ const CellStatePlot = ({ organism, organ, centroids, boundaries, onCellStateClic
       b: 10,
       l: 5,
       r: 5,
-    }
+    },
   };
-
 
   const handleCentroidClick = (event) => {
     console.log(event);
-    const clickedText = event.target.textContent;
+    const clickedText = event.target.textContent || event.target.id;
     onCellStateClick(clickedText);
-    console.log("Clicking centroid: " + clickedText);
   };
 
-  // Make centroid text clickable: Code from "https://chat.openai.com/"
   useEffect(() => {
-    const labels = document.querySelectorAll('.scatterlayer .text text');
 
+    const fills = document.querySelectorAll('.scatterlayer .fills g path');
+    fills.forEach((f, key)=>{
+      if (key > 0) {
+        f.setAttribute('id', key+1);
+      }
+    })
+
+    const labels = document.querySelectorAll('.scatterlayer .text text, .scatterlayer .fills');
     labels.forEach((label) => {
       label.style.cursor = 'pointer';
       label.style['pointer-events'] = 'all';
@@ -75,13 +78,8 @@ const CellStatePlot = ({ organism, organ, centroids, boundaries, onCellStateClic
   }, []);
 
   return (
-    <Plot
-      data={[centroidTrace, ...boundaryTraces]}
-      layout={layout}
-      config={{ displayModeBar: false }}
-    />
+    <Plot data={[centroidTrace, ...boundaryTraces]} layout={layout} />
   );
 };
 
 export default CellStatePlot;
-
