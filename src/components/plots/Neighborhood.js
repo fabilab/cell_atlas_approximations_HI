@@ -56,7 +56,7 @@ const Neighborhood = ({
               organ={organ}
               centroids={centroids}
               boundaries={boundaries}
-              onCellStateClick={handleCellStateClick}
+              onCellStateHover={handleCellStateClick}
             />
             <Text style={{ alignSelf: 'center' }}>* Click on the centroid (cell state) for cell type abundance information.</Text>
           </div>

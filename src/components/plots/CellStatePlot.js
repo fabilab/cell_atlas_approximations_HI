@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
 
-const CellStatePlot = ({ centroids, boundaries, onCellStateClick }) => {
+const CellStatePlot = ({ centroids, boundaries, onCellStateHover }) => {
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
 
   const centroidTrace = {
@@ -52,27 +52,25 @@ const CellStatePlot = ({ centroids, boundaries, onCellStateClick }) => {
     },
   };
 
-  const handleCentroidClick = (event) => {
+  const handleCellStateHover = (event) => {
     console.log(event);
     const clickedText = event.target.textContent || event.target.id;
-    onCellStateClick(clickedText);
+    onCellStateHover(clickedText);
   };
 
   useEffect(() => {
 
     const fills = document.querySelectorAll('.scatterlayer .fills g path');
     fills.forEach((f, key)=>{
-      if (key > 0) {
-        f.setAttribute('id', key+1);
-      }
+      f.setAttribute('id', key+1);
     })
 
     const labels = document.querySelectorAll('.scatterlayer .text text, .scatterlayer .fills');
     labels.forEach((label) => {
       label.style.cursor = 'pointer';
       label.style['pointer-events'] = 'all';
-      label.addEventListener('click', (event) => {
-        handleCentroidClick(event);
+      label.addEventListener('mouseover', (event) => {
+        handleCellStateHover(event);
       });
     });
   }, []);
