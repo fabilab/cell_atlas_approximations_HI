@@ -3,7 +3,8 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const Heatmap = ({ state }) => { 
-  let { plotType, xaxis, yaxis, values, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+  let { plotType, xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+  let values = average;
 
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
@@ -91,6 +92,8 @@ const Heatmap = ({ state }) => {
           "<extra></extra>"
       }
     ];
+
+    console.log(data);
 
     let layout = {
       width: graphWidth,

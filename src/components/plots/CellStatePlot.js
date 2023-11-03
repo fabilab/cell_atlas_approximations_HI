@@ -55,7 +55,6 @@ const CellStatePlot = ({ state }) => {
   };
 
   const handleCellStateHover = (event) => {
-    console.log(event);
     const clickedText = event.target.textContent || event.target.id;
     onCellStateHover(clickedText);
   };

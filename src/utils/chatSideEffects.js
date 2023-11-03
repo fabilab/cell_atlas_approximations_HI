@@ -106,8 +106,6 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
-
-    console.log("here ====");
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
@@ -126,7 +124,7 @@ export const updateChat = async (response, plotState) => {
       extraEndpointsToCall.push('dotplot');
     } 
 
-    if ((intent === 'zoom.out.neighborhood') && (plotState.mainIntent === 'neighborhood')) {
+    if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'neighborhood')) {
         // FIXME: figure out measurement type from plot state (needs some implementing)
         response.intent = intent = 'fraction_detected.geneExpression';
         mainIntent = "fraction_detected";
@@ -139,7 +137,7 @@ export const updateChat = async (response, plotState) => {
         };
     }
 
-    if ((intent === 'zoom.in.neighborhood') && ((plotState.intent === 'fraction_detected.geneExpression') || (plotState.intent === 'average.geneExpression'))) {
+    if ((intent === 'zoom.in.neighborhood') && (['fractionDetected', 'average'].includes(plotState.plotType))) {
       // FIXME: figure out measurement type from plot state (needs some implementing)
       response.intent = intent = 'neighborhood.geneExpression';
       mainIntent = endpoint = "neighborhood";
@@ -158,9 +156,13 @@ export const updateChat = async (response, plotState) => {
 
     if (['add', 'remove'].includes(mainIntent)) {
       params['organism'] = plotState.organism; 
-      params['organ'] = plotState.organ;
 
-      if (plotState.data.fractions) {
+      if (plotState.plotType.endsWith("AcrossOrgans"))
+        params['celltype'] = plotState.celltype;
+      else
+        params['organ'] = plotState.organ;
+
+      if (plotState.plotType.startsWith("fraction")) {
         endpoint = "dotplot";
       } else {
         endpoint = 'average';
@@ -176,11 +178,10 @@ export const updateChat = async (response, plotState) => {
         let geneArrayB = plotState.features.split(",");
         params.features = geneArrayB.filter(gene => !geneArrayA.includes(gene)).join(",");
       }
+
     }
 
     //  Finally, generate bot response and api data for the given intent
-    console.log(params);
-    console.log(endpoint);
     apiData = await atlasapprox[endpoint](params);
   
     if (intent === "organisms.geneExpression") {

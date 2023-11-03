@@ -6,9 +6,6 @@ import { Typography } from 'antd';
 const { Text } = Typography;
 
 const Neighborhood = ({ state }) => {
-  console.log("Neighborhood");
-  console.log(state);
-
   let {
     organism,
     organ,
@@ -28,7 +25,7 @@ const Neighborhood = ({ state }) => {
 
   const handleCellStateClick = (cellState) => {
     setClickCellState(cellState);
-    console.log("A cell state is being clicked.....");
+    //console.log("A cell state is being clicked.....");
   };
 
   const cellStates = [];
@@ -66,8 +63,8 @@ const Neighborhood = ({ state }) => {
   };
 
   return (
-    <div style={{  width: "inherit" }}>
-      <div style={{padding: "1% 3%"}}>
+    <div style={{ width: "inherit", alignItems: "center" }}>
+      <div style={{padding: "1% 3%" }}>
           <BubbleHeatmap
             state={bubbleState}
           />
