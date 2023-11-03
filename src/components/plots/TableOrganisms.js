@@ -6,8 +6,9 @@ import orgMeta from '../../utils/organismMetadata.js';
 const { Title } = Typography;
 const { Meta } = Card;
 
-const TableOrganisms = ({ organisms}) => {
-  console.log(organisms);
+const TableOrganisms = ({ state }) => {
+  let { organisms, measurement_type } = state;
+
   let organismImages = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
     title: orgMeta[org].bioName,

@@ -6,11 +6,13 @@ import { downloadFasta } from "./downloadFasta";
 const updatePlotIntents = [
   "add",
   "plot",
+  "zoom",
   "remove",
   "explore",
   "average",
   "markers",
   "organisms",
+  "neighborhood",
   "celltypexorgan",
   "similar_features",
   "feature_sequences",
@@ -105,6 +107,7 @@ export const updateChat = async (response, plotState) => {
   // Intents that requires API calls & error handling
   try {
 
+    console.log("here ====");
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
@@ -122,7 +125,33 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === 'markers' || mainIntent === 'similar_features') {
       extraEndpointsToCall.push('dotplot');
     } 
-    
+
+    if ((intent === 'zoom.out.neighborhood') && (plotState.mainIntent === 'neighborhood')) {
+        // FIXME: figure out measurement type from plot state (needs some implementing)
+        response.intent = intent = 'fraction_detected.geneExpression';
+        mainIntent = "fraction_detected";
+        params = {
+          organ: plotState.organ,
+          organism: plotState.organism,
+          features: plotState.features,
+          // FIXME: see above
+          measurement_type: "gene_expression",
+        };
+    }
+
+    if ((intent === 'zoom.in.neighborhood') && ((plotState.intent === 'fraction_detected.geneExpression') || (plotState.intent === 'average.geneExpression'))) {
+      // FIXME: figure out measurement type from plot state (needs some implementing)
+      response.intent = intent = 'neighborhood.geneExpression';
+      mainIntent = endpoint = "neighborhood";
+      params = {
+        organ: plotState.organ,
+        organism: plotState.organism,
+        features: plotState.features.join(","),
+        // FIXME: see above
+        measurement_type: "gene_expression",
+      };
+  }
+
     if (mainIntent === 'fraction_detected') {
       endpoint = "dotplot";
     }
@@ -150,15 +179,17 @@ export const updateChat = async (response, plotState) => {
     }
 
     //  Finally, generate bot response and api data for the given intent
+    console.log(params);
+    console.log(endpoint);
     apiData = await atlasapprox[endpoint](params);
-    
+  
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
     }
     answer += buildAnswer(intent, apiData);
 
-    if (params.organ && apiData.celltypes) {
+    if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {
       answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
     }
 
@@ -173,7 +204,7 @@ export const updateChat = async (response, plotState) => {
       let extraApiData = await atlasapprox[e](params);
       apiData = {...apiData, ...extraApiData};
     }
-
+    
   } catch ({ status, message, error }) {
     console.log(error);
       // invalid gene, we can auto remove it and re-call api
@@ -213,7 +244,5 @@ export const updateChat = async (response, plotState) => {
       message: answer,
     };
   }
-
-  
 };
 

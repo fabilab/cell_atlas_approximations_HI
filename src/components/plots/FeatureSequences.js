@@ -4,7 +4,8 @@ import { Card, Tooltip } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 
 
-const FeatureSequences = ({ organism, features, sequences, type }) => {
+const FeatureSequences = ({ state }) => {
+  let { organism, features, sequences, type, measurement_type } = state;
 
   const [copyStatus, setCopyStatus] = useState('not-copied');
   // https://stackoverflow.com/questions/62723863/css-overflow-wrap-does-not-work-in-react-js

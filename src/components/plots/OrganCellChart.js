@@ -52,10 +52,10 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
           standoff: 20,
         },
         type: "log",
-        range: [0, 4],
+        range: [-0.2, 4],
       },
       title: {
-        text: `<b>Measured cell type abundance in ${apiCellOrgan.organism} <span style='color:#0958d9;'>${organName}</span></b>`,
+        text: `<b>Cell type abundance in <span style='color:#0958d9;'>${organName}</span></b>`,
         font: {
           size: 14
         },
@@ -79,8 +79,6 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
       <Plot 
           data={data}
           layout={layout}
-          // after the plot is complete
-          // onAfterPlot={() => attachYAxisClickEvent()}
           onAfterPlot={() => {
             // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
             document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';

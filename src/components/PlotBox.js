@@ -6,6 +6,7 @@ import CellxOrganTable from './plots/CellxOrganTable';
 import TableOrganisms from './plots/TableOrganisms';
 import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
+import Neighborhood from './plots/Neighborhood';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -16,87 +17,69 @@ const plotStyle = {
 
 // MainBoard.js has passed in the plotState as props
 const PlotBox = ({ state }) => {
-  if (state.plotType === 'heatmap') {
-    return (
-      <div style={plotStyle}>
-        <Heatmap
-          subIntent={state.subIntent}
-          dataCategory={state.dataCategory}
-          xaxis={state.data.xaxis}
-          yaxis={state.data.yaxis}
-          values={state.data.average}
-          organism={state.organism}
-          organ={state.organ}
-          celltype={state.celltype}
-          unit={state.data.unit}
-          measurementType={state.data.measurementType}
-          hasLog={state.hasLog}
+  switch (state.plotType) {
+    case 'average':
+    case 'averageAcrossOrgans':
+      return (
+        <div style={plotStyle}>
+          <Heatmap
+            state={state}
+          />
+        </div>
+      );
+    case 'fractionDetected':
+    case 'fractionDetectedAcrossOrgans':
+      return (
+        <div id='canvasId' style={plotStyle}>
+          <BubbleHeatmap
+            state={state}
+          />
+        </div>
+      );
+    case 'highestMeasurement':
+    case 'similarCelltypes':
+      return (
+        <div id='canvasId' style={plotStyle}>
+          <BarChart
+            state={state}
+          />
+        </div>
+      )
+    case 'celltypesXOrgans':
+      return (
+        <CellxOrganTable
+          state={state}
         />
-      </div>
-    );
-  } else if (state.plotType === 'bubbleHeatmap') {
-    return (
-      <div id='canvasId' style={plotStyle}>
-        <BubbleHeatmap
-          target="canvasId"
-          xaxis={state.data.xaxis}
-          yaxis={state.data.yaxis}
-          average={state.data.average}
-          fractions={state.data.fractions}
-          organism={state.organism}
-          organ={state.organ}
-          celltype={state.celltype}
-          unit={state.data.unit}
-          hasLog={state.hasLog}
-          dataCategory={state.dataCategory}
+      )
+    case "showOrganisms":
+      return (
+        <TableOrganisms
+          state={state}
         />
-      </div>
-    );
-  } else if (state.plotType === "barChart") {
-    return (
-      <div id='canvasId' style={plotStyle}>
-        <BarChart
-          intent={state.intent}
-          celltypesOrgan={state.data.celltypesOrgan}
-          targetCelltype={state.targetCelltype}
-          average={state.data.average}
-          organism={state.organism}
-          features={state.features}
-          unit={state.data.unit}
+      )
+    case 'organismProfile':
+      return (
+        <div>
+          <OrganismProfile
+            state={state}
+          />
+        </div>
+      )
+    case 'featureSequences':
+      return (
+        <FeatureSequences
+          state={state}
         />
-      </div>
-    )
-  } else if (state.plotType === "table") {
-    return (
-      <CellxOrganTable
-        state={state}
-      />
-    )
-  } else if (state.plotType === "showOrganisms") {
-    return (
-      <TableOrganisms
-        organisms={state.organisms}
-      />
-    )
-  } else if (state.plotType === 'organismProfile') {
-    return (
-      <div>
-        <OrganismProfile
-          organism={state.organism}
-        />
-      </div>
-    )
-  } else if (state.plotType === 'featureSequences') {
-    return (
-      <FeatureSequences
-        organism = {state.organism}
-        features={state.features}
-        sequences={state.sequences}
-        type={state.type}
-      />
-    )
+      )
+    case 'neighborhood':
+      return (
+        <div>
+          <Neighborhood 
+            state={state}
+          />
+        </div>
+      )
   }
-
 };
 
 export default PlotBox;

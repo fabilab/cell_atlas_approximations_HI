@@ -6,7 +6,9 @@ import { Typography } from 'antd';
 import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
-const OrganismProfile = ({ organism }) => {
+const OrganismProfile = ({ state }) => {
+    let { organism, measurement_type } = state;
+
     const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
     const [cellTypes, setCellTypes] = useState([]);
@@ -140,7 +142,7 @@ const OrganismProfile = ({ organism }) => {
             <ImageMapper 
                 ref={imageRef}
                 map={{ name: `${organism}-map`, areas: areas }}
-                onClick={(area, index, event) => handleOrganClick(area)}
+                onMouseEnter={(area, index, event) => handleOrganClick(area)}
                 onLoad={handleImageLoad}
                 width={480}
                 stayHighlighted={true}
@@ -175,7 +177,7 @@ const OrganismProfile = ({ organism }) => {
                 <div style={{ padding: "0% 3%", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         {renderImageMap()}
-                        <Text style={{ alignSelf: 'center' }}>Click on an organ for cell type information.</Text>
+                        <Text style={{ alignSelf: 'center' }}>* Hover over an organ for cell type information.</Text>
                     </div>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
                         {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}

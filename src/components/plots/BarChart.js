@@ -2,22 +2,28 @@ import React from 'react';
 import { downloadSVG } from '../../utils/downLoadSvg';
 import Plot from 'react-plotly.js';
 
-const BarChart = ({ intent, celltypesOrgan, targetCelltype, average, organism, features, unit }) => {
+const BarChart = ({ state }) => {
+  let { plotType, celltypesOrgan, targetCelltype, average, organism, features, unit } = state;
+
   let xValue = celltypesOrgan;
   let scaleFactor = 1000000; // data is too small for a bar chart, multiplying by 10^6
 
   let title = '';
   let yLabel = '';
-  if (intent === "similar_celltypes.geneExpression") {
-    average = average.map((x) => x * scaleFactor);
-    title = `<b>Cell type similarity to ${targetCelltype} via gene expression correlation</b>`;
-    yLabel = `Distance (x${scaleFactor})`;
-  } else if (intent === "highest_measurement.geneExpression") {
-    title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
-    yLabel = unit;
-  } else if (intent === "highest_measurement.chromatinAccessibility" ) {
-    title = `<b>Highest expressor of ${features} in ${organism}</b>`;
-    yLabel = unit;
+  switch (plotType) {
+    case "similar_celltypes.geneExpression":
+      average = average.map((x) => x * scaleFactor);
+      title = `<b>Cell type similarity to ${targetCelltype} via gene expression correlation</b>`;
+      yLabel = `Distance (x${scaleFactor})`;
+      break;
+    case "highest_measurement.geneExpression":
+      title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
+      yLabel = unit;
+      break;
+    case "highest_measurement.chromatinAccessibility":
+      title = `<b>Highest expressor of ${features} in ${organism}</b>`;
+      yLabel = unit;
+      break;
   }
   let yValue = average.map((x) => Number(x.toFixed(2)));
 
