@@ -2,7 +2,8 @@ import React from 'react';
 import { downloadSVG } from '../../utils/downLoadSvg';
 import Plot from 'react-plotly.js';
 
-const CellStateBar = ({ organism, organ, clickedCellState, celltypes, nCells }) => {
+const CellStateBar = ({ state }) => {
+  let { organism, organ, clickedCellState, celltypes, nCells } = state;
 
   // array index starts from 0;
   clickedCellState -= 1;

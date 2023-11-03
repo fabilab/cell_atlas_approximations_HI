@@ -63,15 +63,12 @@ const updateAverage = (context) => {
         organ: context.organ,
         features: context.features,
         celltype: context.response.params.celltype,
-        data: {
-            type: "matrix",
-            xaxis: xAxis,
-            yaxis: yAxis,
-            average: context.response.data.average,
-            fractions: null,
-            unit: unit,
-            measurementType: context.response.data.measurement_type,
-        },
+        xaxis: xAxis,
+        yaxis: yAxis,
+        average: context.response.data.average,
+        fractions: null,
+        unit: unit,
+        measurementType: context.response.data.measurement_type,
         hasLog: context.plotState.hasLog
     };
 };
@@ -100,20 +97,16 @@ const updateFractions = (context) => {
         features: context.features,
         celltype: context.response.params.celltype,
         measurement_type: context.measurement_type,
-        data: {
-            type: "matrix",
-            xaxis: xAxis,
-            yaxis: yAxis,
-            average: average,
-            fractions: fractions,
-            unit: unit,
-        },
+        xaxis: xAxis,
+        yaxis: yAxis,
+        average: average,
+        fractions: fractions,
+        unit: unit,
         hasLog: context.plotState.hasLog
     };
 };
 
 const updateNeighbor = (context) => {
-
     return {
         plotType: "neighborhood",
         organism: context.organism,
@@ -147,14 +140,11 @@ const similarCelltypes = (context) => {
         celltypes: context.celltypes,
         features: context.features,
         measurement_type: context.measurement_type,
-        data: {
-            type: "matrix",
-            celltypesOrgan: celltypesOrgan,
-            yaxis: context.response.data.distances,
-            average: context.response.data.distances,
-            fractions: null,
-            unit: context.response.data.unit,
-        }
+        celltypesOrgan: celltypesOrgan,
+        yaxis: context.response.data.distances,
+        average: context.response.data.distances,
+        fractions: null,
+        unit: context.response.data.unit,
     };
 };
 
@@ -172,14 +162,11 @@ const highestMeasurement = (context) => {
         celltypes: celltypesOrgan,
         features: context.features,
         measurement_type: context.measurement_type,
-        data: {
-            type: "matrix",
-            celltypesOrgan: celltypesOrgan,
-            yaxis: context.response.data.average,
-            average: context.response.data.average,
-            fractions: null,
-            unit: context.response.data.unit
-        }
+        celltypesOrgan: celltypesOrgan,
+        yaxis: context.response.data.average,
+        average: context.response.data.average,
+        fractions: null,
+        unit: context.response.data.unit
     };
 };
 
@@ -247,28 +234,29 @@ const plotFunctionDispatcher = {
 
 // Main "public" update plot state function
 export const updatePlotState = (response, plotState, setPlotState) => {
-    const intent = response.intent;
-    const mainIntent = intent.split('.')[0];
-    
-    let newPlotState = null;
-    if (plotState) {
-        plotState.hasLog = plotState.hasLog || false;
-    }
+  const intent = response.intent;
+  const mainIntent = intent.split('.')[0];
+  
+  let newPlotState = null;
+  if (plotState) {
+    plotState.hasLog = plotState.hasLog || false;
+  }
 
-    const context = {
-      intent: intent,
-      features: response.params.features || response.params.feature || plotState.features,
-      markers: (response.data && response.data.markers) || "",
-      organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
-      organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
-      plotState: plotState,
-      response: response,
-      measurement_type: response.measurement_type || "",
-    };
+  const context = {
+    intent: intent,
+    features: response.params.features || response.params.feature || plotState.features,
+    markers: (response.data && response.data.markers) || "",
+    organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
+    organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
+    plotState: plotState,
+    response: response,
+    measurement_type: response.measurement_type || "",
+  };
 
-    const updateFunction = plotFunctionDispatcher[mainIntent];
-    if (updateFunction)
-      updateFunction(context);
 
-    setPlotState(newPlotState);
+  const updateFunction = plotFunctionDispatcher[mainIntent];
+  if (updateFunction)
+    newPlotState = updateFunction(context);
+
+  setPlotState(newPlotState);
 };

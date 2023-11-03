@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
 
-const CellStatePlot = ({ centroids, boundaries, onCellStateHover }) => {
+const CellStatePlot = ({ state }) => {
+  let { centroids, boundaries, onCellStateHover } = state;
+
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
 
   const centroidTrace = {
