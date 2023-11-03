@@ -1,5 +1,5 @@
-import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import atlasapprox from "@fabilab/atlasapprox";
+import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import { downloadFasta } from "./downloadFasta";
 
 // decide if an NLP response triggers a plot update
@@ -38,7 +38,6 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
-
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -46,8 +45,6 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
-
-  ({ endpoint, params } = buildAPIParams(intent, entities));
 
   // Intents that do not require API calls
   if (intent === "None") {
@@ -64,6 +61,9 @@ export const updateChat = async (response, plotState) => {
       message: response.followUpQuestion,
     };
   }
+
+  // Extract endpoint and parameters from the response
+  ({ endpoint, params } = buildAPIParams(intent, entities));
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -145,7 +145,7 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'remove' && params.features && plotState.features) {
         let geneArrayA = params.features.split(",");
         let geneArrayB = plotState.features.split(",");
-        params.features = geneArrayB.filter(gene => !geneArrayA .includes(gene)).join(",");
+        params.features = geneArrayB.filter(gene => !geneArrayA.includes(gene)).join(",");
       }
     }
 

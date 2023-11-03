@@ -1,4 +1,3 @@
-import atlasapprox from "@fabilab/atlasapprox";
 import transpose from "./math";
 
 const exploreOrganism = (context) => {

@@ -1,6 +1,5 @@
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, data = null) => {
-
     function _chainList(list, sep, end) {
         let text = "";
         for (let i=0; i < list.length; i++) {
@@ -186,6 +185,7 @@ const buildAnswer = (intent, data = null) => {
 
 
 const buildAPIParams = (intent, entities) => {
+
     // Extract endpoint from intent
     let endpoint = intent.split(".")[0];
 
@@ -193,12 +193,10 @@ const buildAPIParams = (intent, entities) => {
     let params = {};
     for (let i=0; i < entities.length; i++) {
         const entity = entities[i];
-        let paramValue;
-        if (entity.type === "enum") {
-            paramValue = entity.option;
-        } else {
-            paramValue = entity.sourceText;
-        }
+        let paramValue = entity.sourceText;
+        if ((entity.type === "enum") && (entity.option !== undefined))
+          paramValue = entity.option;
+
         // entity names and API parameter names are not exactly the same for clarity
         let paramName = entity.entity;
         if (["nFeatures", "nCelltypes"].includes(paramName))
