@@ -5,6 +5,8 @@ import { downloadSVG } from '../../utils/downLoadSvg';
 const Heatmap = ({ state }) => { 
   let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
   let values = average;
+  console.log(celltype);
+  console.log(organ);
 
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
@@ -47,8 +49,8 @@ const Heatmap = ({ state }) => {
     let title = "";
     let featureHover, xHover, zHover;
     switch (measurement_type) {
-      case "chromatinAccessibility":
-        zHover = "Accessibility";
+      case "chromatin_accessibility":
+        zHover = "accessibility";
         featureHover = "peaks"
         if (celltype) {
           title = `<b>Heatmap of chromatin accessibility in <i>${celltype}</i> across ${organism} organs</b>`;
@@ -59,8 +61,8 @@ const Heatmap = ({ state }) => {
         }
         break;
       default:
-        zHover = "Expression";
-        featureHover = "Gene";
+        zHover = "expression";
+        featureHover = "gene";
         if (celltype) {
           xHover = "organ";
           title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
