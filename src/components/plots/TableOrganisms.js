@@ -7,7 +7,7 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ state }) => {
-  let { organisms, measurement_type } = state;
+  let { organisms } = state;
 
   // FIXME FIXME FIXME FIXME: CHECK THAT THE IMAGE FILE TYPE CHECKS WITH ITS CONTENT (AKA MAGIC NUMBERS)!
   let organismImages = Object.keys(orgMeta).map(org => ({
@@ -35,29 +35,17 @@ const TableOrganisms = ({ state }) => {
   for (let i = 0; i < organismImages.length; i += 4) {
     rows.push(organismImages.slice(i, i + 4));
   }
-
-  const cardBackgroundColor = (imageSrc) => {
-    let color = "#e4eff7";
-    for(let i = 0; i < organismImages.length; i++) {
-      let orgDicti = organismImages[i];
-      if ((orgDicti.src == imageSrc) && (organisms.includes(orgDicti.id))) {
-        color = "white";
-        break;
-      }
-    }
-    return color;
-  };
   
   const cardOpacity = (imageSrc) => {
-    let color = "0.3";
+    let opacity = "0.2";
     for(let i = 0; i < organismImages.length; i++) {
       let orgDicti = organismImages[i];
-      if ((orgDicti.src == imageSrc) && (organisms.includes(orgDicti.id))) {
-        color = "1.0";
+      if ((orgDicti.src === imageSrc) && (organisms.includes(orgDicti.id))) {
+        opacity = "1.0";
         break;
       }
     }
-    return color;
+    return opacity;
   };
 
   return (
@@ -74,7 +62,6 @@ const TableOrganisms = ({ state }) => {
                 <Card style={{ 
                   width: '100%', 
                   margin: '10px', 
-                  backgroundColor: cardBackgroundColor(image.src),
                   opacity: cardOpacity(image.src)
                   }}>
                   <div

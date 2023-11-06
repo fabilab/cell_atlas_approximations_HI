@@ -3,11 +3,7 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const Heatmap = ({ state }) => { 
-  let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
-  let values = average;
-  console.log(celltype);
-  console.log(organ);
-
+  
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
@@ -16,6 +12,8 @@ const Heatmap = ({ state }) => {
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   
   useEffect(() => {
+    let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+    let values = average;
     const yTickTexts = yaxis.map((gene) => {
       const link = geneCardLink(gene);
       return `<a href="${link}" target="_blank">${gene}</a>`;
@@ -161,7 +159,7 @@ const Heatmap = ({ state }) => {
     setData(data);
     setLayout(layout);
     setConfig(config);
-  }, [xaxis, yaxis, values, organism, organ, unit, hasLog])
+  }, [state])
 
   if (plotData && plotLayout && plotConfig) {
     return (

@@ -24,6 +24,8 @@ const BarChart = ({ state }) => {
       title = `<b>Highest expressor of ${features} in ${organism}</b>`;
       yLabel = unit;
       break;
+    default:
+      break;
   }
   let yValue = average.map((x) => Number(x.toFixed(2)));
 

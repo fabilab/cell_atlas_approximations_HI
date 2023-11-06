@@ -9,7 +9,6 @@ const exploreOrganism = (context) => {
 
 const addFeatures = (context) => {
     // Extract required parameters from context within the function
-    console.log(context);
     let features = context.features;
     let measurement_type = context.plotState.measurement_type;
     if (!context.plotState.fractions) {
@@ -30,7 +29,6 @@ const removeFeatures = (context) => {
 
 const toggleLog = (context) => {
     context.plotState.hasLog = !context.plotState.hasLog;
-    console.log(context);
     if (!context.plotState.fractions) {
         return updateAverage(context);
     } else {
@@ -83,7 +81,6 @@ const updateAverage = (context) => {
     }
 
     return {
-        measurement_type: context.measurement_type,
         plotType: plotType,
         organism: context.organism,
         organ: context.organ,
@@ -144,7 +141,7 @@ const updateFractions = (context) => {
         organ: context.organ,
         features: context.features,
         celltype: celltype,
-        measurement_type: context.measurement_type,
+        measurement_type: measurement_type,
         xaxis: xAxis,
         yaxis: yAxis,
         average: average,

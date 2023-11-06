@@ -154,13 +154,10 @@ export const updateChat = async (response, plotState) => {
       endpoint = "dotplot";
     }
 
-    console.log(mainIntent);
     if (['add', 'remove'].includes(mainIntent)) {
-      console.log(plotState);
       params['organism'] = plotState.organism; 
 
       if (plotState.plotType.endsWith("AcrossOrgans")) {
-        console.log("here ====");
         params['celltype'] = plotState.celltype;
       } else {
         params['organ'] = plotState.organ;
@@ -184,8 +181,6 @@ export const updateChat = async (response, plotState) => {
       }
 
     }
-
-    console.log(params);
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
