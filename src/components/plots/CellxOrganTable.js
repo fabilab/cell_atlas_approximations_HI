@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
 
+// FIXME: why is this function the only one that takes the entire state in like this??
 const CellxOrganTable = ({ state }) => {
   
     // Filter cell types detected in multiple organs

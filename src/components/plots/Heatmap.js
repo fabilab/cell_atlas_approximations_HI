@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, organ, celltype, unit, measurementType, hasLog }) => {
+const Heatmap = ({ state }) => { 
+  let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+  let values = average;
 
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
 
-
   const geneCardLink = (gene) =>
     `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
-  
   
   useEffect(() => {
     const yTickTexts = yaxis.map((gene) => {
@@ -35,8 +35,8 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     }
   
     // Calculate suitable cell size
-    const ncelltypes = xaxis.length;
-    const nfeatures = yaxis.length;
+    let ncelltypes = xaxis.length;
+    let nfeatures = yaxis.length;
 
     // Calculate graph width and height
     let ytickMargin = (nfeatures < 10) ? 250 : 200;
@@ -45,18 +45,29 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
     let graphHeight = nfeatures * 30 + ytickMargin;
     
     let title = "";
-    let featureHover = "Gene";
-    let xHover = "cell type";
-    if (subIntent === 'chromatinAccessibility') {
-      title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
-      featureHover = "peaks"
-    } else{
-      if (dataCategory === "across_organs") {
-        xHover = "organ";
-        title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
-      } else {
-        title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
-      }
+    let featureHover, xHover, zHover;
+    switch (measurement_type) {
+      case "chromatinAccessibility":
+        zHover = "Accessibility";
+        featureHover = "peaks"
+        if (celltype) {
+          title = `<b>Heatmap of chromatin accessibility in <i>${celltype}</i> across ${organism} organs</b>`;
+          xHover = "organ";
+        } else {
+          title = `<b>Heatmap of chromatin accessibility in ${organism} ${organ}</b>`;
+          xHover = "cell type";
+        }
+        break;
+      default:
+        zHover = "Expression";
+        featureHover = "Gene";
+        if (celltype) {
+          xHover = "organ";
+          title = `<b>Gene expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+        } else {
+          xHover = "cell type";
+          title = `<b>Heatmap of gene expression in ${organism} ${organ}</b>`;
+        }
     }
 
     let data = [
@@ -67,7 +78,6 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
         type: 'heatmap',
         colorscale: 'YlGnBu',
         reversescale: true,
-        // get unit from API call
         colorbar: {
           title: {
             text: unit,
@@ -77,7 +87,7 @@ const Heatmap = ({ subIntent, dataCategory, xaxis, yaxis, values, organism, orga
         hovertemplate:
           featureHover + ": %{y} <br>" +
           xHover + ": %{x} <br>" +
-          "Expression: %{z}" +
+          zHover + ": %{z}" +
           "<extra></extra>"
       }
     ];

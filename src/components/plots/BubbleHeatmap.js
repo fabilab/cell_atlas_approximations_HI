@@ -2,7 +2,8 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
-const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, dataCategory }) => {
+const BubbleHeatmap = ({ state }) => {
+  let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
 
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
@@ -19,12 +20,30 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
   let all_hovertext = [];
 
   let title = "";
-  let yHover = "cell type";
-  if (dataCategory === "across_organs") {
-    yHover = "organ";
-    title = `<b>Fraction and average expression variation in <i>${celltype}</i> across ${organism} organs<b>`
+  let yHover;
+
+  if (plotType === "neighborhood") {
+    yHover = "cell state";
   } else {
-    title = `<b>Gene expression levels and cell fraction in ${organism} ${organ} by cell type</b>`;
+    switch (measurement_type) {
+      case "chromatinAccessibility":
+        if (celltype) {
+          yHover = "organ";
+          title = `<b>Chromatin accessibility in <i>${celltype}</i> across ${organism} organs<b>`
+        } else {
+          yHover = "cell type";
+          title = `<b>Chromatin accessibility in ${organism} ${organ} by cell type</b>`;
+        }
+        break;
+      default:
+        if (celltype) {
+          yHover = "organ";
+          title = `<b>Gene expression in <i>${celltype}</i> across ${organism} organs<b>`
+        } else {
+          yHover = "cell type";
+          title = `<b>Gene expression in ${organism} ${organ} by cell type</b>`;
+        }
+    }
   }
 
   for (let i = 0; i < yaxis.length; i++) {
@@ -52,7 +71,7 @@ const BubbleHeatmap = ({ xaxis, yaxis, average, fractions, organism, organ, cell
   let nfeatures = yaxis.length;
   let ncelltypes = xaxis.length;
 
-  let ytickMargin = (nfeatures <= 10) ? 250 : 200;
+  let ytickMargin = (nfeatures <= 10) ? 200 : 200;
   let xtickMargin = (ncelltypes <= 20) ? 380 : 170;
 
   let graphWidth = ncelltypes * 30 + xtickMargin;

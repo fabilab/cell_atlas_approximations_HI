@@ -6,8 +6,10 @@ import orgMeta from '../../utils/organismMetadata.js';
 const { Title } = Typography;
 const { Meta } = Card;
 
-const TableOrganisms = ({ organisms}) => {
-  console.log(organisms);
+const TableOrganisms = ({ state }) => {
+  let { organisms, measurement_type } = state;
+
+  // FIXME FIXME FIXME FIXME: CHECK THAT THE IMAGE FILE TYPE CHECKS WITH ITS CONTENT (AKA MAGIC NUMBERS)!
   let organismImages = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
     title: orgMeta[org].bioName,
@@ -25,7 +27,6 @@ const TableOrganisms = ({ organisms}) => {
     if (nameA > nameB) {
       return 1;
     }
-  
     // names must be equal
     return 0;
   });
@@ -36,17 +37,27 @@ const TableOrganisms = ({ organisms}) => {
   }
 
   const cardBackgroundColor = (imageSrc) => {
-    if (!organisms) {
-      return 'white';
+    let color = "#e4eff7";
+    for(let i = 0; i < organismImages.length; i++) {
+      let orgDicti = organismImages[i];
+      if ((orgDicti.src == imageSrc) && (organisms.includes(orgDicti.id))) {
+        color = "white";
+        break;
+      }
     }
-    return organisms.some(org => imageSrc.includes(org)) ? '#e4eff7' : 'white';
+    return color;
   };
   
   const cardOpacity = (imageSrc) => {
-    if (!organisms || organisms.some(org => imageSrc.includes(org))) {
-      return '1';
+    let color = "0.3";
+    for(let i = 0; i < organismImages.length; i++) {
+      let orgDicti = organismImages[i];
+      if ((orgDicti.src == imageSrc) && (organisms.includes(orgDicti.id))) {
+        color = "1.0";
+        break;
+      }
     }
-    return '0.3';
+    return color;
   };
 
   return (
