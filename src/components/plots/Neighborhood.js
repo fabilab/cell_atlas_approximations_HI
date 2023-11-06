@@ -25,7 +25,6 @@ const Neighborhood = ({ state }) => {
 
   const handleCellStateClick = (cellState) => {
     setClickCellState(cellState);
-    //console.log("A cell state is being clicked.....");
   };
 
   const cellStates = [];

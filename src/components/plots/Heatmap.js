@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 
 const Heatmap = ({ state }) => { 
-  let { plotType, xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+  let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
   let values = average;
 
   const [plotData, setData] = useState(null);
@@ -78,7 +78,6 @@ const Heatmap = ({ state }) => {
         type: 'heatmap',
         colorscale: 'YlGnBu',
         reversescale: true,
-        // get unit from API call
         colorbar: {
           title: {
             text: unit,
@@ -92,8 +91,6 @@ const Heatmap = ({ state }) => {
           "<extra></extra>"
       }
     ];
-
-    console.log(data);
 
     let layout = {
       width: graphWidth,

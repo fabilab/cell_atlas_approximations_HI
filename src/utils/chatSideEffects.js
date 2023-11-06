@@ -207,7 +207,6 @@ export const updateChat = async (response, plotState) => {
     }
     
   } catch ({ status, message, error }) {
-    console.log(error);
       // invalid gene, we can auto remove it and re-call api
       let errorValue = error.invalid_value;
       let errorParam = error['invalid_parameter']
