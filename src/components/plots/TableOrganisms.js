@@ -7,7 +7,7 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ state }) => {
-  let { organisms } = state;
+  let { organisms, measurement_type } = state;
 
   // FIXME FIXME FIXME FIXME: CHECK THAT THE IMAGE FILE TYPE CHECKS WITH ITS CONTENT (AKA MAGIC NUMBERS)!
   let organismImages = Object.keys(orgMeta).map(org => ({

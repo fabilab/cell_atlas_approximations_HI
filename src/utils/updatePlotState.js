@@ -43,27 +43,23 @@ const updateMarkers = (context) => {
 };
 
 const updateAverage = (context) => {
-    let xAxis, plotType, average, unit, yAxis, measurement_type, celltype;
+    let xAxis, plotType, average, unit, yAxis, measurement_type;
     if (context.intent.split('.')[2] === "across_organs" || ((["add", "remove"].includes(context.intent.split('.')[0]) || context.intent === 'plot.log') && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
           average = transpose(context.response.data.average);
-          celltype = context.response.params.celltype;
         } else {
           xAxis = context.plotState.xaxis;
           average = context.plotState.average;
-          celltype = context.plotState.celltype;
         }
         plotType = "averageAcrossOrgans";
     } else {
         if (context.response.data) {
           xAxis = context.response.data.celltypes;
           average = context.response.data.average;
-          celltype = context.response.params.celltype;
         } else {
           xAxis = context.plotState.xaxis;
           average = context.plotState.average;
-          celltype = context.plotState.celltype;
         }
         plotType = "average";
     }
@@ -72,20 +68,19 @@ const updateAverage = (context) => {
       yAxis = context.response.data.features; 
       unit = context.response.data.unit;
       measurement_type = context.response.data.measurement_type;
-      celltype = context.response.params.celltype;
     } else {
       yAxis = context.plotState.yaxis; 
       unit = context.plotState.unit;
       measurement_type = context.plotState.measurement_type;
-      celltype = context.plotState.celltype;
     }
 
+    // FIXME: celltype and organ (somethings can be undefined)
     return {
         plotType: plotType,
         organism: context.organism,
         organ: context.organ,
         features: context.features,
-        celltype: celltype,
+        celltype: context.celltype,
         xaxis: xAxis,
         yaxis: yAxis,
         average: average,
@@ -97,18 +92,16 @@ const updateAverage = (context) => {
 };
 
 const updateFractions = (context) => {
-    let xAxis, plotType, average, fractions, unit, yAxis, measurement_type, celltype;
+    let xAxis, plotType, average, fractions, unit, yAxis, measurement_type;
     if (context.intent.split('.')[2] === "across_organs" || ((["add", "remove"].includes(context.intent.split('.')[0]) || context.intent === 'plot.log') && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
           average = transpose(context.response.data.average);
           fractions = transpose(context.response.data.fraction_detected);
-          celltype = context.response.params.celltype;
         } else {
           xAxis = context.plotState.xaxis;
           average = context.plotState.average;
           fractions = context.plotState.fractions;
-          celltype = context.plotState.celltype;
         }
         plotType = "fractionDetectedAcrossOrgans";
     } else {
@@ -116,15 +109,14 @@ const updateFractions = (context) => {
           xAxis = context.response.data.celltypes;
           average = context.response.data.average;
           fractions = context.response.data.fraction_detected;
-          celltype = context.response.params.celltype;
         } else {
           xAxis = context.plotState.xaxis;
           average = context.plotState.average;
           fractions = context.plotState.fractions;
-          celltype = context.plotState.celltype;
         }
         plotType = "fractionDetected";
     }
+    
     if (context.response.data) {
       yAxis = context.response.data.features; 
       unit = context.response.data.unit;
@@ -140,7 +132,7 @@ const updateFractions = (context) => {
         organism: context.organism,
         organ: context.organ,
         features: context.features,
-        celltype: celltype,
+        celltype: context.celltype,
         measurement_type: measurement_type,
         xaxis: xAxis,
         yaxis: yAxis,
@@ -293,6 +285,7 @@ export const updatePlotState = (response, plotState, setPlotState) => {
     markers: (response.data && response.data.markers) || "",
     organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
     organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
+    celltype: (response.params && response.params.celltype) || (plotState && plotState.celltype) || "",
     plotState: plotState,
     response: response,
     measurement_type: response.measurement_type || "",
