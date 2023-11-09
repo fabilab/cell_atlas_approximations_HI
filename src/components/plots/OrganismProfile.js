@@ -78,16 +78,6 @@ const OrganismProfile = ({ state }) => {
     };
 
     const handleImageLoad = (imageRef, parentDimensions) => {
-        const naturalWidth = imageRef.naturalWidth;
-        const naturalHeight = imageRef.naturalHeight;
-        const renderedWidth = parentDimensions.width;
-        const renderedHeight = parentDimensions.height;
-    
-        if (naturalWidth && naturalHeight && renderedWidth && renderedHeight) {
-            const widthFactor = renderedWidth / naturalWidth;
-            const heightFactor = renderedHeight / naturalHeight;
-            setScalingFactors({ width: widthFactor, height: heightFactor });
-        }
 
         try {
             const organismAnatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
