@@ -157,10 +157,11 @@ export const updateChat = async (response, plotState) => {
     if (['add', 'remove'].includes(mainIntent)) {
       params['organism'] = plotState.organism; 
 
-      if (plotState.plotType.endsWith("AcrossOrgans"))
+      if (plotState.plotType.endsWith("AcrossOrgans")) {
         params['celltype'] = plotState.celltype;
-      else
+      } else {
         params['organ'] = plotState.organ;
+      }
 
       if (plotState.plotType.startsWith("fraction")) {
         endpoint = "dotplot";

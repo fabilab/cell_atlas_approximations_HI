@@ -52,7 +52,7 @@ const CellxOrganTable = ({ state }) => {
         dataIndex: 'celltype',
         key: 'celltype',
         render: (text) => (
-          <a href={`https://www.google.com/search?q=${text}`} target="_blank" style={{fontWeight:"bold"}}>
+          <a href={`https://www.google.com/search?q=${text}`} target="_blank" rel="noreferrer" style={{fontWeight:"bold"}}>
             {text}
           </a>
         ),

@@ -44,7 +44,7 @@ const updateMarkers = (context) => {
 
 const updateAverage = (context) => {
     let xAxis, plotType, average, unit, yAxis, measurement_type;
-    if (context.intent.split('.')[2] === "across_organs" || (["add", "remove"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
+    if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
           average = transpose(context.response.data.average);
@@ -73,26 +73,26 @@ const updateAverage = (context) => {
       unit = context.plotState.unit;
       measurement_type = context.plotState.measurement_type;
     }
+
     return {
-        measurement_type: context.measurement_type,
         plotType: plotType,
         organism: context.organism,
         organ: context.organ,
         features: context.features,
-        celltype: context.response.params.celltype,
+        celltype: context.celltype,
         xaxis: xAxis,
         yaxis: yAxis,
         average: average,
         fractions: null,
         unit: unit,
-        measurementType: measurement_type,
+        measurement_type: measurement_type,
         hasLog: context.plotState.hasLog
     };
 };
 
 const updateFractions = (context) => {
     let xAxis, plotType, average, fractions, unit, yAxis, measurement_type;
-    if (context.intent.split('.')[2] === "across_organs" || (["add", "remove"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
+    if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
           average = transpose(context.response.data.average);
@@ -115,6 +115,7 @@ const updateFractions = (context) => {
         }
         plotType = "fractionDetected";
     }
+    
     if (context.response.data) {
       yAxis = context.response.data.features; 
       unit = context.response.data.unit;
@@ -130,8 +131,8 @@ const updateFractions = (context) => {
         organism: context.organism,
         organ: context.organ,
         features: context.features,
-        celltype: context.response.params.celltype,
-        measurement_type: context.measurement_type,
+        celltype: context.celltype,
+        measurement_type: measurement_type,
         xaxis: xAxis,
         yaxis: yAxis,
         average: average,
@@ -283,6 +284,7 @@ export const updatePlotState = (response, plotState, setPlotState) => {
     markers: (response.data && response.data.markers) || "",
     organism: (response.params && response.params.organism) || (plotState && plotState.organism) || "",
     organ: (response.params && response.params.organ) || (plotState && plotState.organ) || "",
+    celltype: (response.params && response.params.celltype) || (plotState && plotState.celltype) || "",
     plotState: plotState,
     response: response,
     measurement_type: response.measurement_type || "",

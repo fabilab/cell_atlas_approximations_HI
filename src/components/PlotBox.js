@@ -79,7 +79,13 @@ const PlotBox = ({ state }) => {
           />
         </div>
       )
+    default:
+      return (
+        <div>
+        </div>
+      )
   }
+
 };
 
 export default PlotBox;

@@ -4,7 +4,6 @@ import { downloadSVG } from '../../utils/downLoadSvg';
 
 const BubbleHeatmap = ({ state }) => {
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
-
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -26,7 +25,7 @@ const BubbleHeatmap = ({ state }) => {
     yHover = "cell state";
   } else {
     switch (measurement_type) {
-      case "chromatinAccessibility":
+      case "chromatin_accessibility":
         if (celltype) {
           yHover = "organ";
           title = `<b>Chromatin accessibility in <i>${celltype}</i> across ${organism} organs<b>`
@@ -53,7 +52,7 @@ const BubbleHeatmap = ({ state }) => {
     all_size = all_size.concat(fractions[i].map((x) => x.toPrecision(3) * 100));
 
     const text = xaxis.map((celltype, index) => {
-      return `Gene: ${yaxis[i]}<br>${yHover}: ${celltype}<br>Avg Exp: ${average[i][index].toPrecision(3)}<br>Proportion: ${fractions[i][index].toPrecision(3) * 100}%`;
+      return `gene: ${yaxis[i]}<br>${yHover}: ${celltype}<br>expression: ${average[i][index].toPrecision(3)}<br>fraction: ${fractions[i][index].toPrecision(3) * 100}%`;
     });
 
     all_hovertext = all_hovertext.concat(text);

@@ -7,11 +7,10 @@ import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ state }) => {
-    let { organism, measurement_type } = state;
+    let { organism } = state;
 
     const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
-    const [cellTypes, setCellTypes] = useState([]);
     const [clickedOrgan, setClickedOrgan] = useState(null);
     const [apiCellOrgan, setApiCellOrgan] = useState(null);
     const [imagePath, setImagePath] = useState(null);
@@ -46,7 +45,7 @@ const OrganismProfile = ({ state }) => {
             
             const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
             if (intrinsicDimensions) {
-                const renderedSize = 480; // Since you've set width and height of ImageMapper to 480
+                const renderedSize = 480;
                 setScalingFactors({
                     width: renderedSize / intrinsicDimensions.width,
                     height: renderedSize / intrinsicDimensions.height,
@@ -60,19 +59,6 @@ const OrganismProfile = ({ state }) => {
     const handleOrganClick = (area) => {
         let tempOrgan = area.name.split('-')[0]
         setClickedOrgan(tempOrgan);
-        const fetchCellTypes = async () => {
-            try {
-                params = {
-                    organism: organism,
-                    organ: tempOrgan,
-                    measurement_type: "gene_expression"
-                }
-                let apiCelltypes = await atlasapprox.celltypes(params);
-                setCellTypes(apiCelltypes.celltypes);
-            } catch (error) {
-                console.error("Error fetching cell types:", error);
-            }
-        };
 
         const fetchCellOrganData = async () => {
             try {
@@ -88,7 +74,6 @@ const OrganismProfile = ({ state }) => {
             }
         };
         
-        fetchCellTypes(); 
         fetchCellOrganData();
     };
 
@@ -165,12 +150,12 @@ const OrganismProfile = ({ state }) => {
                 <div>
                     <h2 style={{fontSize: "1.3em"}}>{bioName}</h2>
                     <p >Common name: {commonName}</p>
-                    <p>Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noopener noreferrer">{dataSource}</a></p>
+                    <p>Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noreferrer">{dataSource}</a></p>
                 </div>
             </div>
             <div style={{padding: "1% 3%"}}>
                 <h3>About</h3>
-                <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description} <a href={descriptionHyperlink} target="_blank">"From Wikipedia"</a></p>
+                <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description} <a href={descriptionHyperlink} target="_blank" rel="noreferrer">"From Wikipedia"</a></p>
             </div>
             <div style={{ padding: "1% 3%" }}>
                 <h3>Organ Map</h3>

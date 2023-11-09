@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
-import orgMeta from '../../utils/organismMetadata.js';
 import { Card, Tooltip } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 
 
 const FeatureSequences = ({ state }) => {
-  let { organism, features, sequences, type, measurement_type } = state;
+  let { features, sequences } = state;
 
   const [copyStatus, setCopyStatus] = useState('not-copied');
   // https://stackoverflow.com/questions/62723863/css-overflow-wrap-does-not-work-in-react-js
   const sequenceStyle = {
-    width: '98%',            // Set the width to 98%
-    // backgroundColor: 'lightgrey',
+    width: '98%',
     whiteSpace: 'pre-wrap',    
     overflowWrap: 'break-word',
-    padding: '10px',         // Add padding for spacing
-    margin: '0',             // Remove any margin
+    padding: '10px',
+    margin: '0',       
   };
 
   const iconStyle = {
     position: 'absolute',
-    top: '5px',     // Adjust as needed
-    right: '5px',    // Adjust as needed
+    top: '5px',
+    right: '5px',
     fontSize:'15px'
   };
 
@@ -41,9 +39,6 @@ const FeatureSequences = ({ state }) => {
     }
     return null;
   };
-
-  let imagePath = require(`../../asset/organisms/${organism}.jpeg`);
-  let bioName = orgMeta[organism]?.bioName || "Unknown";
 
   return (
     <div style={{ width: "inherit" }}>
