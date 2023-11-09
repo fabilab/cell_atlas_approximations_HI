@@ -66,8 +66,6 @@ export const updateChat = async (response, plotState) => {
 
   // Extract endpoint and parameters from the response
   ({ endpoint, params } = buildAPIParams(intent, entities));
-  console.log(intent);
-  console.log(entities);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -210,7 +208,6 @@ export const updateChat = async (response, plotState) => {
     }
     
   } catch ({ status, message, error }) {
-      console.log(error);
       // invalid gene, we can auto remove it and re-call api
       let errorValue = error.invalid_value;
       let errorParam = error['invalid_parameter'];
@@ -231,6 +228,9 @@ export const updateChat = async (response, plotState) => {
             break;
           case 'organ^celltype':
             answer += "I'm sorry, please specific an organ or celltype for this question.";
+            break;
+          default:
+            break;
         }
       } else if (error.type === 'invalid_parameter') {
         if (errorParam === 'features') {
