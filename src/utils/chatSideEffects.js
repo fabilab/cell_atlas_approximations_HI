@@ -226,8 +226,9 @@ export const updateChat = async (response, plotState) => {
         } 
         else if (errorParam === 'feature') {
           answer += `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
-        }
-        else if (errorParam === 'organ') {
+        } else if (errorParam === 'organism') {
+          answer += `I'm sorry, but the species "${errorValue}" is not available in our current dataset for this query. Please specify a different species.`;
+        } else if (errorParam === 'organ') {
           answer += `I'm sorry, but the organ "${errorValue}" is not available in our current dataset for this query. Please specify a different organ.`;
         } 
         else if (errorParam === 'celltype') {
