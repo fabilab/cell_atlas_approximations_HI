@@ -44,7 +44,7 @@ const updateMarkers = (context) => {
 
 const updateAverage = (context) => {
     let xAxis, plotType, average, unit, yAxis, measurement_type;
-    if (context.intent.split('.')[2] === "across_organs" || ((["add", "remove"].includes(context.intent.split('.')[0]) || context.intent === 'plot.log') && context.plotState.plotType.endsWith("AcrossOrgans"))) {
+    if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
           average = transpose(context.response.data.average);
@@ -74,7 +74,6 @@ const updateAverage = (context) => {
       measurement_type = context.plotState.measurement_type;
     }
 
-    // FIXME: celltype and organ (somethings can be undefined)
     return {
         plotType: plotType,
         organism: context.organism,
@@ -93,7 +92,7 @@ const updateAverage = (context) => {
 
 const updateFractions = (context) => {
     let xAxis, plotType, average, fractions, unit, yAxis, measurement_type;
-    if (context.intent.split('.')[2] === "across_organs" || ((["add", "remove"].includes(context.intent.split('.')[0]) || context.intent === 'plot.log') && context.plotState.plotType.endsWith("AcrossOrgans"))) {
+    if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
           average = transpose(context.response.data.average);
