@@ -215,19 +215,19 @@ export const updateChat = async (response, plotState) => {
       if (error.type === 'missing_parameter') {
         switch(mParam) {
           case 'organism':
-            answer += "I'm sorry, please specific an species for this question.";
+            answer += "I'm sorry, please specify a species for this question.";
             break;
           case 'organ':
-            answer += "I'm sorry, please specific an organ for this question.";
+            answer += "I'm sorry, please specify an organ for this question.";
             break;
           case 'features':
-            answer += "I'm sorry, please specific features for this question.";
+            answer += "I'm sorry, please specify features for this question.";
             break;
           case 'celltype':
-            answer += "I'm sorry, please specific a celltype for this question.";
+            answer += "I'm sorry, please specify a celltype for this question.";
             break;
           case 'organ^celltype':
-            answer += "I'm sorry, please specific an organ or celltype for this question.";
+            answer += "I'm sorry, please specify an organ or celltype for this question.";
             break;
           default:
             break;
