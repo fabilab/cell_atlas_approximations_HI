@@ -209,8 +209,29 @@ export const updateChat = async (response, plotState) => {
   } catch ({ status, message, error }) {
       // invalid gene, we can auto remove it and re-call api
       let errorValue = error.invalid_value;
-      let errorParam = error['invalid_parameter']
-      if (error.type === 'invalid_parameter'){
+      let errorParam = error['invalid_parameter'];
+      let mParam = error['missing_parameter'];
+      if (error.type === 'missing_parameter') {
+        switch(mParam) {
+          case 'organism':
+            answer += "I'm sorry, please specify a species for this question.";
+            break;
+          case 'organ':
+            answer += "I'm sorry, please specify an organ for this question.";
+            break;
+          case 'features':
+            answer += "I'm sorry, please specify features for this question.";
+            break;
+          case 'celltype':
+            answer += "I'm sorry, please specify a celltype for this question.";
+            break;
+          case 'organ^celltype':
+            answer += "I'm sorry, please specify an organ or celltype for this question.";
+            break;
+          default:
+            break;
+        }
+      } else if (error.type === 'invalid_parameter') {
         if (errorParam === 'features') {
           params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
         
@@ -225,8 +246,9 @@ export const updateChat = async (response, plotState) => {
         } 
         else if (errorParam === 'feature') {
           answer += `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
-        }
-        else if (errorParam === 'organ') {
+        } else if (errorParam === 'organism') {
+          answer += `I'm sorry, but the species "${errorValue}" is not available in our current dataset for this query. Please specify a different species.`;
+        } else if (errorParam === 'organ') {
           answer += `I'm sorry, but the organ "${errorValue}" is not available in our current dataset for this query. Please specify a different organ.`;
         } 
         else if (errorParam === 'celltype') {
