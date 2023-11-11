@@ -21,18 +21,18 @@ const Landing = () => {
     'What organs are available in human?',
     'Where are fibroblast detected in human?',
     'What organisms have chromatin accessibility?',
-    'Show 10 markers of fibroblast in the frog eye.',
+    'Show 10 markers of rod cells in the frog eye.',
     'Show 10 genes similar to Col1a1 in mouse lung.',
     'What cell types are present in each organ of mouse?',
-    'What cell type is the highest expressor of PECAM1 in human?',
+    'What cell type is the highest expressor of GZMA in human?',
     'List highest accessibility of chr1:9955-10355 in human.',
     'What are the sequences of COL1A1,CD19,ALK,VWF in human?',
     'What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?',
     // 'show 5 cell types with similar chromatin peaks to lung fibroblast in human.',
     'What are the cell states of ML25764a, ML358828a, ML071151a, ML065728a in jellyfish whole?',
-    'Compare fraction of cells expressing APOE, CD19, COL1A1, TGFBI, EPCAM, COL13A1 in fibroblast across organs in human.',
-    'What is the fraction of cells expressing ACE2, FOXJ1, HIF1A, KRT5, COL1A1, COL2A1, VWF, CD19, APOE, CRH, GZMA in human lung?',
-    'What is the expression of TP53, AHR, MED4, VWF, COL1A1, APOE, COL2A1, COL13A1, COL14A1, TGFBI, PDGFRA, CRH, GZMA in human lung?',
+    'What is the expression of VWF, APOE, COL13A1, COL14A1, TGFBI, PDGFRA, GZMA in human lung?',
+    'What is the fraction of cells expressing ACE2, FOXJ1, HIF1A, KRT5, VWF, CD19, APOE, GZMA in human lung?',
+    'Compare fraction expressing PTPRC, MARCO, CD68, CD14 in macrophage across organs in human.',
   ];
 
   return (

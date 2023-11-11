@@ -70,6 +70,7 @@ const buildAnswer = (intent, data = null) => {
                 answer = "The average is shown in the plot.";
             }
         }
+        answer += "<br><br>To log/unlog the data for better dynamic range, type \"log data\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
         break;
       case "fraction_detected":
         switch (addIntent) {
@@ -79,6 +80,7 @@ const buildAnswer = (intent, data = null) => {
           default:
             answer = "A dot plot of " + data.features + " in " + data.organism + " " + data.organ + " is shown in the plot.";
         }
+        answer += "<br><br>To log/unlog the data for better dynamic range, type \"log data\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
         break;
       case "markers":
         switch (sIntent) {
