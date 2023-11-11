@@ -214,19 +214,20 @@ export const updateChat = async (response, plotState) => {
       if (error.type === 'missing_parameter') {
         switch(mParam) {
           case 'organism':
-            answer += "I'm sorry, please specify a species for this question.";
+            answer += "What species would you like to look at?";
             break;
           case 'organ':
-            answer += "I'm sorry, please specify an organ for this question.";
+            answer += "What organ would you like to look at?";
             break;
           case 'features':
-            answer += "I'm sorry, please specify features for this question.";
+            answer += "Please list the features (e.g. genes) you would like to look into.";
             break;
           case 'celltype':
-            answer += "I'm sorry, please specify a celltype for this question.";
+            answer += "Which cell type?";
             break;
           case 'organ^celltype':
-            answer += "I'm sorry, please specify an organ or celltype for this question.";
+            answer += "I did not recognise a cell type or an organ. Please repeat the question specifying either one (but not both).";
+            // FIXME: this requests to repeat the question, so we should reset the bot
             break;
           default:
             break;
@@ -241,18 +242,18 @@ export const updateChat = async (response, plotState) => {
             answer += buildAnswer(intent, apiData);
             answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
           } else {
-            answer = `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
+            answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;
           }
         } 
         else if (errorParam === 'feature') {
-          answer += `I'm sorry, but the feature "${errorValue}" is not available in our current dataset for this query. Please specify a different feature.`;
+          answer += `The feature "${errorValue}" is not available. Have you checked the spelling of that feature? You can retry with a different fgeature if you like.`;
         } else if (errorParam === 'organism') {
-          answer += `I'm sorry, but the species "${errorValue}" is not available in our current dataset for this query. Please specify a different species.`;
+          answer += `Organism "${errorValue}" is not available. Could it be a spelling error? Otherwise, you can try a different species.`;
         } else if (errorParam === 'organ') {
-          answer += `I'm sorry, but the organ "${errorValue}" is not available in our current dataset for this query. Please specify a different organ.`;
+          answer += `Organ "${errorValue}" is not available in this organism. Some organisms (e.g. coral) have been dissociated as "whole", without separating the organs. You can try asking "What organs are available for <organism>?" to get the list of organs for this organism.`;
         } 
         else if (errorParam === 'celltype') {
-          answer += `I'm sorry, but the celltype "${errorValue}" is not available in our current dataset for this query. Please specify a different celltype.`;
+          answer += `Cell type "${errorValue}" is not available in this context. If you are looking into a specific organ, you can ask "What cell types are available in <organism> <organ>?", otherwise you can draw a table of cell types and organs in that organism by asking "Show cell type by organ table of <organism>".`;
         }
       } else {
         answer = message
