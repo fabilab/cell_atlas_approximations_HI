@@ -147,7 +147,7 @@ const updateNeighbor = (context) => {
         plotType: "neighborhood",
         organism: context.organism,
         organ: context.organ,
-        features: context.features.split(","),
+        features: Array.isArray(context.features) ? context.features : context.features.split(","),
         celltypes: context.response.data.celltypes,
         nCells: transpose(context.response.data.ncells),
         boundaries: context.response.data.boundaries,

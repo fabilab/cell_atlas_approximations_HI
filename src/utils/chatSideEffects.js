@@ -144,11 +144,11 @@ export const updateChat = async (response, plotState) => {
       params = {
         organ: plotState.organ,
         organism: plotState.organism,
-        features: plotState.features.join(","),
+        features: plotState.features,
         // FIXME: see above
         measurement_type: "gene_expression",
       };
-  }
+    }
 
     if (mainIntent === 'fraction_detected') {
       endpoint = "dotplot";
@@ -184,7 +184,6 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
-  
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
