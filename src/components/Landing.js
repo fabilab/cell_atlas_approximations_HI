@@ -63,7 +63,7 @@ const Landing = () => {
         marginTop: '8vh' 
       }}>
         <Input
-          placeholder="Ask me a question OR click on the Xmas tree below..."
+          placeholder="Ask me a question OR click on one below..."
           value={searchMessage}
           onChange={(e) => setSearchMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
           prefix={<RobotOutlined style={{ paddingRight: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/> }

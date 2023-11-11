@@ -1,6 +1,6 @@
 {
   "name": "atlas-approx-hi",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "homepage": "https://atlasapprox.org",
   "private": true,
   "dependencies": {
