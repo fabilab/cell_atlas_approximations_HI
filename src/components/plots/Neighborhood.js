@@ -22,10 +22,16 @@ const Neighborhood = ({ state }) => {
   } = state;
 
   const [clickedCellState, setClickCellState] = useState(null);
+  const [hoveredGeneColor, setHoverGeneColor] = useState(null);
 
   const handleCellStateClick = (cellState) => {
     setClickCellState(cellState);
   };
+
+  const handleGeneHover = (geneColor) => {
+    setHoverGeneColor(geneColor);
+    console.log(geneColor);
+  }
 
   const cellStates = [];
   for (let i = 1; i <= nCells[1].length; i++) {
@@ -66,6 +72,7 @@ const Neighborhood = ({ state }) => {
       <div style={{padding: "1% 3%" }}>
           <BubbleHeatmap
             state={bubbleState}
+            onGeneHover={setHoverGeneColor}
           />
       </div>
       <div style={{ padding: "1% 1%" }}>
@@ -73,8 +80,10 @@ const Neighborhood = ({ state }) => {
           <div style={{ flex: 1, overflow: 'auto', minWidth: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <CellStatePlot
               state={embeddingState}
+              hoveredGeneColor={hoveredGeneColor}
             />
             <Text style={{ alignSelf: 'center' }}>* Hover over the cell states for cell type abundance information.</Text>
+            <Text style={{ alignSelf: 'center' }}>* Hover <b>here</b> to color the embedding by cell state.</Text>          
           </div>
           <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
             {clickedCellState !== null &&

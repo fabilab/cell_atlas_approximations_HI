@@ -1,9 +1,12 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
+import {selectAll} from "d3";
+import { useState } from 'react';
 
-const BubbleHeatmap = ({ state }) => {
+const BubbleHeatmap = ({ state, onGeneHover }) => {
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
+  const [selectedGene, setSelectedGene] = useState(null);
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -104,6 +107,7 @@ const BubbleHeatmap = ({ state }) => {
     all_color = all_color.map(value => Math.log(value));
     unit = "log( " + unit + " )";
   }
+  
   let data = {
     x: all_x,
     y: all_y,
@@ -145,11 +149,68 @@ const BubbleHeatmap = ({ state }) => {
     scrollZoom: false,
   };
 
+  const normalizeArray = (matrix) => {
+    const flatten = matrix.flat();
+    const minValue = Math.min(...flatten);
+    const maxValue = Math.max(...flatten);
+  
+    return matrix.map(row =>
+      row.map(value => (value/maxValue))
+    );
+  }
+
+  const mapToColor = (value) => {
+    const YlGnBu = [
+      [0, 'rgb(8,29,88)'], [0.125, 'rgb(37,52,148)'],
+      [0.25, 'rgb(34,94,168)'], [0.375, 'rgb(29,145,192)'],
+      [0.5, 'rgb(65,182,196)'], [0.625, 'rgb(127,205,187)'],
+      [0.75, 'rgb(199,233,180)'], [0.875, 'rgb(237,248,217)'],
+      [1, 'rgb(255,255,217)']
+    ]
+
+    value = 1 - value;
+
+    for (let i = 1; i < YlGnBu.length; i++) {
+      if (value <= YlGnBu[i][0]) {
+        const [v1, color1] = YlGnBu[i - 1];
+        const [v2, color2] = YlGnBu[i];
+        const t = (value - v1) / (v2 - v1);
+        const interpolateComponent = (c1, c2) => Math.round(c1 + t * (c2 - c1));
+        const interpolateColor = (rgb1, rgb2) => rgb1.map((c, i) => interpolateComponent(c, rgb2[i]));
+        return `rgb(${interpolateColor(color1.match(/\d+/g).map(Number), color2.match(/\d+/g).map(Number)).join(',')})`;
+      }
+    }
+    return YlGnBu[YlGnBu.length - 1][1];
+  }
+
+  const geneHover = (event) => {
+    const selected = event.target.textContent;
+    if (selected === selectedGene) {
+      return;
+    }
+    const normalisedAverage = normalizeArray(average);
+    const colors = normalisedAverage[yaxis.indexOf(selected)].map(a => mapToColor(a))
+    onGeneHover(colors);
+    setSelectedGene(selected);
+  }
+
   return (
     <Plot
       data={[data]}
       layout={layout}
       config={config}
+      onAfterPlot={() => {
+        document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
+        document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
+        selectAll(".yaxislayer-above")
+          .selectAll('text')
+          .on("mouseenter", (event) => geneHover(event));
+      }}
+      onInitialized={(figure, graphDiv)=>{
+        selectAll(".yaxislayer-above")
+          .selectAll('text')
+          .on("mouseenter", (event) => geneHover(event));
+      }}
     />
   );
 };
