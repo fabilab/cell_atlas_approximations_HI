@@ -28,11 +28,6 @@ const Neighborhood = ({ state }) => {
     setClickCellState(cellState);
   };
 
-  const handleGeneHover = (geneColor) => {
-    setHoverGeneColor(geneColor);
-    console.log(geneColor);
-  }
-
   const cellStates = [];
   for (let i = 1; i <= nCells[1].length; i++) {
     cellStates.push(`cell state ${i}`);
@@ -83,7 +78,11 @@ const Neighborhood = ({ state }) => {
               hoveredGeneColor={hoveredGeneColor}
             />
             <Text style={{ alignSelf: 'center' }}>* Hover over the cell states for cell type abundance information.</Text>
-            <Text style={{ alignSelf: 'center' }}>* Hover <b>here</b> to color the embedding by cell state.</Text>          
+            <Text 
+              onMouseEnter={() => setHoverGeneColor(null)}
+              style={{ alignSelf: 'center', cursor: 'pointer' }}>
+              * Hover <b>here</b> to color the embedding by cell state.
+            </Text>          
           </div>
           <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
             {clickedCellState !== null &&
