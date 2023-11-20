@@ -64,6 +64,7 @@ const CellStateBar = ({ state }) => {
         click: () => downloadSVG(plotName),
       },
     ],
+    modeBarButtonsToRemove: ['pan2d','select2d','lasso2d','zoom','autoscale', 'zoomin', 'zoomout'],
   }
 
   return (

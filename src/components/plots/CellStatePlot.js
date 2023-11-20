@@ -61,6 +61,10 @@ const CellStatePlot = ({ state, hoveredGeneColor }) => {
     },
   };
 
+  let config = {
+    modeBarButtonsToRemove: ['pan2d','select2d','lasso2d','zoom','autoscale'],
+  }
+
   const handleCellStateHover = (event) => {
     const clickedText = event.target.textContent || event.target.id;
     onCellStateHover(clickedText);
@@ -86,6 +90,7 @@ const CellStatePlot = ({ state, hoveredGeneColor }) => {
     <Plot 
       data={[centroidTrace, ...boundaryTraces]} 
       layout={layout} 
+      config={config}
       onInitialized={(figure, graphDiv) => loadEventListeners()}
     />
   );
