@@ -99,6 +99,12 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
         size: 16
       },
     },
+    margin: {
+      t: 30,
+      b: 10,
+      l: 5,
+      r: 5,
+    },
   };
 
   const desired_maximum_marker_size = 6.2;

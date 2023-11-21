@@ -182,6 +182,7 @@ const buildAnswer = (intent, data = null) => {
           case "geneExpression":
             answer = `The average expression and cell fractions of ${data.features} across cell states are shown in the plot.`
             answer += "<br><br>Hover over the blobs in the embedding for cell type composition information."
+            // answer += "Hover over the feature names to color the embedding by the level of that feature. Hover <span class=\"resetStatePlot\"><b>here</b></span> to reset the original colors."
             answer += "<br><br>Type \"zoom out\" to look at cell type averages."
             break;
           default:

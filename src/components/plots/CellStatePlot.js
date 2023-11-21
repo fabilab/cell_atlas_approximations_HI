@@ -42,7 +42,7 @@ const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
 
   let title = "";
   if (hoveredGene) {
-    title = `Cell state colored by <b>${hoveredGene}</b>`;
+    title = `${hoveredGene}`;
   }
   const layout = {
     showlegend: false,
@@ -56,9 +56,14 @@ const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
       zeroline: false,
       showticklabels: false,
     },
-    title: title,
+    title: {
+      text: title,
+      font: {
+        size: 12,
+      },
+    },
     margin: {
-      t: 80,
+      t: 30,
       b: 10,
       l: 5,
       r: 5,
