@@ -208,12 +208,8 @@ const highestMeasurement = (context) => {
 
 
 const similarFeatures = (context) => {
-    let similarFeatures = context.response.data.similar_features;
-    similarFeatures.unshift(context.features);
-
-    let updatedFeatures = [...new Set(similarFeatures)];
-    let features = updatedFeatures.join(",");
-
+    
+    let features = context.features.join(",");
     return updateFractions({ ...context, features });
 };
 
