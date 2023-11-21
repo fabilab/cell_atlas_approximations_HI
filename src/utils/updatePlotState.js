@@ -29,10 +29,14 @@ const removeFeatures = (context) => {
 
 const toggleLog = (context) => {
     context.plotState.hasLog = !context.plotState.hasLog;
-    if (!context.plotState.fractions) {
-        return updateAverage(context);
-    } else {
-        return updateFractions(context);
+    if (context.plotState.plotType === 'neighborhood') {
+        return updateNeighbor(context);
+    } else{
+        if (!context.plotState.fractions) {
+            return updateAverage(context);
+        } else {
+            return updateFractions(context);
+        }
     }
 };
 
@@ -143,19 +147,44 @@ const updateFractions = (context) => {
 };
 
 const updateNeighbor = (context) => {
+
+    let celltypes, nCells, boundaries, centroids, average, fractions, unit;
+
+    // by deault:
+    if (context.response.data) {
+        celltypes = context.response.data.celltypes;
+        nCells = transpose(context.response.data.ncells);
+        boundaries = context.response.data.boundaries;
+        centroids = context.response.data.centroids;
+        average = context.response.data.average;
+        fractions = context.response.data.fraction_detected;
+        unit = context.response.data.unit;
+    }
+    //  after appling log:
+    else {
+        celltypes = context.plotState.celltypes;
+        nCells = context.plotState.nCells;
+        boundaries = context.plotState.boundaries;
+        centroids = context.plotState.centroids;
+        average = context.plotState.average;
+        fractions = context.plotState.fractions;
+        unit = context.plotState.unit;
+    }
+  
+
     return {
         plotType: "neighborhood",
         organism: context.organism,
         organ: context.organ,
         features: Array.isArray(context.features) ? context.features : context.features.split(","),
-        celltypes: context.response.data.celltypes,
-        nCells: transpose(context.response.data.ncells),
-        boundaries: context.response.data.boundaries,
-        centroids: context.response.data.centroids,
-        average: context.response.data.average,
-        fractions: context.response.data.fraction_detected,
+        celltypes: celltypes,
+        nCells: nCells,
+        boundaries: boundaries,
+        centroids: centroids,
+        average: average,
+        fractions: fractions,
         hasLog: context.plotState.hasLog,
-        unit: context.response.data.unit,
+        unit: unit,
         measurement_type: context.measurement_type,
     };
 };
