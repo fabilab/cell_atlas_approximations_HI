@@ -1,7 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-const CellStatePlot = ({ state, hoveredGeneColor }) => {
+const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
   let { centroids, boundaries, onCellStateHover } = state;
 
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
@@ -40,6 +40,10 @@ const CellStatePlot = ({ state, hoveredGeneColor }) => {
     };
   });
 
+  let title = "";
+  if (hoveredGene) {
+    title = `Cell state colored by <b>${hoveredGene}</b>`;
+  }
   const layout = {
     showlegend: false,
     height: 450,
@@ -52,9 +56,9 @@ const CellStatePlot = ({ state, hoveredGeneColor }) => {
       zeroline: false,
       showticklabels: false,
     },
-    title: "Cell state",
+    title: title,
     margin: {
-      t: 30,
+      t: 80,
       b: 10,
       l: 5,
       r: 5,

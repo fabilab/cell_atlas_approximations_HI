@@ -22,7 +22,8 @@ const Neighborhood = ({ state }) => {
   } = state;
 
   const [clickedCellState, setClickCellState] = useState(null);
-  const [hoveredGeneColor, setHoverGeneColor] = useState(null);
+  const [hoveredGeneColor, setHoveredGeneColor] = useState(null);
+  const [hoveredGene, setHoveredGene] = useState(null);
 
   const handleCellStateClick = (cellState) => {
     setClickCellState(cellState);
@@ -67,7 +68,8 @@ const Neighborhood = ({ state }) => {
       <div style={{padding: "1% 3%" }}>
           <BubbleHeatmap
             state={bubbleState}
-            onGeneHover={setHoverGeneColor}
+            setHoveredGeneColor={setHoveredGeneColor}
+            setHoveredGene={setHoveredGene}
           />
       </div>
       <div style={{ padding: "1% 1%" }}>
@@ -76,10 +78,14 @@ const Neighborhood = ({ state }) => {
             <CellStatePlot
               state={embeddingState}
               hoveredGeneColor={hoveredGeneColor}
+              hoveredGene={hoveredGene}
             />
             <Text style={{ alignSelf: 'center' }}>* Hover over the cell states for cell type abundance information.</Text>
             <Text 
-              onMouseEnter={() => setHoverGeneColor(null)}
+              onMouseOver={() => {
+                setHoveredGeneColor(null);
+                setHoveredGene(null);
+              }}
               style={{ alignSelf: 'center', cursor: 'pointer' }}>
               * Hover <b>here</b> to color the embedding by cell state.
             </Text>          

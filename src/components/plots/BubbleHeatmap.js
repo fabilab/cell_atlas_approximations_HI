@@ -4,9 +4,8 @@ import { downloadSVG } from '../../utils/downLoadSvg';
 import {selectAll} from "d3";
 import { useState } from 'react';
 
-const BubbleHeatmap = ({ state, onGeneHover }) => {
+const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
-  const [selectedGene, setSelectedGene] = useState(null);
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -187,13 +186,10 @@ const BubbleHeatmap = ({ state, onGeneHover }) => {
 
   const geneHover = (event) => {
     const selected = event.target.textContent;
-    if (selected === selectedGene) {
-      return;
-    }
     const normalisedAverage = normalizeArray(average);
     const colors = normalisedAverage[yaxis.indexOf(selected)].map(a => mapToColor(a))
-    onGeneHover(colors);
-    setSelectedGene(selected);
+    setHoveredGeneColor(colors);
+    setHoveredGene(selected);
   }
 
   return (
