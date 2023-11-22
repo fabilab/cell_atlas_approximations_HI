@@ -153,7 +153,6 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === 'fraction_detected') {
       endpoint = "dotplot";
     }
-
     if (['add', 'remove'].includes(mainIntent)) {
       params['organism'] = plotState.organism; 
 
@@ -170,13 +169,26 @@ export const updateChat = async (response, plotState) => {
       }
 
       if (mainIntent === 'add' && params.features && plotState.features) {
-        const plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+        let plotStateGenes;
+        if (plotState.plotType === 'neighborhood') {
+          plotStateGenes = plotState.features;
+          endpoint = 'neighborhood';
+        } else {
+          plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
+        }
         params.features = [...new Set([...params.features.split(','), ...plotStateGenes])].join(',');
       }
 
       if (mainIntent === 'remove' && params.features && plotState.features) {
-        let geneArrayA = params.features.split(",");
-        let geneArrayB = plotState.features.split(",");
+        let geneArrayA, geneArrayB;
+        if (plotState.plotType === 'neighborhood') {
+          geneArrayA = params.features.split(",");
+          geneArrayB = plotState.features;
+          endpoint = 'neighborhood';
+        } else {
+          geneArrayA = params.features.split(",");
+          geneArrayB = plotState.features.split(",");
+        }
         params.features = geneArrayB.filter(gene => !geneArrayA.includes(gene)).join(",");
       }
 
