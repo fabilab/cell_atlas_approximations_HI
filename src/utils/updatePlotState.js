@@ -8,10 +8,11 @@ const exploreOrganism = (context) => {
 };
 
 const addFeatures = (context) => {
-    // Extract required parameters from context within the function
     let features = context.features;
     let measurement_type = context.plotState.measurement_type;
-    if (!context.plotState.fractions) {
+    if (context.plotState.plotType === 'neighborhood') {
+        return updateNeighbor(context);
+    } else if (!context.plotState.fractions) {
         return updateAverage({ ...context, features, measurement_type });
     } else {
         return updateFractions({ ...context, features, measurement_type });
@@ -20,7 +21,9 @@ const addFeatures = (context) => {
 
 const removeFeatures = (context) => {
     let features = context.features;
-    if (!context.plotState.fractions) {
+    if (context.plotState.plotType === 'neighborhood') {
+        return updateNeighbor(context);
+    } else if (!context.plotState.fractions) {
         return updateAverage({ ...context, features });
     } else {
         return updateFractions({ ...context, features });
@@ -149,7 +152,6 @@ const updateFractions = (context) => {
 const updateNeighbor = (context) => {
 
     let celltypes, nCells, boundaries, centroids, average, fractions, unit;
-
     // by deault:
     if (context.response.data) {
         celltypes = context.response.data.celltypes;
@@ -297,12 +299,10 @@ const plotFunctionDispatcher = {
 export const updatePlotState = (response, plotState, setPlotState) => {
   const intent = response.intent;
   const mainIntent = intent.split('.')[0];
-  
   let newPlotState = null;
   if (plotState) {
     plotState.hasLog = plotState.hasLog || false;
   }
-
   const context = {
     intent: intent,
     features: response.params.features || response.params.feature || plotState.features,
