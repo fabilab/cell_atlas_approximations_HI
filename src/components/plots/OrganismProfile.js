@@ -23,18 +23,49 @@ const OrganismProfile = ({ state }) => {
     const [loading, setLoading] = useState(true);
     let params = {};
 
+    const fetchOrganData = async () => {
+        try {
+            const organData = await atlasapprox.organs({organism: organism});
+            if (organData && organData.organs) {
+                const numOrgans = organData.organs.length;
+                let organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
+                if (numOrgans < 2) {
+                    try {
+                        params = {
+                            organism: organism,
+                            organ: null,
+                            measurement_type: "gene_expression"
+                        }
+                        let apiResponse = await atlasapprox.celltypexorgan(params);
+                        setApiCellOrgan(apiResponse);
+                        setClickedOrgan(apiResponse.organs[0]);
+                    } catch (error) {
+                        console.error("Error fetching cell types:", error);
+                    }
+                } else {
+                    const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
+                    if (intrinsicDimensions) {
+                        const renderedSize = 480;
+                        setScalingFactors({
+                            width: renderedSize / intrinsicDimensions.width,
+                            height: renderedSize / intrinsicDimensions.height,
+                        });
+                    }
+                }
+                setImagePath(organismImagePath);
+            }
+        } catch (error) {
+            console.error('Error fetching organ data:', error);
+        }
+    };
+
     useEffect(() => {
         if (organism) {
             setLoading(true); // Set loading to true when organism changes
             setClickedOrgan(null); // Clear previous clicked organ
             setApiCellOrgan(null); // Clear previous API data
-            try {
-                const organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
-                setImagePath(organismImagePath);
-            } catch(error) {
-                const tempAnatomyImage = require(`../../asset/anatomy/temp.jpeg`);
-                setImagePath(tempAnatomyImage);
-            }
+            
+            fetchOrganData();
             
             setBioName(orgMeta[organism]?.bioName || "Unknown");
             setCommonName(orgMeta[organism]?.commonName || "Unknown");
@@ -42,15 +73,6 @@ const OrganismProfile = ({ state }) => {
             setDescription(orgMeta[organism]?.about || "Description not available");
             setDescriptionHyperlink(orgMeta[organism]?.descriptionHyperlink || "Hyperlink unavailable");
             setPaperHyperlink(orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable");
-            
-            const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
-            if (intrinsicDimensions) {
-                const renderedSize = 480;
-                setScalingFactors({
-                    width: renderedSize / intrinsicDimensions.width,
-                    height: renderedSize / intrinsicDimensions.height,
-                });
-            }
 
             setLoading(false);
         }
@@ -78,7 +100,6 @@ const OrganismProfile = ({ state }) => {
     };
 
     const handleImageLoad = (imageRef, parentDimensions) => {
-
         try {
             const organismAnatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
             imageRef.src = organismAnatomyImage;
@@ -90,7 +111,21 @@ const OrganismProfile = ({ state }) => {
     };
 
     const renderImageMap = () => {
-        if (loading || !orgMeta[organism]?.organs) return null;
+        
+        if (loading) return null;
+
+        // whole organism, no organ
+        if (!orgMeta[organism]?.organs) {
+            return (
+                <img 
+                    src={imagePath} 
+                    alt={organism} 
+                    // style={{width: "8%", height: "auto", paddingRight: "8%"}}
+                    width={450}
+                    height={450}
+                />
+            );
+        }
     
         const areas = Object.keys(orgMeta[organism].organs).map(organ => {
             const coords = orgMeta[organism].organs[organ].coords.split(',').map(Number);
