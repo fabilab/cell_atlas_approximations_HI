@@ -1,7 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-const CellStatePlot = ({ state }) => {
+const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
   let { centroids, boundaries, onCellStateHover } = state;
 
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
@@ -25,15 +25,25 @@ const CellStatePlot = ({ state }) => {
       mode: 'lines+markers',
       x: boundary.map((point) => point[0]).concat([boundary[0][0]]),
       y: boundary.map((point) => point[1]).concat([boundary[0][1]]),
-      marker: { size: 1 },
-      line: { shape: 'spline', smoothing: 1.3 },
+      marker: { 
+        size: 1
+      },
+      line: { 
+        shape: 'spline', 
+        smoothing: 1.3,
+        color: hoveredGeneColor && hoveredGeneColor[index]
+      },
       fill: 'toself',
-      opacity: 0.5,
+      opacity: 1,
       hoverinfo: 'none',
       ids: Array(boundary.length).fill(cellStateLabels[index]),
     };
   });
 
+  let title = "";
+  if (hoveredGene) {
+    title = `${hoveredGene}`;
+  }
   const layout = {
     showlegend: false,
     height: 450,
@@ -46,13 +56,23 @@ const CellStatePlot = ({ state }) => {
       zeroline: false,
       showticklabels: false,
     },
+    title: {
+      text: title,
+      font: {
+        size: 12,
+      },
+    },
     margin: {
-      t: 10,
+      t: 30,
       b: 10,
       l: 5,
       r: 5,
     },
   };
+
+  let config = {
+    modeBarButtonsToRemove: ['pan2d','select2d','lasso2d','zoom','autoscale'],
+  }
 
   const handleCellStateHover = (event) => {
     const clickedText = event.target.textContent || event.target.id;
@@ -79,6 +99,7 @@ const CellStatePlot = ({ state }) => {
     <Plot 
       data={[centroidTrace, ...boundaryTraces]} 
       layout={layout} 
+      config={config}
       onInitialized={(figure, graphDiv) => loadEventListeners()}
     />
   );
