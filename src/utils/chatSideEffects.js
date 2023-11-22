@@ -24,7 +24,6 @@ const updatePlotIntents = [
 
 const mainIntentNotRequiresApi = [
   "download",
-  "explore",
   "plot"
 ];
 
@@ -48,7 +47,6 @@ export const updateChat = async (response, plotState) => {
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
 
-  // Intents that do not require API calls
   if (intent === "None") {
     return {
       hasData: false,
@@ -64,7 +62,6 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
-  // Extract endpoint and parameters from the response
   ({ endpoint, params } = buildAPIParams(intent, entities));
 
   // If the intent does not require an API, just build the answer
@@ -81,13 +78,6 @@ export const updateChat = async (response, plotState) => {
         return {
           message: answer,
         }
-      case "explore":
-        answer = buildAnswer(intent, { organism: params.organism });
-        return {
-          hasData: true,
-          params: params,
-          message: answer,
-        };
       case "plot":
         answer = buildAnswer(intent);
         return {
@@ -123,6 +113,10 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === 'markers' || mainIntent === 'similar_features') {
       extraEndpointsToCall.push('dotplot');
     } 
+
+    if (mainIntent === 'explore') {
+      endpoint = 'organs';
+    }
 
     if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'neighborhood')) {
         // FIXME: figure out measurement type from plot state (needs some implementing)
@@ -219,7 +213,6 @@ export const updateChat = async (response, plotState) => {
     }
     
   } catch ({ status, message, error }) {
-      // invalid gene, we can auto remove it and re-call api
       let errorValue = error.invalid_value;
       let errorParam = error['invalid_parameter'];
       let mParam = error['missing_parameter'];
@@ -245,6 +238,7 @@ export const updateChat = async (response, plotState) => {
             break;
         }
       } else if (error.type === 'invalid_parameter') {
+        // invalid gene, we can auto remove it and re-call api
         if (errorParam === 'features') {
           params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
         

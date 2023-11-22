@@ -7,7 +7,7 @@ import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ state }) => {
-    let { organism } = state;
+    let { organism, organs } = state;
 
     const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
@@ -24,40 +24,33 @@ const OrganismProfile = ({ state }) => {
     let params = {};
 
     const fetchOrganData = async () => {
-        try {
-            const organData = await atlasapprox.organs({organism: organism});
-            if (organData && organData.organs) {
-                const numOrgans = organData.organs.length;
-                let organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
-                if (numOrgans < 2) {
-                    try {
-                        params = {
-                            organism: organism,
-                            organ: null,
-                            measurement_type: "gene_expression"
-                        }
-                        let apiResponse = await atlasapprox.celltypexorgan(params);
-                        setApiCellOrgan(apiResponse);
-                        setClickedOrgan(apiResponse.organs[0]);
-                    } catch (error) {
-                        console.error("Error fetching cell types:", error);
-                    }
-                } else {
-                    const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
-                    if (intrinsicDimensions) {
-                        const renderedSize = 480;
-                        setScalingFactors({
-                            width: renderedSize / intrinsicDimensions.width,
-                            height: renderedSize / intrinsicDimensions.height,
-                        });
-                    }
+        let numOrgans = organs.length;
+        let organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
+        if (numOrgans < 2) {
+            try {
+                params = {
+                    organism: organism,
+                    organ: null,
+                    measurement_type: "gene_expression"
                 }
-                setImagePath(organismImagePath);
+                let apiResponse = await atlasapprox.celltypexorgan(params);
+                setApiCellOrgan(apiResponse);
+                setClickedOrgan(apiResponse.organs[0]);
+            } catch (error) {
+                console.error("Error fetching cell types:", error);
             }
-        } catch (error) {
-            console.error('Error fetching organ data:', error);
+        } else {
+            const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
+            if (intrinsicDimensions) {
+                const renderedSize = 480;
+                setScalingFactors({
+                    width: renderedSize / intrinsicDimensions.width,
+                    height: renderedSize / intrinsicDimensions.height,
+                });
+            }
         }
-    };
+        setImagePath(organismImagePath);
+    }
 
     useEffect(() => {
         if (organism) {
@@ -121,8 +114,8 @@ const OrganismProfile = ({ state }) => {
                     src={imagePath} 
                     alt={organism} 
                     // style={{width: "8%", height: "auto", paddingRight: "8%"}}
-                    width={450}
-                    height={450}
+                    width={350}
+                    height={350}
                 />
             );
         }
