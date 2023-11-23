@@ -60,7 +60,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       let nlp = new AtlasApproxNlp(chatContext || {});
       await nlp.initialise();
       let response = await nlp.ask(text);
-      console.log(response);
       setChatContext(nlp.context);
 
       try {

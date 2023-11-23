@@ -45,7 +45,6 @@ const toggleLog = (context) => {
 
 const updateMarkers = (context) => {
     let features = context.markers.join(",");
-    console.log(features);
     return updateFractions({ ...context, features });
 
 };
@@ -125,7 +124,6 @@ const updateFractions = (context) => {
     }
     
     if (context.response.data) {
-        console.log(context);
       yAxis = context.response.data.features; 
       unit = context.response.data.unit;
       measurement_type = context.response.data.measurement_type;
