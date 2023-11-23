@@ -66,6 +66,9 @@ export const updateChat = async (response, plotState) => {
 
   // Extract endpoint and parameters from the response
   ({ endpoint, params } = buildAPIParams(intent, entities));
+  console.log(params.celltype);
+  console.log(intent);
+  console.log(entities);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -121,6 +124,7 @@ export const updateChat = async (response, plotState) => {
 
     // for intents that without actual data, we need to make extra api calls
     if (mainIntent === 'markers' || mainIntent === 'similar_features') {
+      console.log(params);
       extraEndpointsToCall.push('dotplot');
     } 
 
@@ -212,6 +216,7 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'similar_features' || mainIntent === 'markers') {
         params.features = [...apiData[endpoint]];
         endpoint === 'similar_features' && params.features.push(params.feature);
+
         delete params['celltype']
       }
       let extraApiData = await atlasapprox[e](params);
@@ -219,6 +224,7 @@ export const updateChat = async (response, plotState) => {
     }
     
   } catch ({ status, message, error }) {
+    console.log("error");
       // invalid gene, we can auto remove it and re-call api
       let errorValue = error.invalid_value;
       let errorParam = error['invalid_parameter'];
@@ -232,6 +238,7 @@ export const updateChat = async (response, plotState) => {
             answer += "What organ would you like to look at?";
             break;
           case 'features':
+            console.log("5...");
             answer += "Please list the features (e.g. genes) you would like to look into.";
             break;
           case 'celltype':
@@ -245,15 +252,35 @@ export const updateChat = async (response, plotState) => {
             break;
         }
       } else if (error.type === 'invalid_parameter') {
+        console.log(Object.keys(params));
+        console.log("1...");
         if (errorParam === 'features') {
-          params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+          if (typeof params.features === 'string') {
+            params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+          } else {
+            // example case: markers of myopeptidocyte in s_lacustris whole
+            // console.log(error)
+            // remove marjker genes that contain a sapce
+            params.features = params.features.filter(feature => !feature.includes(' '));
+
+            //  re call the extra endpoint which is dotplot
+            endpoint='dotplot'
+            console.log(params);
+          }
         
           if (params.features.length !== 0) {
+            console.log(params);
+            console.log("3...");
             apiData = await atlasapprox[endpoint](params);
+            if (mainIntent === 'markers') {
+              apiData['markers'] = params.features;
+              apiData['celltype'] = entities.filter(e => e.entity==='celltype')[0].sourceText;
+            }
             answer = `Invalid features detected: "${errorValue}". These have been automatically excluded<br><br>`;
             answer += buildAnswer(intent, apiData);
             answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
           } else {
+            console.log("4...");
             answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;
           }
         } 
