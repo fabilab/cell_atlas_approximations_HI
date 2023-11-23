@@ -1,9 +1,13 @@
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
+    
+    let organism = context.organism;
+    let organs = context.response.data.organs;
     return {
         plotType: "organismProfile",
-        organism: context.organism,
+        organism: organism,
+        organs: organs,
     };
 };
 
