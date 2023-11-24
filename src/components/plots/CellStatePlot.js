@@ -1,10 +1,19 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import convert from 'color-convert';
+
 
 const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
   let { centroids, boundaries, onCellStateHover } = state;
+  console.log(boundaries.length);
 
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
+  const boundaryColors = boundaries.map((_, index) => {
+    // Use hoveredGeneColor if available, otherwise use HUSL color (from GTP);
+    return hoveredGeneColor && hoveredGeneColor[index]
+      ? hoveredGeneColor[index]
+      : `rgb(${convert.hsl.rgb([(360 / boundaries.length) * index % 360, 50, 60])})`;
+  });
 
   const centroidTrace = {
     type: 'scatter',
@@ -31,7 +40,7 @@ const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
       line: { 
         shape: 'spline', 
         smoothing: 1.3,
-        color: hoveredGeneColor && hoveredGeneColor[index]
+        color: boundaryColors[index],
       },
       fill: 'toself',
       opacity: 1,
