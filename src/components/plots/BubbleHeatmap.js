@@ -7,11 +7,15 @@ import { useState } from 'react';
 const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
-  const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
-  const yTickTexts = yaxis.map((gene) => {
-    const link = geneCardLink(gene);
-    return `<a href="${link}" target="_blank">${gene}</a>`;
-  });
+  
+  let yTickTexts;
+  if (organism === 'h_sapiens') {
+    let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
+    yTickTexts = yaxis.map((gene) => {
+      let link = geneCardLink(gene);
+      return `<a href="${link}" target="_blank">${gene}</a>`;
+    });
+  }
 
   const yTickVals = yaxis.map((_, index) => index);
 
