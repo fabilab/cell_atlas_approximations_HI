@@ -106,7 +106,7 @@ const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
 
   return (
     <Plot 
-      data={[centroidTrace, ...boundaryTraces]} 
+      data={[...boundaryTraces,centroidTrace]} 
       layout={layout} 
       config={config}
       onInitialized={(figure, graphDiv) => loadEventListeners()}
