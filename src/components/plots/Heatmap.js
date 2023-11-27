@@ -7,18 +7,20 @@ const Heatmap = ({ state }) => {
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
-
-  const geneCardLink = (gene) =>
-    `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
-  
-  useEffect(() => {
-    let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
-    let values = average;
-    const yTickTexts = yaxis.map((gene) => {
-      const link = geneCardLink(gene);
+  let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+  let values = average;
+  let yTickTexts;
+  if (organism === 'h_sapiens') {
+    let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
+    yTickTexts = yaxis.map((gene) => {
+      let link = geneCardLink(gene);
       return `<a href="${link}" target="_blank">${gene}</a>`;
     });
-    const yTickVals = yaxis.map((_, index) => index);
+  }
+  const yTickVals = yaxis.map((_, index) => index);
+
+  
+  useEffect(() => {
   
     // Apply log transform to data is requested by user
     if (hasLog) {
