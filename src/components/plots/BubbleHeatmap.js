@@ -2,11 +2,11 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 import {selectAll} from "d3";
-import { useState } from 'react';
 
 const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
+  console.log(plotType);
   const geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
   const yTickTexts = yaxis.map((gene) => {
     const link = geneCardLink(gene);
@@ -51,11 +51,10 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
   for (let i = 0; i < yaxis.length; i++) {
     all_x = all_x.concat(xaxis);
     all_y = all_y.concat(Array(xaxis.length).fill(yaxis[i]));
-    all_color = all_color.concat(average[i]);
-    all_size = all_size.concat(fractions[i].map((x) => x.toPrecision(3) * 100));
-
+    all_color = all_color.concat(average[i].map(value => Number(value.toFixed(3))));
+    all_size = all_size.concat(fractions[i].map((x) => (x * 100).toFixed(3)));
     const text = xaxis.map((celltype, index) => {
-      return `gene: ${yaxis[i]}<br>${yHover}: ${celltype}<br>expression: ${average[i][index].toPrecision(3)}<br>fraction: ${fractions[i][index].toPrecision(3) * 100}%`;
+      return `gene: ${yaxis[i]}<br>${yHover}: ${celltype}<br>expression: ${average[i][index].toPrecision(3)}<br>fraction: ${(fractions[i][index] * 100).toFixed(3)}%`;
     });
 
     all_hovertext = all_hovertext.concat(text);
@@ -142,14 +141,64 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
     'transform': 'matrix(1 0 0 -1 0 850)',
   };
 
-  let plotName = `dotplot(${organism}-${organ})`;
+  let csvIcon = {
+    'width': 857.1,
+    'height': 1000,
+        'path': 'm214-7h429v214h-429v-214z m500 0h72v500q0 8-6 21t-11 20l-157 156q-5 6-19 12t-22 5v-232q0-22-15-38t-38-16h-322q-22 0-37 16t-16 38v232h-72v-714h72v232q0 22 16 38t37 16h465q22 0 38-16t15-38v-232z m-214 518v178q0 8-5 13t-13 5h-107q-7 0-13-5t-5-13v-178q0-8 5-13t13-5h107q7 0 13 5t5 13z m357-18v-518q0-22-15-38t-38-16h-750q-23 0-38 16t-16 38v750q0 22 16 38t38 16h517q23 0 50-12t42-26l156-157q16-15 27-42t11-49z',
+    'transform': 'matrix(1 0 0 -1 0 850)'
+  };
+
+
+// Define CSV file structure based on plotType
+let plotName = '';
+let csvRowTitle = '';
+switch (plotType) {
+  case 'fractionDetected':
+    csvRowTitle = `Cell types,Gene symbols,Expression(${unit}),Fraction(%)`;
+    plotName = `dotplot_${organism}_${organ}`;
+    break;
+  case 'fractionDetectedAcrossOrgans':
+    csvRowTitle = `Organs,Gene symbols,Expression(${unit}),Fraction(%)`;
+    plotName = `dotplot_${organism}_${celltype}`;
+    break;
+  case 'neighborhood':
+    csvRowTitle = `Cell states,Gene symbols,Expression(${unit}),Fraction(%)`;
+    plotName = `dotplot_${organism}_${organ}`;
+    break;
+  default:
+    break;
+}
+
   let config = {
-    modeBarButtonsToAdd: [
-      {
+    modeBarButtons: [
+      ['toImage'], 
+      [{
         name: 'Download plot as SVG',
         icon: cameraRetro,
         click: () => downloadSVG(plotName),
-      },
+      }],
+      [{
+        name: 'Download data as CSV',
+        icon:  csvIcon,
+        click: function(gd) {
+          const csvContent = [csvRowTitle];
+          for (let i = 0; i < all_x.length; i++) {
+            const rowData = [all_x[i], all_y[i], all_color[i], all_size[i]];
+            const csvRow = rowData.map(String).join(',');
+            csvContent.push(csvRow);
+          }
+          const csvString = csvContent.join('\n');
+          const blob = new Blob([csvString], { type: 'text/plain' });
+          const a = document.createElement('a');
+          const objectURL = URL.createObjectURL(blob);
+          a.href = objectURL;
+          a.download = `${plotName}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          URL.revokeObjectURL(objectURL);
+          document.body.removeChild(a);
+        },
+      }],
     ],
     responsive: true,
     scrollZoom: false,
@@ -159,7 +208,6 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
   if (setHoveredGeneColor && setHoveredGene) {
     const normalizeArray = (matrix) => {
       const flatten = matrix.flat();
-      const minValue = Math.min(...flatten);
       const maxValue = Math.max(...flatten);
     
       return matrix.map(row =>
