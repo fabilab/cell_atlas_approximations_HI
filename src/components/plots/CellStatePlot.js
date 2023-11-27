@@ -1,18 +1,17 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import convert from 'color-convert';
+import chroma from 'chroma-js';
 
 
 const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
   let { centroids, boundaries, onCellStateHover } = state;
-  console.log(boundaries.length);
 
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
   const boundaryColors = boundaries.map((_, index) => {
-    // Use hoveredGeneColor if available, otherwise use HUSL color (from GTP);
+    // https://gka.github.io/chroma.js/ (dynamically generate colors based on boundaries length)
     return hoveredGeneColor && hoveredGeneColor[index]
       ? hoveredGeneColor[index]
-      : `rgb(${convert.hsl.rgb([(360 / boundaries.length) * index % 360, 50, 60])})`;
+      : chroma.scale('Set3').mode('lch').colors(boundaries.length)[index];
   });
 
   const centroidTrace = {
