@@ -206,6 +206,7 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'similar_features' || mainIntent === 'markers') {
         params.features = [...apiData[endpoint]];
         endpoint === 'similar_features' && params.features.push(params.feature);
+
         delete params['celltype']
       }
       let extraApiData = await atlasapprox[e](params);
@@ -240,10 +241,22 @@ export const updateChat = async (response, plotState) => {
       } else if (error.type === 'invalid_parameter') {
         // invalid gene, we can auto remove it and re-call api
         if (errorParam === 'features') {
-          params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+          if (typeof params.features === 'string') {
+            params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+          } else {
+            // example case: markers of myopeptidocyte in s_lacustris whole
+            // remove marker genes that contain a space
+            params.features = params.features.filter(feature => !feature.includes(' '));
+            //  re call the extra endpoint which is dotplot
+            endpoint='dotplot'
+          }
         
           if (params.features.length !== 0) {
             apiData = await atlasapprox[endpoint](params);
+            if (mainIntent === 'markers') {
+              apiData['markers'] = params.features;
+              apiData['celltype'] = entities.filter(e => e.entity==='celltype')[0].sourceText;
+            }
             answer = `Invalid features detected: "${errorValue}". These have been automatically excluded<br><br>`;
             answer += buildAnswer(intent, apiData);
             answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
