@@ -150,7 +150,7 @@ const Heatmap = ({ state }) => {
           name: 'Download data as CSV',
           icon:  csvIcon,
           click: function() {
-            let text = xaxis.join(',') + '\n';
+            let text = "," + xaxis.join(',') + '\n';
             for (let i = 0; i < yaxis.length; i++) {
               text += yaxis[i] + ',' + values[i].join(',') + '\n';
             }
