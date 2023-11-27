@@ -7,7 +7,7 @@ const Heatmap = ({ state }) => {
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
-  let { xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
+  let { plotType, xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
   let values = average;
   let yTickTexts;
   if (organism === 'h_sapiens') {
@@ -27,6 +27,8 @@ const Heatmap = ({ state }) => {
       values = values.map(subArray => subArray.map(value => Math.log(value)));
       unit = "log( " + unit + " )";
     } 
+
+    values = values.map(subArray => subArray.map(value => value.toPrecision(3)));
   
     let longestXlabel = 0, longestYlabel = 0;
     for (let i = 0; i < xaxis.length; i++) {
@@ -125,35 +127,45 @@ const Heatmap = ({ state }) => {
   
     };
       
-  
-    let plotName = `heatmap(${organism}-${organ})`;
+    let plotName = '';
+    switch (plotType) {
+      case 'average':
+        plotName = `heatmap_${organism}_${organ}`;
+        break;
+      case 'averageAcrossOrgans':
+        plotName = `heatmap_${organism}_${celltype}`;
+        break;
+      default:
+        break;
+    }
     let config = {
-      modeBarButtons: [['toImage'], [
-        {
+      modeBarButtons: [
+        ['toImage'], 
+        [{
           name: 'Download plot as SVG',
           icon: cameraRetro,
           click: () => downloadSVG(plotName),
-        },
-      {
-      name: 'Download data as CSV',
-      icon:  csvIcon,
-      click: function(gd) {
-        let text = 'Gene,' + gd.data[0].x.join(',') + '\n';
-        for (let i = 0; i < gd.data[0].y.length; i++) {
-        text += gd.data[0].y[i] + ',' + gd.data[0].z[i].join(',') + '\n';
-        }
-        const blob = new Blob([text], { type: 'text/plain' });
-        const a = document.createElement('a');
-        const objectURL = URL.createObjectURL(blob);
-        a.href = objectURL;
-        a.download = 'expression_data.csv';
-        document.body.appendChild(a);
-        a.click();
-        URL.revokeObjectURL(objectURL);
-        document.body.removeChild(a);
-      },
-      }
-      ]],
+        }],
+        [{
+          name: 'Download data as CSV',
+          icon:  csvIcon,
+          click: function() {
+            let text = "," + xaxis.join(',') + '\n';
+            for (let i = 0; i < yaxis.length; i++) {
+              text += yaxis[i] + ',' + values[i].join(',') + '\n';
+            }
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            const objectURL = URL.createObjectURL(blob);
+            a.href = objectURL;
+            a.download = `${plotName}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(objectURL);
+            document.body.removeChild(a);
+          },
+        }],
+      ],
       responsive: true,
       scrollZoom: false,
     };
