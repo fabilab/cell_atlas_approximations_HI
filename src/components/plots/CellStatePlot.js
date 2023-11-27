@@ -1,10 +1,18 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import chroma from 'chroma-js';
+
 
 const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
   let { centroids, boundaries, onCellStateHover } = state;
 
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
+  const boundaryColors = boundaries.map((_, index) => {
+    // https://gka.github.io/chroma.js/ (dynamically generate colors based on boundaries length)
+    return hoveredGeneColor && hoveredGeneColor[index]
+      ? hoveredGeneColor[index]
+      : chroma.scale('Set3').mode('lch').colors(boundaries.length)[index];
+  });
 
   const centroidTrace = {
     type: 'scatter',
@@ -31,7 +39,7 @@ const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
       line: { 
         shape: 'spline', 
         smoothing: 1.3,
-        color: hoveredGeneColor && hoveredGeneColor[index]
+        color: boundaryColors[index],
       },
       fill: 'toself',
       opacity: 1,
@@ -97,7 +105,7 @@ const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
 
   return (
     <Plot 
-      data={[centroidTrace, ...boundaryTraces]} 
+      data={[...boundaryTraces,centroidTrace]} 
       layout={layout} 
       config={config}
       onInitialized={(figure, graphDiv) => loadEventListeners()}
