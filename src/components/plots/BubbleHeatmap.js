@@ -1,6 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
+import orgMeta from '../../utils/organismMetadata.js';
+import { Popover, Button } from 'antd';
 import {selectAll} from "d3";
 
 const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
@@ -16,6 +18,8 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
     });
   }
 
+  let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
+  let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   const yTickVals = yaxis.map((_, index) => index);
 
   let all_x = [];
@@ -253,31 +257,49 @@ switch (plotType) {
     }
 
     return (
-      <Plot
-        data={[data]}
-        layout={layout}
-        config={config}
-        onAfterPlot={() => {
-          document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
-          document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
-          selectAll(".yaxislayer-above")
-            .selectAll('text')
-            .on("mouseenter", (event) => geneHover(event));
-        }}
-        onInitialized={(figure, graphDiv)=>{
-          selectAll(".yaxislayer-above")
-            .selectAll('text')
-            .on("mouseenter", (event) => geneHover(event));
-        }}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>
+          <Plot
+            data={[data]}
+            layout={layout}
+            config={config}
+            onAfterPlot={() => {
+              document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
+              document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
+              selectAll(".yaxislayer-above")
+                .selectAll('text')
+                .on("mouseenter", (event) => geneHover(event));
+            }}
+            onInitialized={(figure, graphDiv)=>{
+              selectAll(".yaxislayer-above")
+                .selectAll('text')
+                .on("mouseenter", (event) => geneHover(event));
+            }}
+          />
+        </div>
+        <div>
+          <Popover content={dataSource} placement='right'>
+            <Button href={paperHyperlink} target="_blank">Data source</Button>
+          </Popover>
+        </div>
+      </div>
     );
   } else {
     return (
-      <Plot
-        data={[data]}
-        layout={layout}
-        config={config}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>
+          <Plot
+            data={[data]}
+            layout={layout}
+            config={config}
+          />
+        </div>
+        <div>
+          <Popover content={dataSource} placement='right'>
+            <Button href={paperHyperlink} target="_blank">Data source</Button>
+          </Popover>
+        </div>
+      </div>
     );
   }
 };

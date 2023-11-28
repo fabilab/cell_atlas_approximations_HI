@@ -1,10 +1,14 @@
 import React from 'react';
 import { Table } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
+import orgMeta from '../../utils/organismMetadata.js';
+import { Popover, Button } from 'antd';
 
 // FIXME: why is this function the only one that takes the entire state in like this??
 const CellxOrganTable = ({ state }) => {
   
+  let dataSource = orgMeta[state.organism]?.dataSource || "Data source not available";
+  let paperHyperlink = orgMeta[state.organism]?.paperHyperlink || "Hyperlink unavailable";
     // Filter cell types detected in multiple organs
     const multiOrgansData = state.celltypes.map((celltype, index) => {
       const row = { key: index, celltype };
@@ -76,14 +80,22 @@ const CellxOrganTable = ({ state }) => {
     ];
 
     return (
-      <section style={{ margin: '2vh', justifyContent: 'center', alignItems: 'center'}}>
-        <Table
-          columns={columns}
-          dataSource={multiOrgansData}
-          pagination={false}
-          className="sticky-header-table"
-        />
-      </section>
+      <div style={{ display: "flex", flexDirection: "column", margin: "1vh" }}>
+        <div>
+          <Popover content={dataSource} placement='right'>
+            <Button href={paperHyperlink} target="_blank">Data source</Button>
+          </Popover>
+        </div>
+        <br></br>
+        <div>
+          <Table
+            columns={columns}
+            dataSource={multiOrgansData}
+            pagination={false}
+            className="sticky-header-table"
+          />
+        </div>
+      </div>
     );
 };
 
