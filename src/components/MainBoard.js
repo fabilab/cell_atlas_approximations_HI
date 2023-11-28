@@ -5,7 +5,6 @@ import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import { triggersPlotUpdate } from '../utils/chatSideEffects';
 import { updatePlotState } from '../utils/updatePlotState';
-import { Modal, Button } from 'antd';
 
 const MainBoard = () => {
   const location = useLocation();
@@ -14,7 +13,6 @@ const MainBoard = () => {
   const [chatHistory, setChatHistory] = useState(null);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState({"hasLog": false});
-  const [confirmationModal, setConfirmationModal] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -29,44 +27,28 @@ const MainBoard = () => {
   }, []);
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      setConfirmationModal(true);
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload); // page refresh
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handlePageBack = (event) => {
-      event.preventDefault();
-      console.log("clicking button back..");
-      setConfirmationModal(true);
-    };
-
-    window.addEventListener('popstate', handlePageBack); // back button
-
-    return () => {
-      window.removeEventListener('popstate', handlePageBack);
-    };
-  }, []);
-
-  useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
     } 
   }, [currentResponse]);
 
-  const handleLeavePage = (decision) => {
-    setConfirmationModal(false);
-    if (decision) {
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Perform any cleanup or state reset
+      setChatHistory(null);
+      setCurrentResponse(null);
+      setPlotState({ "hasLog": false });
+
+      // Redirect to '/' when leaving
       navigate('/');
-    }
-  };
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [navigate]);
 
   return (
     <ChatProvider>
@@ -83,14 +65,6 @@ const MainBoard = () => {
             {plotState && <PlotBox state={plotState} />}
           </div>
       </div>
-      <Modal
-        title="Leave Page Confirmation"
-        open={confirmationModal}
-        onOk={() => handleLeavePage(true)}
-        onCancel={() => handleLeavePage(false)}
-      >
-        <p>If you leave the page, everything will be lost. Are you sure?</p>
-      </Modal>
     </ChatProvider>
   );
 };
