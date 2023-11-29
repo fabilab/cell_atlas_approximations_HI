@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Typography, Row, Col, FloatButton, Form, Popconfirm,  } from 'antd';
-import { RobotOutlined, SendOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Input, Typography, Row, Col, FloatButton, Form, Popconfirm, message  } from 'antd';
+import { RobotOutlined, SmileOutlined, SendOutlined, MessageOutlined } from '@ant-design/icons';
 import search from '../asset/icon.png';
 import emailjs from '@emailjs/browser';
 const { Title } = Typography;
@@ -14,6 +14,7 @@ const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
   const [feedbackForm, setFeedbackForm] = useState(false);
+  const [thanksMessage, setThanksMessage] = useState('');
   const navigate = useNavigate();
   const formRef = useRef();
 
@@ -37,11 +38,16 @@ const Landing = () => {
       '2njQiG60IwONYzruJ'
     )
     .then((response) => {
-      console.log('Email sent successfully:', response);
+      setThanksMessage('Thank you for your feedback!');
     })
     .catch((error) => {
-      console.error('Email sending failed:', error);
+      setThanksMessage('Error submitting feedback. Please try again.');
     });
+
+    // Clear thanksMessage after a few seconds
+    setTimeout(() => {
+      setThanksMessage('');
+    }, 4000); 
   };
 
   const sampleQueries = [
@@ -167,7 +173,7 @@ const Landing = () => {
         style={{ marginRight: '40px' }}
       >
         <FloatButton
-        icon={<QuestionCircleOutlined />}
+        icon={<MessageOutlined />}
         type="default"
         onClick={showFeedbackForm}
         style={{
@@ -177,6 +183,23 @@ const Landing = () => {
         }}
         />
       </Popconfirm>
+      {thanksMessage && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 100,
+            right: 40,
+            background: 'white',
+            color: 'black',
+            padding: '10px',
+            borderRadius: '10px',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.35)',
+          }}
+        >
+          <SmileOutlined style={{ marginRight: '8px', color: '#52c41a' }} />
+          {thanksMessage}
+        </div>
+      )}
     </div>
   );
 };
