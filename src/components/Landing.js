@@ -26,23 +26,22 @@ const Landing = () => {
   };
 
   const onFinishFeedbackForm = (values) => {
-    const { feedback } = values;
-    console.log('Received values:', feedback);
     formRef.current.resetFields();
     setFeedbackForm(false);
-    // // Send feedback via email
-    // emailjs.send(
-    //   'YOUR_SERVICE_ID',
-    //   'YOUR_TEMPLATE_ID',
-    //   { feedback: values.feedback },
-    //   'YOUR_USER_ID'
-    // )
-    // .then((response) => {
-    //   console.log('Email sent successfully:', response);
-    // })
-    // .catch((error) => {
-    //   console.error('Email sending failed:', error);
-    // });
+    
+    // Send feedback via email
+    emailjs.send(
+      'atlasapprox_support',
+      'template_atlasapprox',
+      { message: values.feedback },
+      '2njQiG60IwONYzruJ'
+    )
+    .then((response) => {
+      console.log('Email sent successfully:', response);
+    })
+    .catch((error) => {
+      console.error('Email sending failed:', error);
+    });
   };
 
   const sampleQueries = [
