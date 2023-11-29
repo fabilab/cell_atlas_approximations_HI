@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Typography, Row, Col, FloatButton, Form, Popconfirm,  } from 'antd';
 import { RobotOutlined, SendOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import search from '../asset/icon.png';
+import emailjs from '@emailjs/browser';
 const { Title } = Typography;
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -12,8 +13,9 @@ const { TextArea } = Input;
 const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
-  const navigate = useNavigate();
   const [feedbackForm, setFeedbackForm] = useState(false);
+  const navigate = useNavigate();
+  const formRef = useRef();
 
   const sendFirstSearch = (query) => {
    navigate("/mainboard", { state: query });
@@ -23,14 +25,24 @@ const Landing = () => {
     setFeedbackForm(true);
   };
 
-  const handleFeedbackModalCancel = () => {
-    setFeedbackForm(false);
-  };
-
   const onFinishFeedbackForm = (values) => {
-    // Handle form submission (send feedback, etc.)
-    console.log('Received values:', values);
+    const { feedback } = values;
+    console.log('Received values:', feedback);
+    formRef.current.resetFields();
     setFeedbackForm(false);
+    // // Send feedback via email
+    // emailjs.send(
+    //   'YOUR_SERVICE_ID',
+    //   'YOUR_TEMPLATE_ID',
+    //   { feedback: values.feedback },
+    //   'YOUR_USER_ID'
+    // )
+    // .then((response) => {
+    //   console.log('Email sent successfully:', response);
+    // })
+    // .catch((error) => {
+    //   console.error('Email sending failed:', error);
+    // });
   };
 
   const sampleQueries = [
@@ -132,9 +144,9 @@ const Landing = () => {
       <Popconfirm
         title={
           <div>
-            <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Tell us more about your experience</div>
-            <Form onFinish={onFinishFeedbackForm}>
-              <Form.Item name="feedback" rules={[{ required: true, message: 'Please provide feedback' }]}>
+            <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Hi there, tell us about your experience</div>
+            <Form ref={formRef}>
+              <Form.Item name="feedback" rules={[{ required: false }]}>
                 <TextArea placeholder="Type your feedback here..." rows={4} />
               </Form.Item>
             </Form>
@@ -142,8 +154,14 @@ const Landing = () => {
         }
         icon={null} 
         open={feedbackForm}
-        onConfirm={() => setFeedbackForm(false)}
-        onCancel={() => setFeedbackForm(false)}
+        onConfirm={() => {
+          const values = formRef.current.getFieldsValue(); // Get form values
+          onFinishFeedbackForm(values);
+        }}
+        onCancel={() => {
+          formRef.current.resetFields(); // Reset form fields
+          setFeedbackForm(false);
+        }}
         okText="Submit"
         cancelText="Cancel"
         placement="topLeft"
