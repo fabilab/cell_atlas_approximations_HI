@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Typography, Row, Col } from 'antd';
-import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import { Input, Typography, Row, Col, FloatButton, Form, Popconfirm,  } from 'antd';
+import { RobotOutlined, SendOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import search from '../asset/icon.png';
 const { Title } = Typography;
 const { Text } = Typography;
+const { TextArea } = Input;
+
 
 
 const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
   const navigate = useNavigate();
+  const [feedbackForm, setFeedbackForm] = useState(false);
+
   const sendFirstSearch = (query) => {
    navigate("/mainboard", { state: query });
   }
+
+  const showFeedbackForm = () => {
+    setFeedbackForm(true);
+  };
+
+  const handleFeedbackModalCancel = () => {
+    setFeedbackForm(false);
+  };
+
+  const onFinishFeedbackForm = (values) => {
+    // Handle form submission (send feedback, etc.)
+    console.log('Received values:', values);
+    setFeedbackForm(false);
+  };
 
   const sampleQueries = [
     'What species are available?',
@@ -110,6 +128,38 @@ const Landing = () => {
         ))}
         </Row>
       </div>
+      {/* Feedback */}
+      <Popconfirm
+        title={
+          <div>
+            <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Tell us more about your experience</div>
+            <Form onFinish={onFinishFeedbackForm}>
+              <Form.Item name="feedback" rules={[{ required: true, message: 'Please provide feedback' }]}>
+                <TextArea placeholder="Type your feedback here..." rows={4} />
+              </Form.Item>
+            </Form>
+          </div>
+        }
+        icon={null} 
+        open={feedbackForm}
+        onConfirm={() => setFeedbackForm(false)}
+        onCancel={() => setFeedbackForm(false)}
+        okText="Submit"
+        cancelText="Cancel"
+        placement="topLeft"
+        style={{ marginRight: '40px' }}
+      >
+        <FloatButton
+        icon={<QuestionCircleOutlined />}
+        type="default"
+        onClick={showFeedbackForm}
+        style={{
+          right: 40,
+          position: 'fixed',
+          bottom: 30,
+        }}
+        />
+      </Popconfirm>
     </div>
   );
 };
