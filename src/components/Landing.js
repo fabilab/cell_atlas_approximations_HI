@@ -1,54 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Typography, Row, Col, FloatButton, Form, Popconfirm, message  } from 'antd';
-import { RobotOutlined, SmileOutlined, SendOutlined, MessageOutlined } from '@ant-design/icons';
+import { Input, Typography, Row, Col } from 'antd';
+import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import FeedbackForm from './FeedbackForm';
 import search from '../asset/icon.png';
-import emailjs from '@emailjs/browser';
 const { Title } = Typography;
 const { Text } = Typography;
-const { TextArea } = Input;
 
 
 
 const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
-  const [feedbackForm, setFeedbackForm] = useState(false);
-  const [thanksMessage, setThanksMessage] = useState('');
   const navigate = useNavigate();
-  const formRef = useRef();
 
   const sendFirstSearch = (query) => {
    navigate("/mainboard", { state: query });
   }
-
-  const showFeedbackForm = () => {
-    setFeedbackForm(true);
-  };
-
-  const onFinishFeedbackForm = (values) => {
-    formRef.current.resetFields();
-    setFeedbackForm(false);
-    
-    // Send feedback via email
-    emailjs.send(
-      'atlasapprox_support',
-      'template_atlasapprox',
-      { message: values.feedback },
-      '2njQiG60IwONYzruJ'
-    )
-    .then((response) => {
-      setThanksMessage('Thank you for your feedback!');
-    })
-    .catch((error) => {
-      setThanksMessage('Error submitting feedback. Please try again.');
-    });
-
-    // Clear thanksMessage after a few seconds
-    setTimeout(() => {
-      setThanksMessage('');
-    }, 4000); 
-  };
 
   const sampleQueries = [
     'What species are available?',
@@ -145,61 +113,7 @@ const Landing = () => {
         ))}
         </Row>
       </div>
-      {/* Feedback */}
-      <Popconfirm
-        title={
-          <div>
-            <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Hi there, tell us about your experience</div>
-            <Form ref={formRef}>
-              <Form.Item name="feedback" rules={[{ required: false }]}>
-                <TextArea placeholder="Type your feedback here..." rows={4} />
-              </Form.Item>
-            </Form>
-          </div>
-        }
-        icon={null} 
-        open={feedbackForm}
-        onConfirm={() => {
-          const values = formRef.current.getFieldsValue(); // Get form values
-          onFinishFeedbackForm(values);
-        }}
-        onCancel={() => {
-          formRef.current.resetFields(); // Reset form fields
-          setFeedbackForm(false);
-        }}
-        okText="Submit"
-        cancelText="Cancel"
-        placement="topLeft"
-        style={{ marginRight: '40px' }}
-      >
-        <FloatButton
-        icon={<MessageOutlined />}
-        type="default"
-        onClick={showFeedbackForm}
-        style={{
-          right: 40,
-          position: 'fixed',
-          bottom: 30,
-        }}
-        />
-      </Popconfirm>
-      {thanksMessage && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 100,
-            right: 40,
-            background: 'white',
-            color: 'black',
-            padding: '10px',
-            borderRadius: '10px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.35)',
-          }}
-        >
-          <SmileOutlined style={{ marginRight: '8px', color: '#52c41a' }} />
-          {thanksMessage}
-        </div>
-      )}
+      <FeedbackForm/>
     </div>
   );
 };
