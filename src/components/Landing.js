@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import FeedbackForm from './FeedbackForm';
 import search from '../asset/icon.png';
 const { Title } = Typography;
 const { Text } = Typography;
+
 
 
 const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
   const navigate = useNavigate();
+
   const sendFirstSearch = (query) => {
    navigate("/mainboard", { state: query });
   }
@@ -110,6 +113,7 @@ const Landing = () => {
         ))}
         </Row>
       </div>
+      <FeedbackForm/>
     </div>
   );
 };

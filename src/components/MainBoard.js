@@ -5,6 +5,7 @@ import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import { triggersPlotUpdate } from '../utils/chatSideEffects';
 import { updatePlotState } from '../utils/updatePlotState';
+import FeedbackForm from './FeedbackForm';
 
 const MainBoard = () => {
   const location = useLocation();
@@ -45,7 +46,9 @@ const MainBoard = () => {
           <div style={{ flex: 1, overflow: 'auto'}}>
             {plotState && <PlotBox state={plotState} />}
           </div>
+         
       </div>
+      <FeedbackForm/>
     </ChatProvider>
   );
 };
