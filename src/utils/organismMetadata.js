@@ -25,6 +25,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/d_melanogaster.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Drosophila_melanogaster",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.abk2432",
+    intrinsicDimensions: { width: 925, height: 817 },
     organs: {
       "antenna": {
         coords: "344,80,400,160,424,153",
