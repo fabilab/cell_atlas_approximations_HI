@@ -71,6 +71,66 @@ const organismMetadata = {
       "ovary": {
         coords: "484,588,504,588,504,617,483,617",
       },
+      "antenna-label": {
+        coords: "10,145,143,174",
+        shape: "rect",
+      },
+      "oenocyte-label": {
+        coords: "3,284,145,316",
+        shape: "rect",
+      },
+      "leg-label": {
+        coords: "51,348,145,377",
+        shape: "rect",
+      },
+      "haltere-label": {
+        coords: "16,440,143,471",
+        shape: "rect",
+      },
+      "testis-label": {
+        coords: "32,495,144,523",
+        shape: "rect",
+      },
+      "wall-label": {
+        coords: "46,531,144,558",
+        shape: "rect",
+      },
+      "wing-label": {
+        coords: "32,647,136,679",
+        shape: "rect",
+      },
+      "male_reproductive-label": {
+        coords: "22,732,193,794",
+        shape: "rect",
+      },
+      "proboscis-label": {
+        coords: "764,128,914,161",
+        shape: "rect",
+      },
+      "trachea-label": {
+        coords: "763,255,898,285",
+        shape: "rect",
+      },
+      "fat-label": {
+        coords: "763,298,861,328",
+        shape: "rect",
+      },
+      "gut-label": {
+        coords: "762,439,859,469",
+        shape: "rect",
+      },
+      "heart-label": {
+        coords: "761,480,875,512",
+        shape: "rect",
+      },
+      "malpighian-label": {
+        coords: "762,529,922,559",
+        shape: "rect",
+      },
+      "ovary-label": {
+        coords: "762,602,877,633",
+        shape: "rect",
+      },
     },
   },
   "d_rerio": {
