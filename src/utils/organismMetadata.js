@@ -24,7 +24,54 @@ const organismMetadata = {
     about: "Drosophila Melanogaster or fruit fly is a flying insect that inhabits all continents. It is a model organism for genetics and development.",
     imagePath: require("../asset/organisms/d_melanogaster.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Drosophila_melanogaster",
-    paperHyperlink: "https://www.science.org/doi/10.1126/science.abk2432"
+    paperHyperlink: "https://www.science.org/doi/10.1126/science.abk2432",
+    organs: {
+      "antenna": {
+        coords: "344,80,400,160,424,153",
+      },
+      "oenocyte": {
+        coords: "444,276,434,280,430,305,435,327,446,333",
+      },
+      "leg": {
+        coords: "356,375,278,334,259,335,263,367,285,435,301,437,290,406,273,356,305,372,365,416",
+      },
+      "haltere": {
+        coords: "369,421,359,430,337,438,315,440,305,453,307,469,321,473,335,468,349,456,358,447,371,446",
+      },
+      "testis": {
+        coords: "404,510,407,496,397,483,386,481,376,490,375,505,382,512,389,520,400,524",
+      },
+      "wing": {
+        coords: "195,553,185,604,179,653,186,699,206,713,230,716,271,698,299,677,340,634,381,559,376,531,370,504,325,552",
+      },
+      "wall": {
+        coords: "372,448,355,464,326,490,302,521,300,546,317,548,336,526,355,514,370,498",
+      },
+      "male_reproductive": {
+        coords: "420,620,485,619,485,650,421,650",
+      },
+      "proboscis": {
+        coords: "411,121,497,121,497,155,411,155",
+      },
+      "trachea": {
+        coords: "439,247,465,247,469,258,464,265,461,277,459,339,447,338,456,309,445,277,437,263,436,256",
+      },
+      "fat": {
+        coords: "500,297,536,297,536,332,501,332",
+      },
+      "gut": {
+        coords: "436,433,432,446,433,460,435,469,434,481,440,495,447,487,454,486,460,488,466,494,472,483,471,472,473,461,475,447,469,433",
+      },
+      "heart": {
+        coords: "453,487,446,488,441,495,440,503,443,511,454,514,464,510,468,500,464,489",
+      },
+      "malpighian": {
+        coords: "470,509,475,497,481,498,486,511,487,524,487,540,479,542,473,552,465,567,466,544",
+      },
+      "ovary": {
+        coords: "484,588,504,588,504,617,483,617",
+      },
+    },
   },
   "d_rerio": {
     bioName: "Danio rerio",
