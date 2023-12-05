@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.2cf3f95e.css",
-    "main.js": "/static/js/main.8c7bc9d5.js",
+    "main.js": "/static/js/main.0ec2ee20.js",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/geneExpHeatmap.png": "/static/media/geneExpHeatmap.73b6ae92652923832853.png",
     "static/media/organismProfile.png": "/static/media/organismProfile.d2ee8c6637a642b467d1.png",
@@ -16,6 +16,7 @@
     "static/media/across-organs.png": "/static/media/across-organs.9dbf5ac413b45e0b3d95.png",
     "static/media/highest_expressor.png": "/static/media/highest_expressor.2be758ae6d5b9cc4c84a.png",
     "static/media/cellxOrgan.png": "/static/media/cellxOrgan.ebebacdddd75ee7f04d4.png",
+    "static/media/d_melanogaster.jpg": "/static/media/d_melanogaster.4b81dbd203779ce4eb4e.jpg",
     "static/media/illu.png": "/static/media/illu.58368d7476e1b5894523.png",
     "static/media/h_sapiens.jpeg": "/static/media/h_sapiens.554acb2c1938a9978eab.jpeg",
     "static/media/l_minuta.jpeg": "/static/media/l_minuta.c0a8f53eba8b20d0edd7.jpeg",
@@ -49,10 +50,10 @@
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.1bac2991f3dbfa237aec.woff2",
     "index.html": "/index.html",
     "main.2cf3f95e.css.map": "/static/css/main.2cf3f95e.css.map",
-    "main.8c7bc9d5.js.map": "/static/js/main.8c7bc9d5.js.map"
+    "main.0ec2ee20.js.map": "/static/js/main.0ec2ee20.js.map"
   },
   "entrypoints": [
     "static/css/main.2cf3f95e.css",
-    "static/js/main.8c7bc9d5.js"
+    "static/js/main.0ec2ee20.js"
   ]
 }
