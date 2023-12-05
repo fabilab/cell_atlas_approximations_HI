@@ -165,7 +165,7 @@ const buildAnswer = (intent, data = null) => {
       case "feature_sequences":
         switch (sIntent) {
           case "geneExpression":
-            answer = "The sequences of " + data.features + " in " + data.organism + " are shown. Type \"download\" to get a FASTA file of them all.";
+            answer = "The sequences of " + data.features + " in " + data.organism + " are shown.<br><br>Type \"download\" to get a FASTA file of them all.";
             break;
           default:
             answer = "Done";
