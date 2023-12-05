@@ -1,10 +1,13 @@
 import React from 'react';
 import { downloadSVG } from '../../utils/downLoadSvg';
 import Plot from 'react-plotly.js';
+import { Popover, Button } from 'antd';
+import orgMeta from '../../utils/organismMetadata.js';
 
 const BarChart = ({ state }) => {
   let { plotType, celltypesOrgan, targetCelltype, average, organism, features, unit } = state;
-
+  let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
+  let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   let xValue = celltypesOrgan;
   let scaleFactor = 1000000; // data is too small for a bar chart, multiplying by 10^6
 
@@ -132,11 +135,20 @@ const BarChart = ({ state }) => {
   };
 
   return (
-      <Plot
-        data={data}
-        layout={layout}
-        config={config}
-      />
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div>
+        <Plot
+          data={data}
+          layout={layout}
+          config={config}
+        />
+      </div>
+      <div>
+        <Popover content={dataSource} placement='right'>
+          <Button href={paperHyperlink} target="_blank">Data source</Button>
+        </Popover>
+      </div>
+    </div>
   );
 };
 
