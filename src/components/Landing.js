@@ -15,7 +15,9 @@ const Landing = () => {
   const navigate = useNavigate();
 
   const sendFirstSearch = (query) => {
-   navigate("/mainboard", { state: query });
+    console.log('Sending first search:', query);
+    setSearchMessage('');
+    navigate("/mainboard", { state: query });
   }
 
   const sampleQueries = [

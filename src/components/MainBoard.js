@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChatProvider } from './ChatContext'; 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
 import { triggersPlotUpdate } from '../utils/chatSideEffects';
@@ -9,7 +9,8 @@ import FeedbackForm from './FeedbackForm';
 
 const MainBoard = () => {
   const location = useLocation();
-  const firstQuery = location.state;
+  const navigate = useNavigate(); 
+  const [firstQuery, setFirstQuery] = useState(location.state);
   const [chatHistory, setChatHistory] = useState(null);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState({"hasLog": false});
@@ -19,12 +20,35 @@ const MainBoard = () => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  //  The following code was adapted from guidance provided by OpenAI's GPT-4.
+  useEffect(() => {
+    // Set a flag in sessionStorage on component mount
+    if (!sessionStorage.getItem('MainBoardLoaded')) {
+      sessionStorage.setItem('MainBoardLoaded', 'true');
+    } else {
+      navigate('/');
+    }
+
+    // Add a simple beforeunload event listener
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ''; // Setting returnValue is necessary
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      sessionStorage.removeItem('MainBoardLoaded');
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [navigate]);
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {
