@@ -1,13 +1,15 @@
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
-    
     let organism = context.organism;
     let organs = context.response.data.organs;
+    let measurement_type = context.response.data.measurement_type;
+
     return {
         plotType: "organismProfile",
         organism: organism,
         organs: organs,
+        measurement_type: measurement_type,
     };
 };
 
@@ -301,6 +303,7 @@ const plotFunctionDispatcher = {
 
 // Main "public" update plot state function
 export const updatePlotState = (response, plotState, setPlotState) => {
+
   const intent = response.intent;
   const mainIntent = intent.split('.')[0];
   let newPlotState = null;

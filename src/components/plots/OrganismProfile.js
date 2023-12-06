@@ -7,7 +7,7 @@ import OrganCellChart from './OrganCellChart.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ state }) => {
-    let { organism, organs } = state;
+    let { organism, organs, measurement_type } = state;
 
     const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
@@ -31,7 +31,7 @@ const OrganismProfile = ({ state }) => {
                 params = {
                     organism: organism,
                     organ: null,
-                    measurement_type: "gene_expression"
+                    measurement_type: measurement_type
                 }
                 let apiResponse = await atlasapprox.celltypexorgan(params);
                 setApiCellOrgan(apiResponse);
@@ -80,7 +80,7 @@ const OrganismProfile = ({ state }) => {
                 params = {
                     organism: organism,
                     organ: null,
-                    measurement_type: "gene_expression"
+                    measurement_type: measurement_type,
                 }
                 let apiResponse = await atlasapprox.celltypexorgan(params);
                 setApiCellOrgan(apiResponse);
@@ -94,7 +94,12 @@ const OrganismProfile = ({ state }) => {
 
     const handleImageLoad = (imageRef, parentDimensions) => {
         try {
-            const organismAnatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
+            let organismAnatomyImage;
+            if(measurement_type === 'chromatin_accessibility') {
+                organismAnatomyImage = require(`../../asset/anatomy/${organism}_chromatin.jpg`);
+            } else {
+                organismAnatomyImage = require(`../../asset/anatomy/${organism}.jpg`);
+            }
             imageRef.src = organismAnatomyImage;
         } catch (error) {
             console.error("Error updating image:", error);
@@ -120,7 +125,9 @@ const OrganismProfile = ({ state }) => {
             );
         }
     
-        const areas = Object.keys(orgMeta[organism].organs).map(organ => {
+        const areas = Object.keys(orgMeta[organism].organs)
+            .filter(organ => organs.includes(organ.includes('-') ? organ.split('-')[0] : organ))
+            .map(organ => {
             const coords = orgMeta[organism].organs[organ].coords.split(',').map(Number);
             const shape = orgMeta[organism].organs[organ].shape || 'poly';
             

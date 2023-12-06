@@ -114,8 +114,12 @@ export const updateChat = async (response, plotState) => {
       extraEndpointsToCall.push('dotplot');
     } 
 
-    if (mainIntent === 'explore') {
+    if (intent === 'explore.organism.geneExpression') {
       endpoint = 'organs';
+      params['measurement_type'] = "gene_expression"
+    } else if (intent === "explore.organism.chromatinAccessibility") {
+      endpoint = 'organs'
+      params['measurement_type'] = "chromatin_accessibility";
     }
 
     if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'neighborhood')) {
@@ -190,6 +194,7 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
+
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
