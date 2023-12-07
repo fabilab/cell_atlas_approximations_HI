@@ -5,7 +5,7 @@ import {selectAll} from "d3";
 
 
 
-const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
+const OrganCellChart = ({ apiCellOrgan, organName, measurementType }) => {
   const { setLocalMessage } = useChat();
 
   // Find the index of the organ, organ cases are different in species
@@ -70,7 +70,12 @@ const OrganCellChart = ({ apiCellOrgan, organName,  }) => {
 
   const yAxisLabelClick = (event) => {
     const clickedCellType = event.target.textContent;
-    let message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
+    let message;
+    if (measurementType === 'chromatin_accessibility') {
+      message = `Show the 10 top marker peaks for ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`
+    } else {
+      message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
+    }
     setLocalMessage(message);
   };
 
