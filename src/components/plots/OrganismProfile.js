@@ -190,7 +190,13 @@ const OrganismProfile = ({ state }) => {
                         <Text style={{ alignSelf: 'center' }}>* Hover over an organ for cell type information.</Text>
                     </div>
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
-                        {apiCellOrgan && clickedOrgan && <OrganCellChart apiCellOrgan={apiCellOrgan} organName={clickedOrgan} />}
+                        {apiCellOrgan && clickedOrgan && 
+                            <OrganCellChart 
+                                apiCellOrgan={apiCellOrgan} 
+                                organName={clickedOrgan}
+                                measurementType={measurement_type}
+                            />
+                        }
                     </div>
                 </div>
             </div>
