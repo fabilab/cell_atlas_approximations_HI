@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 
 const CellStatePlot = ({ state, hoveredGeneColor, hoveredGene }) => {
-  let { centroids, boundaries, onCellStateHover } = state;
+  let { centroids, boundaries, onCellStateHover, hasLog } = state;
 
   const cellStateLabels = centroids.map((_, index) => `${index + 1}`);
   const boundaryColors = boundaries.map((_, index) => {

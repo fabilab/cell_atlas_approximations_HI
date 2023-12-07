@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downLoadSvg';
 import orgMeta from '../../utils/organismMetadata.js';
 import { Popover, Button } from 'antd';
 import {selectAll} from "d3";
 
-const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
+const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
-  
   let yTickTexts;
   if (organism === 'h_sapiens') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -29,30 +28,41 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
   let all_hovertext = [];
 
   let title = "";
-  let yHover;
+  let featureHover, xHover, zHover;
 
   if (plotType === "neighborhood") {
-    yHover = "cell state";
+    featureHover = "gene";
+    xHover = "cell state";
+    zHover = "expression"
   } else {
     switch (measurement_type) {
       case "chromatin_accessibility":
+        zHover = "accessibility";
+        featureHover = "peaks";
         if (celltype) {
-          yHover = "organ";
+          xHover = "organ";
           title = `<b>Chromatin accessibility in <i>${celltype}</i> across ${organism} organs<b>`
         } else {
-          yHover = "cell type";
+          xHover = "cell type";
           title = `<b>Chromatin accessibility in ${organism} ${organ} by cell type</b>`;
         }
         break;
       default:
+        zHover = "expression";
+        featureHover = "gene";
         if (celltype) {
-          yHover = "organ";
+          xHover = "organ";
           title = `<b>Gene expression in <i>${celltype}</i> across ${organism} organs<b>`
         } else {
-          yHover = "cell type";
+          xHover = "cell type";
           title = `<b>Gene expression in ${organism} ${organ} by cell type</b>`;
         }
     }
+  }
+
+  if (hasLog) {
+    average = average.map((row) => row.map((value) => Math.log10(value)));
+    unit = "log( " + unit + " )";
   }
 
   for (let i = 0; i < yaxis.length; i++) {
@@ -60,8 +70,8 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
     all_y = all_y.concat(Array(xaxis.length).fill(yaxis[i]));
     all_color = all_color.concat(average[i].map(value => Number(value.toFixed(3))));
     all_size = all_size.concat(fractions[i].map((x) => (x * 100).toFixed(3)));
-    const text = xaxis.map((celltype, index) => {
-      return `gene: ${yaxis[i]}<br>${yHover}: ${celltype}<br>expression: ${average[i][index].toPrecision(3)}<br>fraction: ${(fractions[i][index] * 100).toFixed(3)}%`;
+    const text = xaxis.map((xaxisLabel, index) => {
+      return `${featureHover}: ${yaxis[i]}<br>${xHover}: ${xaxisLabel}<br>${zHover} ${average[i][index].toPrecision(3)}<br>fraction: ${(fractions[i][index] * 100).toFixed(3)}%`;
     });
 
     all_hovertext = all_hovertext.concat(text);
@@ -114,11 +124,6 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
   };
 
   const desired_maximum_marker_size = 6.2;
-
-  if(hasLog) {
-    all_color = all_color.map(value => Math.log(value));
-    unit = "log( " + unit + " )";
-  }
   
   let data = {
     x: all_x,
@@ -156,25 +161,25 @@ const BubbleHeatmap = ({ state, setHoveredGeneColor, setHoveredGene }) => {
   };
 
 
-// Define CSV file structure based on plotType
-let plotName = '';
-let csvRowTitle = '';
-switch (plotType) {
-  case 'fractionDetected':
-    csvRowTitle = `Cell types,Gene symbols,Expression(${unit}),Fraction(%)`;
-    plotName = `dotplot_${organism}_${organ}`;
-    break;
-  case 'fractionDetectedAcrossOrgans':
-    csvRowTitle = `Organs,Gene symbols,Expression(${unit}),Fraction(%)`;
-    plotName = `dotplot_${organism}_${celltype}`;
-    break;
-  case 'neighborhood':
-    csvRowTitle = `Cell states,Gene symbols,Expression(${unit}),Fraction(%)`;
-    plotName = `dotplot_${organism}_${organ}`;
-    break;
-  default:
-    break;
-}
+  // Define CSV file structure based on plotType
+  let plotName = '';
+  let csvRowTitle = '';
+  switch (plotType) {
+    case 'fractionDetected':
+      csvRowTitle = `Cell types,Gene symbols,Expression(${unit}),Fraction(%)`;
+      plotName = `dotplot_${organism}_${organ}`;
+      break;
+    case 'fractionDetectedAcrossOrgans':
+      csvRowTitle = `Organs,Gene symbols,Expression(${unit}),Fraction(%)`;
+      plotName = `dotplot_${organism}_${celltype}`;
+      break;
+    case 'neighborhood':
+      csvRowTitle = `Cell states,Gene symbols,Expression(${unit}),Fraction(%)`;
+      plotName = `dotplot_${organism}_${organ}`;
+      break;
+    default:
+      break;
+  }
 
   let config = {
     modeBarButtons: [
@@ -211,42 +216,51 @@ switch (plotType) {
     scrollZoom: false,
   };
 
+  const normalizeArray = (matrix) => {
+    const flatten = matrix.flat();
+    const maxValue = Math.max(...flatten);
+  
+    return matrix.map(row =>
+      row.map(value => (value/maxValue))
+    );
+  }
+
+  // from: https://github.com/plotly/plotly.js
+  // Code generated by chatGTP:
+  const mapToColor = (value) => {
+    const YlGnBu = [
+      [0, 'rgb(8,29,88)'], [0.125, 'rgb(37,52,148)'],
+      [0.25, 'rgb(34,94,168)'], [0.375, 'rgb(29,145,192)'],
+      [0.5, 'rgb(65,182,196)'], [0.625, 'rgb(127,205,187)'],
+      [0.75, 'rgb(199,233,180)'], [0.875, 'rgb(237,248,217)'],
+      [1, 'rgb(255,255,217)']
+    ]
+
+    value = 1 - value;
+
+    for (let i = 1; i < YlGnBu.length; i++) {
+      if (value <= YlGnBu[i][0]) {
+        const [v1, color1] = YlGnBu[i - 1];
+        const [v2, color2] = YlGnBu[i];
+        const t = (value - v1) / (v2 - v1);
+        const interpolateComponent = (c1, c2) => Math.round(c1 + t * (c2 - c1));
+        const interpolateColor = (rgb1, rgb2) => rgb1.map((c, i) => interpolateComponent(c, rgb2[i]));
+        return `rgb(${interpolateColor(color1.match(/\d+/g).map(Number), color2.match(/\d+/g).map(Number)).join(',')})`;
+      }
+    }
+    return YlGnBu[YlGnBu.length - 1][1];
+  }
+
+  useEffect(() => {
+    if (hoveredGene && setHoveredGeneColor && setHoveredGene) {
+      const normalisedAverage = normalizeArray(average);
+      const colors = normalisedAverage[yaxis.indexOf(hoveredGene)].map(a => mapToColor(a))
+      setHoveredGeneColor(colors);
+    }
+  }, [hasLog])
+
   // The following part should only be implement when user is looking at the neighhood page:
   if (setHoveredGeneColor && setHoveredGene) {
-    const normalizeArray = (matrix) => {
-      const flatten = matrix.flat();
-      const maxValue = Math.max(...flatten);
-    
-      return matrix.map(row =>
-        row.map(value => (value/maxValue))
-      );
-    }
-
-    // from: https://github.com/plotly/plotly.js
-    // Code generated by chatGTP:
-    const mapToColor = (value) => {
-      const YlGnBu = [
-        [0, 'rgb(8,29,88)'], [0.125, 'rgb(37,52,148)'],
-        [0.25, 'rgb(34,94,168)'], [0.375, 'rgb(29,145,192)'],
-        [0.5, 'rgb(65,182,196)'], [0.625, 'rgb(127,205,187)'],
-        [0.75, 'rgb(199,233,180)'], [0.875, 'rgb(237,248,217)'],
-        [1, 'rgb(255,255,217)']
-      ]
-
-      value = 1 - value;
-
-      for (let i = 1; i < YlGnBu.length; i++) {
-        if (value <= YlGnBu[i][0]) {
-          const [v1, color1] = YlGnBu[i - 1];
-          const [v2, color2] = YlGnBu[i];
-          const t = (value - v1) / (v2 - v1);
-          const interpolateComponent = (c1, c2) => Math.round(c1 + t * (c2 - c1));
-          const interpolateColor = (rgb1, rgb2) => rgb1.map((c, i) => interpolateComponent(c, rgb2[i]));
-          return `rgb(${interpolateColor(color1.match(/\d+/g).map(Number), color2.match(/\d+/g).map(Number)).join(',')})`;
-        }
-      }
-      return YlGnBu[YlGnBu.length - 1][1];
-    }
 
     const geneHover = (event) => {
       const selected = event.target.textContent;
@@ -256,6 +270,14 @@ switch (plotType) {
       setHoveredGene(selected);
     }
 
+    const attachHoverListener = () => {
+      document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
+      document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
+      selectAll(".yaxislayer-above")
+        .selectAll('text')
+        .on("mouseenter", (event) => geneHover(event));
+    }
+
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div>
@@ -263,18 +285,8 @@ switch (plotType) {
             data={[data]}
             layout={layout}
             config={config}
-            onAfterPlot={() => {
-              document.querySelectorAll('.plot-container .yaxislayer-above')[0].style.cursor = 'pointer';
-              document.querySelectorAll('.plot-container .yaxislayer-above')[0].style['pointer-events'] = 'all';
-              selectAll(".yaxislayer-above")
-                .selectAll('text')
-                .on("mouseenter", (event) => geneHover(event));
-            }}
-            onInitialized={(figure, graphDiv)=>{
-              selectAll(".yaxislayer-above")
-                .selectAll('text')
-                .on("mouseenter", (event) => geneHover(event));
-            }}
+            onAfterPlot={() => attachHoverListener()}
+            onInitialized={(figure, graphDiv) => attachHoverListener()}
           />
         </div>
         <div>

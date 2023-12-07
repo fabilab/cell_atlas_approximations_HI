@@ -52,7 +52,8 @@ const Neighborhood = ({ state }) => {
     organ,
     centroids,
     boundaries,
-    onCellStateHover: handleCellStateClick
+    onCellStateHover: handleCellStateClick,
+    hasLog,
   };
 
   let cellBarState = {
@@ -61,6 +62,7 @@ const Neighborhood = ({ state }) => {
     clickedCellState,
     celltypes,
     nCells,
+
   };
 
   return (
@@ -68,6 +70,7 @@ const Neighborhood = ({ state }) => {
       <div style={{padding: "1% 3%" }}>
           <BubbleHeatmap
             state={bubbleState}
+            hoveredGene={hoveredGene}
             setHoveredGeneColor={setHoveredGeneColor}
             setHoveredGene={setHoveredGene}
           />
