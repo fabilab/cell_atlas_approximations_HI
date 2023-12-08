@@ -50,6 +50,9 @@ const toggleLog = (context) => {
 };
 
 const updateMarkers = (context) => {
+    if(context.markers.length === 0) {
+        return;
+    }
     let features = context.markers.join(",");
     return updateFractions({ ...context, features });
 

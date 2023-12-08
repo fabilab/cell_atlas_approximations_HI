@@ -110,7 +110,7 @@ export const updateChat = async (response, plotState) => {
     }
 
     // for intents that without actual data, we need to make extra api calls
-    if (mainIntent === 'markers' || mainIntent === 'similar_features') {
+    if (mainIntent === 'similar_features') {
       extraEndpointsToCall.push('dotplot');
     } 
 
@@ -206,6 +206,13 @@ export const updateChat = async (response, plotState) => {
     }
 
 
+    if (intent === "markers.geneExpression") {
+      if (apiData.markers.length === 0) {
+        answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
+      } else {
+          extraEndpointsToCall.push('dotplot');
+      }
+    }
     // for intent like "marker, fraction, similar celltypes"
     for (const e of extraEndpointsToCall) {
       if (mainIntent === 'similar_features' || mainIntent === 'markers') {
