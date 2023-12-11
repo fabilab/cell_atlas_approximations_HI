@@ -9,7 +9,6 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
   let yTickTexts;
-  console.log(plotType);
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
     yTickTexts = yaxis.map((gene) => {
