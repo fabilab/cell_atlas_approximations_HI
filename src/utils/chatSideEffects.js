@@ -206,7 +206,7 @@ export const updateChat = async (response, plotState) => {
     }
 
 
-    if (intent === "markers.geneExpression") {
+    if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility") {
       if (apiData.markers.length === 0) {
         answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
       } else {
