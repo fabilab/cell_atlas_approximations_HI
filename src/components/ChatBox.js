@@ -13,13 +13,16 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   const [historyIndex, setHistoryIndex] = useState(0);
   const { localMessage, setLocalMessage } = useChat();
   const chatboxRef = useRef(null);
-
+  console.log(currentMessage);
+  console.log(localMessage);
   useEffect(() => {
     // Function to scroll the chatbox to the bottom
     const scrollToBottom = () => {
-      if (chatboxRef.current) {
-        chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
-      }
+      setTimeout(() => {
+        if (chatboxRef.current) {
+          chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+        }
+      }, 0);
     };
     scrollToBottom();
   }, [chatHistory]);
@@ -102,12 +105,17 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
         width: "25%",
         display: 'flex',
         flexDirection: 'column',
-        gap: '30px',
-        height: "inherit",
+        gap: '20px',
+        height: "100%",
         backgroundColor: "#e4eff7",
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+        position: 'relative',
       }}>
-      <div style={{ width: "100%", overflow: "scroll", height:`${window.innerHeight*0.75}px`, paddingTop:"3vh"}} ref={chatboxRef}>
+       <div style={{ 
+          flexGrow: 1, 
+          overflowY: "auto",
+          padding: "3vh 0",
+        }} ref={chatboxRef}>
           {chatHistory && chatHistory.length !== 0 &&
             chatHistory.map((m) => (
               <Message
@@ -135,7 +143,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
           <Button 
             type="text"
             icon={<SendOutlined
-              style={{ color: currentMessage.length > 0 ? '#1890ff' : 'grey' }}
+              style={{ color: localMessage.length > 0 ? '#1890ff' : 'grey' }}
             />} 
             onClick={() => handleSubmit(localMessage)}
             className="send-button"
