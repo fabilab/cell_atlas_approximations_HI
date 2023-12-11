@@ -16,7 +16,7 @@ const Heatmap = ({ state }) => {
   let values = average;
   
   let yTickTexts;
-  if (organism === 'h_sapiens') {
+  if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
     yTickTexts = yaxis.map((gene) => {
       let link = geneCardLink(gene);
