@@ -5,6 +5,8 @@ import Message from "./Message";
 import { Button, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [currentMessage, setCurrentMessage] = useState('');
@@ -13,8 +15,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   const [historyIndex, setHistoryIndex] = useState(0);
   const { localMessage, setLocalMessage } = useChat();
   const chatboxRef = useRef(null);
-  console.log(currentMessage);
-  console.log(localMessage);
+
   useEffect(() => {
     // Function to scroll the chatbox to the bottom
     const scrollToBottom = () => {
@@ -64,6 +65,13 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       await nlp.initialise();
       let response = await nlp.ask(text);
       setChatContext(nlp.context);
+
+      // Record user input before the API call, we want to see what kind of questions people would ask
+      await addDoc(collection(db, 'userInputs'), {
+        message: text,
+        timestamp: serverTimestamp()
+      });
+
 
       try {
         const updateObject = await updateChat(response,plotState)
