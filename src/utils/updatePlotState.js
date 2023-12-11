@@ -1,3 +1,4 @@
+import { celltypes } from "@fabilab/atlasapprox";
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
@@ -70,6 +71,7 @@ const updateAverage = (context) => {
         }
         plotType = "averageAcrossOrgans";
     } else {
+        context.celltype = false;
         if (context.response.data) {
           xAxis = context.response.data.celltypes;
           average = context.response.data.average;
@@ -107,6 +109,7 @@ const updateAverage = (context) => {
 };
 
 const updateFractions = (context) => {
+    console.log(context);
     let xAxis, plotType, average, fractions, unit, yAxis, measurement_type;
     if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
@@ -120,6 +123,7 @@ const updateFractions = (context) => {
         }
         plotType = "fractionDetectedAcrossOrgans";
     } else {
+        context.celltype = false;
         if (context.response.data) {
           xAxis = context.response.data.celltypes;
           average = context.response.data.average;
