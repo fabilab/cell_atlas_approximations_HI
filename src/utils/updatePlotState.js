@@ -1,3 +1,4 @@
+import { celltypes } from "@fabilab/atlasapprox";
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
@@ -70,6 +71,7 @@ const updateAverage = (context) => {
         }
         plotType = "averageAcrossOrgans";
     } else {
+        context.celltype = false;
         if (context.response.data) {
           xAxis = context.response.data.celltypes;
           average = context.response.data.average;
@@ -120,6 +122,7 @@ const updateFractions = (context) => {
         }
         plotType = "fractionDetectedAcrossOrgans";
     } else {
+        context.celltype = false;
         if (context.response.data) {
           xAxis = context.response.data.celltypes;
           average = context.response.data.average;
