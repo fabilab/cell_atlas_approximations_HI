@@ -13,8 +13,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   const [historyIndex, setHistoryIndex] = useState(0);
   const { localMessage, setLocalMessage } = useChat();
   const chatboxRef = useRef(null);
-  console.log(currentMessage);
-  console.log(localMessage);
+
   useEffect(() => {
     // Function to scroll the chatbox to the bottom
     const scrollToBottom = () => {
