@@ -268,6 +268,10 @@ const cellsXorgans = (context) => {
     };
 };
 
+const organsXorganisms = (context) => {
+    console.log(context);
+}
+
 
 const availableOrganisms = (context) => {
     return {
@@ -304,6 +308,7 @@ const plotFunctionDispatcher = {
   "similar_celltypes": similarCelltypes,
   "organisms": availableOrganisms,
   "feature_sequences": featureSequences,
+  "organxorganism": organsXorganisms,
 };
 
 

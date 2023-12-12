@@ -1,6 +1,8 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import { downloadFasta } from "./downloadFasta";
+import { getOrganxOrganism } from "./organxorganismData.js";
+
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
@@ -14,6 +16,7 @@ const updatePlotIntents = [
   "organisms",
   "neighborhood",
   "celltypexorgan",
+  "organxorganism",
   "similar_features",
   "feature_sequences",
   "fraction_detected",
@@ -92,6 +95,17 @@ export const updateChat = async (response, plotState) => {
           message: answer,
         }
     }
+  }
+
+  
+  if(intent === "organxorganism.geneExpression") {
+    let data = await getOrganxOrganism(params.celltype, "gene_expression");
+    return {
+      hasData: data !== null,
+      params: params || null,
+      data: data || null,
+      message: `The presence of ${params.celltype} cells across different organs and species is shown in the table.`,
+    };
   }
 
   // Intents that requires API calls & error handling
@@ -194,6 +208,7 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
+    console.log(apiData);
 
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
