@@ -87,8 +87,8 @@ const Landing = () => {
           marginTop: '8vh', 
           // fontWeight: 'bold', 
           color: '#303131', 
-          marginLeft:'12%',
-          marginRight: '12%',
+          marginLeft:'5%',
+          marginRight: '5%',
         }}>
         <Row gutter={{
           xs: 8,
