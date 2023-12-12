@@ -218,9 +218,9 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === 'similar_features' || mainIntent === 'markers') {
         params.features = [...apiData[endpoint]];
         endpoint === 'similar_features' && params.features.push(params.feature);
-
         delete params['celltype']
       }
+      params.features = [...new Set(params.features)];
       let extraApiData = await atlasapprox[e](params);
       apiData = {...apiData, ...extraApiData};
     }

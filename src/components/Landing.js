@@ -31,6 +31,8 @@ const Landing = () => {
     'What cell type is the highest expressor of GZMA in human?',
     'List highest accessibility of chr1:9955-10355 in human.',
     'What are the sequences of COL1A1,CD19,ALK,VWF in human?',
+    'show the 15 top marker peaks for astrocyte in human brain',
+    'What are 10 peaks similar to chr8:107381240-107381640 in human brain?',
     'What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?',
     // 'show 5 cell types with similar chromatin peaks to lung fibroblast in human.',
     'What are the cell states of ML25764a, ML358828a, ML071151a, ML065728a in jellyfish whole?',
