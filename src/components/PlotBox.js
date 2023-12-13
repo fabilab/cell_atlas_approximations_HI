@@ -7,6 +7,7 @@ import TableOrganisms from './plots/TableOrganisms';
 import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
 import Neighborhood from './plots/Neighborhood';
+import OrganxOrganismTable from './plots/OrganxOrganismTable';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -48,6 +49,12 @@ const PlotBox = ({ state }) => {
     case 'celltypesXOrgans':
       return (
         <CellxOrganTable
+          state={state}
+        />
+      )
+    case 'organsXorganisms':
+      return (
+        <OrganxOrganismTable
           state={state}
         />
       )

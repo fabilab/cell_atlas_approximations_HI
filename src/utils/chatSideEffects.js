@@ -104,7 +104,7 @@ export const updateChat = async (response, plotState) => {
       hasData: data !== null,
       params: params || null,
       data: data || null,
-      message: `The presence of ${params.celltype} cells across different organs and species is shown in the table.`,
+      message: `The presence of <b> ${params.celltype} cells </b> across different organs and species is shown in the table.`,
     };
   }
 
@@ -208,7 +208,6 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
-    console.log(apiData);
 
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;

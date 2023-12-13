@@ -52,7 +52,7 @@ const CellxOrganTable = ({ state }) => {
     // Define the table columns
     const columns = [
       {
-        title: 'Cell Types',
+        title: 'Cell Types / Organs',
         dataIndex: 'celltype',
         key: 'celltype',
         render: (text) => (
