@@ -112,6 +112,9 @@ const buildAnswer = (intent, data = null) => {
       case "celltypexorgan":
         answer = "The presence matrix of cell types in " + data.organism + " is shown in the plot.";
         break;
+      case "organxorganism":
+        answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
+        break;
       case "highest_measurement":
         switch (sIntent) {
           case "geneExpression":

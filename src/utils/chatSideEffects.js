@@ -14,6 +14,7 @@ const updatePlotIntents = [
   "organisms",
   "neighborhood",
   "celltypexorgan",
+  "organxorganism",
   "similar_features",
   "feature_sequences",
   "fraction_detected",

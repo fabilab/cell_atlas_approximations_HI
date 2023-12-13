@@ -1,4 +1,3 @@
-import { celltypes } from "@fabilab/atlasapprox";
 import transpose from "./math";
 
 const exploreOrganism = (context) => {
@@ -269,6 +268,18 @@ const cellsXorgans = (context) => {
 };
 
 
+const organsXorganisms = (context) => {
+    return {
+        plotType: "organsXorganisms",
+        celltype: context.celltype,
+        organs: context.response.data.organs,
+        organisms: context.response.data.organisms,
+        detected: context.response.data.detected,
+        measurement_type: context.measurement_type,
+    };
+}
+
+
 const availableOrganisms = (context) => {
     return {
         plotType: "showOrganisms",
@@ -304,6 +315,7 @@ const plotFunctionDispatcher = {
   "similar_celltypes": similarCelltypes,
   "organisms": availableOrganisms,
   "feature_sequences": featureSequences,
+  "organxorganism": organsXorganisms,
 };
 
 
