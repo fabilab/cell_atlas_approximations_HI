@@ -256,9 +256,9 @@ const similarFeatures = (context) => {
 };
 
 
-const cellsXorgans = (context) => {
+const cellXorgan = (context) => {
     return {
-        plotType: "celltypesXOrgans",
+        plotType: "celltypeXorgan",
         organism: context.organism,
         organs: context.response.data.organs,
         celltypes: context.response.data.celltypes,
@@ -268,9 +268,9 @@ const cellsXorgans = (context) => {
 };
 
 
-const organsXorganisms = (context) => {
+const organXorganism = (context) => {
     return {
-        plotType: "organsXorganisms",
+        plotType: "organXorganism",
         celltype: context.celltype,
         organs: context.response.data.organs,
         organisms: context.response.data.organisms,
@@ -311,11 +311,11 @@ const plotFunctionDispatcher = {
   "fraction_detected": updateFractions,
   "highest_measurement": highestMeasurement,
   "similar_features": similarFeatures,
-  "celltypexorgan": cellsXorgans,
+  "celltypexorgan": cellXorgan,
   "similar_celltypes": similarCelltypes,
   "organisms": availableOrganisms,
   "feature_sequences": featureSequences,
-  "organxorganism": organsXorganisms,
+  "organxorganism": organXorganism,
 };
 
 
