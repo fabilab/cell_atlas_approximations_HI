@@ -36,17 +36,22 @@ const removeFeatures = (context) => {
     }
 };
 
-const toggleLog = (context) => {
-    context.plotState.hasLog = !context.plotState.hasLog;
-    if (context.plotState.plotType === 'neighborhood') {
-        return updateNeighbor(context);
-    } else{
-        if (!context.plotState.fractions) {
-            return updateAverage(context);
-        } else {
-            return updateFractions(context);
+const updatePlot = (context) => {
+    if (context.intent === 'plot.dotplot') {
+        let intent = 'fraction_detected.geneExpression';
+        return updateFractions({...context, intent});
+    } else {
+        context.plotState.hasLog = !context.plotState.hasLog;
+        if (context.plotState.plotType === 'neighborhood') {
+            return updateNeighbor(context);
+        } else{
+            if (!context.plotState.fractions) {
+                return updateAverage(context);
+            } else {
+                return updateFractions(context);
+            }
         }
-    }
+    }   
 };
 
 const updateMarkers = (context) => {
@@ -304,7 +309,7 @@ const plotFunctionDispatcher = {
   "explore": exploreOrganism,
   "add": addFeatures,
   "remove": removeFeatures,
-  "plot": toggleLog,
+  "plot": updatePlot,
   "markers": updateMarkers,
   "average": updateAverage,
   "neighborhood": updateNeighbor,

@@ -89,13 +89,23 @@ export const updateChat = async (response, plotState) => {
           message: answer,
         }
       case "plot":
-        answer = buildAnswer(intent);
-        return {
-          hasData: true,
-          params: params,
-          data: plotState.data,
-          message: answer,
-        };
+        if(intent === 'plot.log') {
+          answer = buildAnswer(intent);
+          return {
+            hasData: true,
+            params: params,
+            data: plotState.data,
+            message: answer,
+          };
+        } else if (intent === 'plot.dotplot') {
+            params['features'] = plotState.features;
+            params['organ'] = plotState.organ;
+            params['organism'] = plotState.organism;
+            intent = "fraction_detected.geneExpression";
+            mainIntent = intent.split('.')[0];
+            subIntent = intent.split('.')[1] || null;
+        }
+        break;
       default:
         answer = buildAnswer(intent);
         return {
