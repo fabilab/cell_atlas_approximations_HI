@@ -38,8 +38,13 @@ const removeFeatures = (context) => {
 
 const updatePlot = (context) => {
     if (context.intent === 'plot.dotplot') {
-        let intent = 'fraction_detected.geneExpression';
-        return updateFractions({...context, intent});
+        if(context.plotState.plotType === 'average') {
+            let intent = 'fraction_detected.geneExpression';
+            return updateFractions({...context, intent});
+        } else if (context.plotState.plotType === 'averageAcrossOrgans') {
+            let intent = 'fraction_detected.geneExpression.across_organs';
+            return updateFractions({...context, intent});
+        }
     } else {
         context.plotState.hasLog = !context.plotState.hasLog;
         if (context.plotState.plotType === 'neighborhood') {

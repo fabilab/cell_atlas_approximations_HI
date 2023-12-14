@@ -98,10 +98,19 @@ export const updateChat = async (response, plotState) => {
             message: answer,
           };
         } else if (intent === 'plot.dotplot') {
-            params['features'] = plotState.features;
-            params['organ'] = plotState.organ;
-            params['organism'] = plotState.organism;
-            intent = "fraction_detected.geneExpression";
+            if (plotState.plotType === 'average') {
+              params['features'] = plotState.features;
+              params['organ'] = plotState.organ;
+              params['organism'] = plotState.organism;
+              intent = "fraction_detected.geneExpression";
+            } else if (plotState.plotType === 'averageAcrossOrgans') {
+              params['celltype'] = plotState.celltype;
+              params['features'] = plotState.features;
+              params['organism'] = plotState.organism;
+              intent = "fraction_detected.geneExpression.across_organs";
+            } else {
+              return {message: "Dotplot conversion is not available for the current plot type"}
+            }
             mainIntent = intent.split('.')[0];
             subIntent = intent.split('.')[1] || null;
         }
