@@ -46,13 +46,13 @@ const PlotBox = ({ state }) => {
           />
         </div>
       )
-    case 'celltypesXOrgans':
+    case 'celltypeXorgan':
       return (
         <CellxOrganTable
           state={state}
         />
       )
-    case 'organsXorganisms':
+    case 'organXorganism':
       return (
         <OrganxOrganismTable
           state={state}

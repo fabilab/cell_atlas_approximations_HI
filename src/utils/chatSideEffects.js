@@ -1,6 +1,7 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import { downloadFasta } from "./downloadFasta";
+import { downloadTable } from "./downloadTable";
 
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
@@ -70,11 +71,19 @@ export const updateChat = async (response, plotState) => {
     switch (mainIntent) {
       case "download":
         let downloadAvailable = true;
-        try {
-          downloadFasta(plotState)
-        } catch (err) {
-          downloadAvailable = false;
-        }
+        if (plotState.plotType === 'featureSequences') {
+          try {
+            downloadFasta(plotState)
+          } catch (err) {
+            downloadAvailable = false;
+          }
+        } else if (plotState.plotType === 'celltypeXorgan' || plotState.plotType === 'organXorganism') {
+          try {
+            downloadTable(plotState, plotState.plotType)
+          } catch (err) {
+            downloadAvailable = false;
+          }
+        } 
         answer = buildAnswer(intent, { success: downloadAvailable });
         return {
           message: answer,
