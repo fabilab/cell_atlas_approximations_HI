@@ -48,7 +48,7 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
-  console.log(intent);
+
   if (intent === "None") {
     return {
       hasData: false,
@@ -70,7 +70,6 @@ export const updateChat = async (response, plotState) => {
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
     switch (mainIntent) {
       case "download":
-        console.log(plotState);
         let downloadAvailable = true;
         if (plotState.plotType === 'featureSequences') {
           try {
