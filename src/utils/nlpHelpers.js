@@ -158,6 +158,15 @@ const buildAnswer = (intent, data = null) => {
             answer = "Done";
         }
         break;
+      case "convert_to":
+        switch (sIntent) {
+          case "dotplot":
+            answer = "Done! The plot has been converted as requested";
+            break;
+          default:
+            answer = "Done";
+        }
+        break;
       case "explore":
         switch (sIntent) {
           case "organism":

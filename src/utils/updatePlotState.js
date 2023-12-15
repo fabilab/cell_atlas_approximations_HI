@@ -49,6 +49,17 @@ const toggleLog = (context) => {
     }
 };
 
+const plotConversion = (context) => {
+    console.log(context);
+    if(context.plotState.plotType === 'average') {
+        let intent = 'fraction_detected.geneExpression';
+        return updateFractions({...context, intent});
+    } else if (context.plotState.plotType === 'averageAcrossOrgans') {
+        let intent = 'fraction_detected.geneExpression.across_organs';
+        return updateFractions({...context, intent});
+    }
+}
+
 const updateMarkers = (context) => {
     if(context.markers.length === 0) {
         return;
@@ -301,21 +312,22 @@ const featureSequences = (context) => {
 
 // This object dispatches single functions above based on intent
 const plotFunctionDispatcher = {
-  "explore": exploreOrganism,
-  "add": addFeatures,
-  "remove": removeFeatures,
-  "plot": toggleLog,
-  "markers": updateMarkers,
-  "average": updateAverage,
-  "neighborhood": updateNeighbor,
-  "fraction_detected": updateFractions,
-  "highest_measurement": highestMeasurement,
-  "similar_features": similarFeatures,
-  "celltypexorgan": cellXorgan,
-  "similar_celltypes": similarCelltypes,
-  "organisms": availableOrganisms,
-  "feature_sequences": featureSequences,
-  "organxorganism": organXorganism,
+    "add": addFeatures,
+    "plot": toggleLog,
+    "remove": removeFeatures,
+    "explore": exploreOrganism,
+    "markers": updateMarkers,
+    "average": updateAverage,
+    "organisms": availableOrganisms,
+    "convert_to": plotConversion,
+    "neighborhood": updateNeighbor,
+    "organxorganism": organXorganism,
+    "celltypexorgan": cellXorgan,
+    "similar_features": similarFeatures,
+    "similar_celltypes": similarCelltypes,
+    "fraction_detected": updateFractions,
+    "feature_sequences": featureSequences,
+    "highest_measurement": highestMeasurement,
 };
 
 

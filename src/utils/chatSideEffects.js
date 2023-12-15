@@ -13,6 +13,7 @@ const updatePlotIntents = [
   "average",
   "markers",
   "organisms",
+  "convert_to",
   "neighborhood",
   "celltypexorgan",
   "organxorganism",
@@ -48,7 +49,7 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
-
+  console.log(response);
   if (intent === "None") {
     return {
       hasData: false,
@@ -106,6 +107,27 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
+    //  plot conversion
+    if (mainIntent === 'convert_to') {
+      if (subIntent === 'dotplot') {
+        if (plotState.plotType === 'average') {
+          params['features'] = plotState.features;
+          params['organ'] = plotState.organ;
+          params['organism'] = plotState.organism;
+          intent = "fraction_detected.geneExpression";
+        } else if (plotState.plotType === 'averageAcrossOrgans') {
+          params['celltype'] = plotState.celltype;
+          params['features'] = plotState.features;
+          params['organism'] = plotState.organism;
+          intent = "fraction_detected.geneExpression.across_organs";
+        } else {
+          return {message: "Dotplot conversion is not available for the current plot type"}
+        }
+        mainIntent = intent.split('.')[0];
+        subIntent = intent.split('.')[1] || null;
+      }
+    }
+
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
