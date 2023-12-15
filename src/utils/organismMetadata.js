@@ -2,7 +2,7 @@ const organismMetadata = {
   "a_queenslandica": {
     bioName: "Amphimedon queenslandica",
     commonName: "Sponge",
-    dataSource: "[Sebé-Pedrós et al. 2018](Early metazoan cell type diversity and the evolution of multicellular gene regulation)",
+    dataSource: `Sebé-Pedrós, et al. (2018). "Early Metazoan Cell Type Diversity and the Evolution of Multicellular Gene Regulation."`,
     about: "Amphimedon queenslandica is a sponge native to the Great Barrier Reef in Australia. It is a model organism for metazoan development and evolution.",
     imagePath: require("../asset/organisms/a_queenslandica.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Amphimedon_queenslandica",
@@ -11,7 +11,7 @@ const organismMetadata = {
   "c_elegans": {
     bioName: "Caenorhabditis elegans",
     commonName: "Nematode",
-    dataSource: "[Cao et al. 2017](Comprehensive single-cell transcriptional profiling of a multicellular organism)",
+    dataSource: `Cao et al. 2017 "Comprehensive single-cell transcriptional profiling of a multicellular organism"`,
     about: "Caenorhabditis elegans is a free-living transparent nematode (roundworm) that lives in temperate soil environments. It is a model organism for development and neuroscience, with a fixed cell type ontology.",
     imagePath: require("../asset/organisms/c_elegans.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Caenorhabditis_elegans",
@@ -20,7 +20,7 @@ const organismMetadata = {
   "d_melanogaster": {
     bioName: "Drosophila melanogaster",
     commonName: "Fruit fly",
-    dataSource: "[Li et al. 2022](Fly Cell Atlas: A single-nucleus transcriptomic atlas of the adult fruit fly)",
+    dataSource: `Li et al. 2022, "Fly Cell Atlas: A single-nucleus transcriptomic atlas of the adult fruit fly"`,
     about: "Drosophila Melanogaster or fruit fly is a flying insect that inhabits all continents. It is a model organism for genetics and development.",
     imagePath: require("../asset/organisms/d_melanogaster.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Drosophila_melanogaster",
@@ -62,7 +62,7 @@ const organismMetadata = {
   "d_rerio": {
     bioName: "Danio rerio",
     commonName: "Zebrafish",
-    dataSource: "[Wagner et al. 2018](Single-cell mapping of gene expression landscapes and lineage in the zebrafish embryo)",
+    dataSource: `Wagner et al. 2018 "Single-cell mapping of gene expression landscapes and lineage in the zebrafish embryo"`,
     about: "Danio rerio or zebrafish is a freshwater fish that originates from South Asia and is a model organism for vertebrate development, genetics, and evolution.",
     genesFromPaper: "epcam, si, krt18, krt8, cldnb, elavl3, krt4, tfap2a, LOC100537766, cldnh, six1b, LOC100006216, myt1a, dlb, sox19a, actc1a, pfn1, cxcl12b, pax6b ",
     imagePath: require("../asset/organisms/d_rerio.jpeg"),
@@ -76,7 +76,7 @@ const organismMetadata = {
   "h_miamia": {
     bioName: "Hofstenia miamia",
     commonName: "Three-banded panther worm",
-    dataSource: "[Hulett et al. 2023](Aciel single-cell atlas reveals expression dynamics and heterogeneity of adult pluripotent stem cells)",
+    dataSource: `Hulett et al. 2023 "Aciel single-cell atlas reveals expression dynamics and heterogeneity of adult pluripotent stem cells"`,
     about: "Hofstenia miamia is an acoel (related to flatworms), a deep-diverging bilaterian lineage. It is an emerging model system to study bilaterian evolution.",
     imagePath: require("../asset/organisms/h_miamia.jpeg"),
     descriptionHyperlink: "https://pubmed.ncbi.nlm.nih.gov/34196362/",
@@ -85,7 +85,7 @@ const organismMetadata = {
   "h_sapiens": {
     bioName: "Homo sapiens",
     commonName: "Human",
-    dataSource: "RNA: [Tabula Sapiens 2022](The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans)",
+    dataSource: `RNA: Tabula Sapiens 2022 "The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans"`,
     about: "Homo sapiens or human is a primate that inhabits all continents. But you know that.",
     imagePath: require("../asset/organisms/h_sapiens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
@@ -162,7 +162,7 @@ const organismMetadata = {
   "i_pulchra": {
     bioName: "Isodiametra pulchra",
     commonName: "Acoel",
-    dataSource: "[Duruz et al. 2020](Acoel Single-Cell Transcriptomics: Cell Type Analysis of a Deep Branching Bilaterian)",
+    dataSource: `Duruz et al. 2020 "Acoel Single-Cell Transcriptomics: Cell Type Analysis of a Deep Branching Bilaterian"`,
     about: "Acoela, or the acoels, is an order of small and simple invertebrates in the subphylum Acoelomorpha of phylum Xenacoelomorpha, a deep branching bilaterian group of animals, which resemble flatworms. Historically they were treated as an order of turbellarian flatworms.",
     imagePath: require("../asset/organisms/i_pulchra.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Acoela",
@@ -172,7 +172,7 @@ const organismMetadata = {
   "l_minuta": {
     bioName: "Lemna minuta",
     commonName: "Least duckweed",
-    dataSource: "[Abramson et al. 2021](The genome and preliminary single-nuclei transcriptome of Lemna minuta reveals mechanisms of invasiveness)",
+    dataSource: `Abramson et al. 2021 "The genome and preliminary single-nuclei transcriptome of Lemna minuta reveals mechanisms of invasiveness"`,
     about: "Lemna minuta is a species of duckweed native to parts of the Americas. It is studied as an example of an invasive plant species in genetics and ecology.",
     imagePath: require("../asset/organisms/l_minuta.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Lemna_minuta",
@@ -182,7 +182,7 @@ const organismMetadata = {
   "m_leidyi": {
     bioName: "Mnemiopsis leidyi",
     commonName: "Comb jelly",
-    dataSource: "[Sebé-Pedrós et al 2018](Early metazoan cell type diversity and the evolution of multicellular gene regulation)",
+    dataSource: `Sebé-Pedrós et al 2018 "Early metazoan cell type diversity and the evolution of multicellular gene regulation"`,
     about: "Mnemiopsis leidyi is a species of tentaculate ctenophore (comb jelly) native to western Atlantic coastal waters. It is studied as an example of a marine invasive species.",
     imagePath: require("../asset/organisms/m_leidyi.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Mnemiopsis",
@@ -191,7 +191,7 @@ const organismMetadata = {
   "m_musculus": {
     bioName: "Mus musculus",
     commonName: "House mouse",
-    dataSource: "[Tabula Muris Senis 2020](A single-cell transcriptomic atlas characterizes ageing tissues in the mouse)",
+    dataSource: `Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,
     about: "Mus musculis or house mouse is a small rodent that lives both in wild temperate climates and in close proximity to humans (e.g. cities). It is a very widely used model organism to study disease, development, genetics, evolution, and other topics.",
     imagePath: require("../asset/organisms/m_musculus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/House_mouse",
@@ -205,7 +205,7 @@ const organismMetadata = {
   "m_murinus": {
     bioName: "Microcebus murinus",
     commonName: "Mouse lemur",
-    dataSource: "[Tabula Microcebus 2023](Tabula Microcebus: A transcriptomic cell atlas of mouse lemur, an emerging primate model organism)",
+    dataSource: `Tabula Microcebus 2023 "Tabula Microcebus: A transcriptomic cell atlas of mouse lemur, an emerging primate model organism"`,
     about: "Microbebus murinus or mouse lemur is a primate that lives in Madagascar. Is is a model organism for comparative genetics and cell biology and to study primate evolution.",
     imagePath: require("../asset/organisms/m_murinus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Gray_mouse_lemur",
@@ -214,7 +214,7 @@ const organismMetadata = {
   "n_vectensis": {
     bioName: "Nematostella vectensis",
     commonName: "Starlet sea anemone",
-    dataSource: "[Steger et al 2022](Single-cell transcriptomics identifies conserved regulators of neuroglandular lineages)",
+    dataSource: `Steger et al 2022 "Single-cell transcriptomics identifies conserved regulators of neuroglandular lineages"`,
     about: "The starlet sea anemone is a species of small sea anemone in the family Edwardsiidae native to the east coast of the United States, with introduced populations along the coast of southeast England and the west coast of the United States. Populations have also been located in Nova Scotia, Canada",
     imagePath: require("../asset/organisms/n_vectensis.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Starlet_sea_anemone",
@@ -223,7 +223,7 @@ const organismMetadata = {
   "s_lacustris": {
     bioName: "Spongilla lacustris",
     commonName: "Freshwater sponge",
-    dataSource: "[Musser et al. 2021](Profiling cellular diversity in sponges informs animal cell type and nervous system evolution)",
+    dataSource: `Musser et al. 2021 "Profiling cellular diversity in sponges informs animal cell type and nervous system evolution"`,
     about: "Spongilla lacustris is a freshwater sponge that is common in Europe. It is studies in ecology and evolutionary biology.",
     imagePath: require("../asset/organisms/s_lacustris.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Spongilla_lacustris",
@@ -232,7 +232,7 @@ const organismMetadata = {
   "s_mansoni": {
     bioName: "Schistosoma mansoni",
     commonName: "Blood fluke",
-    dataSource: "[Li et al. 2021](Single-cell analysis of Schistosoma mansoni identifies a conserved genetic program controlling germline stem cell fate)",
+    dataSource: `Li et al. 2021 "Single-cell analysis of Schistosoma mansoni identifies a conserved genetic program controlling germline stem cell fate"`,
     about: "Schistosoma mansoni is a water-borne parasite of humans. It is studied as the etiological cause of schistosomiasis.",
     imagePath: require("../asset/organisms/s_mansoni.jpeg"),
     descriptionHyperlink: "",
@@ -242,7 +242,7 @@ const organismMetadata = {
   "s_pistillata": {
     bioName: "Stylophora pistillata",
     commonName: "Stony coral",
-    dataSource: "[Levi et al. 2021](A stony coral cell atlas illuminates the molecular and cellular basis of coral symbiosis, calcification, and immunity)",
+    dataSource: `Levi et al. 2021 "A stony coral cell atlas illuminates the molecular and cellular basis of coral symbiosis, calcification, and immunity"`,
     about: "",
     imagePath: require("../asset/organisms/s_pistillata.jpeg"),
     descriptionHyperlink: "",
@@ -252,7 +252,7 @@ const organismMetadata = {
   "c_hemisphaerica": {
     bioName: "Clytia hemisphaerica",
     commonName: "Jellyfish",
-    dataSource: "[Chari et al. 2021](Whole-animal multiplexed single-cell RNA-seq reveals transcriptional shifts across Clytia medusa cell types)",
+    dataSource: `Chari et al. 2021 "Whole-animal multiplexed single-cell RNA-seq reveals transcriptional shifts across Clytia medusa cell types"`,
     about: "",
     imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
     descriptionHyperlink: "",
@@ -262,7 +262,7 @@ const organismMetadata = {
   "s_mediterranea": {
     bioName: "Schmidtea mediterranea",
     commonName: "Planarian worm",
-    dataSource: "[Plass et al 2018](Cell type atlas and lineage tree of a whole complex animal by single-cell transcriptomics)",
+    dataSource: `Plass et al 2018 "Cell type atlas and lineage tree of a whole complex animal by single-cell transcriptomics"`,
     about: "Schmidtea mediterranea is a planarian found in Europe. It is studied because of its ability to regenerate lost body parts thanks to a large reservoir of stem-like cells.",
     imagePath: require("../asset/organisms/s_mediterranea.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Schistosoma_mansoni",
@@ -271,7 +271,7 @@ const organismMetadata = {
   "t_adhaerens": {
     bioName: "Trichoplax adhaerens",
     commonName: "Placozoan",
-    dataSource: "[Sebé-Pedrós et al 2018](Early metazoan cell type diversity and the evolution of multicellular gene regulation)",
+    dataSource: `Sebé-Pedrós et al 2018 "Early metazoan cell type diversity and the evolution of multicellular gene regulation"`,
     about: "Trichoplax adhaerens is an organism in the phylum Placozoa, a basal group of multicellular animals, possible relatives of Cnidaria. They are studied as a comparative outgroup for multicellular organismal evolution, cell biology, and genetics.",
     imagePath: require("../asset/organisms/t_adhaerens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Trichoplax",
@@ -280,7 +280,7 @@ const organismMetadata = {
   "x_laevis": {
     bioName: "Xenopus laevis",
     commonName: "African clawed frog",
-    dataSource: "[Liao et al 2022](Cell landscape of larval and adult Xenopus laevis at single-cell resolution)",
+    dataSource: `Liao et al 2022 "Cell landscape of larval and adult Xenopus laevis at single-cell resolution"`,
     paperHyperlink: "https://www.nature.com/articles/s41467-022-31949-2",
     about: "Xenopus laevis is a species of African aquatic frog. It is a model organism for cell biology and development.",
     imagePath: require("../asset/organisms/x_laevis.jpeg"),
