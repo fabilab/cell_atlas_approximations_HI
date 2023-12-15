@@ -111,9 +111,11 @@ const buildAnswer = (intent, data = null) => {
         break;
       case "celltypexorgan":
         answer = "The presence matrix of cell types in " + data.organism + " is shown in the plot.";
+        answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
+        answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
         break;
       case "highest_measurement":
         switch (sIntent) {
