@@ -3,6 +3,13 @@ import { buildAPIParams, buildAnswer } from './nlpHelpers.js';
 import { downloadFasta } from "./downloadFasta";
 import { downloadTable } from "./downloadTable";
 
+const toCamel = (str) => {
+  return str.replace(
+    /(?!^)_(.)/g,
+    (_, char) => char.toUpperCase()
+  );
+}
+
 // decide if an NLP response triggers a plot update
 const updatePlotIntents = [
   "add",
@@ -13,6 +20,7 @@ const updatePlotIntents = [
   "average",
   "markers",
   "organisms",
+  "convert_to",
   "neighborhood",
   "celltypexorgan",
   "organxorganism",
@@ -48,7 +56,6 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
-
   if (intent === "None") {
     return {
       hasData: false,
@@ -106,6 +113,33 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
+    //  plot conversion
+    //  START
+    if (mainIntent === 'convert_to') {
+      const { plotType, features, organ, organism, celltype, measurement_type } = plotState;
+      const plotTypeIntentMap = {
+        'dotplot': {
+          'average': { intent: `fraction_detected.${toCamel(measurement_type)}`, params: { features, organ, organism } },
+          'averageAcrossOrgans': { intent: `fraction_detected.${toCamel(measurement_type)}.across_organs`, params: { celltype, features, organism } }
+        },
+        'heatmap': {
+          'fractionDetected': { intent: `average.${toCamel(measurement_type)}`, params: { features, organ, organism } },
+          'fractionDetectedAcrossOrgans': { intent: `average.${toCamel(measurement_type)}.across_organs`, params: { celltype, features, organism } }
+        }
+      };
+  
+      const conversion = plotTypeIntentMap[subIntent]?.[plotType];
+      if (conversion) {
+        intent = conversion.intent;
+        Object.assign(params, conversion.params);
+        mainIntent = intent.split('.')[0];
+        subIntent = intent.split('.')[1] || null;
+      } else {
+        return { message: "Plot conversion is not available for the current plot type" };
+      }
+    }
+    // END
+
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
@@ -158,7 +192,7 @@ export const updateChat = async (response, plotState) => {
       };
     }
 
-    if (mainIntent === 'fraction_detected') {
+    if (mainIntent === 'fraction_detected' || mainIntent === 'average') {
       endpoint = "dotplot";
     }
     if (['add', 'remove'].includes(mainIntent)) {
@@ -204,7 +238,7 @@ export const updateChat = async (response, plotState) => {
 
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
-
+    
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;

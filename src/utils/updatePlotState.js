@@ -49,6 +49,25 @@ const toggleLog = (context) => {
     }
 };
 
+const plotConversion = (context) => {
+    const intentMap = {
+        'average': 'fraction_detected.geneExpression',
+        'averageAcrossOrgans': 'fraction_detected.geneExpression.across_organs',
+        'fractionDetected': 'average.geneExpression',
+        'fractionDetectedAcrossOrgans': 'average.geneExpression.across_organs'
+    };
+
+    let pt = context.plotState.plotType
+    let intent = intentMap[pt];
+    if (!intent) return;
+
+    if (pt.startsWith('average')) {
+        return updateFractions({...context, intent});
+    } else if (pt.startsWith('fractionDetected')) {
+        return updateAverage({...context, intent});
+    }
+}
+
 const updateMarkers = (context) => {
     if(context.markers.length === 0) {
         return;
@@ -301,21 +320,22 @@ const featureSequences = (context) => {
 
 // This object dispatches single functions above based on intent
 const plotFunctionDispatcher = {
-  "explore": exploreOrganism,
-  "add": addFeatures,
-  "remove": removeFeatures,
-  "plot": toggleLog,
-  "markers": updateMarkers,
-  "average": updateAverage,
-  "neighborhood": updateNeighbor,
-  "fraction_detected": updateFractions,
-  "highest_measurement": highestMeasurement,
-  "similar_features": similarFeatures,
-  "celltypexorgan": cellXorgan,
-  "similar_celltypes": similarCelltypes,
-  "organisms": availableOrganisms,
-  "feature_sequences": featureSequences,
-  "organxorganism": organXorganism,
+    "add": addFeatures,
+    "plot": toggleLog,
+    "remove": removeFeatures,
+    "explore": exploreOrganism,
+    "markers": updateMarkers,
+    "average": updateAverage,
+    "organisms": availableOrganisms,
+    "convert_to": plotConversion,
+    "neighborhood": updateNeighbor,
+    "organxorganism": organXorganism,
+    "celltypexorgan": cellXorgan,
+    "similar_features": similarFeatures,
+    "similar_celltypes": similarCelltypes,
+    "fraction_detected": updateFractions,
+    "feature_sequences": featureSequences,
+    "highest_measurement": highestMeasurement,
 };
 
 
