@@ -46,17 +46,21 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
 
   const handleSubmit = async (text) => {
 
-    const newMessage = { message: text, index: messageHistory.length };
-    setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
-    setHistoryIndex([...messageHistory, newMessage].length);
-
-    if (text === 'clear') {
+    const resetEverything = () => {
       setMessageHistory([]);
       setHistoryIndex(0);
       setChatHistory([]);
       setChatContext({});
       setCurrentMessage('');
       return '';
+    }
+
+    const newMessage = { message: text, index: messageHistory.length };
+    setMessageHistory((messageHistory) => [...messageHistory, newMessage]);
+    setHistoryIndex([...messageHistory, newMessage].length);
+
+    if (text === 'clear') {
+      return resetEverything();
     } else {
       setCurrentMessage(localMessage); 
       let nlp = new AtlasApproxNlp(chatContext || {});
@@ -65,7 +69,13 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       setChatContext(nlp.context);
 
       try {
-        const updateObject = await updateChat(response,plotState)
+        const updateObject = await updateChat(response, plotState)
+
+        // Bail if the user is saying goodbye
+        if (updateObject.resetEverything === true) {
+          return resetEverything();
+        }
+
         response.hasData = updateObject.hasData;
         if (updateObject.hasData) {
           response.data = updateObject.data;

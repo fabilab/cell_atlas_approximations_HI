@@ -33,6 +33,7 @@ const updatePlotIntents = [
 
 
 const mainIntentNotRequiresApi = [
+  "greetings",
   "download",
   "plot"
 ];
@@ -62,7 +63,7 @@ export const updateChat = async (response, plotState) => {
       message: "Sorry I didn't get that. Please rephrase.",
     };
   }
-
+  
   // If incomplete, follow up question
   if (!complete) {
     return {
@@ -71,6 +72,7 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
+  // This needs to be here: we might need params later on (e.g. plot)
   ({ endpoint, params } = buildAPIParams(intent, entities));
 
   // If the intent does not require an API, just build the answer
@@ -103,6 +105,17 @@ export const updateChat = async (response, plotState) => {
           data: plotState.data,
           message: answer,
         };
+      case "greetings":
+        if (subIntent === "bye") {
+          return {
+            resetEverything: true,
+            message: "",
+          };
+        }
+        answer = buildAnswer(intent);
+        return {
+          message: answer,
+        }
       default:
         answer = buildAnswer(intent);
         return {
