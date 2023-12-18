@@ -50,13 +50,21 @@ const toggleLog = (context) => {
 };
 
 const plotConversion = (context) => {
-    console.log(context);
-    if(context.plotState.plotType === 'average') {
-        let intent = 'fraction_detected.geneExpression';
+    const intentMap = {
+        'average': 'fraction_detected.geneExpression',
+        'averageAcrossOrgans': 'fraction_detected.geneExpression.across_organs',
+        'fractionDetected': 'average.geneExpression',
+        'fractionDetectedAcrossOrgans': 'average.geneExpression.across_organs'
+    };
+
+    let pt = context.plotState.plotType
+    let intent = intentMap[pt];
+    if (!intent) return;
+
+    if (pt.startsWith('average')) {
         return updateFractions({...context, intent});
-    } else if (context.plotState.plotType === 'averageAcrossOrgans') {
-        let intent = 'fraction_detected.geneExpression.across_organs';
-        return updateFractions({...context, intent});
+    } else if (pt.startsWith('fractionDetected')) {
+        return updateAverage({...context, intent});
     }
 }
 

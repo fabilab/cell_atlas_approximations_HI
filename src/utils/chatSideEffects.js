@@ -49,7 +49,6 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
-  console.log(response);
   if (intent === "None") {
     return {
       hasData: false,
@@ -109,22 +108,25 @@ export const updateChat = async (response, plotState) => {
   try {
     //  plot conversion
     if (mainIntent === 'convert_to') {
-      if (subIntent === 'dotplot') {
-        if (plotState.plotType === 'average') {
-          params['features'] = plotState.features;
-          params['organ'] = plotState.organ;
-          params['organism'] = plotState.organism;
-          intent = "fraction_detected.geneExpression";
-        } else if (plotState.plotType === 'averageAcrossOrgans') {
-          params['celltype'] = plotState.celltype;
-          params['features'] = plotState.features;
-          params['organism'] = plotState.organism;
-          intent = "fraction_detected.geneExpression.across_organs";
-        } else {
-          return {message: "Dotplot conversion is not available for the current plot type"}
+      const { plotType, features, organ, organism, celltype } = plotState;
+      const plotTypeIntentMap = {
+        'dotplot': {
+          'average': { intent: 'fraction_detected.geneExpression', params: { features, organ, organism } },
+          'averageAcrossOrgans': { intent: 'fraction_detected.geneExpression.across_organs', params: { celltype, features, organism } }
+        },
+        'heatmap': {
+          'fractionDetected': { intent: 'average.geneExpression', params: { features, organ, organism } },
+          'fractionDetectedAcrossOrgans': { intent: 'average.geneExpression.across_organs', params: { celltype, features, organism } }
         }
+      };
+      const conversion = plotTypeIntentMap[subIntent]?.[plotType];
+      if (conversion) {
+        intent = conversion.intent;
+        Object.assign(params, conversion.params);
         mainIntent = intent.split('.')[0];
         subIntent = intent.split('.')[1] || null;
+      } else {
+        return { message: "Plot conversion is not available for the current plot type" };
       }
     }
 
@@ -180,7 +182,7 @@ export const updateChat = async (response, plotState) => {
       };
     }
 
-    if (mainIntent === 'fraction_detected') {
+    if (mainIntent === 'fraction_detected' || mainIntent === 'average') {
       endpoint = "dotplot";
     }
     if (['add', 'remove'].includes(mainIntent)) {
