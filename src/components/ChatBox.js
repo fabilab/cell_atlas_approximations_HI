@@ -4,7 +4,7 @@ import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
-import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
+import { nlp } from "../utils/nlpHelpers";
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [currentMessage, setCurrentMessage] = useState('');
@@ -63,10 +63,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       return resetEverything();
     } else {
       setCurrentMessage(localMessage); 
-      let nlp = new AtlasApproxNlp(chatContext || {});
-      await nlp.initialise();
       let response = await nlp.ask(text);
-      setChatContext(nlp.context);
 
       try {
         const updateObject = await updateChat(response, plotState)
