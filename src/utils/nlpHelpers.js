@@ -1,3 +1,8 @@
+import { AtlasApproxNlp } from "@fabilab/atlasapprox-nlp";
+
+const nlp = new AtlasApproxNlp();
+await nlp.initialise();
+
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, data = null) => {
     function _chainList(list, sep, end) {
@@ -239,6 +244,7 @@ const buildAPIParams = (intent, entities) => {
 }
 
 export {
+  nlp,
   buildAPIParams,
   buildAnswer,
 };
