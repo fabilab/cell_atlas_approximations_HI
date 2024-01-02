@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.2cf3f95e.css",
-    "main.js": "/static/js/main.489f97f1.js",
+    "main.js": "/static/js/main.16c1e5a6.js",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/geneExpHeatmap.png": "/static/media/geneExpHeatmap.73b6ae92652923832853.png",
     "static/media/organismProfile.png": "/static/media/organismProfile.d2ee8c6637a642b467d1.png",
@@ -20,6 +20,7 @@
     "static/media/d_melanogaster.jpg": "/static/media/d_melanogaster.4b81dbd203779ce4eb4e.jpg",
     "static/media/illu.png": "/static/media/illu.58368d7476e1b5894523.png",
     "static/media/h_sapiens.jpeg": "/static/media/h_sapiens.554acb2c1938a9978eab.jpeg",
+    "static/media/m_musculus.jpg": "/static/media/m_musculus.86e9cae3b2afbc8da6fa.jpg",
     "static/media/l_minuta.jpeg": "/static/media/l_minuta.c0a8f53eba8b20d0edd7.jpeg",
     "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.016b4a6cdced82ab3aa1.ttf",
     "static/media/x_laevis.jpg": "/static/media/x_laevis.0666c96834c70efd3d6b.jpg",
@@ -51,10 +52,10 @@
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.1bac2991f3dbfa237aec.woff2",
     "index.html": "/index.html",
     "main.2cf3f95e.css.map": "/static/css/main.2cf3f95e.css.map",
-    "main.489f97f1.js.map": "/static/js/main.489f97f1.js.map"
+    "main.16c1e5a6.js.map": "/static/js/main.16c1e5a6.js.map"
   },
   "entrypoints": [
     "static/css/main.2cf3f95e.css",
-    "static/js/main.489f97f1.js"
+    "static/js/main.16c1e5a6.js"
   ]
 }
