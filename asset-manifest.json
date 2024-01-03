@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.2cf3f95e.css",
-    "main.js": "/static/js/main.16c1e5a6.js",
+    "main.js": "/static/js/main.f4ddf9e3.js",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/geneExpHeatmap.png": "/static/media/geneExpHeatmap.73b6ae92652923832853.png",
     "static/media/organismProfile.png": "/static/media/organismProfile.d2ee8c6637a642b467d1.png",
@@ -25,6 +25,7 @@
     "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.016b4a6cdced82ab3aa1.ttf",
     "static/media/x_laevis.jpg": "/static/media/x_laevis.0666c96834c70efd3d6b.jpg",
     "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.b6879d41b0852f01ed5b.woff2",
+    "static/media/m_murinus.jpg": "/static/media/m_murinus.1bedab7c45614bd85828.jpg",
     "static/media/c_hemisphaerica.jpeg": "/static/media/c_hemisphaerica.09f675602723bff983df.jpeg",
     "static/media/m_leidyi.jpeg": "/static/media/m_leidyi.a41805ee57fdc2d34d0a.jpeg",
     "static/media/t_adhaerens.jpeg": "/static/media/t_adhaerens.2a5ee028fa382f839a17.jpeg",
@@ -52,10 +53,10 @@
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.1bac2991f3dbfa237aec.woff2",
     "index.html": "/index.html",
     "main.2cf3f95e.css.map": "/static/css/main.2cf3f95e.css.map",
-    "main.16c1e5a6.js.map": "/static/js/main.16c1e5a6.js.map"
+    "main.f4ddf9e3.js.map": "/static/js/main.f4ddf9e3.js.map"
   },
   "entrypoints": [
     "static/css/main.2cf3f95e.css",
-    "static/js/main.16c1e5a6.js"
+    "static/js/main.f4ddf9e3.js"
   ]
 }
