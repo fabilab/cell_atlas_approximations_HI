@@ -5,6 +5,7 @@ await nlp.initialise();
 
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, data = null) => {
+  console.log(data);
     function _chainList(list, sep, end) {
         let text = "";
         for (let i=0; i < list.length; i++) {
@@ -117,6 +118,9 @@ const buildAnswer = (intent, data = null) => {
       case "celltypexorgan":
         answer = "The presence matrix of cell types in " + data.organism + " is shown in the plot.";
         answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
+        break;
+      case "comeasurement":
+        answer = `Here's the co-expression of ${data.features} in ${data.organism}, visualized across cell types and organs.`;
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";

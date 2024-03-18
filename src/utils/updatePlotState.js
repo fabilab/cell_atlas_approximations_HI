@@ -221,6 +221,18 @@ const updateNeighbor = (context) => {
     };
 };
 
+const updateComeasurement = (context) => {
+    console.log(context);
+    const features = context.features.split(',');
+    return {
+        plotType: "coexpressScatter",
+        organism: context.organism,
+        featureX: features[0],
+        featureY: features[1],
+        expData: context.response.data.expressionData
+    };
+}
+
 const similarCelltypes = (context) => {
     let targetCelltype = context.response.params.celltype;
     let similarCelltypes = context.response.data.similar_celltypes;
@@ -329,6 +341,7 @@ const plotFunctionDispatcher = {
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "neighborhood": updateNeighbor,
+    "comeasurement": updateComeasurement,
     "organxorganism": organXorganism,
     "celltypexorgan": cellXorgan,
     "similar_features": similarFeatures,

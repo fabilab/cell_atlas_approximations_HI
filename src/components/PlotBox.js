@@ -8,6 +8,7 @@ import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
 import Neighborhood from './plots/Neighborhood';
 import OrganxOrganismTable from './plots/OrganxOrganismTable';
+import CoexpressScatter from './plots/CoexpressScatter';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -82,6 +83,14 @@ const PlotBox = ({ state }) => {
       return (
         <div>
           <Neighborhood 
+            state={state}
+          />
+        </div>
+      )
+    case 'coexpressScatter':
+      return (
+        <div style={plotStyle}>
+          <CoexpressScatter 
             state={state}
           />
         </div>

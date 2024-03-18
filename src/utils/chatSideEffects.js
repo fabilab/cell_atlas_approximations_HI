@@ -22,6 +22,7 @@ const updatePlotIntents = [
   "organisms",
   "convert_to",
   "neighborhood",
+  "comeasurement",
   "celltypexorgan",
   "organxorganism",
   "similar_features",
@@ -50,6 +51,7 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
+  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -74,6 +76,8 @@ export const updateChat = async (response, plotState) => {
 
   // This needs to be here: we might need params later on (e.g. plot)
   ({ endpoint, params } = buildAPIParams(intent, entities));
+  console.log(endpoint);
+  console.log(params);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -249,13 +253,34 @@ export const updateChat = async (response, plotState) => {
 
     }
 
+    // comeasurement
+    // get all tissue
+    // get average expression for all tissue
+    if (mainIntent === 'comeasurement') {
+      endpoint = 'organs';
+    }
+
     //  Finally, generate bot response and api data for the given intent
     apiData = await atlasapprox[endpoint](params);
     
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
+    } 
+
+    if (mainIntent === 'comeasurement') {
+      const organs = apiData.organs;
+      const averagePromises = organs.map(organ => {
+        params.organ = organ;
+        return atlasapprox['average'](params);
+      })
+
+      const exprData = await Promise.all(averagePromises);
+
+
+      apiData = {expressionData: exprData, features: params.features, organism: params.organism}
     }
+
     answer += buildAnswer(intent, apiData);
 
     if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {
@@ -270,6 +295,7 @@ export const updateChat = async (response, plotState) => {
           extraEndpointsToCall.push('dotplot');
       }
     }
+
     // for intent like "marker, fraction, similar celltypes"
     for (const e of extraEndpointsToCall) {
       if (mainIntent === 'similar_features' || mainIntent === 'markers') {
