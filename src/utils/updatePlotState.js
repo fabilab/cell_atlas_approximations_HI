@@ -222,14 +222,14 @@ const updateNeighbor = (context) => {
 };
 
 const updateComeasurement = (context) => {
-    console.log(context);
     const features = context.features.split(',');
     return {
         plotType: "coexpressScatter",
         organism: context.organism,
         featureX: features[0],
         featureY: features[1],
-        expData: context.response.data.expressionData
+        expData: context.response.data.expData,
+        unit: context.response.data.expData[0].unit,
     };
 }
 

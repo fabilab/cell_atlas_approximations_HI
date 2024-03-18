@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 const CoexpressScatter = ({ state }) => {
     const plotRef = useRef(null);
 
-    let { plotType, organism, featureX, featureY, expData } = state;
+    let { plotType, organism, featureX, featureY, expData, unit } = state;
 
     const plotData = expData.map(item => ({
         x: item.average[0],
@@ -17,19 +17,23 @@ const CoexpressScatter = ({ state }) => {
         `${featureX}: ${item.average[0][index]}<br>${featureY}: ${item.average[1][index]}<br>Organ: ${item.organ}<br>Cell type: ${cellType}`
         ),
         marker: { size: 12 },
-        hoverinfo: 'text', // Use the text array for hover information
+        hoverinfo: 'text',
+        colorbar: {
+            title: {
+              text: "unit",
+            },
+            len: 1.2,
+        },
     }));
 
     var layout = {
         title: `Co-expression of ${featureX} and ${featureY} across cell types and organs in ${organism}`,
         xaxis: {
-            title: featureX,
-            type: 'log',
+            title: featureX + ` (${unit})`,
             autorange: true
         },
         yaxis: {
             title: featureY,
-            type: 'log',
             autorange: true
         }
       };
