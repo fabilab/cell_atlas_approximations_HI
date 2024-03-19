@@ -37,9 +37,12 @@ const removeFeatures = (context) => {
 };
 
 const toggleLog = (context) => {
+
     context.plotState.hasLog = !context.plotState.hasLog;
     if (context.plotState.plotType === 'neighborhood') {
         return updateNeighbor(context);
+    } else if (context.plotState.plotType === 'coexpressScatter') {
+        return updateComeasurement(context);
     } else{
         if (!context.plotState.fractions) {
             return updateAverage(context);
@@ -180,7 +183,6 @@ const updateFractions = (context) => {
 };
 
 const updateNeighbor = (context) => {
-
     let celltypes, nCells, boundaries, centroids, average, fractions, unit;
     // by deault:
     if (context.response.data) {
@@ -220,6 +222,33 @@ const updateNeighbor = (context) => {
         measurement_type: context.measurement_type,
     };
 };
+
+const updateComeasurement = (context) => {
+    let expData, unit;
+    // by deault:
+    if (context.response.data) {
+        expData = context.response.data.expData
+        unit = expData[0].unit
+    }
+    //  after appling log:
+    else {
+        expData = context.plotState.expData
+        unit = context.plotState.unit;
+    }
+  
+    const features = context.features.split(',');
+
+    return {
+        plotType: "coexpressScatter",
+        organism: context.organism,
+        features: context.features,
+        featureX: features[0],
+        featureY: features[1],
+        expData: expData,
+        unit: unit,
+        hasLog: context.plotState.hasLog,
+    };
+}
 
 const similarCelltypes = (context) => {
     let targetCelltype = context.response.params.celltype;
@@ -329,6 +358,7 @@ const plotFunctionDispatcher = {
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "neighborhood": updateNeighbor,
+    "comeasurement": updateComeasurement,
     "organxorganism": organXorganism,
     "celltypexorgan": cellXorgan,
     "similar_features": similarFeatures,
