@@ -10,11 +10,13 @@ const CoexpressScatter = ({ state }) => {
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
 
-    const logTransform = value => Math.log10(value + 1);
+    const logTransformOrNone = value => hasLog ?  Math.log10(value + 1) : value;
+    expData = expData.map(item => ({
+        ...item,
+        average: item.average.map(averageArray => averageArray.map(logTransformOrNone).map(value => value.toPrecision(5)))
+    }));
+
     if (hasLog) {
-        expData.forEach(data => {
-            data.average = data.average.map(averageArray => averageArray.map(logTransform));
-        });
         unit = `log10(${unit})`;
     }
 
@@ -51,7 +53,7 @@ const CoexpressScatter = ({ state }) => {
             autorange: true,
         },
         yaxis: {
-            title: featureY,
+            title: featureY + "<br>" + ` (${unit})`,
             autorange: true
         }
       };
