@@ -239,6 +239,18 @@ const updateComeasurement = (context) => {
   
     const features = context.features.split(',');
 
+    // Modify all numbers in average to 5 significant figures
+    expData = expData.map(data => {
+        let modifiedAverage = data.average.map(array => 
+            array.map(value => +value.toPrecision(5))
+        );
+
+        return {
+            ...data,
+            average: modifiedAverage
+        };
+    });
+
     return {
         plotType: "coexpressScatter",
         organism: context.organism,
