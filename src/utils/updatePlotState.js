@@ -37,9 +37,12 @@ const removeFeatures = (context) => {
 };
 
 const toggleLog = (context) => {
+
     context.plotState.hasLog = !context.plotState.hasLog;
     if (context.plotState.plotType === 'neighborhood') {
         return updateNeighbor(context);
+    } else if (context.plotState.plotType === 'coexpressScatter') {
+        return updateComeasurement(context);
     } else{
         if (!context.plotState.fractions) {
             return updateAverage(context);
@@ -222,14 +225,29 @@ const updateNeighbor = (context) => {
 };
 
 const updateComeasurement = (context) => {
+    let expData, unit;
+    // by deault:
+    if (context.response.data) {
+        expData = context.response.data.expData
+        unit = expData[0].unit
+    }
+    //  after appling log:
+    else {
+        expData = context.plotState.expData
+        unit = context.plotState.unit;
+    }
+  
     const features = context.features.split(',');
+
     return {
         plotType: "coexpressScatter",
         organism: context.organism,
+        features: context.features,
         featureX: features[0],
         featureY: features[1],
-        expData: context.response.data.expData,
-        unit: context.response.data.expData[0].unit,
+        expData: expData,
+        unit: unit,
+        hasLog: context.plotState.hasLog,
     };
 }
 

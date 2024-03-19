@@ -1,10 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Plot from 'react-plotly.js';
 
 const CoexpressScatter = ({ state }) => {
-    const plotRef = useRef(null);
 
-    let { plotType, organism, featureX, featureY, expData, unit } = state;
+    let { plotType, organism, featureX, featureY, expData, unit, hasLog } = state;
+    
+    const logTransform = value => Math.log10(value + 1);
+    if (hasLog) {
+       expData = expData.map(data => ({
+            ...data,
+            average: data.average.map(averageArray =>
+                averageArray.map(logTransform)
+            )
+       }));
+       unit = `log10(${unit})`;
+    }
 
     const plotData = expData.map(item => ({
         x: item.average[0],
@@ -18,19 +28,13 @@ const CoexpressScatter = ({ state }) => {
         ),
         marker: { size: 12 },
         hoverinfo: 'text',
-        colorbar: {
-            title: {
-              text: "unit",
-            },
-            len: 1.2,
-        },
     }));
 
     var layout = {
         title: `Co-expression of ${featureX} and ${featureY} across cell types and organs in ${organism}`,
         xaxis: {
             title: featureX + ` (${unit})`,
-            autorange: true
+            autorange: true,
         },
         yaxis: {
             title: featureY,
