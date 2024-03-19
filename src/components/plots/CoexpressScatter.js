@@ -1,6 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import { Popover, Button } from 'antd';
+import chroma from 'chroma-js';
 import orgMeta from '../../utils/organismMetadata.js';
 
 const CoexpressScatter = ({ state }) => {
@@ -11,14 +12,20 @@ const CoexpressScatter = ({ state }) => {
 
     const logTransform = value => Math.log10(value + 1);
     if (hasLog) {
-       expData = expData.map(data => ({
-            ...data,
-            average: data.average.map(averageArray =>
-                averageArray.map(logTransform)
-            )
-       }));
-       unit = `log10(${unit})`;
+        expData.forEach(data => {
+            data.average = data.average.map(averageArray => averageArray.map(logTransform));
+        });
+        unit = `log10(${unit})`;
     }
+
+    // Generate unique colors for each organ using chroma-js
+    const organs = expData.map(item => item.organ);
+    const colors = chroma.scale('Spectral').mode('lch').colors(organs.length);
+
+    const organColorMap = organs.reduce((acc, organ, index) => {
+        acc[organ] = colors[index];
+        return acc;
+    }, {});
 
     const plotData = expData.map(item => ({
         x: item.average[0],
@@ -30,7 +37,10 @@ const CoexpressScatter = ({ state }) => {
         text: item.celltypes.map((cellType, index) => 
         `${featureX}: ${item.average[0][index]}<br>${featureY}: ${item.average[1][index]}<br>Organ: ${item.organ}<br>Cell type: ${cellType}`
         ),
-        marker: { size: 12 },
+        marker: { 
+            size: 12,
+            color: organColorMap[item.organ],
+        },
         hoverinfo: 'text',
     }));
 
