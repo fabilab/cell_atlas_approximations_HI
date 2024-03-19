@@ -42,7 +42,6 @@ const toggleLog = (context) => {
     if (context.plotState.plotType === 'neighborhood') {
         return updateNeighbor(context);
     } else if (context.plotState.plotType === 'coexpressScatter') {
-        console.log(context);
         return updateComeasurement(context);
     } else{
         if (!context.plotState.fractions) {
@@ -184,7 +183,6 @@ const updateFractions = (context) => {
 };
 
 const updateNeighbor = (context) => {
-    console.log(context);
     let celltypes, nCells, boundaries, centroids, average, fractions, unit;
     // by deault:
     if (context.response.data) {
@@ -226,7 +224,6 @@ const updateNeighbor = (context) => {
 };
 
 const updateComeasurement = (context) => {
-    console.log(context);
     let expData, unit;
     // by deault:
     if (context.response.data) {
