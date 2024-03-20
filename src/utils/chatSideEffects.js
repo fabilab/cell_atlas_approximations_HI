@@ -51,7 +51,6 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
-
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -59,6 +58,7 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
+
   if (intent === "None") {
     return {
       hasData: false,
@@ -128,6 +128,7 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
+
     //  plot conversion
     //  START
     if (mainIntent === 'convert_to') {
@@ -251,23 +252,57 @@ export const updateChat = async (response, plotState) => {
 
     }
 
-    // comeasurement
     // get all tissue
-    // get average expression for all tissue
     if (mainIntent === 'comeasurement') {
       endpoint = 'organs';
     }
 
-    //  Finally, generate bot response and api data for the given intent
-    apiData = await atlasapprox[endpoint](params);
+    if (((intent === 'zoom.in.neighborhood') || (intent === "zoom.out.neighborhood")) && (plotState.plotType === 'coexpressScatter')) {
+
+    } else {
+      // skip the first API call for the above conditions
+      apiData = await atlasapprox[endpoint](params);
+    }
     
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
     } 
 
+    // from scatter by cell type to by cell state
+    if ((intent === 'zoom.in.neighborhood') && (plotState.plotType === 'coexpressScatter')) {
+      const organs = plotState.organs;
+      params.organism = plotState.organism;
+      params.features = plotState.features;
+      
+      const averagePromises = organs.map(organ => {
+        params.organ = organ;
+        return atlasapprox['neighborhood'](params);
+      })
+
+      const expData = await Promise.all(averagePromises);
+      response.intent = intent = 'comeasurement.geneExpression'
+
+      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'cellstate'}
+    }
+
+    // from scatter by cell state to by cell type
+    if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'coexpressScatter')) {
+      response.intent = intent = 'comeasurement.geneExpression';
+      mainIntent = 'comeasurement';
+
+    }
+
     if (mainIntent === 'comeasurement') {
-      const organs = apiData.organs;
+      let organs;
+      if (plotState && plotState.by === 'cellstate') {
+        organs = plotState.organs
+        params.organism = plotState.organism;
+        params.features = plotState.features;
+      } else {
+        organs = apiData.organs;
+      }
+
       const averagePromises = organs.map(organ => {
         params.organ = organ;
         return atlasapprox['average'](params);
@@ -275,7 +310,7 @@ export const updateChat = async (response, plotState) => {
 
       const expData = await Promise.all(averagePromises);
 
-      apiData = {expData: expData, features: params.features, organism: params.organism}
+      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'celltype'}
     }
 
     answer += buildAnswer(intent, apiData);

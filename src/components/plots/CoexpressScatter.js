@@ -6,7 +6,8 @@ import orgMeta from '../../utils/organismMetadata.js';
 
 const CoexpressScatter = ({ state }) => {
 
-    let { plotType, organism, featureX, featureY, expData, unit, hasLog } = state;
+    let { plotType, organism, featureX, featureY, expData, unit, hasLog, by } = state;
+
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
 
@@ -32,22 +33,23 @@ const CoexpressScatter = ({ state }) => {
     const plotData = expData.map(item => ({
         x: item.average[0],
         y: item.average[1],
-        celltype: item.celltypes,
         mode: 'markers',
         type: 'scatter',
         name: item.organ,
-        text: item.celltypes.map((cellType, index) => 
-        `${featureX}: ${item.average[0][index]}<br>${featureY}: ${item.average[1][index]}<br>Organ: ${item.organ}<br>Cell type: ${cellType}`
-        ),
+        text: item.average[0].map((_, idx) => {
+            const baseText = `${featureX}: ${item.average[0][idx]}<br>${featureY}: ${item.average[1][idx]}<br>Organ: ${item.organ}`;
+            return by === "celltype" ? `${baseText}<br>Cell type: ${item.celltypes[idx]}` : `${baseText}<br>Cell state: ${idx + 1}`;
+        }),
         marker: { 
             size: 12,
             color: organColorMap[item.organ],
+            symbol: by === "celltype" ? 'circle' : 'square',
         },
         hoverinfo: 'text',
     }));
 
     var layout = {
-        title: `Co-expression of ${featureX} and ${featureY} across cell types and organs in ${organism}`,
+        title: `Co-expression of ${featureX} and ${featureY} across ${by} and organs in ${organism}`,
         xaxis: {
             title: featureX + ` (${unit})`,
             autorange: true,
