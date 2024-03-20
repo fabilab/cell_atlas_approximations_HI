@@ -157,7 +157,15 @@ const organismMetadata = {
       "vagina": {coords: "684,837,665,862,683,890,700,863"},
       "vagina-label": {coords: "57,846,246,896", shape: "rect"}
     }
-    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
+  },
+  "h_vulgaris": {
+    bioName: "Hydra vulgaris",
+    commonName: "fresh-water polyp",
+    dataSource: `Sieert et al 2019 "Stem cell differentiation trajectories in Hydra resolved at single-cell resolution"`,    
+    about: "Hydra vulgaris, also known as the fresh-water polyp, is a small freshwater hydroid species that ranges in length from 10 mm to 30 mm and is about 1 mm wide",
+    imagePath: require("../asset/organisms/h_vulgaris.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Hydra_vulgaris",
+    paperHyperlink:"https://www.science.org/doi/10.1126/science.aav9314"
   },
   "i_pulchra": {
     bioName: "Isodiametra pulchra",
@@ -167,7 +175,6 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/i_pulchra.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Acoela",
     paperHyperlink:"https://academic.oup.com/mbe/article/38/5/1888/6045962"
-    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "l_minuta": {
     bioName: "Lemna minuta",
@@ -177,7 +184,6 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/l_minuta.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Lemna_minuta",
     paperHyperlink:"https://academic.oup.com/plphys/article/188/2/879/6454113"
-    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "m_leidyi": {
     bioName: "Mnemiopsis leidyi",
@@ -357,6 +363,15 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/t_adhaerens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Trichoplax",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
+  },
+  "t_aestivum": {
+    bioName: "Triticum aestivum",
+    commonName: "Bread wheat",
+    dataSource: `Zhang et al 2023 "Asymmetric gene expression and cell-type-specific regulatory networks in the root of bread wheat revealed by single-cell multiomics analysis"`,    
+    about: "Common wheat (Triticum aestivum), also known as bread wheat, is a cultivated wheat species that constitutes about 95% of all wheat produced worldwide.",
+    imagePath: require("../asset/organisms/t_aestivum.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Common_wheat",
+    paperHyperlink: "https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x",
   },
   "x_laevis": {
     bioName: "Xenopus laevis",
