@@ -1,6 +1,6 @@
 {
   "name": "atlas-approx-hi",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "homepage": "https://atlasapprox.org",
   "private": true,
   "dependencies": {
@@ -10,7 +10,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fabilab/atlasapprox": "^0.2.7",
-    "@fabilab/atlasapprox-nlp": "^0.2.31",
+    "@fabilab/atlasapprox-nlp": "^0.2.33",
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",

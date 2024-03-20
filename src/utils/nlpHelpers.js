@@ -120,7 +120,7 @@ const buildAnswer = (intent, data = null) => {
         answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
         break;
       case "comeasurement":
-        answer = `Here's the co-expression of ${data.features} in ${data.organism}, visualized across cell types and organs.`;
+        answer = `Here's the co-expression of ${data.features} in ${data.organism}, visualized across cell types and organs. Type "log data" to switch between linear and log scales.`;
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
