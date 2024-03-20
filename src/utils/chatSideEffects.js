@@ -59,6 +59,7 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
+
   if (intent === "None") {
     return {
       hasData: false,
@@ -128,6 +129,7 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
+
     //  plot conversion
     //  START
     if (mainIntent === 'convert_to') {
@@ -251,15 +253,16 @@ export const updateChat = async (response, plotState) => {
 
     }
 
-    // comeasurement
     // get all tissue
-    // get average expression for all tissue
     if (mainIntent === 'comeasurement') {
       endpoint = 'organs';
     }
 
-    //  Finally, generate bot response and api data for the given intent
-    apiData = await atlasapprox[endpoint](params);
+    if ((intent === 'zoom.in.neighborhood') && (plotState.plotType === 'coexpressScatter')) {
+    } else {
+      // skip the first API call for the above conditions
+      apiData = await atlasapprox[endpoint](params);
+    }
     
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
@@ -275,7 +278,23 @@ export const updateChat = async (response, plotState) => {
 
       const expData = await Promise.all(averagePromises);
 
-      apiData = {expData: expData, features: params.features, organism: params.organism}
+      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'celltype'}
+    }
+
+    if ((intent === 'zoom.in.neighborhood') && (plotState.plotType === 'coexpressScatter')) {
+      const organs = plotState.organs;
+      params.organism = plotState.organism;
+      params.features = plotState.features;
+      
+      const averagePromises = organs.map(organ => {
+        params.organ = organ;
+        return atlasapprox['neighborhood'](params);
+      })
+
+      const expData = await Promise.all(averagePromises);
+      response.intent = intent = 'comeasurement'
+
+      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'cellstate'}
     }
 
     answer += buildAnswer(intent, apiData);
