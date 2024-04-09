@@ -192,9 +192,12 @@ const OrganismProfile = ({ state }) => {
                     <div style={{ flex: 1, overflow: 'auto', minWidth: '0' }}>
                         {apiCellOrgan && clickedOrgan && 
                             <OrganCellChart 
-                                apiCellOrgan={apiCellOrgan} 
-                                organName={clickedOrgan}
-                                measurementType={measurement_type}
+                                state={{
+                                    plotLocation: "organismProfile",
+                                    apiCellOrgan:apiCellOrgan,
+                                    organName:clickedOrgan,
+                                    measurementType:measurement_type,
+                                }}
                             />
                         }
                     </div>

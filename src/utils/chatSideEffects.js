@@ -19,6 +19,7 @@ const updatePlotIntents = [
   "explore",
   "average",
   "markers",
+  "celltypes",
   "organisms",
   "convert_to",
   "neighborhood",
@@ -59,6 +60,9 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
+  // this is defined to store celltypes and organ for celltypes intent.
+  let targetCelltypes, targetOrgan;
+
   if (intent === "None") {
     return {
       hasData: false,
@@ -166,6 +170,13 @@ export const updateChat = async (response, plotState) => {
     
     if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
+    }
+
+    if (intent === "celltypes.geneExpression") {
+      let celltypesAPI = await atlasapprox[endpoint](params);
+      targetCelltypes = celltypesAPI.celltypes;
+      targetOrgan = celltypesAPI.organ;
+      endpoint = "celltypexorgan"
     }
 
     // for intents that without actual data, we need to make extra api calls
@@ -278,6 +289,10 @@ export const updateChat = async (response, plotState) => {
       apiData = {expData: expData, features: params.features, organism: params.organism}
     }
 
+    if (intent === "celltypes.geneExpression") {
+      apiData.targetCelltypes = targetCelltypes;
+      apiData.targetOrgan = targetOrgan;
+    }
     answer += buildAnswer(intent, apiData);
 
     if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {

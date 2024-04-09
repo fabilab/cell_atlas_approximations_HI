@@ -23,6 +23,7 @@ const Landing = () => {
     'What species are available?',
     'Explore frog.',
     'What organs are available in human?',
+    "What cell types are there in mouse liver?",
     'Where are fibroblast detected in human?',
     'What organisms have chromatin accessibility?',
     'Show 10 markers of rod cells in the frog eye.',
