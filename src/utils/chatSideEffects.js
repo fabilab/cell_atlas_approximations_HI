@@ -53,7 +53,6 @@ export const triggersPlotUpdate = ((response) => {
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
 
-  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -61,6 +60,8 @@ export const updateChat = async (response, plotState) => {
   let complete = response.complete;
   let answer = "", apiData = null, endpoint, params;
   let extraEndpointsToCall = [];
+  // this is defined to store celltypes and organ for celltypes intent.
+  let targetCelltypes, targetOrgan;
 
   if (intent === "None") {
     return {
@@ -79,8 +80,6 @@ export const updateChat = async (response, plotState) => {
 
   // This needs to be here: we might need params later on (e.g. plot)
   ({ endpoint, params } = buildAPIParams(intent, entities));
-  console.log(params);
-  console.log(endpoint);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -174,6 +173,9 @@ export const updateChat = async (response, plotState) => {
     }
 
     if (intent === "celltypes.geneExpression") {
+      let celltypesAPI = await atlasapprox[endpoint](params);
+      targetCelltypes = celltypesAPI.celltypes;
+      targetOrgan = celltypesAPI.organ;
       endpoint = "celltypexorgan"
     }
 
@@ -287,6 +289,10 @@ export const updateChat = async (response, plotState) => {
       apiData = {expData: expData, features: params.features, organism: params.organism}
     }
 
+    if (intent === "celltypes.geneExpression") {
+      apiData.targetCelltypes = targetCelltypes;
+      apiData.targetOrgan = targetOrgan;
+    }
     answer += buildAnswer(intent, apiData);
 
     if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {

@@ -328,7 +328,6 @@ const organXorganism = (context) => {
 }
 
 const cellAbundance = (context) => {
-	console.log(context.response.data);
 	return {
 		plotType: "cellAbundance",
 		plotLocation: "celltypes",
@@ -384,7 +383,6 @@ const plotFunctionDispatcher = {
 // Main "public" update plot state function
 export const updatePlotState = (response, plotState, setPlotState) => {
 
-	console.log(response);
   const intent = response.intent;
   const mainIntent = intent.split('.')[0];
   let newPlotState = null;

@@ -41,7 +41,7 @@ const buildAnswer = (intent, data = null) => {
             answer = "Cells from this organism were dissociated without separating the tissues first. This happens mostly in small organisms, which can be difficult to dissect. While organ information is not directly available, you can ask about cell types: many are good proxies for tissues in this organism. To specify an organ to the chat bot, use 'whole'.";
         break;
       case "celltypes":
-        answer = "The cell types in " + data.organism + " " + data.organ + " are: " + _chainList(data.celltypes, ", ", ".");
+        answer = "The cell types available in " + data.organism + " " + data.targetOrgan + " are: " + _chainList(data.targetCelltypes, ", ", ".");
         break;
       case "celltype_location":
         if (data.organs.length === 0) {
