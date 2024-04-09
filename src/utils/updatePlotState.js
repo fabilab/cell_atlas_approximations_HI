@@ -327,6 +327,17 @@ const organXorganism = (context) => {
     };
 }
 
+const cellAbundance = (context) => {
+	console.log(context.response.data);
+	return {
+		plotType: "cellAbundance",
+		plotLocation: "celltypes",
+		organism: context.organism,
+		apiCellOrgan: context.response.data,
+		organName: context.organ,
+		measurementType: context.response.data.measurement_type,
+	};
+}
 
 const availableOrganisms = (context) => {
     return {
@@ -355,6 +366,7 @@ const plotFunctionDispatcher = {
     "explore": exploreOrganism,
     "markers": updateMarkers,
     "average": updateAverage,
+		"celltypes": cellAbundance,
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "neighborhood": updateNeighbor,
@@ -372,6 +384,7 @@ const plotFunctionDispatcher = {
 // Main "public" update plot state function
 export const updatePlotState = (response, plotState, setPlotState) => {
 
+	console.log(response);
   const intent = response.intent;
   const mainIntent = intent.split('.')[0];
   let newPlotState = null;

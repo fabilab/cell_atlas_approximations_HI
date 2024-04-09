@@ -1,14 +1,15 @@
 import React from 'react';
 import Heatmap from "./plots/Heatmap"
-import BubbleHeatmap from './plots/BubbleHeatmap';
 import BarChart from './plots/BarChart';
-import CellxOrganTable from './plots/CellxOrganTable';
+import Neighborhood from './plots/Neighborhood';
+import BubbleHeatmap from './plots/BubbleHeatmap';
+import OrganCellChart from './plots/OrganCellChart';
 import TableOrganisms from './plots/TableOrganisms';
+import CellxOrganTable from './plots/CellxOrganTable';
 import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
-import Neighborhood from './plots/Neighborhood';
-import OrganxOrganismTable from './plots/OrganxOrganismTable';
 import CoexpressScatter from './plots/CoexpressScatter';
+import OrganxOrganismTable from './plots/OrganxOrganismTable';
 
 const plotStyle = {
   marginTop: '5vh', 
@@ -91,6 +92,14 @@ const PlotBox = ({ state }) => {
       return (
         <div style={plotStyle}>
           <CoexpressScatter 
+            state={state}
+          />
+        </div>
+      )
+    case 'cellAbundance':
+      return (
+        <div style={plotStyle}>
+          <OrganCellChart 
             state={state}
           />
         </div>

@@ -5,9 +5,10 @@ import {selectAll} from "d3";
 
 
 
-const OrganCellChart = ({ apiCellOrgan, organName, measurementType }) => {
+const OrganCellChart = ({ state }) => {
   const { setLocalMessage } = useChat();
-
+  const { plotLocation, apiCellOrgan, organName, measurementType } =  state;
+  const scaleFactor = plotLocation === 'celltypes' ? 1.3 : 1; // Scale factor for size adjustment
   // Find the index of the organ, organ cases are different in species
   const organIndex = apiCellOrgan.organs.findIndex(organ => organ.toLowerCase() === organName.toLowerCase());
 
@@ -23,6 +24,7 @@ const OrganCellChart = ({ apiCellOrgan, organName, measurementType }) => {
   // Sort by decreasing abundance
   nonZeroData.sort((item1, item2) => item1.value - item2.value);
 
+  
   // Prepare for plotly
   const data = [{
       type: 'bar',
@@ -40,16 +42,16 @@ const OrganCellChart = ({ apiCellOrgan, organName, measurementType }) => {
   }];
 
   let layout = {
-      width: 520,
-      height: 180 + 14.8 * nonZeroData.length, //14.7
+      width: 520 * scaleFactor,
+      height: 180 + 14.8 * nonZeroData.length * scaleFactor, //14.7
       xaxis: {
         automargin: true,
         title: {
           text: 'Number of cells detected',
           font: {
-            size: 13,
+            size: 13 * scaleFactor,
           },
-          standoff: 20,
+          standoff: 20 * scaleFactor,
         },
         type: "log",
         range: [-0.2, 4],
@@ -57,14 +59,17 @@ const OrganCellChart = ({ apiCellOrgan, organName, measurementType }) => {
       title: {
         text: `<b>Cell type abundance in <span style='color:#0958d9;'>${organName}</span></b>`,
         font: {
-          size: 14
+          size: 14 * scaleFactor
         },
       },
       yaxis: {
         automargin: true,
         showticklabels: true,
         type: "category",
-        autorange: true
+        autorange: true,
+        tickfont: {
+          size: 11 * scaleFactor, // Adjusted tick font size
+      },
       }
   };
 
