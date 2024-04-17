@@ -333,6 +333,16 @@ const organXorganism = (context) => {
     };
 }
 
+const cellAbundance = (context) => {
+	return {
+		plotType: "cellAbundance",
+		plotLocation: "celltypes",
+		organism: context.organism,
+		apiCellOrgan: context.response.data,
+		organName: context.organ,
+		measurementType: context.response.data.measurement_type,
+	};
+}
 
 const availableOrganisms = (context) => {
     return {
@@ -361,6 +371,7 @@ const plotFunctionDispatcher = {
     "explore": exploreOrganism,
     "markers": updateMarkers,
     "average": updateAverage,
+	"celltypes": cellAbundance,
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "neighborhood": updateNeighbor,
