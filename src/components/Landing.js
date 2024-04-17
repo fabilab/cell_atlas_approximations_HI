@@ -28,19 +28,16 @@ const Landing = () => {
     'What organisms have chromatin accessibility?',
     'Show 10 markers of rod cells in the frog eye.',
     'Show 10 genes similar to Col1a1 in mouse lung.',
+    "What cells coexpress CD19 and MSA41 in human?",
     'What cell types are present in each organ of mouse?',
     'What cell type is the highest expressor of GZMA in human?',
     'List highest accessibility of chr1:9955-10355 in human.',
     'What are the sequences of COL1A1,CD19,ALK,VWF in human?',
-    "What cells coexpress CD19 and MSA4 in human?",
     'show the 15 top marker peaks for astrocyte in human brain',
-    'What are 10 peaks similar to chr8:107381240-107381640 in human brain?',
-    'What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?',
-    // 'show 5 cell types with similar chromatin peaks to lung fibroblast in human.',
     'What are the cell states of ML25764a, ML358828a, ML071151a, ML065728a in jellyfish whole?',
     'What is the expression of VWF, APOE, COL13A1, COL14A1, TGFBI, PDGFRA, GZMA in human lung?',
-    'What is the fraction of cells expressing ACE2, FOXJ1, HIF1A, KRT5, VWF, CD19, APOE, GZMA in human lung?',
     'Compare fraction expressing PTPRC, MARCO, CD68, CD14 in macrophage across organs in human.',
+    'What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?',
   ];
 
   return (
