@@ -189,6 +189,7 @@ const buildAnswer = (intent, data = null) => {
         switch (sIntent) {
           case "geneExpression":
             answer = "The sequences of " + data.features + " in " + data.organism + " are shown.<br><br>Type \"download\" to get a FASTA file of them all.";
+            answer += "<br><br>Please note that currently only protein sequences are available. We are still working on providing the DNA sequences.";
             break;
           default:
             answer = "Done";
