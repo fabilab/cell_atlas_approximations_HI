@@ -193,27 +193,24 @@ export const updateChat = async (response, plotState) => {
     }
 
     if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'neighborhood')) {
-        // FIXME: figure out measurement type from plot state (needs some implementing)
+
         response.intent = intent = 'fraction_detected.geneExpression';
         mainIntent = "fraction_detected";
         params = {
           organ: plotState.organ,
           organism: plotState.organism,
           features: plotState.features,
-          // FIXME: see above
           measurement_type: "gene_expression",
         };
     }
 
     if ((intent === 'zoom.in.neighborhood') && (['fractionDetected', 'average'].includes(plotState.plotType))) {
-      // FIXME: figure out measurement type from plot state (needs some implementing)
       response.intent = intent = 'neighborhood.geneExpression';
       mainIntent = endpoint = "neighborhood";
       params = {
         organ: plotState.organ,
         organism: plotState.organism,
         features: plotState.features,
-        // FIXME: see above
         measurement_type: "gene_expression",
       };
     }
@@ -321,6 +318,7 @@ export const updateChat = async (response, plotState) => {
     }
     
   } catch ({ status, message, error }) {
+    
       let errorValue = error.invalid_value;
       let errorParam = error['invalid_parameter'];
       let mParam = error['missing_parameter'];
@@ -349,7 +347,16 @@ export const updateChat = async (response, plotState) => {
         // invalid gene, we can auto remove it and re-call api
         if (errorParam === 'features') {
           if (typeof params.features === 'string') {
-            params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+            if(mainIntent === 'comeasurement') {
+              if (errorValue.length === 1) {
+                answer += `The gene "${errorValue}" is not valid. Please ensure that gene names are spelled correctly.`;
+              } else if (errorValue.length === 2) {
+                answer += `The genes "${errorValue}" are not valid. Please ensure that gene names are spelled correctly.`;
+              }
+              apiData = null;
+            } else {
+              params.features = params.features.split(',').filter(feature => !errorValue.includes(feature.toLowerCase())).join(',');
+            }
           } else {
             // example case: markers of myopeptidocyte in s_lacustris whole
             // remove marker genes that contain a space
@@ -358,17 +365,19 @@ export const updateChat = async (response, plotState) => {
             endpoint='dotplot'
           }
         
-          if (params.features.length !== 0) {
-            apiData = await atlasapprox[endpoint](params);
-            if (mainIntent === 'markers') {
-              apiData['markers'] = params.features;
-              apiData['celltype'] = entities.filter(e => e.entity==='celltype')[0].sourceText;
+          if (mainIntent !== 'comeasurement') {
+            if (params.features.length !== 0) {
+                apiData = await atlasapprox[endpoint](params);
+              if (mainIntent === 'markers') {
+                apiData['markers'] = params.features;
+                apiData['celltype'] = entities.filter(e => e.entity==='celltype')[0].sourceText;
+              }
+              answer += `Invalid features detected: "${errorValue}". These have been automatically excluded<br>`;
+              answer += buildAnswer(intent, apiData);
+              answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
+            } else {
+              answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;
             }
-            answer = `Invalid features detected: "${errorValue}". These have been automatically excluded<br><br>`;
-            answer += buildAnswer(intent, apiData);
-            answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
-          } else {
-            answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;
           }
         } 
         else if (errorParam === 'feature') {

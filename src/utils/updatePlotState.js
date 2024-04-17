@@ -365,7 +365,7 @@ const plotFunctionDispatcher = {
     "explore": exploreOrganism,
     "markers": updateMarkers,
     "average": updateAverage,
-		"celltypes": cellAbundance,
+	"celltypes": cellAbundance,
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "neighborhood": updateNeighbor,
