@@ -159,6 +159,9 @@ export const updateChat = async (response, plotState) => {
     }
     // END
 
+    if (mainIntent === "neighborhood") {
+      params['include_embedding'] = true;
+    }
     if (subIntent === "chromatinAccessibility") { 
       params['measurement_type'] = 'chromatin_accessibility';
     }
@@ -201,6 +204,7 @@ export const updateChat = async (response, plotState) => {
           organism: plotState.organism,
           features: plotState.features,
           measurement_type: "gene_expression",
+          include_embedding: true,
         };
     }
 
@@ -212,6 +216,7 @@ export const updateChat = async (response, plotState) => {
         organism: plotState.organism,
         features: plotState.features,
         measurement_type: "gene_expression",
+        include_embedding: true,
       };
     }
 
@@ -238,6 +243,7 @@ export const updateChat = async (response, plotState) => {
         if (plotState.plotType === 'neighborhood') {
           plotStateGenes = plotState.features;
           endpoint = 'neighborhood';
+          params['include_embedding'] = true;
         } else {
           plotStateGenes = plotState.features.split(',').map(gene => gene.trim());
         }
@@ -250,6 +256,7 @@ export const updateChat = async (response, plotState) => {
           geneArrayA = params.features.split(",");
           geneArrayB = plotState.features;
           endpoint = 'neighborhood';
+          params['include_embedding'] = true;
         } else {
           geneArrayA = params.features.split(",");
           geneArrayB = plotState.features.split(",");
