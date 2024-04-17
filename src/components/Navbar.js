@@ -16,7 +16,7 @@ const headerStyle = {
   paddingRight: '2%',
   position: 'fixed', 
   top: 0,
-  width: '100%',
+  width: '96%',
   zIndex: 100, // Ensures the header is above other content
   backgroundColor: '#1D2531',
   opacity: '96%',
@@ -28,7 +28,6 @@ const headerStyle = {
 
 const navItemStyle = {
   color: 'white',
-
 }
 
 const Navbar = () => {
