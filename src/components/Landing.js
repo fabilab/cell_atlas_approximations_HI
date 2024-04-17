@@ -34,7 +34,7 @@ const Landing = () => {
     'List highest accessibility of chr1:9955-10355 in human.',
     'What are the sequences of COL1A1,CD19,ALK,VWF in human?',
     'show the 15 top marker peaks for astrocyte in human brain',
-    'What are the cell states of ML25764a, ML358828a, ML071151a, ML065728a in jellyfish whole?',
+    'What are the cell states of ml25764a, ML358828a, ML071151a, ML065728a in jellyfish whole?',
     'What is the expression of VWF, APOE, COL13A1, COL14A1, TGFBI, PDGFRA, GZMA in human lung?',
     'Compare fraction expressing PTPRC, MARCO, CD68, CD14 in macrophage across organs in human.',
     'What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?',
