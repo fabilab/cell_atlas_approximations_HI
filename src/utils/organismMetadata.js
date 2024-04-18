@@ -8,6 +8,15 @@ const organismMetadata = {
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Amphimedon_queenslandica",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
   },
+  "a_thaliana": {
+    bioName: "Arabidopsis thaliana",
+    commonName: "Thale cress",
+    dataSource: "Shahan et al 2022",
+    about: "Arabidopsis thaliana is a small flowering plant widely used as a model organism in plant biology.",
+    imagePath: require("../asset/organisms/a_thaliana.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Arabidopsis_thaliana",
+    paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S1534580722000338",
+  },
   "c_elegans": {
     bioName: "Caenorhabditis elegans",
     commonName: "Nematode",
@@ -16,6 +25,24 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/c_elegans.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Caenorhabditis_elegans",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.aam8940"
+  },
+  "c_gigas": {
+    bioName: "Crassostrea gigas",
+    commonName: "Pacific oyster (larva)",
+    dataSource: "Piovani et al 2023",
+    about: "Crassostrea gigas is a species of oyster native to the Pacific coast of Asia.",
+    imagePath: require("../asset/organisms/c_gigas.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Pacific_oyster",
+    paperHyperlink: "https://doi.org/10.1126/sciadv.adg6034",
+  },
+  "c_hemisphaerica": {
+    bioName: "Clytia hemisphaerica",
+    commonName: "Marine jellyfish",
+    dataSource: "Chari et al. 2021",
+    about: "Clytia hemisphaerica is a species of jellyfish found in the Mediterranean Sea and the Atlantic Ocean.",
+    imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Clytia_hemisphaerica",
+    paperHyperlink: "https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4",
   },
   "d_melanogaster": {
     bioName: "Drosophila melanogaster",
@@ -301,6 +328,24 @@ const organismMetadata = {
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Starlet_sea_anemone",
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S2211124722012025?via%3Dihub",
   },
+  "p_crozieri": {
+    bioName: "Prostheceraeus crozieri",
+    commonName: "Müller's larva",
+    dataSource: "Piovani et al 2023",
+    about: "Prostheceraeus crozieri is a species of polyclad flatworm found in the Caribbean Sea.",
+    imagePath: require("../asset/organisms/p_crozieri.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Prostheceraeus_crozieri",
+    paperHyperlink: "https://doi.org/10.1126/sciadv.adg6034",
+  },
+  "p_dumerilii": {
+    bioName: "Platynereis dumerilii",
+    commonName: "Annelid worm (larva)",
+    dataSource: "Achim et al 2017",
+    about: "Platynereis dumerilii is a species of annelid worm used as a model organism in developmental biology.",
+    // imagePath: require("../asset/organisms/p_dumerilii.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Platynereis_dumerilii",
+    paperHyperlink: "https://academic.oup.com/mbe/article/35/5/1047/4823215",
+  },
   "s_lacustris": {
     bioName: "Spongilla lacustris",
     commonName: "Freshwater sponge",
@@ -320,6 +365,15 @@ const organismMetadata = {
     paperHyperlink: "https://www.nature.com/articles/s41467-020-20794-w",
 
   },
+  "s_mediterranea": {
+    bioName: "Schmidtea mediterranea",
+    commonName: "Planarian worm",
+    dataSource: `Plass et al 2018 "Cell type atlas and lineage tree of a whole complex animal by single-cell transcriptomics"`,    
+    about: "Schmidtea mediterranea is a planarian found in Europe. It is studied because of its ability to regenerate lost body parts thanks to a large reservoir of stem-like cells.",
+    imagePath: require("../asset/organisms/s_mediterranea.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Schistosoma_mansoni",
+    paperHyperlink: "https://www.science.org/doi/10.1126/science.aaq1723",
+  },
   "s_pistillata": {
     bioName: "Stylophora pistillata",
     commonName: "Stony coral",
@@ -330,24 +384,14 @@ const organismMetadata = {
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S0092867421004402",
 
   },
-  "c_hemisphaerica": {
-    bioName: "Clytia hemisphaerica",
-    commonName: "Jellyfish",
-    dataSource: `Chari et al. 2021 "Whole-animal multiplexed single-cell RNA-seq reveals transcriptional shifts across Clytia medusa cell types"`,    
-    about: "",
-    imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
-    descriptionHyperlink: "",
-    paperHyperlink: "https://www.science.org/doi/10.1126/sciadv.abh1683",
-
-  },
-  "s_mediterranea": {
-    bioName: "Schmidtea mediterranea",
-    commonName: "Planarian worm",
-    dataSource: `Plass et al 2018 "Cell type atlas and lineage tree of a whole complex animal by single-cell transcriptomics"`,    
-    about: "Schmidtea mediterranea is a planarian found in Europe. It is studied because of its ability to regenerate lost body parts thanks to a large reservoir of stem-like cells.",
-    imagePath: require("../asset/organisms/s_mediterranea.jpeg"),
-    descriptionHyperlink: "https://en.wikipedia.org/wiki/Schistosoma_mansoni",
-    paperHyperlink: "https://www.science.org/doi/10.1126/science.aaq1723",
+  "s_purpuratus": {
+    bioName: "Strongylocentrotus purpuratus",
+    commonName: "Purple sea urchin",
+    dataSource: "Paganos et al 2021",
+    about: "Strongylocentrotus purpuratus is a species of sea urchin found along the west coast of North America.",
+    // imagePath: require("../asset/organisms/s_purpuratus.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Strongylocentrotus_purpuratus",
+    paperHyperlink: "https://doi.org/10.7554/eLife.70416",
   },
   "t_adhaerens": {
     bioName: "Trichoplax adhaerens",
@@ -357,6 +401,15 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/t_adhaerens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Trichoplax",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
+  },
+  "t_aestivum": {
+    bioName: "Triticum aestivum",
+    commonName: "Bread wheat",
+    dataSource: "Zhang et al 2023",
+    about: "Triticum aestivum is a species of wheat widely cultivated for its seed, a cereal grain which is a worldwide staple food.",
+    imagePath: require("../asset/organisms/t_aestivum.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Triticum_aestivum",
+    paperHyperlink: "https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x",
   },
   "x_laevis": {
     bioName: "Xenopus laevis",
