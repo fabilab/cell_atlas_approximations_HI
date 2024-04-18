@@ -29,7 +29,7 @@ const organismMetadata = {
   "c_gigas": {
     bioName: "Crassostrea gigas",
     commonName: "Pacific oyster (larva)",
-    dataSource: "Piovani et al 2023",
+    dataSource: `Piovani et al 2023 "Single-cell atlases of two lophotrochozoan larvae highlight their complex evolutionary histories"`,
     about: "Crassostrea gigas is a species of oyster native to the Pacific coast of Asia.",
     imagePath: require("../asset/organisms/c_gigas.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Pacific_oyster",
@@ -38,7 +38,7 @@ const organismMetadata = {
   "c_hemisphaerica": {
     bioName: "Clytia hemisphaerica",
     commonName: "Marine jellyfish",
-    dataSource: "Chari et al. 2021",
+    dataSource:  `Chari et al. 2021 "Whole-animal multiplexed single-cell RNA-seq reveals transcriptional shifts across Clytia medusa cell types"`,
     about: "Clytia hemisphaerica is a species of jellyfish found in the Mediterranean Sea and the Atlantic Ocean.",
     imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Clytia_hemisphaerica",
@@ -331,7 +331,7 @@ const organismMetadata = {
   "p_crozieri": {
     bioName: "Prostheceraeus crozieri",
     commonName: "Müller's larva",
-    dataSource: "Piovani et al 2023",
+    dataSource: `Piovani et al 2023 "Single-cell atlases of two lophotrochozoan larvae highlight their complex evolutionary histories"`,
     about: "Prostheceraeus crozieri is a species of polyclad flatworm found in the Caribbean Sea.",
     imagePath: require("../asset/organisms/p_crozieri.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Prostheceraeus_crozieri",
@@ -340,9 +340,9 @@ const organismMetadata = {
   "p_dumerilii": {
     bioName: "Platynereis dumerilii",
     commonName: "Annelid worm (larva)",
-    dataSource: "Achim et al 2017",
+    dataSource: `Achim et al 2017 "Whole-Body Single-Cell Sequencing Reveals Transcriptional Domains in the Annelid Larval Body"`,
     about: "Platynereis dumerilii is a species of annelid worm used as a model organism in developmental biology.",
-    // imagePath: require("../asset/organisms/p_dumerilii.jpeg"),
+    imagePath: require("../asset/organisms/p_dumerilii.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Platynereis_dumerilii",
     paperHyperlink: "https://academic.oup.com/mbe/article/35/5/1047/4823215",
   },
@@ -387,9 +387,9 @@ const organismMetadata = {
   "s_purpuratus": {
     bioName: "Strongylocentrotus purpuratus",
     commonName: "Purple sea urchin",
-    dataSource: "Paganos et al 2021",
+    dataSource: `Paganos et al 2021 Single-cell RNA sequencing of the Strongylocentrotus purpuratus larva reveals the blueprint of major cell types and nervous system of a non-chordate deuterostome`,
     about: "Strongylocentrotus purpuratus is a species of sea urchin found along the west coast of North America.",
-    // imagePath: require("../asset/organisms/s_purpuratus.jpeg"),
+    imagePath: require("../asset/organisms/s_purpuratus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Strongylocentrotus_purpuratus",
     paperHyperlink: "https://doi.org/10.7554/eLife.70416",
   },
@@ -405,7 +405,7 @@ const organismMetadata = {
   "t_aestivum": {
     bioName: "Triticum aestivum",
     commonName: "Bread wheat",
-    dataSource: "Zhang et al 2023",
+    dataSource: `Zhang et al 2023 "Asymmetric gene expression and cell-type-specific regulatory networks in the root of bread wheat revealed by single-cell multiomics analysis"`,
     about: "Triticum aestivum is a species of wheat widely cultivated for its seed, a cereal grain which is a worldwide staple food.",
     imagePath: require("../asset/organisms/t_aestivum.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Triticum_aestivum",

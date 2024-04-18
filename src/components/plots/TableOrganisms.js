@@ -76,7 +76,7 @@ const TableOrganisms = ({ state }) => {
                   >
                     <img
                       src={image.src}
-                      alt="organisms"
+                      alt="coming soon :)"
                       style={{ maxHeight: '100%', maxWidth: '100%' }}
                     />
                   </div>
