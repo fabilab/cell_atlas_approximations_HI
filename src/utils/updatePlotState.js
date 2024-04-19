@@ -224,16 +224,20 @@ const updateNeighbor = (context) => {
 };
 
 const updateComeasurement = (context) => {
-    let expData, unit;
+    let expData, unit, organs, by;
     // by deault:
     if (context.response.data) {
         expData = context.response.data.expData
         unit = expData[0].unit
+        organs = context.response.data.organs
+        by = context.response.data.by
     }
     //  after appling log:
     else {
         expData = context.plotState.expData
         unit = context.plotState.unit;
+        organs = context.plotState.organs
+        by = context.plotState.by
     }
   
     const features = context.features.split(',');
@@ -247,6 +251,8 @@ const updateComeasurement = (context) => {
         expData: expData,
         unit: unit,
         hasLog: context.plotState.hasLog,
+        organs: organs,
+        by: by,
     };
 }
 
@@ -382,7 +388,6 @@ const plotFunctionDispatcher = {
 
 // Main "public" update plot state function
 export const updatePlotState = (response, plotState, setPlotState) => {
-
   const intent = response.intent;
   const mainIntent = intent.split('.')[0];
   let newPlotState = null;

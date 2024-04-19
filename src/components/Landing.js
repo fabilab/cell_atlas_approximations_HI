@@ -28,7 +28,7 @@ const Landing = () => {
     'What organisms have chromatin accessibility?',
     'Show 10 markers of rod cells in the frog eye.',
     'Show 10 genes similar to Col1a1 in mouse lung.',
-    "What cells coexpress CD19 and MSA41 in human?",
+    "What cells coexpress CD19 and MS4A1 in human?",
     'What cell types are present in each organ of mouse?',
     'What cell type is the highest expressor of GZMA in human?',
     'List highest accessibility of chr1:9955-10355 in human.',
