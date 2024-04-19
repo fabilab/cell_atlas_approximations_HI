@@ -6,7 +6,7 @@ import orgMeta from '../../utils/organismMetadata.js';
 
 const CoexpressScatter = ({ state }) => {
 
-    let { plotType, organism, featureX, featureY, expData, unit, hasLog, by } = state;
+    let { plotType, organism, features, expData, unit, hasLog, by } = state;
 
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
@@ -37,7 +37,7 @@ const CoexpressScatter = ({ state }) => {
         type: 'scatter',
         name: item.organ,
         text: item.average[0].map((_, idx) => {
-            const baseText = `${featureX}: ${item.average[0][idx]}<br>${featureY}: ${item.average[1][idx]}<br>Organ: ${item.organ}`;
+            const baseText = `${features[0]}: ${item.average[0][idx]}<br>${features[1]}: ${item.average[1][idx]}<br>Organ: ${item.organ}`;
             return by === "celltype" ? `${baseText}<br>Cell type: ${item.celltypes[idx]}` : `${baseText}<br>Cell state: ${idx + 1}`;
         }),
         marker: { 
@@ -49,13 +49,13 @@ const CoexpressScatter = ({ state }) => {
     }));
 
     var layout = {
-        title: `Co-expression of ${featureX} and ${featureY} across ${by} and organs in ${organism}`,
+        title: `Coexpression of ${features[0]} and ${features[1]} across ${by} and organs in ${organism}`,
         xaxis: {
-            title: featureX + ` (${unit})`,
+            title: features[0] + ` (${unit})`,
             autorange: true,
         },
         yaxis: {
-            title: featureY + "<br>" + ` (${unit})`,
+            title: features[1] + "<br>" + ` (${unit})`,
             autorange: true
         }
       };

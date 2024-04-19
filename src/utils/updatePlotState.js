@@ -224,30 +224,31 @@ const updateNeighbor = (context) => {
 };
 
 const updateComeasurement = (context) => {
-    let expData, unit, organs, by;
+    let expData, unit, organs, by, features;
     // by deault:
     if (context.response.data) {
         expData = context.response.data.expData
         unit = expData[0].unit
         organs = context.response.data.organs
         by = context.response.data.by
+        features = Array.isArray(context.features) ? context.features : context.features.split(",")
     }
-    //  after appling log:
+    //  after applying log:
     else {
         expData = context.plotState.expData
         unit = context.plotState.unit;
         organs = context.plotState.organs
         by = context.plotState.by
+        features = context.plotState.features
     }
-  
-    const features = context.features.split(',');
 
+    features = Array.isArray(features) ? features : features.split(",")
+  
     return {
         plotType: "coexpressScatter",
         organism: context.organism,
         features: context.features,
-        featureX: features[0],
-        featureY: features[1],
+        features: features,
         expData: expData,
         unit: unit,
         hasLog: context.plotState.hasLog,
@@ -371,7 +372,7 @@ const plotFunctionDispatcher = {
     "explore": exploreOrganism,
     "markers": updateMarkers,
     "average": updateAverage,
-	"celltypes": cellAbundance,
+	  "celltypes": cellAbundance,
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "neighborhood": updateNeighbor,

@@ -52,6 +52,7 @@ export const triggersPlotUpdate = ((response) => {
 
 // Generate bot response and get data
 export const updateChat = async (response, plotState) => {
+  console.log("Calling update chat...");
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split('.')[0];
@@ -98,12 +99,12 @@ export const updateChat = async (response, plotState) => {
             downloadAvailable = false;
           }
         } 
-        answer = buildAnswer(intent, { success: downloadAvailable });
+        answer = buildAnswer(intent, plotState, { success: downloadAvailable });
         return {
           message: answer,
         }
       case "plot":
-        answer = buildAnswer(intent);
+        answer = buildAnswer(intent, plotState);
         return {
           hasData: true,
           params: params,
@@ -117,12 +118,12 @@ export const updateChat = async (response, plotState) => {
             message: "",
           };
         }
-        answer = buildAnswer(intent);
+        answer = buildAnswer(intent, plotState);
         return {
           message: answer,
         }
       default:
-        answer = buildAnswer(intent);
+        answer = buildAnswer(intent, plotState);
         return {
           message: answer,
         }
@@ -196,7 +197,6 @@ export const updateChat = async (response, plotState) => {
     }
 
     if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'neighborhood')) {
-
         response.intent = intent = 'fraction_detected.geneExpression';
         mainIntent = "fraction_detected";
         params = {
@@ -263,18 +263,21 @@ export const updateChat = async (response, plotState) => {
         }
         params.features = geneArrayB.filter(gene => !geneArrayA.includes(gene)).join(",");
       }
-
     }
 
-    // get all tissue
+    // coexpression of two genes (or comeasurements of two features)
+    // FIXME: START COMEASUREMENT -- not quite
+    // This happens when either intent is comeasurement or plotState of coexpressScatter and intent is zoom or log
+    // get data from all tissues
     if (mainIntent === 'comeasurement') {
       endpoint = 'organs';
+      //apiData = await atlasapprox[endpoint](params);
     }
 
+    // comeasurement has a special double API call, deal with it separately
     if (((intent === 'zoom.in.neighborhood') || (intent === "zoom.out.neighborhood")) && (plotState.plotType === 'coexpressScatter')) {
 
     } else {
-      // skip the first API call for the above conditions
       apiData = await atlasapprox[endpoint](params);
     }
     
@@ -283,28 +286,30 @@ export const updateChat = async (response, plotState) => {
       answer = `There are ${numOrganisms} organisms available:<br>`;
     } 
 
-    // from scatter by cell type to by cell state
-    if ((intent === 'zoom.in.neighborhood') && (plotState.plotType === 'coexpressScatter')) {
-      const organs = plotState.organs;
-      params.organism = plotState.organism;
-      params.features = plotState.features;
-      
-      const averagePromises = organs.map(organ => {
-        params.organ = organ;
-        return atlasapprox['neighborhood'](params);
-      })
+    if (plotState.plotType === 'coexpressScatter') {
+  
+      // from scatter by cell type to by cell state, call API about averages in cell states
+      if (intent === 'zoom.in.neighborhood') {
+        const organs = plotState.organs;
+        params.organism = plotState.organism;
+        params.features = plotState.features;
+        const averagePromises = organs.map(organ => {
+          params.organ = organ;
+          return atlasapprox['neighborhood'](params);
+        })
 
-      const expData = await Promise.all(averagePromises);
-      response.intent = intent = 'comeasurement.geneExpression'
+        const expData = await Promise.all(averagePromises);
+        // FIXME: this is part of a big refactoring that needs to happen
+        response.intent = intent = 'comeasurement.geneExpression'
+        apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'cellstate'}
 
-      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'cellstate'}
-    }
-
-    // from scatter by cell state to by cell type
-    if ((intent === 'zoom.out.neighborhood') && (plotState.plotType === 'coexpressScatter')) {
-      response.intent = intent = 'comeasurement.geneExpression';
-      mainIntent = 'comeasurement';
-
+      // from scatter by cell state to by cell type, call API about averages in cell types: the API call is not immediately here because this
+      // looks much like a direct request for co-expression
+      } else if (intent === 'zoom.out.neighborhood') {
+        // FIXME: this is part of a big refactoring that needs to happen
+        response.intent = intent = 'comeasurement.geneExpression';
+        mainIntent = 'comeasurement';
+      }
     }
 
     if (mainIntent === 'comeasurement') {
@@ -316,22 +321,30 @@ export const updateChat = async (response, plotState) => {
       } else {
         organs = apiData.organs;
       }
-
       const averagePromises = organs.map(organ => {
         params.organ = organ;
         return atlasapprox['average'](params);
       })
-
       const expData = await Promise.all(averagePromises);
-
       apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'celltype'}
     }
+    // END COMEASUREMENT
 
     if (intent === "celltypes.geneExpression") {
       apiData.targetCelltypes = targetCelltypes;
       apiData.targetOrgan = targetOrgan;
     }
-    answer += buildAnswer(intent, apiData);
+
+
+    console.log("Update chat, right before building answer...");
+    console.log(intent);
+    console.log(plotState);
+    console.log(apiData);
+
+    answer += buildAnswer(intent, plotState, apiData);
+
+    console.log("Reporting answer after buildAnswer:");
+    console.log(answer);
 
     if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {
       answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
@@ -414,7 +427,7 @@ export const updateChat = async (response, plotState) => {
                 apiData['celltype'] = entities.filter(e => e.entity==='celltype')[0].sourceText;
               }
               answer += `Invalid features detected: "${errorValue}". These have been automatically excluded<br>`;
-              answer += buildAnswer(intent, apiData);
+              answer += buildAnswer(intent, plotState, apiData);
               answer += `<br><br>It covers ${apiData.celltypes.length} cell types and ${apiData.features.length} genes.`
             } else {
               answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;

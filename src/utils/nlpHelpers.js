@@ -4,7 +4,7 @@ const nlp = new AtlasApproxNlp();
 await nlp.initialise();
 
 // Construct an answer given the API has provided the requested information
-const buildAnswer = (intent, data = null) => {
+const buildAnswer = (intent, plotState, data = null) => {
 
   function _chainList(list, sep, end) {
         let text = "";
@@ -27,13 +27,18 @@ const buildAnswer = (intent, data = null) => {
       if (intentParts.length > 2)
         addIntent = intentParts[2];
     }
+
+    // FOR DEBUGGING
+    console.log("Current intent (answer building):");
+    console.log(intent);
+    console.log(gIntent);
       
     switch (gIntent) {
       case "measurement_types":
         answer = "The available measurement types are: " + _chainList(data.measurement_types, ", ", ".");
         break;
       case "organisms":
-        answer = _chainList(data.organisms, ", <br>", ".");
+        answer = _chainList(data.organisms, ", <br>", ".") + "<br><br>Type \"explore <i>organism</i>\" to explore a specific organism.";
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
@@ -99,6 +104,7 @@ const buildAnswer = (intent, data = null) => {
           default:
             answer = "The markers for " + data.celltype + " in " + data.organism + " " + data.organ + " are: " + data.markers;
         }
+        answer += "<br><br>Type \"zoom in\" to see the data at the cell state level.";
         break;
       case "similar_features":
         switch (sIntent) {
@@ -120,7 +126,9 @@ const buildAnswer = (intent, data = null) => {
         answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
         break;
       case "comeasurement":
-        answer = `Here's the co-expression of ${data.features} in ${data.organism}, visualized across cell types and organs. Type "log data" to switch between linear and log scales.`;
+        answer = `Here's the coexpression of ${data.features} across all organs of ${data.organism}.`;
+        answer += "<br><br>Type \"log\" to switch between linear and log scales.";
+        //answer += "<br><br>Type \"zoom in\" to visualise the coexpression at the cell state level.";
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
@@ -189,7 +197,7 @@ const buildAnswer = (intent, data = null) => {
         switch (sIntent) {
           case "geneExpression":
             answer = "The sequences of " + data.features + " in " + data.organism + " are shown.<br><br>Type \"download\" to get a FASTA file of them all.";
-            answer += "<br><br>Please note that currently only protein sequences are available. We are still working on providing the DNA sequences.";
+            answer += "<br><br>Please note that currently only protein sequences are available. We are still working on providing RNA sequences, including for noncoding RNAs.";
             break;
           default:
             answer = "Done";
