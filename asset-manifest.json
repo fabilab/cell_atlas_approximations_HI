@@ -1,7 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.9c8ac44e.css",
-    "main.js": "/static/js/main.0ef22e1b.js",
+    "main.js": "/static/js/main.e6b5ecad.js",
+    "static/media/t_aestivum.jpeg": "/static/media/t_aestivum.88be02293c0b0d38b936.jpeg",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/geneExpHeatmap.png": "/static/media/geneExpHeatmap.73b6ae92652923832853.png",
     "static/media/organismProfile.png": "/static/media/organismProfile.d2ee8c6637a642b467d1.png",
@@ -34,29 +35,34 @@
     "static/media/m_murinus.jpeg": "/static/media/m_murinus.8c58c85541f70f50af85.jpeg",
     "static/media/a_queenslandica.jpeg": "/static/media/a_queenslandica.bb9300ea1b54bb8570b4.jpeg",
     "static/media/s_lacustris.jpeg": "/static/media/s_lacustris.0935ce39a7006abc638e.jpeg",
+    "static/media/a_thaliana.jpeg": "/static/media/a_thaliana.92e4f5b52acae92dec11.jpeg",
     "static/media/i_pulchra.jpeg": "/static/media/i_pulchra.96bb795c00a1b6f79182.jpeg",
     "static/media/d_rerio.jpeg": "/static/media/d_rerio.cbd1203e53f0c0226c08.jpeg",
     "static/media/s_mansoni.jpeg": "/static/media/s_mansoni.d1754567841feac039bc.jpeg",
     "static/media/s_mediterranea.jpeg": "/static/media/s_mediterranea.80824e5e100ef0120367.jpeg",
     "static/media/c_elegans.jpeg": "/static/media/c_elegans.2a5afc0d16dcbc8e9360.jpeg",
+    "static/media/p_crozieri.jpeg": "/static/media/p_crozieri.198fa409d96576a2137a.jpeg",
     "static/media/d_melanogaster.jpeg": "/static/media/d_melanogaster.2cd99b691a1205b4e3a6.jpeg",
     "static/media/n_vectensis.jpeg": "/static/media/n_vectensis.dfd0c3bf3c0a640c7e50.jpeg",
     "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.adc51aab4d771ab65f81.ttf",
+    "static/media/p_dumerilii.jpeg": "/static/media/p_dumerilii.db5945608258cc179049.jpeg",
     "static/media/m_musculus.jpeg": "/static/media/m_musculus.d77198c715a5d44184a0.jpeg",
     "static/media/icon.png": "/static/media/icon.a5678a4e85412637cbbb.png",
+    "static/media/s_purpuratus.jpeg": "/static/media/s_purpuratus.a47ba9a39095d54510fa.jpeg",
     "static/media/temp.jpeg": "/static/media/temp.d4864e37a257623672e0.jpeg",
     "static/media/fabiLogo.png": "/static/media/fabiLogo.d0fe2e8fd74e9426adff.png",
     "static/media/h_miamia.jpeg": "/static/media/h_miamia.7351572b66d85def27b2.jpeg",
+    "static/media/c_gigas.jpeg": "/static/media/c_gigas.b78854c54f985642d7f3.jpeg",
     "static/media/x_laevis.jpeg": "/static/media/x_laevis.8e764c19ea74b9c26d07.jpeg",
     "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.e931bc0d14f5bbb1da22.woff2",
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.2eb7b3ef25042305f3ff.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.b3049b13a93f07e026fc.woff2",
     "index.html": "/index.html",
     "main.9c8ac44e.css.map": "/static/css/main.9c8ac44e.css.map",
-    "main.0ef22e1b.js.map": "/static/js/main.0ef22e1b.js.map"
+    "main.e6b5ecad.js.map": "/static/js/main.e6b5ecad.js.map"
   },
   "entrypoints": [
     "static/css/main.9c8ac44e.css",
-    "static/js/main.0ef22e1b.js"
+    "static/js/main.e6b5ecad.js"
   ]
 }
