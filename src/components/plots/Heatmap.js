@@ -112,6 +112,7 @@ const Heatmap = ({ state }) => {
       },
       yaxis: {
         automargin: true,
+        autorange: 'reversed',
         tickmode: 'array',
         ticktext: yTickTexts,
         tickvals: yTickVals,

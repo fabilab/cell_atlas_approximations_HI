@@ -105,6 +105,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
     },
     yaxis: {
       automargin: true,
+      autorange: 'reversed',
       tickmode: 'array',
       ticktext: yTickTexts,
       tickvals: yTickVals,

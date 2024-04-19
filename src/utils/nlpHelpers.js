@@ -161,7 +161,7 @@ const buildAnswer = (intent, data = null) => {
       case "plot":
         switch (sIntent) {
           case "log":
-            answer = "Done! Data has been modified as requested";
+            answer = "Done! Data has been modified as requested. Type \"log\" again to toggle between logged and linear data.";
             break;
           default:
             answer = "Done";
