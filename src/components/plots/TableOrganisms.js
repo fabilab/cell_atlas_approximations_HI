@@ -13,6 +13,7 @@ const TableOrganisms = ({ state }) => {
   let organismImages = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
     title: orgMeta[org].bioName,
+    commonName: orgMeta[org].commonName,
     id: org
   }));
 
@@ -75,11 +76,19 @@ const TableOrganisms = ({ state }) => {
                   >
                     <img
                       src={image.src}
-                      alt="organisms"
+                      alt="coming soon :)"
                       style={{ maxHeight: '100%', maxWidth: '100%' }}
                     />
                   </div>
-                  <Meta title={<div style={{ textAlign: 'center' }}>{image.title}</div>} />
+                  <Meta
+                    title={
+                      <div style={{ textAlign: 'center' }}>
+                        {image.title}
+                        <br />
+                        <span style={{ fontSize: '0.8em', color: '#4196d5' }}>{image.commonName}</span>
+                      </div>
+                    }
+                  />
                 </Card>
               </Fade>
             </Col>
