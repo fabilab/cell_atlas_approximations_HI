@@ -6,7 +6,7 @@ import { CopyOutlined } from '@ant-design/icons';
 import { useState } from "react";
 
 const Message = (props) => {
-  const { role, message, pause, help, setCurrentMessage } = props;
+  const { role, message, pause, help } = props;
   const [copyStatus, setCopyStatus] = useState('not-copied');
   let formattedMessage = message;
   formattedMessage = formattedMessage.replace(/,([^ ])/g, ', $1');
@@ -38,12 +38,11 @@ const Message = (props) => {
     fontSize: '13px',
     backgroundColor: role === 'user' ? '#565C5E' : 'white',
     color: role === 'user' ? 'white' : '#565C5E',
-    marginLeft: role === 'user' ? '0px' : '10px',
     position: 'relative',
     boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
     padding: '10px',
     borderRadius: '6px',
-    marginLeft: role === 'user' ? '15px' : '0px',
+    marginLeft: role === 'user' ? '0px' : '10px',
     marginRight: role === 'user' ? '0px' : '15px',
   }
 

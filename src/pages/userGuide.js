@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import orgMeta from '../utils/organismMetadata';
 import { Row, Col, Tabs, Collapse, Divider } from 'antd';
 import imgIllustration from '../demo/illu.png';
 import geneExpHeatmap from '../demo/geneExpHeatmap.png';
@@ -52,12 +51,12 @@ const UserGuide = () => {
               </h2>
             </Col>
             <Col span={10}>
-              <img src={imgIllustration} alt="Description of Image" style={{ width: '100%' }} />
+              <img src={imgIllustration} alt="" style={{ width: '100%' }} />
             </Col>
           </Row>
         </div>
 
-        <h2 style={{ color: "rgb(48, 49, 49)" }}>What kind of cell diversity are you into? <img src='https://images.emojiterra.com/google/noto-emoji/unicode-15/animated/1f984.gif' style={{width:"35px"}}></img>
+        <h2 style={{ color: "rgb(48, 49, 49)" }}>What kind of cell diversity are you into? <img src='https://images.emojiterra.com/google/noto-emoji/unicode-15/animated/1f984.gif' style={{width:"35px"}} alt=""></img>
 </h2>
 		<Divider style={{ borderTopWidth: "1px", borderColor: "rgb(48, 49, 49, 0.5)" }}></Divider>
         <Tabs defaultActiveKey="1" centered type='card'>

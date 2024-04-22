@@ -10,22 +10,10 @@ import FeedbackForm from './FeedbackForm';
 const MainBoard = () => {
   const location = useLocation();
   const navigate = useNavigate(); 
-  const [firstQuery, setFirstQuery] = useState(location.state);
+  const [firstQuery] = useState(location.state);
   const [chatHistory, setChatHistory] = useState(null);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [plotState, setPlotState] = useState({"hasLog": false});
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   //  The following code was adapted from guidance provided by OpenAI's GPT-4.
   useEffect(() => {
@@ -54,6 +42,7 @@ const MainBoard = () => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
     } 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentResponse]);
 
   return (
