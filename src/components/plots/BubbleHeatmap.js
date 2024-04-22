@@ -253,11 +253,12 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   }
 
   useEffect(() => {
-    if (hoveredGene && setHoveredGeneColor && setHoveredGene) {
+    if (hoveredGene && setHoveredGeneColor) {
       const normalisedAverage = normalizeArray(average);
       const colors = normalisedAverage[yaxis.indexOf(hoveredGene)].map(a => mapToColor(a))
       setHoveredGeneColor(colors);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasLog])
 
   // The following part should only be implement when user is looking at the neighhood page:

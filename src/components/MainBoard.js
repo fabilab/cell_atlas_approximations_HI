@@ -42,6 +42,7 @@ const MainBoard = () => {
     if (triggersPlotUpdate(currentResponse)) {
       updatePlotState(currentResponse, plotState, setPlotState);
     } 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentResponse]);
 
   return (

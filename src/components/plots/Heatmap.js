@@ -30,12 +30,14 @@ const Heatmap = ({ state }) => {
     setPaperHyperlink(orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable");
   
     // Apply log transform to data is requested by user
+    let plot_unit = unit;
+    let plot_values = values;
     if (hasLog) {
-      values = values.map(subArray => subArray.map(value => Math.log(value)));
-      unit = "log( " + unit + " )";
+      plot_values = values.map(subArray => subArray.map(value => Math.log(value)));
+      plot_unit = "log( " + unit + " )";
     } 
 
-    values = values.map(subArray => subArray.map(value => value.toPrecision(3)));
+    plot_values = plot_values.map(subArray => subArray.map(value => value.toPrecision(3)));
   
     let longestXlabel = 0, longestYlabel = 0;
     for (let i = 0; i < xaxis.length; i++) {
@@ -83,7 +85,7 @@ const Heatmap = ({ state }) => {
 
     let data = [
       {
-        z: values,
+        z: plot_values,
         x: xaxis,
         y: yaxis,
         type: 'heatmap',
@@ -91,7 +93,7 @@ const Heatmap = ({ state }) => {
         reversescale: true,
         colorbar: {
           title: {
-            text: unit,
+            text: plot_unit,
           },
           len: 1.2,
         },
@@ -160,7 +162,7 @@ const Heatmap = ({ state }) => {
           click: function() {
             let text = "," + xaxis.join(',') + '\n';
             for (let i = 0; i < yaxis.length; i++) {
-              text += yaxis[i] + ',' + values[i].join(',') + '\n';
+              text += yaxis[i] + ',' + plot_values[i].join(',') + '\n';
             }
             const blob = new Blob([text], { type: 'text/plain' });
             const a = document.createElement('a');
@@ -181,6 +183,7 @@ const Heatmap = ({ state }) => {
     setData(data);
     setLayout(layout);
     setConfig(config);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   if (plotData && plotLayout && plotConfig) {
