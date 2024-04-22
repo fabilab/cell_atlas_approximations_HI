@@ -43,16 +43,16 @@ const Navbar = () => {
           </div>
           <div style={{ marginRight: '20px' }}>
             <CodeOutlined />
-            <a href="//atlasapprox.readthedocs.io/en/latest/index.html" target="_blank" style={navItemStyle} className="tab-link"> API</a>
+            <a href="//atlasapprox.readthedocs.io/en/latest/index.html" target="_blank" rel="noreferrer" style={navItemStyle} className="tab-link"> API</a>
           </div>
           <div style={{ marginRight: '20px' }}>
             <GithubOutlined />
-            <a href="//github.com/fabilab/cell_atlas_approximations" target="_blank" style={navItemStyle} className="tab-link"> Github Repo
+            <a href="//github.com/fabilab/cell_atlas_approximations" target="_blank"  rel="noreferrer" style={navItemStyle} className="tab-link"> Github Repo
             </a>
           </div>
           <div>
             <CustomerServiceOutlined />
-            <a href="//fabilab.org/pages/contact.html" target="_blank" style={navItemStyle} className="tab-link"> Contact us</a>
+            <a href="//fabilab.org/pages/contact.html" target="_blank" rel="noreferrer" style={navItemStyle} className="tab-link"> Contact us</a>
           </div>
         </div>
       </Header>
