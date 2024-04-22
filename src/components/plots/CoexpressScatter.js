@@ -6,7 +6,7 @@ import orgMeta from '../../utils/organismMetadata.js';
 
 const CoexpressScatter = ({ state }) => {
 
-    let { plotType, organism, features, expData, unit, hasLog, by } = state;
+    let { organism, features, expData, unit, hasLog, by } = state;
 
     let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
     let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";

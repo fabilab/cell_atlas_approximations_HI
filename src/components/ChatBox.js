@@ -7,8 +7,6 @@ import { updateChat } from "../utils/chatSideEffects";
 import { nlp } from "../utils/nlpHelpers";
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
-  const [currentMessage, setCurrentMessage] = useState('');
-  const [chatContext, setChatContext] = useState({});
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const { localMessage, setLocalMessage } = useChat();
@@ -50,8 +48,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       setMessageHistory([]);
       setHistoryIndex(0);
       setChatHistory([]);
-      setChatContext({});
-      setCurrentMessage('');
       return '';
     }
 
@@ -62,7 +58,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
     if (text === 'clear') {
       return resetEverything();
     } else {
-      setCurrentMessage(localMessage); 
       let response = await nlp.ask(text);
 
       try {
@@ -130,7 +125,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
                 message={m.message}
                 pause={false}
                 help={m.isHelp}
-                setCurrentMessage={(m) => setCurrentMessage(m)}
               />
           ))}
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import orgMeta from '../utils/organismMetadata';
 import { Row, Col, Tabs, Collapse, Divider } from 'antd';
 import imgIllustration from '../demo/illu.png';
 import geneExpHeatmap from '../demo/geneExpHeatmap.png';
