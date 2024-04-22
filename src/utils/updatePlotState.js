@@ -247,7 +247,6 @@ const updateComeasurement = (context) => {
     return {
         plotType: "coexpressScatter",
         organism: context.organism,
-        features: context.features,
         features: features,
         expData: expData,
         unit: unit,

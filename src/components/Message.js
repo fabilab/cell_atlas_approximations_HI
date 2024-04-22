@@ -38,12 +38,11 @@ const Message = (props) => {
     fontSize: '13px',
     backgroundColor: role === 'user' ? '#565C5E' : 'white',
     color: role === 'user' ? 'white' : '#565C5E',
-    marginLeft: role === 'user' ? '0px' : '10px',
     position: 'relative',
     boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
     padding: '10px',
     borderRadius: '6px',
-    marginLeft: role === 'user' ? '15px' : '0px',
+    marginLeft: role === 'user' ? '0px' : '10px',
     marginRight: role === 'user' ? '0px' : '15px',
   }
 

@@ -55,7 +55,7 @@ const CoexpressScatter = ({ state }) => {
             autorange: true,
         },
         yaxis: {
-            title: features[1] + "<br>" + ` (${unit})`,
+            title: `${features[1]}<br>(${unit})`,
             autorange: true
         }
       };
