@@ -1,12 +1,7 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import { buildAPIParams, buildAnswer } from "./nlpHelpers.js";
-import { handleNoApiIntents } from "./hanleNoApiIntent.js"
-
-
-
-const toCamel = (str) => {
-  return str.replace(/(?!^)_(.)/g, (_, char) => char.toUpperCase());
-};
+import { handleNoApiIntents } from "./hanleNoApiIntent.js";
+import { handlePlotConversion } from "./plotConversion.js";
 
 // updatePlotIntents: An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
@@ -52,7 +47,6 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
-
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -81,7 +75,7 @@ export const updateChat = async (response, plotState) => {
     };
   }
 
-  // prepare the endpoint and parameters based on the user's intent and entities. 
+  // prepare the endpoint and parameters based on the user's intent and entities.
   // modifications might be necessary to ensure the API call functions correctly.
   ({ endpoint, params } = buildAPIParams(intent, entities));
 
@@ -92,54 +86,16 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
-    //  plot conversion
-    //  START
-    if (mainIntent === "convert_to") {
-      const {
-        plotType,
-        features,
-        organ,
-        organism,
-        celltype,
-        measurement_type,
-      } = plotState;
-      const plotTypeIntentMap = {
-        dotplot: {
-          average: {
-            intent: `fraction_detected.${toCamel(measurement_type)}`,
-            params: { features, organ, organism },
-          },
-          averageAcrossOrgans: {
-            intent: `fraction_detected.${toCamel(
-              measurement_type
-            )}.across_organs`,
-            params: { celltype, features, organism },
-          },
-        },
-        heatmap: {
-          fractionDetected: {
-            intent: `average.${toCamel(measurement_type)}`,
-            params: { features, organ, organism },
-          },
-          fractionDetectedAcrossOrgans: {
-            intent: `average.${toCamel(measurement_type)}.across_organs`,
-            params: { celltype, features, organism },
-          },
-        },
-      };
-
-      const conversion = plotTypeIntentMap[subIntent]?.[plotType];
-      if (conversion) {
-        intent = conversion.intent;
-        Object.assign(params, conversion.params);
-        mainIntent = intent.split(".")[0];
-        subIntent = intent.split(".")[1] || null;
+    //  START: plot conversion
+    const plotConversionResult = handlePlotConversion(mainIntent, subIntent, plotState, params);
+    if (plotConversionResult) {
+      if (plotConversionResult.message) {
+        return plotConversionResult;
       } else {
-        return {
-          message: "Plot conversion is not available for the current plot type",
-        };
+        ({ intent, mainIntent, subIntent, params } = plotConversionResult);
       }
     }
+
     // END
 
     if (mainIntent === "neighborhood") {
