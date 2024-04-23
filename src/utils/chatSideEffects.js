@@ -1,7 +1,8 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import { buildAPIParams, buildAnswer } from "./nlpHelpers.js";
-import { downloadFasta } from "./downloadFasta";
-import { downloadTable } from "./downloadTable";
+import { handleNoApiIntents } from "./hanleNoApiIntent.js"
+
+
 
 const toCamel = (str) => {
   return str.replace(/(?!^)_(.)/g, (_, char) => char.toUpperCase());
@@ -86,54 +87,7 @@ export const updateChat = async (response, plotState) => {
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
-    switch (mainIntent) {
-      case "download":
-        let downloadAvailable = true;
-        if (plotState.plotType === "featureSequences") {
-          try {
-            downloadFasta(plotState);
-          } catch (err) {
-            downloadAvailable = false;
-          }
-        } else if (
-          plotState.plotType === "celltypeXorgan" ||
-          plotState.plotType === "organXorganism"
-        ) {
-          try {
-            downloadTable(plotState, plotState.plotType);
-          } catch (err) {
-            downloadAvailable = false;
-          }
-        }
-        answer = buildAnswer(intent, plotState, { success: downloadAvailable });
-        return {
-          message: answer,
-        };
-      case "plot":
-        answer = buildAnswer(intent, plotState);
-        return {
-          hasData: true,
-          params: params,
-          data: plotState.data,
-          message: answer,
-        };
-      case "greetings":
-        if (subIntent === "bye") {
-          return {
-            resetEverything: true,
-            message: "",
-          };
-        }
-        answer = buildAnswer(intent, plotState);
-        return {
-          message: answer,
-        };
-      default:
-        answer = buildAnswer(intent, plotState);
-        return {
-          message: answer,
-        };
-    }
+    return handleNoApiIntents(mainIntent, subIntent, intent, plotState, params);
   }
 
   // Intents that requires API calls & error handling
