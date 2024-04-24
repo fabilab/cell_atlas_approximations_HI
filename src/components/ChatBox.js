@@ -97,7 +97,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       await handleSubmit(initialMessage);
     }
     if (!chatHistory || chatHistory.length === 0) {
-      console.log('first submit')
       firstSubmit();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

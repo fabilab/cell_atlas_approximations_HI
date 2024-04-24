@@ -29,9 +29,6 @@ const buildAnswer = (intent, plotState, data = null) => {
     }
 
     // FOR DEBUGGING
-    console.log("Current intent (answer building):");
-    console.log(intent);
-    console.log(gIntent);
       
     switch (gIntent) {
       case "measurement_types":
@@ -128,7 +125,7 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "comeasurement":
         answer = `Here's the coexpression of ${data.features} across all organs of ${data.organism}.`;
         answer += "<br><br>Type \"log\" to switch between linear and log scales.";
-        //answer += "<br><br>Type \"zoom in\" to visualise the coexpression at the cell state level.";
+        answer += "<br><br>Type \"zoom in\" to visualise the coexpression at the cell state level.";
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
@@ -155,6 +152,18 @@ const buildAnswer = (intent, plotState, data = null) => {
             break;
           default:
             answer = "Added.";
+        }
+        break;
+      case "zoom":
+        switch (sIntent) {
+          case "in":
+            answer = "Type \"zoom out\" to visualise the data back at cell type level.";
+            break;
+          case "out":
+            answer = "Type \"zoom in\" to visualise data at cell state level.";
+            break;
+          default:
+            answer = "Done";
         }
         break;
       case "remove":

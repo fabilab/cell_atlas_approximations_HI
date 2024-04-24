@@ -218,126 +218,115 @@ export const updateChat = async (response, plotState) => {
       }
     }
 
-    // coexpression of two genes (or comeasurements of two features)
-    // FIXME: START COMEASUREMENT -- not quite
-    // This happens when either intent is comeasurement or plotState of coexpressScatter and intent is zoom or log
-    // get data from all tissues
-    if (mainIntent === "comeasurement") {
-      endpoint = "organs";
-      //apiData = await atlasapprox[endpoint](params);
+    if (mainIntent === 'comeasurement') {
+      endpoint = 'organs';
     }
 
-    // comeasurement has a special double API call, deal with it separately
-    if (
-      (intent === "zoom.in.neighborhood" ||
-        intent === "zoom.out.neighborhood") &&
-      plotState.plotType === "coexpressScatter"
-    ) {
-    } else {
-      apiData = await atlasapprox[endpoint](params);
+    // when user already at co-rexpression analysis and want to zoom in/out, no need to call organs enpoint
+    // just need to call extra endpoints
+    if (plotState.plotType === 'coexpressScatter' && mainIntent === 'zoom') {
+      endpoint = null
+      if (intent === 'zoom.out.neighborhood') {
+        response.intent = intent = 'comeasurement.geneExpression';
+        mainIntent = 'comeasurement';
+      }
     }
+
+    // ------------------- START CALLING MAIN API ENDPOINT ------------------- //
+    if (endpoint) {
+      // all main end point call here
+      apiData = await atlasapprox[endpoint](params);
+
+      if (intent === "celltypes.geneExpression") {
+        apiData.targetCelltypes = targetCelltypes;
+        apiData.targetOrgan = targetOrgan;
+      }
+
+    }
+
+    // ------------------- END CALLING MAIN API ENDPOINT ------------------- //
+    
+    // ------------------- START CALLING EXTRA ENPOINTS ------------------- //
+
+    if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility") {
+      if (apiData.markers.length === 0) {
+        answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
+      } else {
+          extraEndpointsToCall.push('dotplot');
+      }
+    }
+
+    // for example, markers: the initial API call will give us a list of genes
+    // but we still need to make another API call through the 'dotplot' endpoint to get data for plotting
+    for (const e of extraEndpointsToCall) {
+
+      if (mainIntent === 'similar_features' || mainIntent === 'markers') {
+        params.features = [...apiData[endpoint]];
+        endpoint === 'similar_features' && params.features.push(params.feature);
+        delete params['celltype']
+      }
+      params.features = [...new Set(params.features)];
+      let extraApiData = await atlasapprox[e](params);
+      apiData = {...apiData, ...extraApiData};
+    }
+
+    // extra parallel API calls to fecth avg expression for each organ
+    if (intent === 'zoom.in.neighborhood' && plotState.plotType === 'coexpressScatter') {
+      const organs = plotState.organs;
+      params.organism = plotState.organism;
+      params.features = plotState.features;
+      const averagePromises = organs.map(organ => {
+        params.organ = organ;
+        return atlasapprox['neighborhood'](params);
+      })
+      const expData = await Promise.all(averagePromises);
+      response.intent = intent = 'comeasurement.geneExpression'
+      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'cellstate'}
+    } 
+
+    // extra parallel API calls to fecth avg expression for each organ
+    if (mainIntent === 'comeasurement') {
+      let organs = apiData?.organs;
+
+      // user typing in zoom out without zooming in
+      // or user type in a new coexpression query right after zooming out
+      // or user zoom out after zooming in
+      if (plotState?.by === 'cellstate' || plotState?.by === 'celltype') {
+        organs = plotState.organs;
+        
+        // BUG FIXED: if this is another coexpression query on top of an existing coexpression query
+        // we don't want to use the old params in the new query
+        // so we only assign params a values when we are 'zooming out'
+        if (Object.keys(params).length === 0) {
+          params.features = plotState.features;
+          params.organism = plotState.organism;
+        }
+      }
+      const averagePromises = organs.map(organ => {
+        params.organ = organ;
+        return atlasapprox['average'](params);
+      })
+      const expData = await Promise.all(averagePromises);
+      apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'celltype'}
+    }
+
+    // ------------------- END CALLING EXTRA ENPOINTS ------------------- //
+
+    // ------------------- START BUILDING ANSWER WHEN MAIN API CALL SUCCEEDS ------------------- //
 
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
       answer = `There are ${numOrganisms} organisms available:<br>`;
-    }
-
-    if (plotState.plotType === "coexpressScatter") {
-      // from scatter by cell type to by cell state, call API about averages in cell states
-      if (intent === "zoom.in.neighborhood") {
-        const organs = plotState.organs;
-        params.organism = plotState.organism;
-        params.features = plotState.features;
-        const averagePromises = organs.map((organ) => {
-          params.organ = organ;
-          return atlasapprox["neighborhood"](params);
-        });
-
-        const expData = await Promise.all(averagePromises);
-        // FIXME: this is part of a big refactoring that needs to happen
-        response.intent = intent = "comeasurement.geneExpression";
-        apiData = {
-          expData: expData,
-          features: params.features,
-          organism: params.organism,
-          organs: organs,
-          by: "cellstate",
-        };
-
-        // from scatter by cell state to by cell type, call API about averages in cell types: the API call is not immediately here because this
-        // looks much like a direct request for co-expression
-      } else if (intent === "zoom.out.neighborhood") {
-        // FIXME: this is part of a big refactoring that needs to happen
-        response.intent = intent = "comeasurement.geneExpression";
-        mainIntent = "comeasurement";
-      }
-    }
-
-    if (mainIntent === "comeasurement") {
-      let organs;
-      if (plotState && plotState.by === "cellstate") {
-        organs = plotState.organs;
-        params.organism = plotState.organism;
-        params.features = plotState.features;
-      } else {
-        organs = apiData.organs;
-      }
-      const averagePromises = organs.map((organ) => {
-        params.organ = organ;
-        return atlasapprox["average"](params);
-      });
-      const expData = await Promise.all(averagePromises);
-      apiData = {
-        expData: expData,
-        features: params.features,
-        organism: params.organism,
-        organs: organs,
-        by: "celltype",
-      };
-    }
-    // END COMEASUREMENT
-
-    if (intent === "celltypes.geneExpression") {
-      apiData.targetCelltypes = targetCelltypes;
-      apiData.targetOrgan = targetOrgan;
-    }
-
-    console.log("Update chat, right before building answer...");
-    console.log(intent);
-    console.log(plotState);
-    console.log(apiData);
+    } 
 
     answer += buildAnswer(intent, plotState, apiData);
 
-    console.log("Reporting answer after buildAnswer:");
-    console.log(answer);
-
     if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {
-      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`;
+      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
     }
 
-    if (
-      intent === "markers.geneExpression" ||
-      intent === "markers.chromatinAccessibility"
-    ) {
-      if (apiData.markers.length === 0) {
-        answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
-      } else {
-        extraEndpointsToCall.push("dotplot");
-      }
-    }
-
-    // for intent like "marker, fraction, similar celltypes"
-    for (const e of extraEndpointsToCall) {
-      if (mainIntent === "similar_features" || mainIntent === "markers") {
-        params.features = [...apiData[endpoint]];
-        endpoint === "similar_features" && params.features.push(params.feature);
-        delete params["celltype"];
-      }
-      params.features = [...new Set(params.features)];
-      let extraApiData = await atlasapprox[e](params);
-      apiData = { ...apiData, ...extraApiData };
-    }
+    // ------------------- END BUILDING ANSWER WHEN MAIN API CALL SUCCEEDS ------------------- //
+    
   } catch ({ status, message, error }) {
     let errorValue = error.invalid_value;
     let errorParam = error["invalid_parameter"];
