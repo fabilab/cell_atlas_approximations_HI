@@ -2,6 +2,7 @@ import atlasapprox from "@fabilab/atlasapprox";
 import { buildAPIParams, buildAnswer } from "./nlpHelpers.js";
 import { handleNoApiIntents } from "./hanleNoApiIntent.js";
 import { handlePlotConversion } from "./plotConversion.js";
+import { handleAddRemove } from "./addRemoveHandler.js";
 
 // updatePlotIntents: An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
@@ -171,51 +172,9 @@ export const updateChat = async (response, plotState) => {
       endpoint = "dotplot";
     }
     if (["add", "remove"].includes(mainIntent)) {
-      params["organism"] = plotState.organism;
-
-      if (plotState.plotType.endsWith("AcrossOrgans")) {
-        params["celltype"] = plotState.celltype;
-      } else {
-        params["organ"] = plotState.organ;
-      }
-
-      if (plotState.plotType.startsWith("fraction")) {
-        endpoint = "dotplot";
-      } else {
-        endpoint = "average";
-      }
-
-      if (mainIntent === "add" && params.features && plotState.features) {
-        let plotStateGenes;
-        if (plotState.plotType === "neighborhood") {
-          plotStateGenes = plotState.features;
-          endpoint = "neighborhood";
-          params["include_embedding"] = true;
-        } else {
-          plotStateGenes = plotState.features
-            .split(",")
-            .map((gene) => gene.trim());
-        }
-        params.features = [
-          ...new Set([...params.features.split(","), ...plotStateGenes]),
-        ].join(",");
-      }
-
-      if (mainIntent === "remove" && params.features && plotState.features) {
-        let geneArrayA, geneArrayB;
-        if (plotState.plotType === "neighborhood") {
-          geneArrayA = params.features.split(",");
-          geneArrayB = plotState.features;
-          endpoint = "neighborhood";
-          params["include_embedding"] = true;
-        } else {
-          geneArrayA = params.features.split(",");
-          geneArrayB = plotState.features.split(",");
-        }
-        params.features = geneArrayB
-          .filter((gene) => !geneArrayA.includes(gene))
-          .join(",");
-      }
+      const result = handleAddRemove(mainIntent, params, plotState, endpoint);
+      params = result.params;
+      endpoint = result.endpoint;
     }
 
     if (mainIntent === 'comeasurement') {
@@ -340,8 +299,7 @@ export const updateChat = async (response, plotState) => {
           answer += "What organ would you like to look at?";
           break;
         case "features":
-          answer +=
-            "Please list the features (e.g. genes) you would like to look into.";
+          answer += "Please list the features (e.g. genes) you would like to look into.";
           break;
         case "celltype":
           answer += "Which cell type?";

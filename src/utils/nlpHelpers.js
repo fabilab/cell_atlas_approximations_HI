@@ -27,8 +27,6 @@ const buildAnswer = (intent, plotState, data = null) => {
       if (intentParts.length > 2)
         addIntent = intentParts[2];
     }
-
-    // FOR DEBUGGING
       
     switch (gIntent) {
       case "measurement_types":
