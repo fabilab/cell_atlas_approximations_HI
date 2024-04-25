@@ -121,9 +121,14 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
         break;
       case "comeasurement":
-        answer = `Here's the coexpression of ${data.features} across all organs of ${data.organism}.`;
+        console.log(plotState,data);
+        answer = `Here's the coexpression of ${typeof data.features === 'string' ? data.features.split(',').join(' and ') : data.features.join(' and ')} across all organs of ${data.organism}.`;
         answer += "<br><br>Type \"log\" to switch between linear and log scales.";
-        answer += "<br><br>Type \"zoom in\" to visualise the coexpression at the cell state level.";
+        if (data?.by === 'celltype') {
+          answer += "<br><br>Type \"zoom in\" to visualise data at cell state level.";
+        } else if (data?.by === 'cellstate') {
+          answer += "<br><br>Type \"zoom out\" to visualise the data back at cell type level.";
+        }
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
