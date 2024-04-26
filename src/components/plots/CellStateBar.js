@@ -1,5 +1,5 @@
 import React from 'react';
-import { downloadSVG } from '../../utils/downLoadSvg';
+import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
 import Plot from 'react-plotly.js';
 
 const CellStateBar = ({ state }) => {

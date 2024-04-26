@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
-import { downloadSVG } from '../../utils/downLoadSvg';
+import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
 import orgMeta from '../../utils/organismMetadata.js';
 import { Popover, Button } from 'antd';
 import {selectAll} from "d3";

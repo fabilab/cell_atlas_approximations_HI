@@ -1,4 +1,4 @@
-import { buildAnswer } from "./nlpHelpers.js";
+import { buildAnswer } from "../nlpResponseGenerator.js";
 import atlasapprox from "@fabilab/atlasapprox";
 
 export const handleErrors = async (error, mainIntent, params, entities, answer, endpoint, plotState, intent, message) => {

@@ -1,8 +1,8 @@
 // handleNoApiIntents.js
 
-import { buildAnswer } from './nlpHelpers.js';
-import { downloadFasta } from "./downloadFasta";
-import { downloadTable } from "./downloadTable";
+import { buildAnswer } from '../nlpResponseGenerator.js';
+import { downloadFasta } from "../downloadHelpers/downloadFasta.js";
+import { downloadTable } from "../downloadHelpers/downloadTable.js";
 
 export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, params) {
   let answer;

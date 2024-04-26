@@ -4,7 +4,7 @@ import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
-import { nlp } from "../utils/nlpHelpers";
+import { nlp } from "../utils/nlpResponseGenerator";
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [messageHistory, setMessageHistory] = useState([]);
