@@ -3,7 +3,7 @@ import { Card, Row, Col, Typography } from 'antd';
 import { Fade } from 'react-awesome-reveal';
 import orgMeta from '../../utils/organismMetadata.js'; 
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ state }) => {
@@ -54,7 +54,11 @@ const TableOrganisms = ({ state }) => {
       <Title level={3} style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '5vh' }}>
         Available Organisms
       </Title>
-
+        <div style={{ textAlign: 'right', marginTop: '2rem', marginRight: '1rem' }}>
+          <Text type="secondary">
+            Drawings proudly created by @Haolan Li
+          </Text>
+        </div>
       {rows.map((row, index) => (
         <Row gutter={[32, 24]} key={index} justify="center">
           {row.map((image, innerIndex) => (
