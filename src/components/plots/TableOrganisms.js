@@ -56,7 +56,7 @@ const TableOrganisms = ({ state }) => {
       </Title>
         <div style={{ textAlign: 'right', marginTop: '2rem', marginRight: '1rem' }}>
           <Text type="secondary">
-            Drawings proudly created by @Haolan Li
+            Drawings proudly created by Haolan Zhou (lankelcy@qq.com)
           </Text>
         </div>
       {rows.map((row, index) => (
