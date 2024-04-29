@@ -1,6 +1,6 @@
 // handleNoApiIntents.js
 
-import { buildAnswer } from '../nlpResponseGenerator.js';
+import { buildAnswer } from './nlpResponseGenerator.js';
 import { downloadFasta } from "../downloadHelpers/downloadFasta.js";
 import { downloadTable } from "../downloadHelpers/downloadTable.js";
 

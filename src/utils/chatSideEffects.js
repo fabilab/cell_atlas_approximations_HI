@@ -1,9 +1,9 @@
 import atlasapprox from "@fabilab/atlasapprox";
-import { buildAPIParams, buildAnswer } from "./nlpResponseGenerator.js";
-import { handleNoApiIntents } from "./chatHelper.js/hanleNoApiIntent.js";
-import { handlePlotConversion } from "./chatHelper.js/plotConversion.js";
-import { handleAddRemove } from "./chatHelper.js/addRemoveHandler.js";
-import { handleErrors } from "./chatHelper.js/errorHandler.js"; 
+import { buildAPIParams, buildAnswer } from "./chatHelpers/nlpResponseGenerator.js";
+import { handleNoApiIntents } from "./chatHelpers/hanleNoApiIntent.js";
+import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
+import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
+import { handleErrors } from "./chatHelpers/errorHandler.js"; 
 
 // updatePlotIntents: An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
