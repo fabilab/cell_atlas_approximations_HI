@@ -1,11 +1,11 @@
 import atlasapprox from "@fabilab/atlasapprox";
 import { buildAPIParams, buildAnswer } from "./chatHelpers/nlpResponseGenerator.js";
-import { handleNoApiIntents } from "./chatHelpers/hanleNoApiIntent.js";
+import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js"; 
 
-// updatePlotIntents: An array of intents that trigger a plot update.
+// An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
 const updatePlotIntents = [
   "add",
@@ -29,12 +29,12 @@ const updatePlotIntents = [
   "highest_measurement",
 ];
 
-// mainIntentNotRequiresApi: An array of main intents that don't require an API call.
+// An array of main intents that don't require an API call.
 // These intents can be handled without fetching data from the API.
 const mainIntentNotRequiresApi = ["greetings", "download", "plot"];
 
-// triggersPlotUpdate: Checks if a response triggers a plot update.
-// It verifies if the response contains data and if the main intent is included in the updatePlotIntents array.
+// Checks if a response triggers a plot update.
+// Verifies if the response contains data and if the main intent is included in the updatePlotIntents array.
 export const triggersPlotUpdate = (response) => {
   if (!response) return false;
   if (!response.hasData) return false;
@@ -88,7 +88,7 @@ export const updateChat = async (response, plotState) => {
 
   // Intents that requires API calls & error handling
   try {
-    //  START: plot conversion
+    //  START: Plot conversion
     const plotConversionResult = handlePlotConversion(mainIntent, subIntent, plotState, params);
     if (plotConversionResult) {
       if (plotConversionResult.message) {
@@ -98,8 +98,10 @@ export const updateChat = async (response, plotState) => {
       }
     }
 
-    // END
+    // END: Plot conversion
 
+
+    // START: Adjustment of parameters to ensure correct API call
     if (mainIntent === "neighborhood") {
       params["include_embedding"] = true;
     }
@@ -126,11 +128,12 @@ export const updateChat = async (response, plotState) => {
       endpoint = "celltypexorgan";
     }
 
-    // for intents that without actual data, we need to make extra api calls
+    // Handle intents without actual data requiring extra API calls
     if (mainIntent === "similar_features") {
       extraEndpointsToCall.push("dotplot");
     }
 
+    // Handle exploration intents for different organism measurements
     if (intent === "explore.organism.geneExpression") {
       endpoint = "organs";
       params["measurement_type"] = "gene_expression";
@@ -172,6 +175,7 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === "fraction_detected" || mainIntent === "average") {
       endpoint = "dotplot";
     }
+
     if (["add", "remove"].includes(mainIntent)) {
       const result = handleAddRemove(mainIntent, params, plotState, endpoint);
       params = result.params;
@@ -191,10 +195,10 @@ export const updateChat = async (response, plotState) => {
         mainIntent = 'comeasurement';
       }
     }
+    // END parameter adjustment
 
-    // ------------------- START CALLING MAIN API ENDPOINT ------------------- //
+     // START: Calling main API endpoint
     if (endpoint) {
-      // all main end point call here
       apiData = await atlasapprox[endpoint](params);
 
       if (intent === "celltypes.geneExpression") {
@@ -204,10 +208,9 @@ export const updateChat = async (response, plotState) => {
 
     }
 
-    // ------------------- END CALLING MAIN API ENDPOINT ------------------- //
+    // END: Calling main API endpoint
     
-    // ------------------- START CALLING EXTRA ENPOINTS ------------------- //
-
+    // START: Calling extra endpoints
     if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility") {
       if (apiData.markers.length === 0) {
         answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
@@ -216,8 +219,7 @@ export const updateChat = async (response, plotState) => {
       }
     }
 
-    // for example, markers: the initial API call will give us a list of genes
-    // but we still need to make another API call through the 'dotplot' endpoint to get data for plotting
+    // Call extra endpoints for markers or similar features
     for (const e of extraEndpointsToCall) {
 
       if (mainIntent === 'similar_features' || mainIntent === 'markers') {
@@ -230,7 +232,7 @@ export const updateChat = async (response, plotState) => {
       apiData = {...apiData, ...extraApiData};
     }
 
-    // extra parallel API calls to fecth avg expression for each organ
+    // Call extra endpoints for zoom in neighborhood in coexpressScatter plot
     if (intent === 'zoom.in.neighborhood' && plotState.plotType === 'coexpressScatter') {
       const organs = plotState.organs;
       params.organism = plotState.organism;
@@ -244,7 +246,7 @@ export const updateChat = async (response, plotState) => {
       apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'cellstate'}
     } 
 
-    // extra parallel API calls to fecth avg expression for each organ
+    // Call extra endpoints for comeasurement intent
     if (mainIntent === 'comeasurement') {
       let organs = apiData?.organs;
 
@@ -270,9 +272,9 @@ export const updateChat = async (response, plotState) => {
       apiData = {expData: expData, features: params.features, organism: params.organism, organs: organs, by: 'celltype'}
     }
 
-    // ------------------- END CALLING EXTRA ENPOINTS ------------------- //
+    // END: Calling extra endpoints
 
-    // ------------------- START BUILDING ANSWER WHEN MAIN API CALL SUCCEEDS ------------------- //
+    // START: Handle building answer when main API call succeeds
 
     if (intent === "organisms.geneExpression") {
       let numOrganisms = apiData.organisms.length;
@@ -285,7 +287,7 @@ export const updateChat = async (response, plotState) => {
       answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`
     }
 
-    // ------------------- END BUILDING ANSWER WHEN MAIN API CALL SUCCEEDS ------------------- //
+    // END: Handle building answer when main API call succeeds
     
   } catch ({ status, message, error }) {
     const result = await handleErrors(error, mainIntent, params, entities, answer, endpoint, plotState, intent, message);

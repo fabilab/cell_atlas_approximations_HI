@@ -1,13 +1,13 @@
-// handleNoApiIntents.js
-
 import { buildAnswer } from './nlpResponseGenerator.js';
 import { downloadFasta } from "../downloadHelpers/downloadFasta.js";
 import { downloadTable } from "../downloadHelpers/downloadTable.js";
 
+// Function to handle intents that do not require an API call
 export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, params) {
   let answer;
 
   switch (mainIntent) {
+    // handle data download
     case "download":
       let downloadAvailable = true;
       if (plotState.plotType === 'featureSequences') {
@@ -27,6 +27,7 @@ export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, par
       return {
         message: answer,
       };
+    // handle log and unlog data
     case "plot":
       answer = buildAnswer(intent, plotState);
       return {
