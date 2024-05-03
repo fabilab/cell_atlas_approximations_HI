@@ -1,3 +1,4 @@
+// This function downloads sequences data into fasta format
 export const downloadFasta = (props) => {
 
     let organism = props.organism;

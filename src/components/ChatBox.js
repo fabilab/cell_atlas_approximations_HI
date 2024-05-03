@@ -4,7 +4,7 @@ import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Row, Input } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
-import { nlp } from "../utils/nlpHelpers";
+import { nlp } from "../utils/chatHelpers/nlpResponseGenerator";
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [messageHistory, setMessageHistory] = useState([]);
@@ -97,7 +97,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       await handleSubmit(initialMessage);
     }
     if (!chatHistory || chatHistory.length === 0) {
-      console.log('first submit')
       firstSubmit();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
