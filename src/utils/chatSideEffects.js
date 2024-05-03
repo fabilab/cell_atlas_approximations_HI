@@ -61,7 +61,6 @@ export const updateChat = async (response, plotState) => {
   let extraEndpointsToCall = [];
   // this is defined to store celltypes and organ for celltypes intent.
   let targetCelltypes, targetOrgan;
-
   if (intent === "None") {
     return {
       hasData: false,
@@ -211,7 +210,7 @@ export const updateChat = async (response, plotState) => {
     // END: Calling main API endpoint
     
     // START: Calling extra endpoints
-    if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility") {
+    if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility" || intent === "markers.geneExpression.across_organs") {
       if (apiData.markers.length === 0) {
         answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
       } else {
@@ -222,10 +221,16 @@ export const updateChat = async (response, plotState) => {
     // Call extra endpoints for markers or similar features
     for (const e of extraEndpointsToCall) {
 
-      if (mainIntent === 'similar_features' || mainIntent === 'markers') {
+      if (mainIntent === 'similar_features') {
         params.features = [...apiData[endpoint]];
-        endpoint === 'similar_features' && params.features.push(params.feature);
+        params.features.push(params.feature);
         delete params['celltype']
+      } else if (intent === "markers.geneExpression") {
+        params.features = [...apiData[endpoint]];
+        delete params['celltype']
+      } else if (intent === "markers.geneExpression.across_organs") {
+        params.features = [...apiData[endpoint]];
+        delete params['organ']
       }
       params.features = [...new Set(params.features)];
       let extraApiData = await atlasapprox[e](params);

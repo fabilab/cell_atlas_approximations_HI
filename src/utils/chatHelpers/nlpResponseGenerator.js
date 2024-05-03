@@ -99,7 +99,9 @@ const buildAnswer = (intent, plotState, data = null) => {
           default:
             answer = "The markers for " + data.celltype + " in " + data.organism + " " + data.organ + " are: " + data.markers;
         }
-        answer += "<br><br>Type \"zoom in\" to see the data at the cell state level.";
+        if (addIntent !== "across_organs") {
+          answer += "<br><br>Type \"zoom in\" to see the data at the cell state level.";
+        }
         break;
       case "similar_features":
         switch (sIntent) {
