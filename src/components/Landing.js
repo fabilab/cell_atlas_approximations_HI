@@ -21,13 +21,13 @@ const Landing = () => {
 
   const sampleQueries = [
     'What species are available?',
-    'Explore frog.',
+    'Explore lemur',
     'What organs are available in human?',
     'What cell types are there in mouse liver?',
-    'Where are fibroblast detected in human?',
-    'What organisms have chromatin accessibility?',
+    'show interactors of CD19 in human heart',
     'Show 10 markers of rod cells in the frog eye.',
     'What are markers for all cells in mouse lung',
+    'What organisms have chromatin accessibility?',
     'Show 10 genes similar to Col1a1 in mouse lung.',
     "What cells coexpress CD19 and MS4A1 in human?",
     'show organs containing macrophage across species',
