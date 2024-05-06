@@ -81,7 +81,6 @@ const updateMarkers = (context) => {
 };
 
 const updateInteractors = (context) => {
-    console.log(context);
     return updateFractions({ ...context});
 }
 

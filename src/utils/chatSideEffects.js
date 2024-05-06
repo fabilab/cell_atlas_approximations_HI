@@ -83,8 +83,6 @@ export const updateChat = async (response, plotState) => {
   // prepare the endpoint and parameters based on the user's intent and entities.
   // modifications might be necessary to ensure the API call functions correctly.
   ({ endpoint, params } = buildAPIParams(intent, entities));
-  console.log(endpoint, params);
-  console.log(response);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -142,14 +140,12 @@ export const updateChat = async (response, plotState) => {
       extraEndpointsToCall.push("dotplot");
     }
 
-    console.log(response);
-    console.log(params);
     // Handle interaction partners: we want to displat a dotplot containing both the queried and target genes
     if (mainIntent === "interactors") {
       endpoint = "interaction_partners";
       extraEndpointsToCall.push("dotplot");
     }
-    console.log(response);
+
     // Handle exploration intents for different organism measurements
     if (intent === "explore.organism.geneExpression") {
       endpoint = "organs";
@@ -259,11 +255,9 @@ export const updateChat = async (response, plotState) => {
         delete params["organ"];
       } else if (intent === "interactors.geneExpression"){
         const allGenes = apiData.queries + "," + apiData.targets;
-        params.features = [...new Set(allGenes.split(','))];
-        console.log(params);
+        params.features = allGenes.split(',');
       }
       params.features = [...new Set(params.features)];
-      console.log(params);
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
     }
@@ -334,9 +328,9 @@ export const updateChat = async (response, plotState) => {
 
     answer += buildAnswer(intent, plotState, apiData);
 
-    if (params.organ && apiData.celltypes && mainIntent !== "neighborhood") {
-      answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`;
-    }
+    // if (params.organ && apiData.celltypes && mainIntent !== "neighborhood" && mainIntent != "interactors") {
+    //   answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`;
+    // }
 
     // END: Handle building answer when main API call succeeds
   } catch ({ status, message, error }) {
