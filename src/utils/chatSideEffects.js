@@ -185,6 +185,10 @@ export const updateChat = async (response, plotState) => {
       endpoint = 'organs';
     }
 
+    if (intent === 'markers.geneExpression.across_organs') {
+      params["versus"] = "other_organs";
+    }
+
     // when user already at co-rexpression analysis and want to zoom in/out, no need to call organs enpoint
     // just need to call extra endpoints
     if (plotState.plotType === 'coexpressScatter' && mainIntent === 'zoom') {
