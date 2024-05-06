@@ -156,21 +156,22 @@ export const updateChat = async (response, plotState) => {
       };
     }
 
-    if (
-      intent === "zoom.in.neighborhood" &&
-      ["fractionDetected", "average"].includes(plotState.plotType)
-    ) {
-      response.intent = intent = "neighborhood.geneExpression";
-      mainIntent = endpoint = "neighborhood";
-      params = {
-        organ: plotState.organ,
-        organism: plotState.organism,
-        features: plotState.features,
-        measurement_type: "gene_expression",
-        include_embedding: true,
-      };
-    }
-
+    if (intent === "zoom.in.neighborhood") {
+      if (["fractionDetected", "average"].includes(plotState.plotType)) {
+        response.intent = intent = "neighborhood.geneExpression";
+        mainIntent = endpoint = "neighborhood";
+        params = {
+          organ: plotState.organ,
+          organism: plotState.organism,
+          features: plotState.features,
+          measurement_type: "gene_expression",
+          include_embedding: true,
+        };
+      } else {
+        answer += "Zooming into the neighborhood is only supported for across cell types measurements, particularly for dotplot and heatmap visualizations"
+      }
+    } 
+  
     if (mainIntent === "fraction_detected" || mainIntent === "average") {
       endpoint = "dotplot";
     }
