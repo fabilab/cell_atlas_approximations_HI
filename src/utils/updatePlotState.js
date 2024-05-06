@@ -80,6 +80,11 @@ const updateMarkers = (context) => {
 
 };
 
+const updateInteractors = (context) => {
+    console.log(context);
+    return updateFractions({ ...context});
+}
+
 const updateAverage = (context) => {
     let xAxis, plotType, average, unit, yAxis, measurement_type;
     if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
@@ -371,9 +376,10 @@ const plotFunctionDispatcher = {
     "explore": exploreOrganism,
     "markers": updateMarkers,
     "average": updateAverage,
-	  "celltypes": cellAbundance,
+	"celltypes": cellAbundance,
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
+    "interactors": updateInteractors,
     "neighborhood": updateNeighbor,
     "comeasurement": updateComeasurement,
     "organxorganism": organXorganism,

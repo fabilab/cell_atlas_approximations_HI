@@ -21,6 +21,7 @@ const updatePlotIntents = [
   "celltypes",
   "organisms",
   "convert_to",
+  "interactors",
   "neighborhood",
   "comeasurement",
   "celltypexorgan",
@@ -82,6 +83,8 @@ export const updateChat = async (response, plotState) => {
   // prepare the endpoint and parameters based on the user's intent and entities.
   // modifications might be necessary to ensure the API call functions correctly.
   ({ endpoint, params } = buildAPIParams(intent, entities));
+  console.log(endpoint, params);
+  console.log(response);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -139,6 +142,14 @@ export const updateChat = async (response, plotState) => {
       extraEndpointsToCall.push("dotplot");
     }
 
+    console.log(response);
+    console.log(params);
+    // Handle interaction partners: we want to displat a dotplot containing both the queried and target genes
+    if (mainIntent === "interactors") {
+      endpoint = "interaction_partners";
+      extraEndpointsToCall.push("dotplot");
+    }
+    console.log(response);
     // Handle exploration intents for different organism measurements
     if (intent === "explore.organism.geneExpression") {
       endpoint = "organs";
@@ -246,8 +257,13 @@ export const updateChat = async (response, plotState) => {
       } else if (intent === "markers.geneExpression.across_organs") {
         params.features = [...apiData[endpoint]];
         delete params["organ"];
+      } else if (intent === "interactors.geneExpression"){
+        const allGenes = apiData.queries + "," + apiData.targets;
+        params.features = [...new Set(allGenes.split(','))];
+        console.log(params);
       }
       params.features = [...new Set(params.features)];
+      console.log(params);
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
     }
