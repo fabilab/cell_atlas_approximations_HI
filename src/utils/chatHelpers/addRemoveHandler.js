@@ -1,8 +1,9 @@
 // This function is written to handle adding and removing genes from plots.
 // It's applicable for both heatmap,dotplot and cell state plot
 export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
-  params["organism"] = plotState.organism;
 
+  params["organism"] = plotState.organism;
+  
   if (plotState.plotType.endsWith("AcrossOrgans")) {
     params["celltype"] = plotState.celltype;
   } else {
@@ -16,17 +17,23 @@ export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
   }
 
   if (mainIntent === "add" && params.features && plotState.features) {
+
     let plotStateGenes;
     if (plotState.plotType === "neighborhood") {
       plotStateGenes = plotState.features;
       endpoint = "neighborhood";
       params["include_embedding"] = true;
     } else {
-      plotStateGenes = plotState.features.split(",").map((gene) => gene.trim());
+      plotStateGenes = Array.isArray(plotState.features)
+      ? plotState.features
+      : plotState.features.split(",").map((gene) => gene.trim());
     }
-    params.features = [
-      ...new Set([...params.features.split(","), ...plotStateGenes]),
-    ].join(",");
+    const paramsFeatures = typeof params.features === 'string'
+    ? params.features.split(",")
+    : params.features;
+
+    params.features = [...new Set([...paramsFeatures, ...plotStateGenes])].join(",");
+
   }
 
   if (mainIntent === "remove" && params.features && plotState.features) {
@@ -38,12 +45,11 @@ export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
       params["include_embedding"] = true;
     } else {
       geneArrayA = params.features.split(",");
-      geneArrayB = plotState.features.split(",");
+      geneArrayB = typeof plotState.features === 'string' ? plotState.features.split(',') : plotState.features;
     }
     params.features = geneArrayB
       .filter((gene) => !geneArrayA.includes(gene))
       .join(",");
   }
-
   return { params, endpoint };
 };

@@ -5,7 +5,6 @@ await nlp.initialise();
 
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, plotState, data = null) => {
-
   function _chainList(list, sep, end) {
         let text = "";
         for (let i=0; i < list.length; i++) {
@@ -103,6 +102,17 @@ const buildAnswer = (intent, plotState, data = null) => {
           answer += "<br><br>Type \"zoom in\" to see the data at the cell state level.";
         }
         break;
+      case "interactors":
+        switch (sIntent) {
+          case "geneExpression":
+            const queriedGenes = [...new Set(data.queries)];
+            let tempAnswer = `The interaction partners of ${queriedGenes.join(' and ')} are: ${data.targets.join(', ')}.`;
+            answer = tempAnswer;
+            break;
+          default:
+          answer = `The interaction partners of ${queriedGenes.join(' and ')} are: ${data.targets.join(', ')}.`;
+        }
+        break;
       case "similar_features":
         switch (sIntent) {
           case "geneExpression":
@@ -123,7 +133,6 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
         break;
       case "comeasurement":
-        console.log(plotState,data);
         answer = `Here's the coexpression of ${typeof data.features === 'string' ? data.features.split(',').join(' and ') : data.features.join(' and ')} across all organs of ${data.organism}.`;
         answer += "<br><br>Type \"log\" to switch between linear and log scales.";
         if (data?.by === 'celltype') {

@@ -58,7 +58,6 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
 
         if (mainIntent !== "comeasurement") {
           if (params.features.length !== 0) {
-            console.log(intent, endpoint, params)
             apiData = await atlasapprox[endpoint](params);
             if (mainIntent === "markers") {
               apiData["markers"] = params.features;
