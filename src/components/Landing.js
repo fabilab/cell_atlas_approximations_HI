@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
@@ -19,12 +19,15 @@ const Landing = () => {
     navigate("/mainboard", { state: query });
   }
 
+  // textInput must be declared here so the ref can refer to it
+  const queryInput = useRef(null);
+
   const sampleQueries = [
     'What species are available?',
     'Explore lemur',
     'What organs are available in human?',
     'What cell types are there in mouse liver?',
-    'show interactors of CD19 in human heart',
+    'show interactors of NOTCH1 in human hearspleent',
     'Show 10 markers of rod cells in the frog eye.',
     'What are markers for all cells in mouse lung',
     'What organisms have chromatin accessibility?',
@@ -72,6 +75,7 @@ const Landing = () => {
       }}>
         <Input
           placeholder="Ask me a question OR click on one below..."
+          ref={queryInput}
           value={searchMessage}
           onChange={(e) => setSearchMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
           prefix={<RobotOutlined style={{ paddingRight: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/> }
@@ -105,7 +109,7 @@ const Landing = () => {
               textAlign: index % 2 === 1 ? "left" : "right",
               }}>
               <Text
-                onClick={() => setSearchMessage(query)}
+                onClick={() => { setSearchMessage(query); queryInput.current.focus(); }}
                 style={{
                   color: searchMessage === query ? '#303131' : 'initial',
                   fontWeight: searchMessage === query ? 'bold' : '',

@@ -98,6 +98,7 @@ const buildAnswer = (intent, plotState, data = null) => {
           default:
             answer = "The markers for " + data.celltype + " in " + data.organism + " " + data.organ + " are: " + data.markers;
         }
+        answer += "<br><br>Type <b>log</b> to increase the dynamic range of the plot.";
         if (addIntent !== "across_organs") {
           answer += "<br><br>Type \"zoom in\" to see the data at the cell state level.";
         }
@@ -106,12 +107,12 @@ const buildAnswer = (intent, plotState, data = null) => {
         switch (sIntent) {
           case "geneExpression":
             const queriedGenes = [...new Set(data.queries)];
-            let tempAnswer = `The interaction partners of ${queriedGenes.join(' and ')} are: ${data.targets.join(', ')}.`;
-            answer = tempAnswer;
+            answer = "The interaction partners of " + queriedGenes.join(' and ') + " are: " + _chainList(data.targets, ", ", ".");
             break;
           default:
-          answer = `The interaction partners of ${queriedGenes.join(' and ')} are: ${data.targets.join(', ')}.`;
+            answer = "The interaction partners are shown in the plot.";
         }
+        answer += "<br><br>Type <b>log</b> to see more dynamic range. You can also type <b>zoom in</b> to look at cell states.";
         break;
       case "similar_features":
         switch (sIntent) {
