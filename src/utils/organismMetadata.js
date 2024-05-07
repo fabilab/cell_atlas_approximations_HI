@@ -7,6 +7,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/a_queenslandica.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Amphimedon_queenslandica",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
+    category: "Animal",
   },
   "a_thaliana": {
     bioName: "Arabidopsis thaliana",
@@ -16,6 +17,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/a_thaliana.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Arabidopsis_thaliana",
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S1534580722000338",
+    category: "Plant",
   },
   "c_elegans": {
     bioName: "Caenorhabditis elegans",
@@ -24,7 +26,8 @@ const organismMetadata = {
     about: "Caenorhabditis elegans is a free-living transparent nematode (roundworm) that lives in temperate soil environments. It is a model organism for development and neuroscience, with a fixed cell type ontology.",
     imagePath: require("../asset/organisms/c_elegans.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Caenorhabditis_elegans",
-    paperHyperlink: "https://www.science.org/doi/10.1126/science.aam8940"
+    paperHyperlink: "https://www.science.org/doi/10.1126/science.aam8940",
+    category: "Animal",
   },
   "c_gigas": {
     bioName: "Crassostrea gigas",
@@ -34,6 +37,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/c_gigas.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Pacific_oyster",
     paperHyperlink: "https://doi.org/10.1126/sciadv.adg6034",
+    category: "Animal",
   },
   "c_hemisphaerica": {
     bioName: "Clytia hemisphaerica",
@@ -43,6 +47,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/c_hemisphaerica.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Clytia_hemisphaerica",
     paperHyperlink: "https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4",
+    category: "Animal",
   },
   "d_melanogaster": {
     bioName: "Drosophila melanogaster",
@@ -53,6 +58,7 @@ const organismMetadata = {
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Drosophila_melanogaster",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.abk2432",
     intrinsicDimensions: { width: 925, height: 817 },
+    category: "Animal",
     organs: {
       "antenna": {coords: "344,80,400,160,424,153"},
       "oenocyte": {coords: "444,276,434,280,430,305,435,327,446,333"},
@@ -94,6 +100,7 @@ const organismMetadata = {
     genesFromPaper: "epcam, si, krt18, krt8, cldnb, elavl3, krt4, tfap2a, LOC100537766, cldnh, six1b, LOC100006216, myt1a, dlb, sox19a, actc1a, pfn1, cxcl12b, pax6b ",
     imagePath: require("../asset/organisms/d_rerio.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Zebrafish",
+    category: "Animal",
     organs: {
       "Whole": {
           coords: "247,35,203,70,177,131,175,159,162,228,173,300,199,370,228,422,342,426,408,415,412,346,395,264,358,176,310,109,287,67"
@@ -107,7 +114,8 @@ const organismMetadata = {
     about: "Hofstenia miamia is an acoel (related to flatworms), a deep-diverging bilaterian lineage. It is an emerging model system to study bilaterian evolution.",
     imagePath: require("../asset/organisms/h_miamia.jpeg"),
     descriptionHyperlink: "https://pubmed.ncbi.nlm.nih.gov/34196362/",
-    paperHyperlink: "https://www.nature.com/articles/s41467-023-38016-4"
+    paperHyperlink: "https://www.nature.com/articles/s41467-023-38016-4",
+    category: "Animal",
   },
   "h_sapiens": {
     bioName: "Homo sapiens",
@@ -117,6 +125,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/h_sapiens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
     paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896",
+    category: "Animal",
     intrinsicDimensions: { width: 1361, height: 1361 },
     organs: {
       "brain": {coords: "682,38,668,32,656,38,647,49,644,61,649,85,656,95,668,97,681,107,689,107,701,99,712,91,715,79,719,65,712,47,701,36,690,32"},
@@ -184,7 +193,6 @@ const organismMetadata = {
       "vagina": {coords: "684,837,665,862,683,890,700,863"},
       "vagina-label": {coords: "57,846,246,896", shape: "rect"}
     }
-    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
   },
   "i_pulchra": {
     bioName: "Isodiametra pulchra",
@@ -193,8 +201,8 @@ const organismMetadata = {
     about: "Acoela, or the acoels, is an order of small and simple invertebrates in the subphylum Acoelomorpha of phylum Xenacoelomorpha, a deep branching bilaterian group of animals, which resemble flatworms. Historically they were treated as an order of turbellarian flatworms.",
     imagePath: require("../asset/organisms/i_pulchra.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Acoela",
-    paperHyperlink:"https://academic.oup.com/mbe/article/38/5/1888/6045962"
-    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
+    paperHyperlink:"https://academic.oup.com/mbe/article/38/5/1888/6045962",
+    category: "Animal",
   },
   "l_minuta": {
     bioName: "Lemna minuta",
@@ -203,8 +211,8 @@ const organismMetadata = {
     about: "Lemna minuta is a species of duckweed native to parts of the Americas. It is studied as an example of an invasive plant species in genetics and ecology.",
     imagePath: require("../asset/organisms/l_minuta.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Lemna_minuta",
-    paperHyperlink:"https://academic.oup.com/plphys/article/188/2/879/6454113"
-    // anatomyImage: require("../asset/anatomy/h_sapiens.jpeg"),
+    paperHyperlink:"https://academic.oup.com/plphys/article/188/2/879/6454113",
+    category: "Plant",
   },
   "m_leidyi": {
     bioName: "Mnemiopsis leidyi",
@@ -214,6 +222,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/m_leidyi.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Mnemiopsis",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
+    category: "Animal",
   },
   "m_musculus": {
     bioName: "Mus musculus",
@@ -224,6 +233,7 @@ const organismMetadata = {
     descriptionHyperlink: "https://en.wikipedia.org/wiki/House_mouse",
     paperHyperlink: "https://www.nature.com/articles/s41586-020-2496-1",
     intrinsicDimensions: { width: 1134, height: 1227 },
+    category: "Animal",
     organs: {
       "skin": {coords: "454,249,436,301,434,328,456,328,483,321,466,287"},
       "fat": {coords: "456,369,442,372,429,380,428,393,428,402,431,413,439,416,451,419,465,418,482,414,492,398,488,378,473,369"},
@@ -267,6 +277,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/m_murinus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Gray_mouse_lemur",
     paperHyperlink:"https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2",
+    category: "Animal",
     intrinsicDimensions: { width: 1126, height: 1046 },
     organs: {
       "eye": {coords: "528,70,486,130,480,112,487,93,505,75"},
@@ -327,6 +338,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/n_vectensis.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Starlet_sea_anemone",
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S2211124722012025?via%3Dihub",
+    category: "Animal",
   },
   "p_crozieri": {
     bioName: "Prostheceraeus crozieri",
@@ -336,6 +348,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/p_crozieri.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Prostheceraeus_crozieri",
     paperHyperlink: "https://doi.org/10.1126/sciadv.adg6034",
+    category: "Animal",
   },
   "p_dumerilii": {
     bioName: "Platynereis dumerilii",
@@ -345,6 +358,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/p_dumerilii.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Platynereis_dumerilii",
     paperHyperlink: "https://academic.oup.com/mbe/article/35/5/1047/4823215",
+    category: "Animal",
   },
   "s_lacustris": {
     bioName: "Spongilla lacustris",
@@ -354,6 +368,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/s_lacustris.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Spongilla_lacustris",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.abj2949",
+    category: "Animal",
   },
   "s_mansoni": {
     bioName: "Schistosoma mansoni",
@@ -363,7 +378,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/s_mansoni.jpeg"),
     descriptionHyperlink: "",
     paperHyperlink: "https://www.nature.com/articles/s41467-020-20794-w",
-
+    category: "Animal",
   },
   "s_mediterranea": {
     bioName: "Schmidtea mediterranea",
@@ -373,6 +388,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/s_mediterranea.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Schistosoma_mansoni",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.aaq1723",
+    category: "Animal",
   },
   "s_pistillata": {
     bioName: "Stylophora pistillata",
@@ -382,7 +398,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/s_pistillata.jpeg"),
     descriptionHyperlink: "",
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S0092867421004402",
-
+    category: "Animal",
   },
   "s_purpuratus": {
     bioName: "Strongylocentrotus purpuratus",
@@ -392,6 +408,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/s_purpuratus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Strongylocentrotus_purpuratus",
     paperHyperlink: "https://doi.org/10.7554/eLife.70416",
+    category: "Animal",
   },
   "t_adhaerens": {
     bioName: "Trichoplax adhaerens",
@@ -401,6 +418,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/t_adhaerens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Trichoplax",
     paperHyperlink: "https://www.nature.com/articles/s41559-018-0575-6",
+    category: "Animal",
   },
   "t_aestivum": {
     bioName: "Triticum aestivum",
@@ -410,6 +428,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/t_aestivum.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Triticum_aestivum",
     paperHyperlink: "https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x",
+    category: "Plant",
   },
   "x_laevis": {
     bioName: "Xenopus laevis",
@@ -420,6 +439,7 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/x_laevis.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/African_clawed_frog",
     intrinsicDimensions: { width: 1110, height: 1115 },
+    category: "Animal",
     organs: {
       "heart": {coords: "531,263,520,273,527,285,527,291,512,309,506,332,509,352,513,369,528,381,544,381,556,374,570,358,574,342,577,324,573,305,563,297,574,288,571,274,559,277,544,294"},
       "liver": {coords: "491,267,480,269,469,280,455,302,449,326,435,345,421,373,413,402,411,424,416,438,421,442,439,434,455,423,469,411,485,396,498,378,505,356,506,327,505,294,501,273"},
