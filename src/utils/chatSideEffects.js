@@ -254,8 +254,17 @@ export const updateChat = async (response, plotState) => {
         params.features = [...apiData[endpoint]];
         delete params["organ"];
       } else if (intent === "interactors.geneExpression"){
-        const allGenes = apiData.queries + "," + apiData.targets;
-        params.features = allGenes.split(',');
+        const queryGenes = [...new Set(apiData.queries)];
+        const targetGenes = apiData.targets;
+        const allGenes = queryGenes.reduce((acc, gene, index) => {
+          acc.push(gene);
+          const startIndex = apiData.queries.indexOf(gene);
+          const endIndex = apiData.queries.lastIndexOf(gene);
+          const targets = targetGenes.slice(startIndex, endIndex + 1);
+          acc.push(...targets);
+          return acc;
+        }, []);
+        params.features = [...new Set(allGenes)];
       }
       params.features = [...new Set(params.features)];
       let extraApiData = await atlasapprox[e](params);

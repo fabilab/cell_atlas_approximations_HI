@@ -1,3 +1,4 @@
+import { features } from "@fabilab/atlasapprox";
 import transpose from "./plotHelpers.js/math";
 
 const exploreOrganism = (context) => {
@@ -81,6 +82,7 @@ const updateMarkers = (context) => {
 };
 
 const updateInteractors = (context) => {
+    console.log(context);
     return updateFractions({ ...context});
 }
 
@@ -134,7 +136,7 @@ const updateAverage = (context) => {
 };
 
 const updateFractions = (context) => {
-    let xAxis, plotType, average, fractions, unit, yAxis, measurement_type;
+    let xAxis, plotType, average, fractions, unit, yAxis, measurement_type, queriedGenes;
     if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
@@ -170,6 +172,10 @@ const updateFractions = (context) => {
       measurement_type = context.plotState.measurement_type;
     }
 
+    if (context.intent === "interactors.geneExpression") {
+        queriedGenes = [...new Set(context.response.data.queries)];
+    }
+
     return {
         plotType: plotType,
         organism: context.organism,
@@ -182,7 +188,9 @@ const updateFractions = (context) => {
         average: average,
         fractions: fractions,
         unit: unit,
-        hasLog: context.plotState.hasLog
+        hasLog: context.plotState.hasLog,
+        // This varibale is used only for interactor plots. we need these genes to highlight the plot
+        queriedGenes: queriedGenes,
     };
 };
 
