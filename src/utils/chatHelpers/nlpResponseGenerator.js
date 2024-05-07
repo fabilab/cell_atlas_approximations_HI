@@ -32,7 +32,8 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer = "The available measurement types are: " + _chainList(data.measurement_types, ", ", ".");
         break;
       case "organisms":
-        answer = _chainList(data.organisms, ", <br>", ".") + "<br><br>Type \"explore <i>organism</i>\" to explore a specific organism.";
+        answer = _chainList(data.organisms, ", <br>", ".");
+        answer += "<br><br>To start exploring an organism's data, type 'explore' followed by the organism abbreviation. <br><br>For example: 'explore h_sapiens' for human.";
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
