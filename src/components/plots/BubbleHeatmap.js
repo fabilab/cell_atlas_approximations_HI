@@ -99,32 +99,33 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   // Code generated with the assistance of GPT
   // Calculate the ranges for partner genes dynamically
   const groups = [];
-  let start = 0;
-  for (let i = 0; i < queriedGenes.length; i++) {
-      const gene = queriedGenes[i];
-      const startIndex = yaxis.indexOf(gene);
-      const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
-      groups.push({ start: start, end: endIndex });
-      start = endIndex;
-  }
+for (let i = 0; i < queriedGenes.length; i++) {
+    const gene = queriedGenes[i];
+    const startIndex = yaxis.indexOf(gene);
+    const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
+    groups.push({ start: startIndex, end: endIndex });
+}
+  // Create shapes for each queried gene
+const shapes = queriedGenes.map(gene => {
+  const geneIndex = yaxis.indexOf(gene);
+  return {
+      type: 'rect',
+      xref: 'paper',
+      yref: 'y',
+      x0: 0 + 0.01,
+      x1: 1 - 0.01,
+      y0: geneIndex + 0.4,
+      y1: geneIndex - 0.4,
+      line: {
+          color: '#c6a2fc', // Set border color for the queried genes
+          width: 2 // Set border width
+      },
+      // fillcolor: '#c6a2fc',
+  };
+});
 
-  // Create shapes for each group
-  const shapes = groups.map((group, index) => ({
-    type: 'rect',
-    xref: 'paper',
-    yref: 'y',
-    x0: 0,
-    x1: 1,
-    y0: group.start,
-    y1: group.end,
-    line: {
-      color: index % 2 === 0 ? '#fcb572' : '#aa79f7', // Set border color
-      width: 2 // Set border width
-    },
-    fillcolor: 'rgba(0, 0, 0, 0)', // Transparent fill color
-  }));
 
-
+  
   let layout = {
     width: graphWidth,
     height: graphHeight,
