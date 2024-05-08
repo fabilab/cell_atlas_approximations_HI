@@ -1,4 +1,3 @@
-import { features } from "@fabilab/atlasapprox";
 import transpose from "./plotHelpers.js/math";
 
 const exploreOrganism = (context) => {

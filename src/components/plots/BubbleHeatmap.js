@@ -96,6 +96,34 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   let graphWidth = ncelltypes * 30 + xtickMargin;
   let graphHeight = nfeatures * 30 + ytickMargin;
 
+  // Code generated with the assistance of GPT
+  // Calculate the ranges for partner genes dynamically
+  const groups = [];
+  let start = 0;
+  for (let i = 0; i < queriedGenes.length; i++) {
+      const gene = queriedGenes[i];
+      const startIndex = yaxis.indexOf(gene);
+      const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
+      groups.push({ start: start, end: endIndex });
+      start = endIndex;
+  }
+
+  // Create shapes for each group
+  const shapes = groups.map((group, index) => ({
+    type: 'rect',
+    xref: 'paper',
+    yref: 'y',
+    x0: 0,
+    x1: 1,
+    y0: group.start,
+    y1: group.end,
+    line: {
+      color: index % 2 === 0 ? '#fcb572' : '#aa79f7', // Set border color
+      width: 2 // Set border width
+    },
+    fillcolor: 'rgba(0, 0, 0, 0)', // Transparent fill color
+  }));
+
 
   let layout = {
     width: graphWidth,
@@ -123,8 +151,8 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       l: 5,
       r: 5,
     },
+    shapes: shapes
   };
-
   const desired_maximum_marker_size = 6.2;
   
   let data = {

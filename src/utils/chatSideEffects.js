@@ -256,14 +256,17 @@ export const updateChat = async (response, plotState) => {
       } else if (intent === "interactors.geneExpression"){
         const queryGenes = [...new Set(apiData.queries)];
         const targetGenes = apiData.targets;
-        const allGenes = queryGenes.reduce((acc, gene, index) => {
-          acc.push(gene);
-          const startIndex = apiData.queries.indexOf(gene);
-          const endIndex = apiData.queries.lastIndexOf(gene);
-          const targets = targetGenes.slice(startIndex, endIndex + 1);
-          acc.push(...targets);
-          return acc;
-        }, []);
+        const getAllGenes = (queries, targets) => {
+          return queryGenes.reduce((acc, gene, index) => {
+            acc.push(gene);
+            const startIndex = queries.indexOf(gene);
+            const endIndex = queries.lastIndexOf(gene);
+            const targetSlice = targets.slice(startIndex, endIndex + 1);
+            acc.push(...targetSlice);
+            return acc;
+          }, []);
+        };
+        const allGenes = getAllGenes(apiData.queries, targetGenes);
         params.features = [...new Set(allGenes)];
       }
       params.features = [...new Set(params.features)];
