@@ -37,7 +37,7 @@ const removeFeatures = (context) => {
 };
 
 const toggleLog = (context) => {
-
+    console.log(context);
     context.plotState.hasLog = !context.plotState.hasLog;
     if (context.plotState.plotType === 'neighborhood') {
         return updateNeighbor(context);
@@ -171,7 +171,10 @@ const updateFractions = (context) => {
       measurement_type = context.plotState.measurement_type;
     }
 
-    if (context.intent === "interactors.geneExpression") {
+    if (context.plotState.queriedGenes) {
+        queriedGenes = context.plotState.queriedGenes;
+    } else if (context.intent === "interactors.geneExpression") 
+    {
         queriedGenes = [...new Set(context.response.data.queries)];
     }
 

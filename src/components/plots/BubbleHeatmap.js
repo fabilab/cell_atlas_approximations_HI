@@ -8,7 +8,7 @@ import {selectAll} from "d3";
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes } = state;
-  console.log(queriedGenes);
+
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -98,33 +98,34 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
 
   // Code generated with the assistance of GPT
   // Calculate the ranges for partner genes dynamically
-  const groups = [];
-for (let i = 0; i < queriedGenes.length; i++) {
-    const gene = queriedGenes[i];
-    const startIndex = yaxis.indexOf(gene);
-    const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
-    groups.push({ start: startIndex, end: endIndex });
-}
-  // Create shapes for each queried gene
-const shapes = queriedGenes.map(gene => {
-  const geneIndex = yaxis.indexOf(gene);
-  return {
-      type: 'rect',
-      xref: 'paper',
-      yref: 'y',
-      x0: 0 + 0.01,
-      x1: 1 - 0.01,
-      y0: geneIndex + 0.4,
-      y1: geneIndex - 0.4,
-      line: {
-          color: '#c6a2fc', // Set border color for the queried genes
-          width: 2 // Set border width
-      },
-      // fillcolor: '#c6a2fc',
-  };
-});
-
-
+  let shapes = [];
+  if (queriedGenes) {
+    const groups = [];
+    for (let i = 0; i < queriedGenes.length; i++) {
+        const gene = queriedGenes[i];
+        const startIndex = yaxis.indexOf(gene);
+        const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
+        groups.push({ start: startIndex, end: endIndex });
+    }
+      // Create shapes for each queried gene
+    shapes = queriedGenes.map(gene => {
+      const geneIndex = yaxis.indexOf(gene);
+      return {
+          type: 'rect',
+          xref: 'paper',
+          yref: 'y',
+          x0: 0 + 0.01,
+          x1: 1 - 0.01,
+          y0: geneIndex + 0.4,
+          y1: geneIndex - 0.4,
+          line: {
+              color: '#c6a2fc', // Set border color for the queried genes
+              width: 2 // Set border width
+          },
+          // fillcolor: '#c6a2fc',
+      };
+    });
+  }
   
   let layout = {
     width: graphWidth,
