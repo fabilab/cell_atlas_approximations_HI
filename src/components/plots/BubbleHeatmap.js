@@ -119,10 +119,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           y0: geneIndex + 0.4,
           y1: geneIndex - 0.4,
           line: {
-              color: '#c6a2fc', // Set border color for the queried genes
+              color: '#b082f5', // Set border color for the queried genes
               width: 2 // Set border width
           },
-          // fillcolor: '#c6a2fc',
       };
     });
   }

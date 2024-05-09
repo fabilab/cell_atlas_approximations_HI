@@ -106,12 +106,25 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "interactors":
         switch (sIntent) {
-          case "geneExpression":
-            const queriedGenes = [...new Set(data.queries)];
-            answer = "The interaction partners of " + queriedGenes.join(' and ') + " are: " + _chainList(data.targets, ", ", ".");
-            break;
-          default:
-            answer = "The interaction partners are shown in the plot.";
+            case "geneExpression":
+                const uniqueGenes = [...new Set(data.queries)]; // Get unique queried genes
+                const interactionPartners = data.targets.reduce((acc, target, index) => {
+                    const queriedGene = data.queries[index];
+                    acc[queriedGene] = acc[queriedGene] || []; // Initialize array for queriedGene if not exist
+                    acc[queriedGene].push(target); // Push interaction partner to array
+                    return acc;
+                }, {});
+    
+                const interactionText = uniqueGenes.map(gene => {
+                    const partners = interactionPartners[gene].join(', '); // Join interaction partners
+                    return "The interaction partners of " + gene + " are: " + partners + ".<br>";
+                }).join('<br>');
+    
+                answer = interactionText;
+                answer += "<br>In the dotplot visualization, the queried genes are highlighted for easy identification. Below the dotplot, you can find the interactive partners corresponding to each queried gene until the next highlighted gene.";
+                break;
+            default:
+                answer = "The interaction partners are shown in the plot.";
         }
         answer += "<br><br>Type <b>log</b> to see more dynamic range. You can also type <b>zoom in</b> to look at cell states.";
         break;
