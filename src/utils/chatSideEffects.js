@@ -53,6 +53,7 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];

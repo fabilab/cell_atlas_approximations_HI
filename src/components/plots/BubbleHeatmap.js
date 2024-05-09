@@ -114,7 +114,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           type: 'rect',
           xref: 'paper',
           yref: 'y',
-          x0: 0 + 0.01,
+          x0: 0 - 0.22,
           x1: 1 - 0.01,
           y0: geneIndex + 0.4,
           y1: geneIndex - 0.4,

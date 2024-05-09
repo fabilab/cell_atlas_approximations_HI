@@ -37,7 +37,7 @@ const removeFeatures = (context) => {
 };
 
 const toggleLog = (context) => {
-    console.log(context);
+
     context.plotState.hasLog = !context.plotState.hasLog;
     if (context.plotState.plotType === 'neighborhood') {
         return updateNeighbor(context);
@@ -81,7 +81,7 @@ const updateMarkers = (context) => {
 };
 
 const updateInteractors = (context) => {
-    console.log(context);
+
     return updateFractions({ ...context});
 }
 
@@ -171,7 +171,10 @@ const updateFractions = (context) => {
       measurement_type = context.plotState.measurement_type;
     }
 
-    if (context.plotState.queriedGenes) {
+    // handle 2 different cases:
+    // apply log to an existing interactors plot
+    // generate an interators plot with new gene sets from an old plot
+    if (context.plotState.queriedGenes && context.intent !== "interactors.geneExpression") {
         queriedGenes = context.plotState.queriedGenes;
     } else if (context.intent === "interactors.geneExpression") 
     {
@@ -197,7 +200,8 @@ const updateFractions = (context) => {
 };
 
 const updateNeighbor = (context) => {
-    let celltypes, nCells, boundaries, centroids, average, fractions, unit;
+
+    let celltypes, nCells, boundaries, centroids, average, fractions, unit, queriedGenes;
     // by deault:
     if (context.response.data) {
         celltypes = context.response.data.celltypes;
@@ -219,6 +223,9 @@ const updateNeighbor = (context) => {
         unit = context.plotState.unit;
     }
   
+    if (context.plotState.queriedGenes) {
+        queriedGenes = context.plotState.queriedGenes;
+    }
 
     return {
         plotType: "neighborhood",
@@ -234,6 +241,7 @@ const updateNeighbor = (context) => {
         hasLog: context.plotState.hasLog,
         unit: unit,
         measurement_type: context.measurement_type,
+        queriedGenes: queriedGenes,
     };
 };
 
