@@ -5,6 +5,7 @@ await nlp.initialise();
 
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, plotState, data = null) => {
+
   function _chainList(list, sep, end) {
         let text = "";
         for (let i=0; i < list.length; i++) {

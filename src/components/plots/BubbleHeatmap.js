@@ -107,7 +107,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
         const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
         groups.push({ start: startIndex, end: endIndex });
     }
-      // Create shapes for each queried gene
+    // Create shapes for each queried gene
     shapes = queriedGenes.map(gene => {
       const geneIndex = yaxis.indexOf(gene);
       return {
@@ -122,6 +122,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
               color: '#b082f5', // Set border color for the queried genes
               width: 2 // Set border width
           },
+          fillcolor: 'rgba(176, 130, 245, 0.1)'
       };
     });
   }

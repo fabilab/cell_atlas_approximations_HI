@@ -225,6 +225,9 @@ export const updateChat = async (response, plotState) => {
         apiData.targetCelltypes = targetCelltypes;
         apiData.targetOrgan = targetOrgan;
       }
+      if (intent === "interactors.geneExpression") {
+        answer += buildAnswer(intent, plotState, apiData);
+      }
     }
 
     // END: Calling main API endpoint
@@ -271,6 +274,7 @@ export const updateChat = async (response, plotState) => {
         params.features = [...new Set(allGenes)];
       }
       params.features = [...new Set(params.features)];
+
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
     }
@@ -356,7 +360,11 @@ export const updateChat = async (response, plotState) => {
       endpoint,
       plotState,
       intent,
-      message
+      message,
+      // this line is added to handle cases where there is an invalid gene found from the interactors api
+      // which will cause an error on the dot plot api.
+      // we need to pass both the queried and targets genes onto the dotplot's error handling function
+      apiData 
     );
     params = result.params;
     apiData = result.apiData;
