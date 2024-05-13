@@ -242,11 +242,6 @@ export const updateChat = async (response, plotState) => {
       }
     }
 
-    // handling case for when a gene has no interactor
-    if (intent === "interactors.geneExpression") {
-      
-    }
-
     // Call extra endpoints for markers or similar features
     for (const e of extraEndpointsToCall) {
       if (mainIntent === "similar_features") {
@@ -265,8 +260,6 @@ export const updateChat = async (response, plotState) => {
           apiData = null
           answer = "No interactors partners were found for the given query."
         } else {
-          answer += buildAnswer(intent, plotState, apiData);
-
           const queryGenes = [...new Set(apiData.queries)];
           const targetGenes = apiData.targets;
           // group queried genes with their target genes
@@ -354,11 +347,8 @@ export const updateChat = async (response, plotState) => {
       answer = `There are ${numOrganisms} organisms available:<br>`;
     }
 
+    // normal build answer
     answer += buildAnswer(intent, plotState, apiData);
-
-    // if (params.organ && apiData.celltypes && mainIntent !== "neighborhood" && mainIntent != "interactors") {
-    //   answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`;
-    // }
 
     // END: Handle building answer when main API call succeeds
   } catch ({ status, message, error }) {

@@ -49,9 +49,13 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
               .join(",");
           }
         } else if (intent === "interactors.geneExpression" && typeof params.features === "object") {
-            params.features = params.features
-            .filter((feature) => !errorValue.includes(feature.toLowerCase()))
+            params.features = params.features.filter((feature) => !errorValue.includes(feature.toLowerCase()))
             endpoint = "dotplot";
+
+            // build the answer before calling the dotplot again
+            // this ensures that the features causing the dotplot error will still be included
+            // calling this here will also make sure that the answer willl only be built once when there are invalid interactors for dotplot
+            answer += buildAnswer(intent, plotState, apiData);
         } else {
           // example case: markers of myopeptidocyte in s_lacustris whole
           // remove marker genes that contain a space
