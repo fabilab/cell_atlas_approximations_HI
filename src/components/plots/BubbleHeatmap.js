@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
 import orgMeta from '../../utils/organismMetadata.js';
-import { Popover, Button } from 'antd';
+import { Tooltip, Button } from 'antd';
 import {selectAll} from "d3";
 
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
@@ -323,9 +323,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           />
         </div>
         <div>
-          <Popover content={dataSource} placement='right'>
+          <Tooltip title={dataSource} overlayStyle={{ maxWidth: '400px', overflowX: 'auto' }}>
             <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+          </Tooltip>
         </div>
       </div>
     );
@@ -340,9 +340,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           />
         </div>
         <div>
-          <Popover content={dataSource} placement='right'>
+          <Tooltip placement="rightTop" color="#108ee9" title={dataSource} overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}>
             <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+          </Tooltip>
         </div>
       </div>
     );

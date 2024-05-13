@@ -260,6 +260,7 @@ export const updateChat = async (response, plotState) => {
       } else if (intent === "interactors.geneExpression"){
         const queryGenes = [...new Set(apiData.queries)];
         const targetGenes = apiData.targets;
+        // group queried genes with their target genes
         const getAllGenes = (queries, targets) => {
           return queryGenes.reduce((acc, gene, index) => {
             acc.push(gene);
