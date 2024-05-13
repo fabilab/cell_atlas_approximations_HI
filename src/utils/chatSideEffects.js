@@ -225,9 +225,6 @@ export const updateChat = async (response, plotState) => {
         apiData.targetCelltypes = targetCelltypes;
         apiData.targetOrgan = targetOrgan;
       }
-      if (intent === "interactors.geneExpression") {
-        answer += buildAnswer(intent, plotState, apiData);
-      }
     }
 
     // END: Calling main API endpoint
@@ -245,6 +242,11 @@ export const updateChat = async (response, plotState) => {
       }
     }
 
+    // handling case for when a gene has no interactor
+    if (intent === "interactors.geneExpression") {
+      
+    }
+
     // Call extra endpoints for markers or similar features
     for (const e of extraEndpointsToCall) {
       if (mainIntent === "similar_features") {
@@ -258,21 +260,29 @@ export const updateChat = async (response, plotState) => {
         params.features = [...apiData[endpoint]];
         delete params["organ"];
       } else if (intent === "interactors.geneExpression"){
-        const queryGenes = [...new Set(apiData.queries)];
-        const targetGenes = apiData.targets;
-        // group queried genes with their target genes
-        const getAllGenes = (queries, targets) => {
-          return queryGenes.reduce((acc, gene, index) => {
-            acc.push(gene);
-            const startIndex = queries.indexOf(gene);
-            const endIndex = queries.lastIndexOf(gene);
-            const targetSlice = targets.slice(startIndex, endIndex + 1);
-            acc.push(...targetSlice);
-            return acc;
-          }, []);
-        };
-        const allGenes = getAllGenes(apiData.queries, targetGenes);
-        params.features = [...new Set(allGenes)];
+        // If there is no interactors partners being found, just return an answer
+        if (apiData.targets.length === 0 || apiData.queries.length === 0) {
+          apiData = null
+          answer = "No interactors partners were found for the given query."
+        } else {
+          answer += buildAnswer(intent, plotState, apiData);
+
+          const queryGenes = [...new Set(apiData.queries)];
+          const targetGenes = apiData.targets;
+          // group queried genes with their target genes
+          const getAllGenes = (queries, targets) => {
+            return queryGenes.reduce((acc, gene, index) => {
+              acc.push(gene);
+              const startIndex = queries.indexOf(gene);
+              const endIndex = queries.lastIndexOf(gene);
+              const targetSlice = targets.slice(startIndex, endIndex + 1);
+              acc.push(...targetSlice);
+              return acc;
+            }, []);
+          };
+          const allGenes = getAllGenes(apiData.queries, targetGenes);
+          params.features = [...new Set(allGenes)];
+        }
       }
       params.features = [...new Set(params.features)];
 

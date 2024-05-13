@@ -115,7 +115,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           xref: 'paper',
           yref: 'y',
           x0: 0 - 0.22,
-          x1: 1 - 0.01,
+          x1: 1 - 0.02,
           y0: geneIndex + 0.4,
           y1: geneIndex - 0.4,
           line: {
@@ -153,7 +153,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       l: 5,
       r: 5,
     },
-    shapes: shapes
+    shapes: shapes,
   };
   const desired_maximum_marker_size = 6.2;
   
@@ -170,8 +170,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       colorbar: {title: {
         text: unit,
         titleside: "bottom",
-      },
-      len: 1
+        },
       },
     },
     text: all_hovertext,
