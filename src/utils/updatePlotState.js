@@ -81,6 +81,7 @@ const updateMarkers = (context) => {
 };
 
 const updateInteractors = (context) => {
+
     return updateFractions({ ...context});
 }
 
@@ -134,7 +135,7 @@ const updateAverage = (context) => {
 };
 
 const updateFractions = (context) => {
-    let xAxis, plotType, average, fractions, unit, yAxis, measurement_type;
+    let xAxis, plotType, average, fractions, unit, yAxis, measurement_type, queriedGenes;
     if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
         if (context.response.data) {
           xAxis = context.response.data.organs;
@@ -170,6 +171,16 @@ const updateFractions = (context) => {
       measurement_type = context.plotState.measurement_type;
     }
 
+    // handle 2 different cases:
+    // apply log to an existing interactors plot
+    // generate an interators plot with new gene sets from an old plot
+    if (context.plotState.queriedGenes && context.intent !== "interactors.geneExpression") {
+        queriedGenes = context.plotState.queriedGenes;
+    } else if (context.intent === "interactors.geneExpression") 
+    {
+        queriedGenes = [...new Set(context.response.data.queries)];
+    }
+
     return {
         plotType: plotType,
         organism: context.organism,
@@ -182,12 +193,15 @@ const updateFractions = (context) => {
         average: average,
         fractions: fractions,
         unit: unit,
-        hasLog: context.plotState.hasLog
+        hasLog: context.plotState.hasLog,
+        // This varibale is used only for interactor plots. we need these genes to highlight the plot
+        queriedGenes: queriedGenes,
     };
 };
 
 const updateNeighbor = (context) => {
-    let celltypes, nCells, boundaries, centroids, average, fractions, unit;
+
+    let celltypes, nCells, boundaries, centroids, average, fractions, unit, queriedGenes;
     // by deault:
     if (context.response.data) {
         celltypes = context.response.data.celltypes;
@@ -209,6 +223,9 @@ const updateNeighbor = (context) => {
         unit = context.plotState.unit;
     }
   
+    if (context.plotState.queriedGenes) {
+        queriedGenes = context.plotState.queriedGenes;
+    }
 
     return {
         plotType: "neighborhood",
@@ -224,6 +241,7 @@ const updateNeighbor = (context) => {
         hasLog: context.plotState.hasLog,
         unit: unit,
         measurement_type: context.measurement_type,
+        queriedGenes: queriedGenes,
     };
 };
 

@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
 import orgMeta from '../../utils/organismMetadata.js';
-import { Popover, Button } from 'antd';
+import { Tooltip, Button } from 'antd';
 import {selectAll} from "d3";
 
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
-  let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type } = state;
+  let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes } = state;
+
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -95,7 +96,37 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   let graphWidth = ncelltypes * 30 + xtickMargin;
   let graphHeight = nfeatures * 30 + ytickMargin;
 
-
+  // Code generated with the assistance of GPT
+  // Calculate the ranges for partner genes dynamically
+  let shapes = [];
+  if (queriedGenes) {
+    const groups = [];
+    for (let i = 0; i < queriedGenes.length; i++) {
+        const gene = queriedGenes[i];
+        const startIndex = yaxis.indexOf(gene);
+        const endIndex = (i < queriedGenes.length - 1) ? yaxis.indexOf(queriedGenes[i + 1]) : yaxis.length;
+        groups.push({ start: startIndex, end: endIndex });
+    }
+    // Create shapes for each queried gene
+    shapes = queriedGenes.map(gene => {
+      const geneIndex = yaxis.indexOf(gene);
+      return {
+          type: 'rect',
+          xref: 'paper',
+          yref: 'y',
+          x0: 0 - 0.22,
+          x1: 1 - 0.02,
+          y0: geneIndex + 0.4,
+          y1: geneIndex - 0.4,
+          line: {
+              color: '#b082f5', // Set border color for the queried genes
+              width: 2 // Set border width
+          },
+          fillcolor: 'rgba(176, 130, 245, 0.1)'
+      };
+    });
+  }
+  
   let layout = {
     width: graphWidth,
     height: graphHeight,
@@ -122,8 +153,8 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       l: 5,
       r: 5,
     },
+    shapes: shapes,
   };
-
   const desired_maximum_marker_size = 6.2;
   
   let data = {
@@ -139,8 +170,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       colorbar: {title: {
         text: unit,
         titleside: "bottom",
-      },
-      len: 1
+        },
       },
     },
     text: all_hovertext,
@@ -292,9 +322,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           />
         </div>
         <div>
-          <Popover content={dataSource} placement='right'>
+          <Tooltip title={dataSource} overlayStyle={{ maxWidth: '400px', overflowX: 'auto' }}>
             <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+          </Tooltip>
         </div>
       </div>
     );
@@ -309,9 +339,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           />
         </div>
         <div>
-          <Popover content={dataSource} placement='right'>
+          <Tooltip placement="rightTop" color="#108ee9" title={dataSource} overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}>
             <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+          </Tooltip>
         </div>
       </div>
     );

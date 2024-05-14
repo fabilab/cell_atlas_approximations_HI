@@ -19,6 +19,7 @@ const Neighborhood = ({ state }) => {
     unit,
     measurement_type,
     hasLog,
+    queriedGenes,
   } = state;
 
   const [clickedCellState, setClickCellState] = useState(null);
@@ -45,6 +46,7 @@ const Neighborhood = ({ state }) => {
     hasLog,
     average,
     fractions,
+    queriedGenes,
   };
 
   let embeddingState = {

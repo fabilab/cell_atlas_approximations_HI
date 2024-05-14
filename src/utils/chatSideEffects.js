@@ -53,6 +53,7 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -254,10 +255,30 @@ export const updateChat = async (response, plotState) => {
         params.features = [...apiData[endpoint]];
         delete params["organ"];
       } else if (intent === "interactors.geneExpression"){
-        const allGenes = apiData.queries + "," + apiData.targets;
-        params.features = allGenes.split(',');
+        // If there is no interactors partners being found, just return an answer
+        if (apiData.targets.length === 0 || apiData.queries.length === 0) {
+          apiData = null
+          answer = "No interactors partners were found for the given query."
+        } else {
+          const queryGenes = [...new Set(apiData.queries)];
+          const targetGenes = apiData.targets;
+          // group queried genes with their target genes
+          const getAllGenes = (queries, targets) => {
+            return queryGenes.reduce((acc, gene, index) => {
+              acc.push(gene);
+              const startIndex = queries.indexOf(gene);
+              const endIndex = queries.lastIndexOf(gene);
+              const targetSlice = targets.slice(startIndex, endIndex + 1);
+              acc.push(...targetSlice);
+              return acc;
+            }, []);
+          };
+          const allGenes = getAllGenes(apiData.queries, targetGenes);
+          params.features = [...new Set(allGenes)];
+        }
       }
       params.features = [...new Set(params.features)];
+
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
     }
@@ -326,11 +347,8 @@ export const updateChat = async (response, plotState) => {
       answer = `There are ${numOrganisms} organisms available:<br>`;
     }
 
+    // normal build answer
     answer += buildAnswer(intent, plotState, apiData);
-
-    // if (params.organ && apiData.celltypes && mainIntent !== "neighborhood" && mainIntent != "interactors") {
-    //   answer += `<br><br>It includes ${apiData.celltypes.length} cell types and ${apiData.features.length} features.`;
-    // }
 
     // END: Handle building answer when main API call succeeds
   } catch ({ status, message, error }) {
@@ -343,7 +361,11 @@ export const updateChat = async (response, plotState) => {
       endpoint,
       plotState,
       intent,
-      message
+      message,
+      // this line is added to handle cases where there is an invalid gene found from the interactors api
+      // which will cause an error on the dot plot api.
+      // we need to pass both the queried and targets genes onto the dotplot's error handling function
+      apiData 
     );
     params = result.params;
     apiData = result.apiData;

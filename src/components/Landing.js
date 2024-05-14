@@ -28,6 +28,7 @@ const Landing = () => {
     'What organs are available in human?',
     'What cell types are there in mouse liver?',
     'show interactors of NOTCH1 in human heart.',
+    // 'show interactors of COL1A1 in human heart.',
     'Show 10 markers of rod cells in the frog eye.',
     'What are markers for all cells in mouse lung?',
     'What organisms have chromatin accessibility?',

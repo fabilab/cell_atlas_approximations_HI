@@ -1,11 +1,12 @@
 import { buildAnswer } from "./nlpResponseGenerator.js";
 import atlasapprox from "@fabilab/atlasapprox";
 
-export const handleErrors = async (error, mainIntent, params, entities, answer, endpoint, plotState, intent, message) => {
+export const handleErrors = async (error, mainIntent, params, entities, answer, endpoint, plotState, intent, message, apiData = null) => {
+
     let errorValue = error.invalid_value;
     let errorParam = error["invalid_parameter"];
     let mParam = error["missing_parameter"];
-    let apiData = null;
+    let existingApiData = apiData;
 
     if (error.type === "missing_parameter") {
       switch (mParam) {
@@ -30,7 +31,8 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
           break;
       }
     } else if (error.type === "invalid_parameter") {
-      // invalid gene, we can auto remove it and re-call api
+      // Invalid gene, we can auto remove it and re-call api
+      // Need to handle both cases where features can be either a string or an object.
       if (errorParam === "features") {
         if (typeof params.features === "string") {
           if (mainIntent === "comeasurement") {
@@ -46,6 +48,14 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
               .filter((feature) => !errorValue.includes(feature.toLowerCase()))
               .join(",");
           }
+        } else if (intent === "interactors.geneExpression" && typeof params.features === "object") {
+            params.features = params.features.filter((feature) => !errorValue.includes(feature.toLowerCase()))
+            endpoint = "dotplot";
+
+            // build the answer before calling the dotplot again
+            // this ensures that the features causing the dotplot error will still be included
+            // calling this here will also make sure that the answer willl only be built once when there are invalid interactors for dotplot
+            answer += buildAnswer(intent, plotState, apiData);
         } else {
           // example case: markers of myopeptidocyte in s_lacustris whole
           // remove marker genes that contain a space
@@ -65,9 +75,11 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
                 (e) => e.entity === "celltype"
               )[0].sourceText;
             }
-            answer += `Invalid features detected: "${errorValue}". These have been automatically excluded<br>`;
-            answer += buildAnswer(intent, plotState, apiData);
-            answer += `<br><br>It covers ${apiData.celltypes ? `${apiData.celltypes.length} cell types` : '1 cell type'} and ${apiData.features.length} genes.`;
+            if (intent !== "interactors.geneExpression") {
+              answer += `Invalid features detected: "${errorValue}". These have been automatically excluded<br>`;
+              answer += buildAnswer(intent, plotState, apiData);
+              answer += `<br><br>It covers ${apiData.celltypes ? `${apiData.celltypes.length} cell types` : '1 cell type'} and ${apiData.features.length} genes.`;
+            }
           } else {
             answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;
           }
@@ -84,6 +96,9 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
     } else {
       answer = message;
     }
-
+    if (intent === "interactors.geneExpression") {
+      apiData.queries = existingApiData.queries;
+      apiData.targests = existingApiData.targest;
+    }
     return { params, apiData, answer };
 };
