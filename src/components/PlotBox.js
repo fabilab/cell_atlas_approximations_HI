@@ -1,6 +1,7 @@
 import React from 'react';
 import Heatmap from "./plots/Heatmap"
 import BarChart from './plots/BarChart';
+import HomologsGraph from './plots/HomologsGraph';
 import Neighborhood from './plots/Neighborhood';
 import BubbleHeatmap from './plots/BubbleHeatmap';
 import OrganCellChart from './plots/OrganCellChart';
@@ -33,7 +34,7 @@ const PlotBox = ({ state }) => {
     case 'fractionDetected':
     case 'fractionDetectedAcrossOrgans':
       return (
-        <div id='canvasId' style={plotStyle}>
+        <div style={plotStyle}>
           <BubbleHeatmap
             state={state}
           />
@@ -42,7 +43,7 @@ const PlotBox = ({ state }) => {
     case 'highestMeasurement':
     case 'similarCelltypes':
       return (
-        <div id='canvasId' style={plotStyle}>
+        <div style={plotStyle}>
           <BarChart
             state={state}
           />
@@ -100,6 +101,14 @@ const PlotBox = ({ state }) => {
       return (
         <div style={plotStyle}>
           <OrganCellChart 
+            state={state}
+          />
+        </div>
+      )
+    case 'homologs':
+      return (
+        <div style={plotStyle}>
+          <HomologsGraph
             state={state}
           />
         </div>

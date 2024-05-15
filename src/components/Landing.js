@@ -25,7 +25,7 @@ const Landing = () => {
   const sampleQueries = [
     'What species are available?',
     'Explore lemur',
-    'What organs are available in human?',
+    // 'What organs are available in human?',
     'What cell types are there in mouse liver?',
     'show interactors of NOTCH1 in human heart.',
     // 'show interactors of COL1A1 in human heart.',
@@ -41,6 +41,7 @@ const Landing = () => {
     // 'List highest accessibility of chr6:98834292-98834692 in human.',
     'Show 10 markers for fibroblast in human lung compared to other tissues.',
     'Show the 10 top marker peaks for cardiomyocyte in h_sapiens heart.',
+    'What are the homologs of MS4A1,GP6,COL1A1 from human to mouse?',
     'What is the expression of COL13A1, COL14A1, TGFBI, PDGFRA, GZMA in human lung?',
     'What are the cell states of ML358828a, ML071151a, ML065728a in jellyfish whole?',
     'Compare fraction expressing PTPRC, MARCO, CD68, CD14 in macrophage across organs in human.',

@@ -18,6 +18,7 @@ const updatePlotIntents = [
   "explore",
   "average",
   "markers",
+  "homologs",
   "celltypes",
   "organisms",
   "convert_to",
@@ -54,6 +55,7 @@ export const triggersPlotUpdate = (response) => {
  */
 export const updateChat = async (response, plotState) => {
 
+  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -84,6 +86,8 @@ export const updateChat = async (response, plotState) => {
   // prepare the endpoint and parameters based on the user's intent and entities.
   // modifications might be necessary to ensure the API call functions correctly.
   ({ endpoint, params } = buildAPIParams(intent, entities));
+  console.log(endpoint);
+  console.log(params);
 
   // If the intent does not require an API, just build the answer
   if (mainIntentNotRequiresApi.includes(mainIntent)) {
@@ -113,6 +117,7 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === "neighborhood") {
       params["include_embedding"] = true;
     }
+
     if (subIntent === "chromatinAccessibility") {
       params["measurement_type"] = "chromatin_accessibility";
     }
@@ -127,6 +132,14 @@ export const updateChat = async (response, plotState) => {
 
     if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
+    }
+
+    if(intent === "homologs.geneExpression") {
+      // Modify the params object
+      params["source_organism"] = params["organism"];
+      params["target_organism"] = params["targetOrganism"];
+      delete params["organism"];
+      delete params["targetOrganism"];
     }
 
     if (intent === "celltypes.geneExpression") {
