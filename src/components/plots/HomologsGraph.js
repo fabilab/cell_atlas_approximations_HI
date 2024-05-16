@@ -11,24 +11,33 @@ const HomologsGraph = ({ state }) => {
     const orderedQueries = [];
     const orderedTargets = [];
     const orderedDistances = [];
+    // a dictionary to keep track of the homologs counts for each queried gene.
+    const featureTargetCount = {};
 
     featureArray.forEach(feature => {
-        let targetCounts = 0;
+        let displayTargetCounts = 0;
+        let totalTargetCounts = 0;
         const featureGroup = [];
         for (let index = 0; index < queries.length; index++) {
             const query = queries[index];
             if (query === feature) {
-                featureGroup.push({ query, target: targets[index], distance: distances[index] });
-                targetCounts += 1;
-                // only display the top 5 homologs
-                if (targetCounts >= 5) {
-                    break;
-                }
+                // restrict the display homologs number to 5
+                if (displayTargetCounts <= 4) {
+                    featureGroup.push({ query, target: targets[index], distance: distances[index] });
+                    displayTargetCounts += 1;
+                }  
+                totalTargetCounts += 1;
             }
+            featureTargetCount[feature] = totalTargetCounts;
         }
 
         // Sort the group by distance in increasing order
         featureGroup.sort((a, b) => a.distance - b.distance);
+
+        if (totalTargetCounts > 5) {
+            featureGroup.push({ query: feature, target: `... ${totalTargetCounts-5} more`, distance: 0 });
+        }
+
 
         // Add sorted group to ordered arrays
         featureGroup.forEach(item => {
@@ -44,17 +53,36 @@ const HomologsGraph = ({ state }) => {
 
     // Assign y positions based on corresponding target
     orderedQueries.forEach((query, index) => {
+        
         const queryLower = query.toLowerCase();
         const targetLower = orderedTargets[index].toLowerCase();
         if (!(queryLower in yPositionMap)) {
             yPositionMap[queryLower] = currentY;
-            currentY--;
         }
         if (!(targetLower in yPositionMap)) {
             yPositionMap[targetLower] = currentY;
-            currentY--;
         }
+        // decrease Y coord for every round
+        currentY--;
     });
+
+    // Define layout
+    const layout = {
+        title: `<b>Homologs of genes from ${source_organism} to ${target_organism}`,
+        showlegend: false,
+        xaxis: {
+            showgrid: false,
+            zeroline: false,
+            showticklabels: false,
+            range: [-0.2, 1.2],
+        },
+        yaxis: {
+            showgrid: false,
+            zeroline: false,
+            showticklabels: false,
+        },
+        height: orderedTargets.length * 50 + 100
+    };
 
     // Define Plotly data
     const plotData = [
@@ -85,6 +113,20 @@ const HomologsGraph = ({ state }) => {
                 size: 10,
                 color: 'black'
             }
+        },
+        {
+            type: 'scatter',
+            mode: 'text',
+            x: [],
+            y: [],
+            text: [],
+            textposition: 'center',
+            showlegend: false,
+            textfont: {
+                size: 12,
+                color: 'black',
+                // weight: 'bold',
+            }
         }
     ];
 
@@ -109,48 +151,35 @@ const HomologsGraph = ({ state }) => {
         // show distance between nodes
         const midX = 0.5;
         const midY = (sourceY + targetY) / 2;
-  
-        // Create a new line trace for each connection
-        plotData.push({
-            type: 'scatter',
-            mode: 'lines',
-            x: [0.025, 0.975, null],
-            y: [sourceY, targetY, null],
-            line: {
-                width: lineWidth,
-                color: '#434343',
-            }
-        });
 
-        // null is used here to ensure that the line will only connect queried gene and it's target
-        plotData[0].x.push(0, 1);
-        plotData[0].y.push(sourceY, targetY);
-        plotData[0].text.push(query, target);
-        plotData[0].textposition.push('middle left', 'middle right');
+        // when distance it valid, draw the line and dots
+        if (distance > 0) {
+            plotData.push({
+                type: 'scatter',
+                mode: 'lines',
+                x: [0.025, 0.975, null],
+                y: [sourceY, targetY, null],
+                line: {
+                    width: lineWidth,
+                    color: '#434343',
+                }
+            });
+            plotData[1].x.push(midX);
+            plotData[1].y.push(midY);
+            plotData[1].text.push(distance.toFixed(2));
 
-        plotData[1].x.push(midX);
-        plotData[1].y.push(midY);
-        plotData[1].text.push(distance.toFixed(2));
+            // null is used here to ensure that the line will only connect queried gene and it's target
+            plotData[0].x.push(0, 1);
+            plotData[0].y.push(sourceY, targetY);
+            plotData[0].text.push(query, target);
+            plotData[0].textposition.push('middle left', 'middle right');
+        } else {
+            plotData[2].x.push(1);
+            plotData[2].y.push(targetY);
+            plotData[2].text.push(target);
+        }
 
     });
-
-    // Define layout
-    const layout = {
-        title: `<b>Homologs of genes from ${source_organism} to ${target_organism}`,
-        showlegend: false,
-        xaxis: {
-            showgrid: false,
-            zeroline: false,
-            showticklabels: false,
-            range: [-0.2, 1.2],
-        },
-        yaxis: {
-            showgrid: false,
-            zeroline: false,
-            showticklabels: false,
-        },
-        height: orderedTargets.length * 50 + 100,
-    };
 
     return (
         <div>
