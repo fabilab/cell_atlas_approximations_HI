@@ -82,12 +82,24 @@ const HomologsGraph = ({ state }) => {
         }
     ];
 
+    // Line width counter for each query
+    const queryLineWidthCounter = {};
+    
     // Add nodes and edges to the plotData
     orderedQueries.forEach((query, index) => {
         const target = orderedTargets[index];
         const distance = orderedDistances[index];
         const sourceY = yPositionMap[query.toLowerCase()];
         const targetY = yPositionMap[target.toLowerCase()];
+
+        // Initialize or increment the line width counter for the current query
+        if (!(query in queryLineWidthCounter)) {
+            queryLineWidthCounter[query] = 0;
+        }
+        queryLineWidthCounter[query]++;
+
+        // Calculate line width
+        const lineWidth = 1 + 0.5 * (queryLineWidthCounter[query] - 1);
 
         // show distance between nodes
         const midX = 0.5;
@@ -100,7 +112,7 @@ const HomologsGraph = ({ state }) => {
             x: [0, 1, null],
             y: [sourceY, targetY, null],
             line: {
-                width: 1,
+                width: lineWidth,
                 color: '#434343',
             }
         });
