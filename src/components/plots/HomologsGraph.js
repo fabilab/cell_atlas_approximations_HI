@@ -1,15 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import chroma from 'chroma-js';
 
 const HomologsGraph = ({ state }) => {
     let { features, source_organism, target_organism, queries, targets, distances } = state;
-
-    // Ensure all properties are defined
-    features = features || '';
-    queries = queries || [];
-    targets = targets || [];
-    distances = distances || [];
 
     // Convert the features string to an array
     const featureArray = features.split(',');
@@ -20,12 +13,21 @@ const HomologsGraph = ({ state }) => {
     const orderedDistances = [];
 
     featureArray.forEach(feature => {
+        const featureGroup = [];
         queries.forEach((query, index) => {
             if (query === feature) {
-                orderedQueries.push(query);
-                orderedTargets.push(targets[index]);
-                orderedDistances.push(distances[index]);
+                featureGroup.push({ query, target: targets[index], distance: distances[index] });
             }
+        });
+
+        // Sort the group by distance in increasing order
+        featureGroup.sort((a, b) => a.distance - b.distance);
+
+        // Add sorted group to ordered arrays
+        featureGroup.forEach(item => {
+            orderedQueries.push(item.query);
+            orderedTargets.push(item.target);
+            orderedDistances.push(item.distance);
         });
     });
 
@@ -34,6 +36,7 @@ const HomologsGraph = ({ state }) => {
     let currentY = featureArray.length - 1; // Start from the top
 
     // Assign y positions based on corresponding target
+    console.log(orderedQueries);
     orderedQueries.forEach((query, index) => {
         const queryLower = query.toLowerCase();
         const targetLower = orderedTargets[index].toLowerCase();
@@ -47,31 +50,21 @@ const HomologsGraph = ({ state }) => {
         }
     });
 
-
     // Define Plotly data
     const plotData = [
-        {
-            type: 'scatter',
-            mode: 'lines',
-            x: [],
-            y: [],
-            line: {
-                width: 2,
-                // color: '#ffd666' // Lines color
-                color: '#b37feb',
-            }
-        },
         {
             type: 'scatter',
             mode: 'markers+text',
             x: [],
             y: [],
             text: [],
+            textfont: {
+                weight: 'bold',
+            },
             textposition: [],
             marker: {
                 size: 20,
-                // color: '#9254de',
-                color: '#73d13d',
+                color: '#1890ff',
             }
         },
         {
@@ -96,22 +89,32 @@ const HomologsGraph = ({ state }) => {
         const sourceY = yPositionMap[query.toLowerCase()];
         const targetY = yPositionMap[target.toLowerCase()];
 
+        // show distance between nodes
         const midX = 0.5;
         const midY = (sourceY + targetY) / 2;
-        
-        plotData[0].x.push(0, 1, null);
-        plotData[0].y.push(sourceY, targetY, null);
+  
+        // Create a new line trace for each connection
+        plotData.push({
+            type: 'scatter',
+            mode: 'lines',
+            x: [0, 1, null],
+            y: [sourceY, targetY, null],
+            line: {
+                width: 1,
+                color: '#434343',
+            }
+        });
 
-        plotData[1].x.push(0, 1);
-        plotData[1].y.push(sourceY, targetY);
-        plotData[1].text.push(query, target);
-        // Push text position for queries and targets
-        plotData[1].textposition.push('middle left', 'middle right');
-         // Push colors for queries and targets
+        // null is used here to ensure that the line will only connect queried gene and it's target
+        plotData[0].x.push(0, 1);
+        plotData[0].y.push(sourceY, targetY);
+        plotData[0].text.push(query, target);
+        plotData[0].textposition.push('middle left', 'middle right');
 
-        plotData[2].x.push(midX);
-        plotData[2].y.push(midY);
-        plotData[2].text.push(distance.toFixed(2));
+        plotData[1].x.push(midX);
+        plotData[1].y.push(midY);
+        plotData[1].text.push(distance.toFixed(2));
+
     });
 
     // Define layout
