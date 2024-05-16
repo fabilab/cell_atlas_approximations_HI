@@ -13,12 +13,19 @@ const HomologsGraph = ({ state }) => {
     const orderedDistances = [];
 
     featureArray.forEach(feature => {
+        let targetCounts = 0;
         const featureGroup = [];
-        queries.forEach((query, index) => {
+        for (let index = 0; index < queries.length; index++) {
+            const query = queries[index];
             if (query === feature) {
                 featureGroup.push({ query, target: targets[index], distance: distances[index] });
+                targetCounts += 1;
+                // only display the top 5 homologs
+                if (targetCounts >= 5) {
+                    break;
+                }
             }
-        });
+        }
 
         // Sort the group by distance in increasing order
         featureGroup.sort((a, b) => a.distance - b.distance);
@@ -36,7 +43,6 @@ const HomologsGraph = ({ state }) => {
     let currentY = featureArray.length - 1; // Start from the top
 
     // Assign y positions based on corresponding target
-    console.log(orderedQueries);
     orderedQueries.forEach((query, index) => {
         const queryLower = query.toLowerCase();
         const targetLower = orderedTargets[index].toLowerCase();
@@ -84,7 +90,6 @@ const HomologsGraph = ({ state }) => {
 
     // Line width counter for each query
     const queryLineWidthCounter = {};
-    
     // Add nodes and edges to the plotData
     orderedQueries.forEach((query, index) => {
         const target = orderedTargets[index];
@@ -109,7 +114,7 @@ const HomologsGraph = ({ state }) => {
         plotData.push({
             type: 'scatter',
             mode: 'lines',
-            x: [0, 1, null],
+            x: [0.025, 0.975, null],
             y: [sourceY, targetY, null],
             line: {
                 width: lineWidth,
@@ -144,7 +149,7 @@ const HomologsGraph = ({ state }) => {
             zeroline: false,
             showticklabels: false,
         },
-        height: targets.length * 50 + 100,
+        height: orderedTargets.length * 50 + 100,
     };
 
     return (
