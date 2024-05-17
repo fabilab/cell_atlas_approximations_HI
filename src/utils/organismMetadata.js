@@ -97,7 +97,6 @@ const organismMetadata = {
     commonName: "Zebrafish",
     dataSource: `Wagner et al. 2018 "Single-cell mapping of gene expression landscapes and lineage in the zebrafish embryo"`,    
     about: "Danio rerio or zebrafish is a freshwater fish that originates from South Asia and is a model organism for vertebrate development, genetics, and evolution.",
-    genesFromPaper: "epcam, si, krt18, krt8, cldnb, elavl3, krt4, tfap2a, LOC100537766, cldnh, six1b, LOC100006216, myt1a, dlb, sox19a, actc1a, pfn1, cxcl12b, pax6b ",
     imagePath: require("../asset/organisms/d_rerio.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Zebrafish",
     category: "Animal",
@@ -106,6 +105,16 @@ const organismMetadata = {
           coords: "247,35,203,70,177,131,175,159,162,228,173,300,199,370,228,422,342,426,408,415,412,346,395,264,358,176,310,109,287,67"
       },
     },
+  },
+  "f_vesca": {
+    bioName: "Fragaria vesca",
+    commonName: "Wildland strawberry",
+    dataSource: `Bai et al 2022 "Development of a single-cell atlas for woodland strawberry (Fragaria vesca) leaves during early Botrytis cinerea infection using single-cell RNA-seq"`,
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Fragaria_vesca",
+    about: "Fragaria vesca, commonly called the wild strawberry, woodland strawberry, is a perennial herbaceous plant in the rose family that grows naturally throughout much of the Northern Hemisphere, and that produces edible fruits",
+    paperHyperlink: "https://doi.org/10.1093/hr/uhab055",
+    imagePath: require("../asset/organisms/f_vesca.jpeg"),
+    category: "Plant",
   },
   "h_miamia": {
     bioName: "Hofstenia miamia",
@@ -340,6 +349,16 @@ const organismMetadata = {
     paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S2211124722012025?via%3Dihub",
     category: "Animal",
   },
+  "o_sativa": {
+    bioName:"Oryza sativa",
+    commonName: "Rice root",
+    dataSource: `Zhang et al 2021 "Single-cell transcriptome atlas and chromatin accessibility landscape reveal differentiation trajectories in the rice root"`,
+    about: "Oryza sativa is the most common of the two rice species cultivated as a cereal, the other species being O. glaberrima, African rice. It was first domesticated in the Yangtze River basin in China 13,500 to 8,200 years ago.",
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Oryza_sativa",
+    paperHyperlink:"https://doi.org/10.1038/s41467-021-22352-4",
+    imagePath: require("../asset/organisms/o_sativa.jpeg"),
+    category: "Plant",
+  },
   "p_crozieri": {
     bioName: "Prostheceraeus crozieri",
     commonName: "Müller's larva",
@@ -476,7 +495,17 @@ const organismMetadata = {
       "bladder-label": {coords: "915,604,1091,645", "shape": "rect"},
       "muscle-label": {coords: "914,820,1079,865", "shape": "rect"}
     }  
-  }
+  },
+  "z_mays": {
+    bioName: "Zea mays",
+    commonName: "corn",
+    dataSource: `Marand  et al 2021 "A cis-regulatory atlas in maize at single-cell resolution"`,
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Maize",
+    about: "Maize (Zea mays), also known as corn, is a tall grass domesticated in southern Mexico 9,000 years ago, known for its cereal grain produced on leafy stalks, commonly found in yellow or white varieties.",
+    paperHyperlink: "https://doi.org/10.1016/j.cell.2021.04.014",
+    imagePath: require("../asset/organisms/z_mays.jpeg"),
+    category: "Plant",
+  },
 };
 
 export default organismMetadata;
