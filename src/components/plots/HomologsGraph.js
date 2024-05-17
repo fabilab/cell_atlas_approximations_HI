@@ -98,7 +98,7 @@ const HomologsGraph = ({ state }) => {
             textposition: [],
             marker: {
                 size: 20,
-                color: '#1890ff',
+                color: 'tomato',
             }
         },
         {
@@ -124,8 +124,7 @@ const HomologsGraph = ({ state }) => {
             showlegend: false,
             textfont: {
                 size: 12,
-                color: 'black',
-                // weight: 'bold',
+                color: 'tomato',
             }
         }
     ];
@@ -174,6 +173,7 @@ const HomologsGraph = ({ state }) => {
             plotData[0].text.push(query, target);
             plotData[0].textposition.push('middle left', 'middle right');
         } else {
+            // push the "...N more" node here
             plotData[2].x.push(1);
             plotData[2].y.push(targetY);
             plotData[2].text.push(target);
