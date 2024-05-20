@@ -87,7 +87,11 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
       } else if (errorParam === "feature") {
         answer += `The feature "${errorValue}" is not available. Have you checked the spelling of that feature? You can retry with a different fgeature if you like.`;
       } else if (errorParam === "organism") {
-        answer += `Organism "${errorValue}" is not available. Could it be a spelling error? Otherwise, you can try a different species.`;
+        if (intent === "interactors.geneExpression") {
+          answer += "Interaction partners are only supported for the species <i>Homo sapiens</i> and <i>Mus musculus</i>.";
+        } else {
+          answer += `Organism "${errorValue}" is not available. Could it be a spelling error? Otherwise, you can try a different species.`;
+        }
       } else if (errorParam === "organ") {
         answer += `Organ "${errorValue}" is not available in this organism. Some organisms (e.g. coral) have been dissociated as "whole", without separating the organs. You can try asking "What organs are available for <organism>?" to get the list of organs for this organism.`;
       } else if (errorParam === "celltype") {
@@ -96,7 +100,7 @@ export const handleErrors = async (error, mainIntent, params, entities, answer, 
     } else {
       answer = message;
     }
-    if (intent === "interactors.geneExpression") {
+    if (intent === "interactors.geneExpression" && existingApiData) {
       apiData.queries = existingApiData.queries;
       apiData.targests = existingApiData.targest;
     }
