@@ -1,7 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-// Define line thickness based on distance: shorter distance results in a thicker line
+// A function to define graph line thickness based on distance: shorter distance results in a thicker line
 // d: distance
 const getLineStyle = (d) => {
     switch (true) {
@@ -90,7 +90,8 @@ const HomologsGraph = ({ state }) => {
     // Define layout
     const layout = {
         title: `<b>Homologs of genes from ${source_organism} to ${target_organism}`,
-        showlegend: true,
+        showlegend: true, // global
+        staticPlot: true,
         xaxis: {
             showgrid: false,
             zeroline: false,
@@ -102,13 +103,13 @@ const HomologsGraph = ({ state }) => {
             zeroline: false,
             showticklabels: false,
         },
-        height: orderedTargets.length * 50 + 100,
+        height: orderedTargets.length * 45 + 300,
         width: 1000
     };
 
-    // Define Plotly data
+    // START: Define and construct plotly data
     const plotData = [
-        // Gene nodes
+        // Gene nodes (for both queried and target)
         {
             type: 'scatter',
             mode: 'markers+text',
@@ -121,9 +122,10 @@ const HomologsGraph = ({ state }) => {
             textposition: [],
             marker: {
                 size: 20,
-                color: 'tomato',
+                color: [],
             },
-            showlegend: false
+            showlegend: false, // local
+            hoverinfo: 'none',
         },
         // distance data 
         {
@@ -137,7 +139,8 @@ const HomologsGraph = ({ state }) => {
             textfont: {
                 size: 10,
                 color: 'black'
-            }
+            },
+            hoverinfo: 'none',
         },
         // text to show the No. of hidden nodes
         {
@@ -151,7 +154,8 @@ const HomologsGraph = ({ state }) => {
             textfont: {
                 size: 12,
                 color: 'black',
-            }
+            },
+            hoverinfo: 'none',
         },
     ];
 
@@ -200,6 +204,7 @@ const HomologsGraph = ({ state }) => {
             plotData[0].x.push(0, 1);
             plotData[0].y.push(sourceY, targetY);
             plotData[0].text.push(query, target);
+            plotData[0].marker.color.push('#f5222d', '#1677ff'); // Colors for queried genes and target genes
             plotData[0].textposition.push('middle left', 'middle right');
         } else {
             // push the "...N more" node here
@@ -210,15 +215,50 @@ const HomologsGraph = ({ state }) => {
 
     });
 
-    // Add legend items
+    // END: Define and construct plotly data
+
+    // START: Defind and construct legend
+
+    const sourceSpecies = {
+        x: [null],
+        y: [null],
+        mode: 'markers',
+        marker: {
+          color: '#f5222d',
+          size: 10,
+        },
+        name: `Genes from ${source_organism}`,
+        showlegend: true,
+        hoverinfo: 'none',
+    };
+      
+    const targetSpecies = {
+        x: [null],
+        y: [null],
+        mode: 'markers',
+        marker: {
+            color: '#1677ff',
+            size: 10,
+        },
+        name: `Genes from ${target_organism}`,
+        showlegend: true,
+        hoverinfo: 'none',
+    };
+
+    // Legend of line styles
     const legendItems = [
-        { range: '0-5', width: 3, dash: 'solid' },
-        { range: '5-10', width: 2.5, dash: 'solid' },
-        { range: '10-20', width: 2, dash: 'solid' },
-        { range: '20-30', width: 1.5, dash: 'solid' },
+        { range: '0-5', width: 5, dash: 'solid' },
+        { range: '5-10', width: 4, dash: 'solid' },
+        { range: '10-20', width: 3, dash: 'solid' },
+        { range: '20-30', width: 2, dash: 'solid' },
         { range: '30-40', width: 1, dash: 'solid' },
-        { range: '>40', width: 4, dash: 'dot' }
+        { range: '>40', width: 1, dash: 'dot' }
     ];
+
+    // Add legends to plot:
+
+    plotData.push(sourceSpecies);
+    plotData.push(targetSpecies);
 
     legendItems.forEach(item => {
         plotData.push({
@@ -234,12 +274,18 @@ const HomologsGraph = ({ state }) => {
             name: `Distance ${item.range}`
         });
     });
+
+    // config to remove unused tool bar
+    let config = {
+        modeBarButtonsToRemove: ['zoom2d','pan2d','select2d','lasso2d','autoScale2d','zoomIn2d', 'zoomOut2d','zoomInGeo'],
+    }
     
     return (
         <div>
             <Plot
                 data={plotData}
                 layout={layout}
+                config={config}
             />
         </div>
     );
