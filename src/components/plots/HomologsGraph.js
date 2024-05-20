@@ -1,5 +1,7 @@
 import React from "react";
 import Plot from "react-plotly.js";
+import { useChat } from '../ChatContext'; 
+import {selectAll} from "d3";
 
 // A function to define graph line thickness based on distance: shorter distance results in a thicker line
 // d: distance
@@ -31,7 +33,7 @@ const HomologsGraph = ({ state }) => {
     targets,
     distances,
   } = state;
-
+  const { setLocalMessage } = useChat();
   // Convert the features string to an array
   const featureArray = features.split(",");
 
@@ -88,13 +90,12 @@ const HomologsGraph = ({ state }) => {
 
   // Assign y positions based on corresponding target
   orderedQueries.forEach((query, index) => {
-    const queryLower = query.toLowerCase();
-    const targetLower = orderedTargets[index].toLowerCase();
-    if (!(queryLower in yPositionMap)) {
-      yPositionMap[queryLower] = currentY;
+    const target = orderedTargets[index];
+    if (!(query in yPositionMap)) {
+      yPositionMap[query] = currentY;
     }
-    if (!(targetLower in yPositionMap)) {
-      yPositionMap[targetLower] = currentY;
+    if (!(target in yPositionMap)) {
+      yPositionMap[target] = currentY;
     }
     // decrease Y coord for every round
     currentY--;
@@ -178,8 +179,8 @@ const HomologsGraph = ({ state }) => {
   orderedQueries.forEach((query, index) => {
     const target = orderedTargets[index];
     const distance = orderedDistances[index];
-    const sourceY = yPositionMap[query.toLowerCase()];
-    const targetY = yPositionMap[target.toLowerCase()];
+    const sourceY = yPositionMap[query];
+    const targetY = yPositionMap[target];
 
     // Initialize or increment the line width counter for the current query
     if (!(query in queryLineWidthCounter)) {
@@ -300,9 +301,39 @@ const HomologsGraph = ({ state }) => {
     ],
   };
 
+// Make genes on the plot clickable and give suggestion query:
+// A function that handle gene name click event
+const featureLabelClick = (event) => {
+    const clickedFeature = event.target.textContent;
+    const species = event.target.__data__.x === 0 ? source_organism : target_organism;
+    let message = `what are the highest ${clickedFeature} expressors in ${species}?`;
+    setLocalMessage(message);
+};
+
   return (
     <div>
-      <Plot data={plotData} layout={layout} config={config} />
+      <Plot 
+        data={plotData}
+        layout={layout}
+        config={config} 
+        onAfterPlot={() => {
+            // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
+            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+
+            selectAll(".plot")
+              .selectAll('text')
+              .on("click", (event) => featureLabelClick (event));
+          }}
+          onInitialized={(figure, graphDiv)=>{
+            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+
+            selectAll(".plot")
+              .selectAll('text')
+              .on("click", (event) => featureLabelClick (event));
+          }}
+      />
     </div>
   );
 };
