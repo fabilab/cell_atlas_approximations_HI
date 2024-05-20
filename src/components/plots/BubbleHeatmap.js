@@ -90,7 +90,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   let nfeatures = yaxis.length;
   let ncelltypes = xaxis.length;
 
-  let ytickMargin = (nfeatures <= 10) ? 200 : 200;
+  let ytickMargin = (nfeatures <= 10) ? 220 : 200;
   let xtickMargin = (ncelltypes <= 20) ? 380 : 170;
 
   let graphWidth = ncelltypes * 30 + xtickMargin;
@@ -114,15 +114,15 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           type: 'rect',
           xref: 'paper',
           yref: 'y',
-          x0: 0 - 0.22,
+          x0: 0 - 0.25,
           x1: 1 - 0.02,
           y0: geneIndex + 0.4,
           y1: geneIndex - 0.4,
           line: {
-              color: '#b082f5', // Set border color for the queried genes
-              width: 2 // Set border width
+              color: 'rgba(176, 130, 245, 0.2)',
+              width: 1
           },
-          fillcolor: 'rgba(176, 130, 245, 0.1)'
+          fillcolor: 'rgba(176, 130, 245, 0.2)'
       };
     });
   }
@@ -148,7 +148,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       },
     },
     margin: {
-      t: 30,
+      t: 60,
       b: 10,
       l: 5,
       r: 5,
