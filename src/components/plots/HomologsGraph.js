@@ -1,6 +1,27 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
+// Define line thickness based on distance: shorter distance results in a thicker line
+// d: distance
+const getLineStyle = (d) => {
+    switch (true) {
+      case (d >= 0 && d <= 5):
+        return { width: 5, dash: 'solid'};
+      case (d > 5 && d <= 10):
+        return { width: 4, dash: 'solid'};
+      case (d > 10 && d <= 20):
+        return { width: 3, dash: 'solid'};
+      case (d > 20 && d <= 30):
+        return { width: 2, dash: 'solid'};
+      case (d > 30 && d <= 40):
+        return { width: 1, dash: 'solid'};
+      case (d > 40):
+        return { width: 1, dash: 'dot'};
+      default:
+        return { width: 1, dash: 'solid' }; // Default thickness
+    }
+  };
+
 const HomologsGraph = ({ state }) => {
     let { features, source_organism, target_organism, queries, targets, distances } = state;
 
@@ -144,8 +165,9 @@ const HomologsGraph = ({ state }) => {
         }
         queryLineWidthCounter[query]++;
 
-        // Calculate line width
-        const lineWidth = 1 + 0.5 * (queryLineWidthCounter[query] - 1);
+        
+        // Compute line style based on distance
+        const { width,dash } = getLineStyle(distance);
 
         // show distance between nodes
         const midX = 0.5;
@@ -159,8 +181,9 @@ const HomologsGraph = ({ state }) => {
                 x: [0.025, 0.975, null],
                 y: [sourceY, targetY, null],
                 line: {
-                    width: lineWidth,
-                    color: '#434343',
+                    width: width,
+                    dash: dash,
+                    color: 'black',
                 }
             });
             plotData[1].x.push(midX);
