@@ -90,23 +90,25 @@ const HomologsGraph = ({ state }) => {
     // Define layout
     const layout = {
         title: `<b>Homologs of genes from ${source_organism} to ${target_organism}`,
-        showlegend: false,
+        showlegend: true,
         xaxis: {
             showgrid: false,
             zeroline: false,
             showticklabels: false,
-            range: [-0.2, 1.2],
+            range: [-0.5, 1.5],
         },
         yaxis: {
             showgrid: false,
             zeroline: false,
             showticklabels: false,
         },
-        height: orderedTargets.length * 50 + 100
+        height: orderedTargets.length * 50 + 100,
+        width: 1000
     };
 
     // Define Plotly data
     const plotData = [
+        // Gene nodes
         {
             type: 'scatter',
             mode: 'markers+text',
@@ -120,8 +122,10 @@ const HomologsGraph = ({ state }) => {
             marker: {
                 size: 20,
                 color: 'tomato',
-            }
+            },
+            showlegend: false
         },
+        // distance data 
         {
             type: 'scatter',
             mode: 'text',
@@ -135,6 +139,7 @@ const HomologsGraph = ({ state }) => {
                 color: 'black'
             }
         },
+        // text to show the No. of hidden nodes
         {
             type: 'scatter',
             mode: 'text',
@@ -145,9 +150,9 @@ const HomologsGraph = ({ state }) => {
             showlegend: false,
             textfont: {
                 size: 12,
-                color: 'tomato',
+                color: 'black',
             }
-        }
+        },
     ];
 
     // Line width counter for each query
@@ -184,7 +189,8 @@ const HomologsGraph = ({ state }) => {
                     width: width,
                     dash: dash,
                     color: 'black',
-                }
+                },
+                showlegend: false
             });
             plotData[1].x.push(midX);
             plotData[1].y.push(midY);
@@ -204,6 +210,31 @@ const HomologsGraph = ({ state }) => {
 
     });
 
+    // Add legend items
+    const legendItems = [
+        { range: '0-5', width: 3, dash: 'solid' },
+        { range: '5-10', width: 2.5, dash: 'solid' },
+        { range: '10-20', width: 2, dash: 'solid' },
+        { range: '20-30', width: 1.5, dash: 'solid' },
+        { range: '30-40', width: 1, dash: 'solid' },
+        { range: '>40', width: 4, dash: 'dot' }
+    ];
+
+    legendItems.forEach(item => {
+        plotData.push({
+            type: 'scatter',
+            mode: 'lines',
+            x: [null, null],
+            y: [null, null],
+            line: {
+                width: item.width,
+                dash: item.dash,
+                color: '#434343',
+            },
+            name: `Distance ${item.range}`
+        });
+    });
+    
     return (
         <div>
             <Plot
