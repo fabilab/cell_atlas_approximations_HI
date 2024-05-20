@@ -18,6 +18,7 @@ const updatePlotIntents = [
   "explore",
   "average",
   "markers",
+  "homologs",
   "celltypes",
   "organisms",
   "convert_to",
@@ -113,6 +114,7 @@ export const updateChat = async (response, plotState) => {
     if (mainIntent === "neighborhood") {
       params["include_embedding"] = true;
     }
+
     if (subIntent === "chromatinAccessibility") {
       params["measurement_type"] = "chromatin_accessibility";
     }
@@ -127,6 +129,14 @@ export const updateChat = async (response, plotState) => {
 
     if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
+    }
+
+    if(intent === "homologs.geneExpression") {
+      // Modify the params object
+      params["source_organism"] = params["organism"];
+      params["target_organism"] = params["targetOrganism"];
+      delete params["organism"];
+      delete params["targetOrganism"];
     }
 
     if (intent === "celltypes.geneExpression") {
@@ -224,6 +234,13 @@ export const updateChat = async (response, plotState) => {
       if (intent === "celltypes.geneExpression") {
         apiData.targetCelltypes = targetCelltypes;
         apiData.targetOrgan = targetOrgan;
+      }
+
+      if(intent === "homologs.geneExpression") {
+        // add source and target organism to apiData, we need them for build answer
+        apiData["features"] = params["features"];
+        apiData["source_organism"] = params["source_organism"];
+        apiData["target_organism"] = params["target_organism"];
       }
     }
 

@@ -5,7 +5,6 @@ await nlp.initialise();
 
 // Construct an answer given the API has provided the requested information
 const buildAnswer = (intent, plotState, data = null) => {
-
   function _chainList(list, sep, end) {
         let text = "";
         for (let i=0; i < list.length; i++) {
@@ -156,6 +155,9 @@ const buildAnswer = (intent, plotState, data = null) => {
         } else if (data?.by === 'cellstate') {
           answer += "<br><br>Type \"zoom out\" to visualise the data back at cell type level.";
         }
+        break;
+      case "homologs":
+        answer = "The homologos of " + data.features + " from " + data.source_organism + " to " + data.target_organism + " are shown in the bipartite graph.";
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";

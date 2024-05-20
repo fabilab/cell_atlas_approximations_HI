@@ -85,6 +85,26 @@ const updateInteractors = (context) => {
     return updateFractions({ ...context});
 }
 
+const updateHomologs = (context) => {
+    let features, source_organism, target_organism, queries, targets, distances;
+    features = context.response.params.features;
+    source_organism = context.response.params.source_organism;
+    target_organism = context.response.params.target_organism;
+    queries = context.response.data.queries;
+    targets = context.response.data.targets;
+    distances = context.response.data.distances;
+    
+    return {
+        plotType: "homologs",
+        features: features,
+        source_organism: source_organism,
+        target_organism: target_organism,
+        queries: queries,
+        targets: targets,
+        distances: distances,
+    }
+}
+
 const updateAverage = (context) => {
     let xAxis, plotType, average, unit, yAxis, measurement_type;
     if (context.intent.split('.')[2] === "across_organs" || (["add", "remove", "plot"].includes(context.intent.split('.')[0]) && context.plotState.plotType.endsWith("AcrossOrgans"))) {
@@ -394,6 +414,7 @@ const plotFunctionDispatcher = {
     "markers": updateMarkers,
     "average": updateAverage,
 	"celltypes": cellAbundance,
+    "homologs": updateHomologs,
     "organisms": availableOrganisms,
     "convert_to": plotConversion,
     "interactors": updateInteractors,
