@@ -2,14 +2,15 @@ import React from 'react';
 import { Card, Row, Col, Typography } from 'antd';
 import { Fade } from 'react-awesome-reveal';
 import orgMeta from '../../utils/organismMetadata.js'; 
-
+import { useChat } from '../ChatContext'; 
 const { Title, Text } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ state }) => {
   let { organisms } = state;
 
-  // FIXME FIXME FIXME FIXME: CHECK THAT THE IMAGE FILE TYPE CHECKS WITH ITS CONTENT (AKA MAGIC NUMBERS)!
+  const { setLocalMessage } = useChat();
+
   let organismCards = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
     title: orgMeta[org].bioName,
@@ -71,14 +72,21 @@ const TableOrganisms = ({ state }) => {
         <Row gutter={[32, 24]} key={index} justify="center">
           {row.map((image, innerIndex) => (
             <Col key={innerIndex} xs={24} sm={12} md={8} lg={6}>
-              <Fade>
-                <Card style={{ width: '100%', margin: '10px', opacity: cardOpacity(image.src) }}>
+              {/* <Fade> */}
+                <Card 
+                  style={{ width: '100%', margin: '10px', opacity: cardOpacity(image.src) }}
+                  onClick={(e) => {
+                    let clickedSpecies = `${image.title.toLowerCase().split(' ')[0][0]}_${image.title.toLowerCase().split(' ')[1]}`;
+                    setLocalMessage(`explore ${clickedSpecies}`);
+                  }}
+                  hoverable
+                >
                   <div style={{ height: 80, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1rem' }}>
                     <img src={image.src} alt="coming soon :)" style={{ maxHeight: '100%', maxWidth: '100%' }} />
                   </div>
                   <Meta title={<div style={{ textAlign: 'center' }}>{image.title}<br /><span style={{ fontSize: '0.8em', color: '#4196d5' }}>{image.commonName}</span></div>} />
                 </Card>
-              </Fade>
+              {/* </Fade> */}
             </Col>
           ))}
         </Row>
@@ -91,7 +99,14 @@ const TableOrganisms = ({ state }) => {
           {row.map((image, innerIndex) => (
             <Col key={innerIndex} xs={24} sm={12} md={8} lg={6}>
               <Fade>
-                <Card style={{ width: '100%', margin: '10px', opacity: cardOpacity(image.src) }}>
+              <Card 
+                  style={{ width: '100%', margin: '10px', opacity: cardOpacity(image.src) }}
+                  onClick={(e) => {
+                    let clickedSpecies = `${image.title.toLowerCase().split(' ')[0][0]}_${image.title.toLowerCase().split(' ')[1]}`;
+                    setLocalMessage(`explore ${clickedSpecies}`);
+                  }}
+                  hoverable
+                >
                   <div style={{ height: 80, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1rem' }}>
                     <img src={image.src} alt="coming soon :)" style={{ maxHeight: '100%', maxWidth: '100%' }} />
                   </div>
