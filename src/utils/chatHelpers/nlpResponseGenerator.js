@@ -76,17 +76,24 @@ const buildAnswer = (intent, plotState, data = null) => {
                 answer = "The average is shown in the plot.";
             }
         }
-        answer += "<br><br>To log/unlog the data for better dynamic range, type \"<b>log data</b>\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
+        answer += "<br><br>To log/unlog the data for better dynamic range, type \"<b>log data</b>\". <br><br>You can also try \"<b>add gene1,gene2</b>\" or \"<b>remove gene1,gene2</b>\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
+        if (data.organism === 'h_sapiens') {
+          answer += "<br><br>To access gene card, click on the gene name on the y-axis.";
+        }
         break;
       case "fraction_detected":
         switch (addIntent) {
           case "across_organs":
             answer = "A dot plot of " + data.features + " in " + data.organism + " " + data.celltype + " is shown in the plot.";
+            answer += ""
             break;
           default:
             answer = "A dot plot of " + data.features + " in " + data.organism + " " + data.organ + " is shown in the plot.";
         }
-        answer += "<br><br>To log/unlog the data for better dynamic range, type \"<b>log data</b>\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
+        answer += "<br><br>To log/unlog the data for better dynamic range, type \"<b>log data</b>\". <br><br>You can also try \"<b>add gene1,gene2</b>\" or \"<b>remove gene1,gene2</b>\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
+        if (data.organism === 'h_sapiens') {
+          answer += "<br><br>To access gene card, click on the gene name on the y-axis.";
+        }
         break;
       case "markers":
         switch (sIntent) {
@@ -102,6 +109,9 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer += "<br><br>Type \"<b>log</b>\" to increase the dynamic range of the plot.";
         if (addIntent !== "across_organs") {
           answer += "<br><br>Type \"<b>zoom in</b>\" to see the data at the cell state level.";
+        }
+        if (data.organism === 'h_sapiens') {
+          answer += "<br><br>To access gene card, click on the gene name on the y-axis.";
         }
         break;
       case "interactors":
