@@ -273,15 +273,15 @@ const updateComeasurement = (context) => {
         unit = expData[0].unit
         organs = context.response.data.organs
         by = context.response.data.by
-        features = Array.isArray(context.features) ? context.features : context.features.split(",")
+        features = expData[0].features
     }
     //  after applying log:
     else {
         expData = context.plotState.expData
-        unit = context.plotState.unit;
+        unit = context.plotState.unit
         organs = context.plotState.organs
         by = context.plotState.by
-        features = context.plotState.features
+        features = expData[0].features
     }
 
     features = Array.isArray(features) ? features : features.split(",")
