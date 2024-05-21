@@ -14,16 +14,12 @@ const BarChart = ({ state }) => {
   let title = '';
   let yLabel = '';
   switch (plotType) {
-    case "similar_celltypes.geneExpression":
+    case "similarCelltypes":
       average = average.map((x) => x * scaleFactor);
       title = `<b>Cell type similarity to ${targetCelltype} via gene expression correlation</b>`;
-      yLabel = `Distance (x${scaleFactor})`;
+      yLabel = `Scaled distance`;
       break;
-    case "highest_measurement.geneExpression":
-      title = `<b>Highest expressor of <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${features}" target="_blank">${features}</a> gene in ${organism}</b>`;
-      yLabel = unit;
-      break;
-    case "highest_measurement.chromatinAccessibility":
+    case "highestMeasurement":
       title = `<b>Highest expressor of ${features} in ${organism}</b>`;
       yLabel = unit;
       break;
