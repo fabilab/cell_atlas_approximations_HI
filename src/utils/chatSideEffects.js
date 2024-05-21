@@ -54,7 +54,6 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
-
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -112,31 +111,31 @@ export const updateChat = async (response, plotState) => {
 
     // START: Adjustment of parameters to ensure correct API call
     if (mainIntent === "neighborhood") {
-      params["include_embedding"] = true;
+      params.include_embedding = true;
     }
 
     if (subIntent === "chromatinAccessibility") {
-      params["measurement_type"] = "chromatin_accessibility";
+      params.measurement_type = "chromatin_accessibility";
     }
 
     if (
       mainIntent === "similar_features" ||
       mainIntent === "highest_measurement"
     ) {
-      params["feature"] = params["features"];
-      delete params["features"];
+      params.feature = params.features;
+      delete params.features;
     }
 
     if (intent === "feature_sequences.geneExpression") {
       endpoint = "sequences";
     }
 
-    if(intent === "homologs.geneExpression") {
+    if (intent === "homologs.geneExpression") {
       // Modify the params object
-      params["source_organism"] = params["organism"];
-      params["target_organism"] = params["targetOrganism"];
-      delete params["organism"];
-      delete params["targetOrganism"];
+      params.source_organism = params.organism;
+      params.target_organism = params.targetOrganism;
+      delete params.organism;
+      delete params.targetOrganism;
     }
 
     if (intent === "celltypes.geneExpression") {
@@ -160,10 +159,10 @@ export const updateChat = async (response, plotState) => {
     // Handle exploration intents for different organism measurements
     if (intent === "explore.organism.geneExpression") {
       endpoint = "organs";
-      params["measurement_type"] = "gene_expression";
+      params.measurement_type = "gene_expression";
     } else if (intent === "explore.organism.chromatinAccessibility") {
       endpoint = "organs";
-      params["measurement_type"] = "chromatin_accessibility";
+      params.measurement_type = "chromatin_accessibility";
     }
 
     if (
@@ -213,7 +212,7 @@ export const updateChat = async (response, plotState) => {
     }
 
     if (intent === "markers.geneExpression.across_organs") {
-      params["versus"] = "other_organs";
+      params.versus = "other_organs";
     }
 
     // when user already at co-rexpression analysis and want to zoom in/out, no need to call organs enpoint
@@ -236,11 +235,11 @@ export const updateChat = async (response, plotState) => {
         apiData.targetOrgan = targetOrgan;
       }
 
-      if(intent === "homologs.geneExpression") {
+      if (intent === "homologs.geneExpression") {
         // add source and target organism to apiData, we need them for build answer
-        apiData["features"] = params["features"];
-        apiData["source_organism"] = params["source_organism"];
-        apiData["target_organism"] = params["target_organism"];
+        apiData.features = params.features;
+        apiData.source_organism = params.source_organism;
+        apiData.target_organism = params.target_organism;
       }
     }
 
@@ -264,18 +263,18 @@ export const updateChat = async (response, plotState) => {
       if (mainIntent === "similar_features") {
         params.features = [...apiData[endpoint]];
         params.features.push(params.feature);
-        delete params["celltype"];
+        delete params.celltype;
       } else if (intent === "markers.geneExpression") {
         params.features = [...apiData[endpoint]];
-        delete params["celltype"];
+        delete params.celltype;
       } else if (intent === "markers.geneExpression.across_organs") {
         params.features = [...apiData[endpoint]];
-        delete params["organ"];
-      } else if (intent === "interactors.geneExpression"){
+        delete params.organ;
+      } else if (intent === "interactors.geneExpression") {
         // If there is no interactors partners being found, just return an answer
         if (apiData.targets.length === 0 || apiData.queries.length === 0) {
-          apiData = null
-          answer = "No interactors partners were found for the given query."
+          apiData = null;
+          answer = "No interactors partners were found for the given query.";
         } else {
           const queryGenes = [...new Set(apiData.queries)];
           const targetGenes = apiData.targets;
@@ -343,7 +342,7 @@ export const updateChat = async (response, plotState) => {
       }
       const averagePromises = organs.map((organ) => {
         params.organ = organ;
-        return atlasapprox["average"](params);
+        return atlasapprox.average(params);
       });
       const expData = await Promise.all(averagePromises);
       apiData = {
@@ -382,7 +381,7 @@ export const updateChat = async (response, plotState) => {
       // this line is added to handle cases where there is an invalid gene found from the interactors api
       // which will cause an error on the dot plot api.
       // we need to pass both the queried and targets genes onto the dotplot's error handling function
-      apiData 
+      apiData
     );
     params = result.params;
     apiData = result.apiData;
