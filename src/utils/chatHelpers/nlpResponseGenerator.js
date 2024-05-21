@@ -33,7 +33,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "organisms":
         answer = _chainList(data.organisms, ", <br>", ".");
-        answer += "<br><br>To start exploring an organism's data, type 'explore' followed by the organism abbreviation. <br><br>For example: 'explore h_sapiens' for human.";
+        answer += "<br><br>To start exploring an organism's data, type '<b>explore</b>' followed by the organism abbreviation. <br><br>For example: 'explore h_sapiens' for human.";
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
@@ -76,7 +76,7 @@ const buildAnswer = (intent, plotState, data = null) => {
                 answer = "The average is shown in the plot.";
             }
         }
-        answer += "<br><br>To log/unlog the data for better dynamic range, type \"log data\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
+        answer += "<br><br>To log/unlog the data for better dynamic range, type \"<b>log data</b>\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
         break;
       case "fraction_detected":
         switch (addIntent) {
@@ -86,7 +86,7 @@ const buildAnswer = (intent, plotState, data = null) => {
           default:
             answer = "A dot plot of " + data.features + " in " + data.organism + " " + data.organ + " is shown in the plot.";
         }
-        answer += "<br><br>To log/unlog the data for better dynamic range, type \"log data\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
+        answer += "<br><br>To log/unlog the data for better dynamic range, type \"<b>log data</b>\". You can also try \"add gene1,gene2\" and \"remove gene1,gene2\".<br><br>To download either the plot or the data, use the toolbar that shows when you hover on the plot.";
         break;
       case "markers":
         switch (sIntent) {
@@ -99,9 +99,9 @@ const buildAnswer = (intent, plotState, data = null) => {
           default:
             answer = "The markers for " + data.celltype + " in " + data.organism + " " + data.organ + " are: " + data.markers;
         }
-        answer += "<br><br>Type <b>log</b> to increase the dynamic range of the plot.";
+        answer += "<br><br>Type \"<b>log</b>\" to increase the dynamic range of the plot.";
         if (addIntent !== "across_organs") {
-          answer += "<br><br>Type \"zoom in\" to see the data at the cell state level.";
+          answer += "<br><br>Type \"<b>zoom in</b>\" to see the data at the cell state level.";
         }
         break;
       case "interactors":
@@ -126,7 +126,7 @@ const buildAnswer = (intent, plotState, data = null) => {
             default:
                 answer = "The interaction partners are shown in the plot.";
         }
-        answer += "<br><br>Type <b>log</b> to see more dynamic range. You can also type <b>zoom in</b> to look at cell states.";
+        answer += "<br><br>Type \"<b>log</b>\" to see more dynamic range. You can also type \"<b>zoom in</b>\" to look at cell states.";
         break;
       case "similar_features":
         switch (sIntent) {
@@ -145,15 +145,17 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "celltypexorgan":
         answer = "The presence matrix of cell types in " + data.organism + " is shown in the plot.";
-        answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
+        answer += "<br><br>Type \"<b>download</b>\" to get the table data in CSV format.";
+
+        
         break;
       case "comeasurement":
         answer = `Here's the coexpression of ${typeof data.features === 'string' ? data.features.split(',').join(' and ') : data.features.join(' and ')} across all organs of ${data.organism}.`;
-        answer += "<br><br>Type \"log\" to switch between linear and log scales.";
+        answer += "<br><br>Type \"<b>log</b>\" to switch between linear and log scales.";
         if (data?.by === 'celltype') {
-          answer += "<br><br>Type \"zoom in\" to visualise data at cell state level.";
+          answer += "<br><br>Type \"<b>zoom in</b>\" to visualise data at cell state level.";
         } else if (data?.by === 'cellstate') {
-          answer += "<br><br>Type \"zoom out\" to visualise the data back at cell type level.";
+          answer += "<br><br>Type \"<b>zoom out</b>\" to visualise the data back at cell type level.";
         }
         break;
       case "homologs":
@@ -161,7 +163,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
-        answer += "<br><br>Type <b>'download'</b> to get the table data in CSV format."
+        answer += "<br><br>Type \"<b>download</b>\" to get the table data in CSV format."
         break;
       case "highest_measurement":
         switch (sIntent) {
@@ -189,10 +191,10 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "zoom":
         switch (sIntent) {
           case "in":
-            answer = "Type \"zoom out\" to visualise the data back at cell type level.";
+            answer = "Type \"<b>zoom out</b>\" to visualise the data back at cell type level.";
             break;
           case "out":
-            answer = "Type \"zoom in\" to visualise data at cell state level.";
+            answer = "Type \"<b>zoom in</b>\" to visualise data at cell state level.";
             break;
           default:
             answer = "Done";
@@ -210,7 +212,7 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "plot":
         switch (sIntent) {
           case "log":
-            answer = "Done! Data has been modified as requested. Type \"log\" again to toggle between logged and linear data.";
+            answer = "Done! Data has been modified as requested. Type \"<b>log</b>\" again to toggle between logged and linear data.";
             break;
           default:
             answer = "Done";
@@ -237,7 +239,7 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "feature_sequences":
         switch (sIntent) {
           case "geneExpression":
-            answer = "The sequences of " + data.features + " in " + data.organism + " are shown.<br><br>Type \"download\" to get a FASTA file of them all.";
+            answer = "The sequences of " + data.features + " in " + data.organism + " are shown.<br><br>Type \"<b>download</b>\" to get a FASTA file of them all.";
             answer += "<br><br>Please note that currently only protein sequences are available. We are still working on providing RNA sequences, including for noncoding RNAs.";
             break;
           default:
@@ -256,7 +258,7 @@ const buildAnswer = (intent, plotState, data = null) => {
             answer = `The average expression and cell fractions of ${data.features} across cell states are shown in the plot.`
             answer += "<br><br>Hover over the blobs in the embedding for cell type composition information."
             // answer += "Hover over the feature names to color the embedding by the level of that feature. Hover <span class=\"resetStatePlot\"><b>here</b></span> to reset the original colors."
-            answer += "<br><br>Type \"zoom out\" to look at cell type averages."
+            answer += "<br><br>Type \"<b>zoom out</b>\" to look at cell type averages."
             break;
           default:
             answer = "Done";
