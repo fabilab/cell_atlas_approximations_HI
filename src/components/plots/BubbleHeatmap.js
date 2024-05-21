@@ -9,8 +9,7 @@ import { useChat } from '../ChatContext';
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes } = state;
-
-  console.log(measurement_type);
+  const { setLocalMessage } = useChat();
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -62,6 +61,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
         } else {
           xHover = "cell type";
           title = `<b>Gene expression in ${organism} ${organ} by cell type</b>`;
+          enableCellTypeClick =  true;
         }
     }
   }
@@ -297,13 +297,12 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   }, [hasLog])
 
   const cellTypeOnClick = (event) => {
+    
     if (enableCellTypeClick) {
-      console.labels(event);
+      const cellType = event.target.__data__.text;
+      let message = `Show 10 markers of ${cellType} in the ${organism} ${organ}.`;
+      setLocalMessage(message);
     }
-    // const clickedFeature = event.target.textContent;
-    // const species = event.target.__data__.x === 0 ? source_organism : target_organism;
-    // let message = `what are the highest ${clickedFeature} expressors in ${species}?`;
-    // setLocalMessage(message);
   }
 
   // The following part should only be implement when user is looking at the neighhood page:
@@ -353,17 +352,20 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
             layout={layout}
             config={config}
             onAfterPlot={() => {
-              // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
-              document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-              document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
-  
+              document.querySelectorAll('.plot-container .xaxislayer-above text').forEach(function(element) {
+                element.style.cursor = 'pointer';
+                element.style['pointer-events'] = 'all';
+              });
+
               selectAll(".xaxislayer-above")
                 .selectAll('text')
-                .on("click", (event) => cellTypeOnClick (event));
+                .on("click", (event) => cellTypeOnClick(event));
             }}
             onInitialized={(figure, graphDiv)=>{
-              document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-              document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+              document.querySelectorAll('.plot-container .xaxislayer-above text').forEach(function(element) {
+                element.style.cursor = 'pointer';
+                element.style['pointer-events'] = 'all';
+              });
   
               selectAll(".xaxislayer-above")
                 .selectAll('text')
