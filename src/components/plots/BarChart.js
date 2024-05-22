@@ -9,15 +9,13 @@ const BarChart = ({ state }) => {
   let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
   let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   let xValue = celltypesOrgan;
-  let scaleFactor = 1000000; // data is too small for a bar chart, multiplying by 10^6
 
   let title = '';
   let yLabel = '';
   switch (plotType) {
     case "similarCelltypes":
-      average = average.map((x) => x * scaleFactor);
       title = `<b>Cell type similarity to ${targetCelltype} via gene expression correlation</b>`;
-      yLabel = `Scaled distance`;
+      yLabel = `Distance`;
       break;
     case "highestMeasurement":
       title = `<b>Highest expressor of ${features} in ${organism}</b>`;
@@ -26,7 +24,7 @@ const BarChart = ({ state }) => {
     default:
       break;
   }
-  let yValue = average.map((x) => Number(x.toFixed(2)));
+  let yValue = average.map((x) => Number(x.toPrecision(3)));
 
   let trace1 = {
     x: xValue,
