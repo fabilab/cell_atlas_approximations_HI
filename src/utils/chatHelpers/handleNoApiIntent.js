@@ -1,6 +1,7 @@
 import { buildAnswer } from './nlpResponseGenerator.js';
 import { downloadFasta } from "../downloadHelpers/downloadFasta.js";
 import { downloadTable } from "../downloadHelpers/downloadTable.js";
+import { downloadCSV } from "../downloadHelpers/downloadCSV.js";
 
 // Function to handle intents that do not require an API call
 export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, params) {
@@ -9,16 +10,25 @@ export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, par
   switch (mainIntent) {
     // handle data download
     case "download":
-      let downloadAvailable = true;
+      let downloadAvailable = false;
       if (plotState.plotType === 'featureSequences') {
         try {
-          downloadFasta(plotState)
+          downloadFasta(plotState);
+          downloadAvailable = true;
         } catch (err) {
           downloadAvailable = false;
         }
       } else if (plotState.plotType === 'celltypeXorgan' || plotState.plotType === 'organXorganism') {
         try {
           downloadTable(plotState, plotState.plotType)
+          downloadAvailable = true;
+        } catch (err) {
+          downloadAvailable = false;
+        }
+      } else if (plotState.plotType === 'homologs') {
+        try {
+          downloadCSV(plotState);
+          downloadAvailable = true;
         } catch (err) {
           downloadAvailable = false;
         }

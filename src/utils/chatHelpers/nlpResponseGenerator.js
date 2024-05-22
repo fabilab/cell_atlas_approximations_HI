@@ -170,7 +170,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "homologs":
         answer = "The homologos of " + data.features + " from " + data.source_organism + " to " + data.target_organism + " are shown in the bipartite graph.";
-        answer += "<br><br>Use the top right mode bar to download plot or download data in CSV format";
+        answer += "<br><br>Type \"<b>download</b>\" to get a CSV file of them all.";
         break;
       case "organxorganism":
         answer = "The presence of <b>" + data.celltype + " </b>cells across different organs and species is shown in the table.";
@@ -259,7 +259,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "download":
         if (data.success)
-          answer = "Data can be downloaded using the pop-up window.";
+          answer = "Download successful.";
         else
           answer = "Sorry, you cannot download data from this page.";
         break;
