@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useChat } from './ChatContext'
+import { useAutoSubmit } from './AutoSubmitContext'
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Row, Input } from "antd";
@@ -10,6 +11,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const { localMessage, setLocalMessage } = useChat();
+  const { autoSubmitButtonRef } = useAutoSubmit();
   const chatboxRef = useRef(null);
 
   useEffect(() => {
@@ -43,7 +45,6 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   };
 
   const handleSubmit = async (text) => {
-
     const resetEverything = () => {
       setMessageHistory([]);
       setHistoryIndex(0);
@@ -134,15 +135,16 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
           <Input.TextArea
             id="chatBoxInput"
             // allowClear
-              autoSize={{ minRows: 4, maxRows: 5 }}
-              value={localMessage}
-              onChange={(e) => setLocalMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-              onKeyDown={handleKeyDown}
-              onPressEnter={() => handleSubmit(localMessage)}
-              className="chat-input"
+            autoSize={{ minRows: 4, maxRows: 5 }}
+            value={localMessage}
+            onChange={(e) => setLocalMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
+            onKeyDown={handleKeyDown}
+            onPressEnter={() => handleSubmit(localMessage)}
+            className="chat-input"
           />
           <Button 
             type="text"
+            ref={autoSubmitButtonRef}
             icon={<SendOutlined
               style={{ color: localMessage.length > 0 ? '#1890ff' : 'grey' }}
             />} 

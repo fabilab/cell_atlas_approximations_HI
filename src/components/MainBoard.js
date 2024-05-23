@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChatProvider } from './ChatContext'; 
+import { AutoSubmitProvider } from './AutoSubmitContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
@@ -9,7 +10,7 @@ import FeedbackForm from './FeedbackForm';
 
 const MainBoard = () => {
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [firstQuery] = useState(location.state);
   const [chatHistory, setChatHistory] = useState(null);
   const [currentResponse, setCurrentResponse] = useState(null);
@@ -46,23 +47,25 @@ const MainBoard = () => {
   }, [currentResponse]);
 
   return (
-    <ChatProvider>
-      <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
-          <ChatBox
-            style={{ height:'100%' }}
-            initialMessage={firstQuery}
-            chatHistory={chatHistory}
-            setChatHistory={setChatHistory}
-            setCurrentResponse={setCurrentResponse}
-            plotState={plotState}
-          />
-          <div style={{ flex: 1, overflow: 'auto'}}>
-            {plotState && <PlotBox state={plotState} />}
-          </div>
-         
-      </div>
-      <FeedbackForm/>
-    </ChatProvider>
+    <AutoSubmitProvider>
+      <ChatProvider>
+        <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
+            <ChatBox
+              style={{ height:'100%' }}
+              initialMessage={firstQuery}
+              chatHistory={chatHistory}
+              setChatHistory={setChatHistory}
+              setCurrentResponse={setCurrentResponse}
+              plotState={plotState}
+            />
+            <div style={{ flex: 1, overflow: 'auto'}}>
+              {plotState && <PlotBox state={plotState} />}
+            </div>
+          
+        </div>
+        <FeedbackForm/>
+      </ChatProvider>
+    </AutoSubmitProvider>
   );
 };
 
