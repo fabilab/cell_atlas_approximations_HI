@@ -351,7 +351,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
             data={[data]}
             layout={layout}
             config={config}
-            onAfterPlot={() => {
+            onUpdate={() => {
               document.querySelectorAll('.plot-container .xaxislayer-above text').forEach(function(element) {
                 element.style.cursor = 'pointer';
                 element.style['pointer-events'] = 'all';
@@ -366,7 +366,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
                 element.style.cursor = 'pointer';
                 element.style['pointer-events'] = 'all';
               });
-  
+
               selectAll(".xaxislayer-above")
                 .selectAll('text')
                 .on("click", (event) => cellTypeOnClick (event));
