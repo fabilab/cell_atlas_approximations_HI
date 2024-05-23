@@ -32,8 +32,11 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer = "The available measurement types are: " + _chainList(data.measurement_types, ", ", ".");
         break;
       case "organisms":
-        answer = _chainList(data.organisms, ", <br>", ".");
-        answer += "<br><br>To start exploring an organism's data, type '<b>explore</b>' followed by the organism abbreviation. <br><br>For example: 'explore h_sapiens' for human.";
+        // answer = _chainList(data.organisms, ", <br>", ".");
+        answer = "There are " + data.organisms.length + " species available, displayed in the plot on the right.<br><br>";
+        answer += "To explore an organism's data, click on its card or type '<b>explore</b>' followed by the organism abbreviation.<br><br>";
+        answer += "For example: 'explore h_sapiens' for human.";
+
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
@@ -240,7 +243,8 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "explore":
         switch (sIntent) {
           case "organism":
-            answer = `Fantastic choice! Check out the explore section on the right side of the page to dive deep into the world of ${data.organism} atlas`
+            answer = "Great choice! The summary profile displayed provides a brief overview of the  " + data.organism + ".<br></br>";
+            answer += "To visualize marker genes for each cell type in " + data.organism + ", simply click on the cell type along the y-axis of the bar chart. This will automatically populate the chatbox with a suggestion query related to the selected cell type.";
             break;
           default:
             answer = "Done";
