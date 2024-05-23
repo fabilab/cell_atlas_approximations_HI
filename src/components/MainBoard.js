@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChatProvider } from './ChatContext'; 
 import { AutoSubmitProvider } from './AutoSubmitContext';
 import { useLocation, useNavigate } from 'react-router-dom';
