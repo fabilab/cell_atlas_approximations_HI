@@ -109,6 +109,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer += "<br><br>Type \"<b>log</b>\" to increase the dynamic range of the plot.";
         if (addIntent !== "across_organs") {
           answer += "<br><br>Type \"<b>zoom in</b>\" to see the data at the cell state level.";
+          answer += "<br><br>To visualize marker genes for other cell type, simply click on the cell type along the x-axis. This will populate the chatbox with a new query.";
         }
         if (data.organism === 'h_sapiens') {
           answer += "<br><br>To access gene card, click on the gene name on the y-axis.";
