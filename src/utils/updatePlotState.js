@@ -208,7 +208,8 @@ const updateFractions = (context) => {
   // generate an interators plot with new gene sets from an old plot
   if (
     context.plotState.queriedGenes &&
-    context.intent !== "interactors.geneExpression"
+    context.intent !== "interactors.geneExpression" &&
+    context.intent === "plot.log"
   ) {
     queriedGenes = context.plotState.queriedGenes;
   } else if (context.intent === "interactors.geneExpression") {
