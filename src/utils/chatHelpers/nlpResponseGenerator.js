@@ -174,6 +174,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         break;
       case "homologs":
         answer = "The homologos of " + data.features + " from " + data.source_organism + " to " + data.target_organism + " are shown in the bipartite graph.";
+        answer += "<br><br>Click on any gene name to get a suggestion query for viewing its highest expressing cell types and organs"
         answer += "<br><br>Type \"<b>download</b>\" to get a CSV file of them all.";
         break;
       case "organxorganism":

@@ -2,6 +2,10 @@ import React from "react";
 import Plot from "react-plotly.js";
 import { useChat } from '../ChatContext'; 
 import {selectAll} from "d3";
+import { Typography } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+const { Link, Paragraph } = Typography;
+
 
 // A function to define graph line thickness based on distance: shorter distance results in a thicker line
 // d: distance
@@ -351,28 +355,36 @@ const featureLabelClick = (event) => {
 
   return (
     <div>
-      <Plot 
-        data={plotData}
-        layout={layout}
-        config={config} 
-        onAfterPlot={() => {
-            // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
-            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+      <div style={{ margin: '0 2w' }}>
+        <Plot 
+          data={plotData}
+          layout={layout}
+          config={config} 
+          onAfterPlot={() => {
+              // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
+              document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
+              document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
 
-            selectAll(".plot")
-              .selectAll('text')
-              .on("click", (event) => featureLabelClick (event));
-          }}
-          onInitialized={(figure, graphDiv)=>{
-            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+              selectAll(".plot")
+                .selectAll('text')
+                .on("click", (event) => featureLabelClick (event));
+            }}
+            onInitialized={(figure, graphDiv)=>{
+              document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
+              document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
 
-            selectAll(".plot")
-              .selectAll('text')
-              .on("click", (event) => featureLabelClick (event));
-          }}
-      />
+              selectAll(".plot")
+                .selectAll('text')
+                .on("click", (event) => featureLabelClick (event));
+            }}
+        />
+      </div>
+      <div style={{ display: 'flex', margin: '0 3vw' }}>
+        <InfoCircleOutlined style={{ fontSize: '18px', color: '#1890ff', marginRight: '15px' }} />
+        <Paragraph style={{ margin: 0, fontSize: '15px'}}>
+          Homologs are computed as follows: the algorithm first generates ESM1b embeddings for each protein-coding gene sequence. These embeddings are then compressed using <Link href="https://doi.org/10.1073/pnas.2211823120" target="_blank">PROST</Link> (PRotein Ortholog Search Tool). It then calculates the L1 distances between the compressed embedding of the query gene and all genes in the target species. Finally, it reports the genes with the smallest L1 distances as potential homologs to the query gene.
+        </Paragraph>
+      </div>
     </div>
   );
 };

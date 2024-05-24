@@ -5,6 +5,9 @@ import orgMeta from '../../utils/organismMetadata.js';
 import { Tooltip, Button } from 'antd';
 import {selectAll} from "d3";
 import { useChat } from '../ChatContext'; 
+import { Typography } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+const { Link, Paragraph } = Typography;
 
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
@@ -345,7 +348,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   //  The following code return a general dot plot
   } else {
     return (
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div>
           <Plot
             data={[data]}
@@ -378,6 +381,14 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
             <Button href={paperHyperlink} target="_blank">Data source</Button>
           </Tooltip>
         </div>
+        { queriedGenes &&
+          <div style={{ display: 'flex', margin: '0 3vw' }}>
+            <InfoCircleOutlined style={{ fontSize: '18px', color: '#1890ff', marginRight: '15px' }} />
+            <Paragraph style={{ margin: 0, fontSize: '15px'}}>
+              The gene interaction pairs are identified using data from <Link href="https://omnipathdb.org/" target="_blank">OmniPath</Link>, a comprehensive molecular biology database that combines information from over 100 resources.
+            </Paragraph>
+          </div>
+        }
       </div>
     );
   }
