@@ -4,6 +4,7 @@ import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
 import orgMeta from '../../utils/organismMetadata.js';
 import { Tooltip, Button } from 'antd';
 import {selectAll} from "d3";
+import { useChat } from '../ChatContext'; 
 import { Typography } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 const { Link, Paragraph } = Typography;
@@ -11,7 +12,7 @@ const { Link, Paragraph } = Typography;
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes } = state;
-
+  const { setLocalMessage } = useChat();
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -33,6 +34,8 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
 
   let title = "";
   let featureHover, xHover, zHover;
+  // Enable x-axis (celltype) click to autofill a suggestion query on chatbox input
+  let enableCellTypeClick = false;
 
   if (plotType === "neighborhood") {
     featureHover = "gene";
@@ -49,6 +52,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
         } else {
           xHover = "cell type";
           title = `<b>Chromatin accessibility in ${organism} ${organ} by cell type</b>`;
+          enableCellTypeClick =  true;
         }
         break;
       default:
@@ -60,6 +64,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
         } else {
           xHover = "cell type";
           title = `<b>Gene expression in ${organism} ${organ} by cell type</b>`;
+          enableCellTypeClick =  true;
         }
     }
   }
@@ -294,6 +299,15 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasLog])
 
+  const cellTypeOnClick = (event) => {
+    
+    if (enableCellTypeClick) {
+      const cellType = event.target.__data__.text;
+      let message = `Show 10 markers of ${cellType} in the ${organism} ${organ}.`;
+      setLocalMessage(message);
+    }
+  }
+
   // The following part should only be implement when user is looking at the neighhood page:
   if (setHoveredGeneColor && setHoveredGene) {
 
@@ -331,6 +345,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
         </div>
       </div>
     );
+  //  The following code return a general dot plot
   } else {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -339,6 +354,26 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
             data={[data]}
             layout={layout}
             config={config}
+            onUpdate={() => {
+              document.querySelectorAll('.plot-container .xaxislayer-above text').forEach(function(element) {
+                element.style.cursor = 'pointer';
+                element.style['pointer-events'] = 'all';
+              });
+
+              selectAll(".xaxislayer-above")
+                .selectAll('text')
+                .on("click", (event) => cellTypeOnClick(event));
+            }}
+            onInitialized={(figure, graphDiv)=>{
+              document.querySelectorAll('.plot-container .xaxislayer-above text').forEach(function(element) {
+                element.style.cursor = 'pointer';
+                element.style['pointer-events'] = 'all';
+              });
+
+              selectAll(".xaxislayer-above")
+                .selectAll('text')
+                .on("click", (event) => cellTypeOnClick (event));
+            }}
           />
         </div>
         <div>

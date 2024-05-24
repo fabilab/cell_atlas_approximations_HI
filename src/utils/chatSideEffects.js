@@ -358,12 +358,6 @@ export const updateChat = async (response, plotState) => {
 
     // START: Handle building answer when main API call succeeds
 
-    if (intent === "organisms.geneExpression") {
-      let numOrganisms = apiData.organisms.length;
-      answer = `There are ${numOrganisms} organisms available:<br>`;
-    }
-
-    // normal build answer
     answer += buildAnswer(intent, plotState, apiData);
 
     // END: Handle building answer when main API call succeeds
