@@ -94,7 +94,6 @@ const Message = (props) => {
                     .changeDelay(10);
 
                   lines.forEach((line, index) => {
-                    console.log(index, line);
                     typewriter
                       .typeString(line)
                       .callFunction(onTypingUpdate)
