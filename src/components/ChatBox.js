@@ -14,15 +14,13 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   const { autoSubmitButtonRef } = useAutoSubmit();
   const chatboxRef = useRef(null);
 
+  const scrollToBottom = () => {
+      if (chatboxRef.current) {
+        chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+      }
+  };
+
   useEffect(() => {
-    // Function to scroll the chatbox to the bottom
-    const scrollToBottom = () => {
-      setTimeout(() => {
-        if (chatboxRef.current) {
-          chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
-        }
-      }, 0);
-    };
     scrollToBottom();
   }, [chatHistory]);
 
@@ -127,6 +125,8 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
                 message={m.message}
                 pause={false}
                 help={m.isHelp}
+                onTypingComplete={() => scrollToBottom()}
+                onTypingUpdate={() => scrollToBottom()}
               />
           ))}
       </div>
