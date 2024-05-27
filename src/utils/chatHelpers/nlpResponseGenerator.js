@@ -134,7 +134,7 @@ const buildAnswer = (intent, plotState, data = null) => {
     
                 const interactionText = uniqueGenes.map(gene => {
                   const partners = interactionPartners[gene].join(', '); // Join interaction partners
-                  return `<p>The interaction partners of ${gene} are: ${partners}. </p><br><br>`;
+                  return "The interaction partners of " + gene + " are: " + partners + ". <br><br>";
                 }).join('');
     
                 answer = interactionText;
