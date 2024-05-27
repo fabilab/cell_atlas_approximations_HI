@@ -28,14 +28,14 @@ export const handleErrors = async (
         break;
       case "features":
         answer +=
-          "Please list the features (e.g. genes) you would like to look into.";
+          "Please list the features (e.g. genes) you would like to look into. ";
         break;
       case "celltype":
         answer += "Which cell type?";
         break;
       case "organ^celltype":
         answer +=
-          "I did not recognise a cell type or an organ. Please repeat the question specifying either one (but not both).";
+          "I did not recognise a cell type or an organ. Please repeat the question specifying either one (but not both). ";
         // FIXME: this requests to repeat the question, so we should reset the bot
         break;
       default:
@@ -48,9 +48,9 @@ export const handleErrors = async (
       if (typeof params.features === "string") {
         if (mainIntent === "comeasurement") {
           if (errorValue.length === 1) {
-            answer += `The gene "${errorValue}" is not valid. Please ensure that gene names are spelled correctly.`;
+            answer += `The gene "${errorValue}" is not valid. Please ensure that gene names are spelled correctly. `;
           } else if (errorValue.length === 2) {
-            answer += `The genes "${errorValue}" are not valid. Please ensure that gene names are spelled correctly.`;
+            answer += `The genes "${errorValue}" are not valid. Please ensure that gene names are spelled correctly. `;
           }
           apiData = null;
         } else {
@@ -101,22 +101,23 @@ export const handleErrors = async (
             } and ${apiData.features.length} genes.`;
           }
         } else {
-          answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like.`;
+          answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like. `;
         }
       }
     } else if (errorParam === "feature") {
-      answer += `The feature "${errorValue}" is not available. Have you checked the spelling of that feature? You can retry with a different fgeature if you like.`;
+      answer += `The feature "${errorValue}" is not available. Have you checked the spelling of that feature? You can retry with a different fgeature if you like. `;
     } else if (errorParam === "organism") {
       if (intent === "interactors.geneExpression") {
         answer +=
-          "Interaction partners are only supported for the species <i>Homo sapiens</i> and <i>Mus musculus</i>.";
+          "Interaction partners are only supported for the species <i>Homo sapiens</i> and <i>Mus musculus</i>. ";
       } else {
-        answer += `Organism "${errorValue}" is not available. Could it be a spelling error? Otherwise, you can try a different species.`;
+        answer += `Organism "${errorValue}" is not available. Could it be a spelling error? Otherwise, you can try a different species. `;
       }
     } else if (errorParam === "organ") {
-      answer += `Organ "${errorValue}" is not available in this organism. Some organisms (e.g. coral) have been dissociated as "whole", without separating the organs. You can try asking "What organs are available for <organism>?" to get the list of organs for this organism.`;
+      answer += `Organ "${errorValue}" is not available in this organism. Some organisms (e.g. coral) have been dissociated as "whole", without separating the organs. You can try asking "What organs are available for <organism>?" to get the list of organs for this organism. `;
     } else if (errorParam === "celltype") {
-      answer += `Cell type "${errorValue}" is not available in this context. If you are looking into a specific organ, you can ask "What cell types are available in <organism> <organ>?", otherwise you can draw a table of cell types and organs in that organism by asking "Show cell type by organ table of <organism>".`;
+      answer += "Cell type " + errorValue + " is not available in this context. <br><br>" 
+      answer += "If you are looking into a specific organ, you can ask: \"What cell types are available in {organism} {organ}?\". <br><br>Otherwise you can draw a table of cell types and organs in that organism by asking: \"Show cell type by organ table of {organism}\". ";
     }
   } else {
     answer = message;
