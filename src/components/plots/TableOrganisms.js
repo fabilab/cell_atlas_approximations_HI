@@ -3,14 +3,12 @@ import { Card, Row, Col, Typography } from 'antd';
 import { Fade } from 'react-awesome-reveal';
 import orgMeta from '../../utils/organismMetadata.js'; 
 import { useChat } from '../ChatContext'; 
-import { useAutoSubmit } from '../AutoSubmitContext.js';
 const { Title, Text } = Typography;
 const { Meta } = Card;
 
 const TableOrganisms = ({ state }) => {
   let { organisms } = state;
   const { setLocalMessage } = useChat();
-  const { autoSubmitButtonRef } = useAutoSubmit();
 
   let organismCards = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
@@ -74,12 +72,11 @@ const TableOrganisms = ({ state }) => {
           {row.map((image, innerIndex) => (
             <Col key={innerIndex} xs={24} sm={12} md={8} lg={6}>
               {/* <Fade> */}
-                <Card 
+              <Card 
                   style={{ width: '100%', margin: '10px', opacity: cardOpacity(image.src) }}
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     let clickedSpecies = `${image.title.toLowerCase().split(' ')[0][0]}_${image.title.toLowerCase().split(' ')[1]}`;
-                    await setLocalMessage(`explore ${clickedSpecies}`);
-                    autoSubmitButtonRef.current.click()
+                    setLocalMessage(`explore ${clickedSpecies}`);
                   }}
                   hoverable
                 >
@@ -103,10 +100,9 @@ const TableOrganisms = ({ state }) => {
               <Fade>
               <Card 
                   style={{ width: '100%', margin: '10px', opacity: cardOpacity(image.src) }}
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     let clickedSpecies = `${image.title.toLowerCase().split(' ')[0][0]}_${image.title.toLowerCase().split(' ')[1]}`;
-                    await setLocalMessage(`explore ${clickedSpecies}`);
-                    autoSubmitButtonRef.current.click()
+                    setLocalMessage(`explore ${clickedSpecies}`);
                   }}
                   hoverable
                 >
