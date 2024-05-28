@@ -242,6 +242,7 @@ const updateNeighbor = (context) => {
     average,
     fractions,
     unit,
+    measurement_type,
     queriedGenes;
   // by deault:
   if (context.response.data) {
@@ -252,6 +253,7 @@ const updateNeighbor = (context) => {
     average = context.response.data.average;
     fractions = context.response.data.fraction_detected;
     unit = context.response.data.unit;
+    measurement_type = context.response.data.measurement_type;
   }
   //  after appling log:
   else {
@@ -262,6 +264,7 @@ const updateNeighbor = (context) => {
     average = context.plotState.average;
     fractions = context.plotState.fractions;
     unit = context.plotState.unit;
+    measurement_type = context.plotState.measurement_type;
   }
 
   if (context.plotState.queriedGenes) {
@@ -283,7 +286,7 @@ const updateNeighbor = (context) => {
     fractions: fractions,
     hasLog: context.plotState.hasLog,
     unit: unit,
-    measurement_type: context.measurement_type,
+    measurement_type: measurement_type,
     queriedGenes: queriedGenes,
   };
 };

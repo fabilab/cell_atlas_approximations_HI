@@ -175,8 +175,7 @@ export const updateChat = async (response, plotState) => {
         organ: plotState.organ,
         organism: plotState.organism,
         features: plotState.features,
-        measurement_type: "gene_expression",
-        include_embedding: true,
+        measurement_type: plotState.measurement_type,
       };
     }
 
@@ -188,7 +187,7 @@ export const updateChat = async (response, plotState) => {
           organ: plotState.organ,
           organism: plotState.organism,
           features: plotState.features,
-          measurement_type: "gene_expression",
+          measurement_type: plotState.measurement_type,
           include_embedding: true,
         };
       } else {
