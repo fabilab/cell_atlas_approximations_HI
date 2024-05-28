@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ChatProvider } from './ChatContext'; 
-import { AutoSubmitProvider } from './AutoSubmitContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import PlotBox from './PlotBox';
@@ -47,7 +46,6 @@ const MainBoard = () => {
   }, [currentResponse]);
 
   return (
-    <AutoSubmitProvider>
       <ChatProvider>
         <div style={{ marginTop: '55px', display: 'flex', height: 'calc(100vh - 55px)'}}>
             <ChatBox
@@ -65,7 +63,6 @@ const MainBoard = () => {
         </div>
         <FeedbackForm/>
       </ChatProvider>
-    </AutoSubmitProvider>
   );
 };
 
