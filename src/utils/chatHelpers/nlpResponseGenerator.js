@@ -32,10 +32,9 @@ const buildAnswer = (intent, plotState, data = null) => {
         answer = "The available measurement types are: " + _chainList(data.measurement_types, ", ", ".");
         break;
       case "organisms":
-        // answer = _chainList(data.organisms, ", <br>", ".");
-        answer ="There are " + data.organisms.length + " species available, displayed in the plot on the right. <br><br>"
-        answer += "To explore an organism's data, click on its card or type '<b>explore</b>' followed by the organism abbreviation. <br><br>"
-        answer += "For example: 'explore h_sapiens' for human. "
+        answer ="There are " + data.organisms.length + " species available, displayed on the right. <br><br>"
+        answer += "To explore an organism's data, click on its card or use the chatbot, e.g. '<b>explore human</b>'. <br><br>"
+        answer += "For all organisms, you can also use species <i>abbreviations</i>, which are the initial of the species name followed by _ (underscore) then the full subspecies name. For instance, human is 'h_sapiens' and fruitfly 'd_melanogaster'. "
         break;
       case "organs":
         answer = "The available organs for " + data.organism + " are: " + _chainList(data.organs, ", ", ".");
@@ -289,6 +288,9 @@ const buildAnswer = (intent, plotState, data = null) => {
       default:
         answer = "Sorry, I have no answer to that.";
     };
+
+    if (answer.includes("<br>"))
+      answer = answer.trim().replace(/\.$/, "") + ". ";
 
     return answer;
 }
