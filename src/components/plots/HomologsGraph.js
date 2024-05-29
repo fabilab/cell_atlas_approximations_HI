@@ -355,7 +355,7 @@ const featureLabelClick = (event) => {
 
   return (
     <div>
-      <div style={{ margin: '0 2w' }}>
+      <div style={{ margin: '0 2vw' }}>
         <Plot 
           data={plotData}
           layout={layout}
