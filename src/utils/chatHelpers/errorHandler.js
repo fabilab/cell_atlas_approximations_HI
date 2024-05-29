@@ -91,8 +91,15 @@ export const handleErrors = async (
               (e) => e.entity === "celltype"
             )[0].sourceText;
           }
-          if (intent !== "interactors.geneExpression") {
-            answer += `Invalid features detected: "${errorValue}". These have been automatically excluded<br>`;
+          if (mainIntent === "homologs") {
+            apiData.features = params.features;
+            apiData.source_organism = params.source_organism;
+            apiData.target_organism = params.target_organism;
+            answer += `Invalid features detected: "${errorValue}". These have been automatically excluded. <br><br>`;
+            answer += buildAnswer(intent, plotState, apiData);
+          }
+          else if (intent !== "interactors.geneExpression") {
+            answer += `Invalid features detected: "${errorValue}". These have been automatically excluded. <br>`;
             answer += buildAnswer(intent, plotState, apiData);
             answer += `<br><br>It covers ${
               apiData.celltypes
