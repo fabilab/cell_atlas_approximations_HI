@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 import {selectAll} from "d3";
 
 const OrganCellChart = ({ state }) => {
-  const { setLocalMessage, queryInputRef } = useChat();
+  const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
   const { plotLocation, apiCellOrgan, organName, measurementType } =  state;
   const scaleFactor = plotLocation === 'celltypes' ? 1.3 : 1; // Scale factor for size adjustment
   // Find the index of the organ, organ cases are different in species
@@ -80,6 +80,7 @@ const OrganCellChart = ({ state }) => {
       message = `Show 10 markers of ${clickedCellType} in ${apiCellOrgan.organism} ${organName}`;
     }
     setLocalMessage(message);
+    inputBorderFlash();
     if (queryInputRef.current) {
       queryInputRef.current.focus(); // Focus the input field
     }

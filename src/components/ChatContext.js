@@ -16,11 +16,11 @@ export const ChatProvider = ({ children }) => {
     const flashInterval = setInterval(() => {
       setInputHighlight(prev => !prev);
       flashCount++;
-      if (flashCount === 8) { // 3 times on and 3 times off
+      if (flashCount === 6) { // 3 times on and 3 times off
         clearInterval(flashInterval);
-        setInputHighlight(false); // Ensure it ends in the 'off' state
+        setInputHighlight(false);
       }
-    }, 500); // Adjust the interval as needed
+    }, 350); 
   };
 
   return (
