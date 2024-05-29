@@ -9,7 +9,7 @@ import { nlp } from "../utils/chatHelpers/nlpResponseGenerator";
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const { localMessage, setLocalMessage, queryInputRef } = useChat();
+  const { localMessage, setLocalMessage, queryInputRef,  inputHighlight } = useChat();
   const chatboxRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -139,6 +139,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
             onKeyDown={handleKeyDown}
             onPressEnter={() => handleSubmit(localMessage)}
             className="chat-input"
+            style={{ borderColor: inputHighlight ? '#1677ff' : 'white', borderWidth: inputHighlight ? '4px' : '1px'  }}
           />
           <Button 
             type="text"
