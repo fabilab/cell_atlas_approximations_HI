@@ -36,7 +36,7 @@ const updatePlotIntents = [
 
 // An array of main intents that don't require an API call.
 // These intents can be handled without fetching data from the API.
-const mainIntentNotRequiresApi = ["greetings", "download", "plot"];
+const mainIntentNotRequiresApi = ["greetings", "download", "plot", "link"];
 
 // Checks if a response triggers a plot update.
 // Verifies if the response contains data and if the main intent is included in the updatePlotIntents array.
