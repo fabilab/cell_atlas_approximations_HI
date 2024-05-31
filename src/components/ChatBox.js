@@ -139,7 +139,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
             onKeyDown={handleKeyDown}
             onPressEnter={() => handleSubmit(localMessage)}
             className="chat-input"
-            style={{ borderColor: inputHighlight ? '#1677ff' : 'white', borderWidth: inputHighlight ? '4px' : '1px'  }}
+            style={{ borderColor: inputHighlight ? '#1890ff' : 'white', borderWidth: inputHighlight ? '4.5px' : '1px'  }}
           />
           <Button 
             type="text"
