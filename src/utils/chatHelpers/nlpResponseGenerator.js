@@ -46,7 +46,8 @@ const buildAnswer = (intent, plotState, data = null) => {
         for (let i = 0; i < data.targetCelltypes.length; i++) {
           cellTypeList += "<br>" + (i+1) + ". " + data.targetCelltypes[i];
         }
-        answer = "These are the available cell types in " + data.organism + " " + data.targetOrgan + ":" + cellTypeList;
+        answer = "These are the available cell types in " + data.organism + " " + data.targetOrgan + ":" + cellTypeList + ". <br><br>";
+        answer += "To visualize marker genes for each cell type in " + data.organism + ", simply click on the cell type along the y-axis of the bar chart. This will populate the chatbox with a suggestion query related to the selected cell type. "
         break;
       case "celltype_location":
         if (data.organs.length === 0) {

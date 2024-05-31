@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useChat } from './ChatContext'
-import { useAutoSubmit } from './AutoSubmitContext'
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
 import { Button, Row, Input } from "antd";
@@ -10,8 +9,7 @@ import { nlp } from "../utils/chatHelpers/nlpResponseGenerator";
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const { localMessage, setLocalMessage } = useChat();
-  const { autoSubmitButtonRef } = useAutoSubmit();
+  const { localMessage, setLocalMessage, queryInputRef,  inputHighlight } = useChat();
   const chatboxRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -134,17 +132,17 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
         <div className="chat-input-container">
           <Input.TextArea
             id="chatBoxInput"
-            // allowClear
+            ref={queryInputRef}
             autoSize={{ minRows: 4, maxRows: 5 }}
             value={localMessage}
             onChange={(e) => setLocalMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
             onKeyDown={handleKeyDown}
             onPressEnter={() => handleSubmit(localMessage)}
             className="chat-input"
+            style={{ borderColor: inputHighlight ? '#1890ff' : 'white', borderWidth: inputHighlight ? '4.5px' : '1px'  }}
           />
           <Button 
             type="text"
-            ref={autoSubmitButtonRef}
             icon={<SendOutlined
               style={{ color: localMessage.length > 0 ? '#1890ff' : 'grey' }}
             />} 

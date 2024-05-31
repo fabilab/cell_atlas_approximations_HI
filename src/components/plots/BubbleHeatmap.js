@@ -12,7 +12,7 @@ const { Link, Paragraph } = Typography;
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes } = state;
-  const { setLocalMessage } = useChat();
+  const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
     let geneCardLink = (gene) => `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${gene}`;
@@ -305,6 +305,8 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
       const cellType = event.target.__data__.text;
       let message = `Show 10 markers of ${cellType} in the ${organism} ${organ}.`;
       setLocalMessage(message);
+      inputBorderFlash();
+      queryInputRef.current.focus(); 
     }
   }
 

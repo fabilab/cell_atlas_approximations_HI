@@ -8,7 +8,7 @@ const { Meta } = Card;
 
 const TableOrganisms = ({ state }) => {
   let { organisms } = state;
-  const { setLocalMessage } = useChat();
+  const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
 
   let organismCards = Object.keys(orgMeta).map(org => ({
     src: orgMeta[org].imagePath,
@@ -77,6 +77,10 @@ const TableOrganisms = ({ state }) => {
                   onClick={(e) => {
                     let clickedSpecies = `${image.title.toLowerCase().split(' ')[0][0]}_${image.title.toLowerCase().split(' ')[1]}`;
                     setLocalMessage(`explore ${clickedSpecies}`);
+                    inputBorderFlash();
+                    if (queryInputRef.current) {
+                      queryInputRef.current.focus(); // Focus the input field
+                    }
                   }}
                   hoverable
                 >
@@ -103,6 +107,10 @@ const TableOrganisms = ({ state }) => {
                   onClick={(e) => {
                     let clickedSpecies = `${image.title.toLowerCase().split(' ')[0][0]}_${image.title.toLowerCase().split(' ')[1]}`;
                     setLocalMessage(`explore ${clickedSpecies}`);
+                    inputBorderFlash();
+                    if (queryInputRef.current) {
+                      queryInputRef.current.focus(); // Focus the input field
+                    }
                   }}
                   hoverable
                 >
