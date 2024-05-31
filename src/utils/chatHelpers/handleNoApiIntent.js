@@ -57,10 +57,14 @@ export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, par
       return {
         message: answer,
       };
-    default:
+    case "link":
       answer = buildAnswer(intent, plotState);
       return {
         message: answer,
       };
+      default:
+        return {
+          message: "Unhandled intent"
+    };
   }
 }

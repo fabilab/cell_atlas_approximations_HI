@@ -28,6 +28,36 @@ const buildAnswer = (intent, plotState, data = null) => {
     }
       
     switch (gIntent) {
+      case "link":
+        switch (sIntent) {
+          case "video":
+            answer = "The video tutorials are available at <a href=\"https://www.youtube.com/@AtlasapproxFabilab\">https://www.youtube.com/@AtlasapproxFabilab</a>";
+            break;
+          case "api":
+            answer =  "The API is at <a href=\"https://atlasapprox.readthedocs.io\">https://atlasapprox.readthedocs.io</a>";
+            break;
+          case "userguide":
+            answer = "The user guide is at <a href=\"https://atlasapprox.org/#/user-guide\">https://atlasapprox.org/#/user-guide</a>";
+            break;
+          default:
+            answer = "";
+        }
+        break;
+        case "greetings":
+          switch (sIntent) {
+            case "hello":
+              answer = "Hello! Welcome to Atlasapprox. Please check our user guide for help";
+              break;
+            case "hate":
+              answer =  "Sorry to hear. Please share your feedback through the user feedback form so we can address your concerns.";
+              break;
+            case "love":
+              answer = "Great! Check out https://fabilab.org to see what else we do.";
+              break;
+            default:
+              answer = "";
+          }
+          break;
       case "measurement_types":
         answer = "The available measurement types are: " + _chainList(data.measurement_types, ", ", ".");
         break;
