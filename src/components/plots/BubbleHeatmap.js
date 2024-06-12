@@ -11,7 +11,7 @@ const { Link, Paragraph } = Typography;
 
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
-  let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes } = state;
+  let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes, isSurface } = state;
   const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {
@@ -62,8 +62,12 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           xHover = "organ";
           title = `<b>Gene expression in <i>${celltype}</i> across ${organism} organs<b>`
         } else {
-          xHover = "cell type";
+          if (isSurface) {
+            title = `<b>Gene expression of surface markers in ${organism} ${organ} by cell type</b>`;
+          } else {
           title = `<b>Gene expression in ${organism} ${organ} by cell type</b>`;
+          }
+          xHover = "cell type";
           enableCellTypeClick =  true;
         }
     }
@@ -302,8 +306,13 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   const cellTypeOnClick = (event) => {
     
     if (enableCellTypeClick) {
-      const cellType = event.target.__data__.text;
-      let message = `Show 10 markers of ${cellType} in the ${organism} ${organ}.`;
+      let cellType = event.target.__data__.text;
+      let message;
+      if (isSurface) {
+        message = `What are the 5 top surface markers of ${cellType} in the ${organism} ${organ}.`;
+      } else {
+        message = `Show 10 markers of ${cellType} in the ${organism} ${organ}.`;
+      }
       setLocalMessage(message);
       inputBorderFlash();
       queryInputRef.current.focus(); 
