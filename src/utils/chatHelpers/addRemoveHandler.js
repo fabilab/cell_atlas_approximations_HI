@@ -31,9 +31,7 @@ export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
         ? params.features.split(",")
         : params.features;
 
-    params.features = [...new Set([...paramsFeatures, ...plotStateGenes])].join(
-      ","
-    );
+    params.features = [...new Set([...paramsFeatures, ...plotStateGenes])].join(",");
   }
 
   if (mainIntent === "remove" && params.features && plotState.features) {
