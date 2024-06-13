@@ -54,6 +54,7 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
+
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -64,6 +65,7 @@ export const updateChat = async (response, plotState) => {
     endpoint,
     params;
   let extraEndpointsToCall = [];
+
   // this is defined to store celltypes and organ for celltypes intent.
   let targetCelltypes, targetOrgan;
   if (intent === "None") {
@@ -214,6 +216,10 @@ export const updateChat = async (response, plotState) => {
       params.versus = "other_organs";
     }
 
+    if (intent === "markers.geneExpression" && params.surface) {
+      params.surface_only = true;
+    }
+
     // when user already at co-rexpression analysis and want to zoom in/out, no need to call organs enpoint
     // just need to call extra endpoints
     if (plotState.plotType === "coexpressScatter" && mainIntent === "zoom") {
@@ -251,7 +257,12 @@ export const updateChat = async (response, plotState) => {
       intent === "markers.geneExpression.across_organs"
     ) {
       if (apiData.markers.length === 0) {
-        answer = `There is no markers detected in ${apiData.organism} ${apiData.organ}`;
+        if (params.surface) {
+          answer = `No surface markers were detected on ${apiData.celltype} in the ${apiData.organism} ${apiData.organ}.`;
+          apiData = null;
+        } else {
+          answer = `No markers were detected on ${apiData.celltype} in the ${apiData.organism} ${apiData.organ}`;
+        }
       } else {
         extraEndpointsToCall.push("dotplot");
       }

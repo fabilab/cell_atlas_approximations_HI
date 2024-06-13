@@ -282,7 +282,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         switch (sIntent) {
           case "organism":
             answer = "Great choice! The summary profile displayed provides a brief overview of " + data.organism + ". <br><br>"
-            answer += "To visualize marker genes for each cell type in " + data.organism + ", simply click on the cell type along the y-axis of the bar chart. This will populate the chatbox with a suggestion query related to the selected cell type. <br><br>"
+            answer += "To visualize marker genes for each cell type in " + data.organism + ", simply click on the cell type along the y-axis of the bar chart. This will populate the chatbox with a suggestion query related to the selected cell type"
             break;
             default:
               answer = "<p>Great choice! The summary profile displayed provides a brief overview of " + data.organism + ". </p>";

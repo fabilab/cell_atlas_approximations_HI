@@ -117,6 +117,9 @@ export const handleErrors = async (
       if (intent === "interactors.geneExpression") {
         answer +=
           "Interaction partners are only supported for the species <i>Homo sapiens</i> and <i>Mus musculus</i>. ";
+      } else if (params.surface) {
+        answer += 
+          "Surface markers are only supported for the species <i>Homo sapiens</i> and <i>Mus musculus</i> ";
       } else {
         answer += `Organism "${errorValue}" is not available. Could it be a spelling error? Otherwise, you can try a different species. `;
       }

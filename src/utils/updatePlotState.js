@@ -163,7 +163,8 @@ const updateFractions = (context) => {
     unit,
     yAxis,
     measurement_type,
-    queriedGenes;
+    queriedGenes,
+    isSurface;
   if (
     context.intent.split(".")[2] === "across_organs" ||
     (["add", "remove", "plot"].includes(context.intent.split(".")[0]) &&
@@ -185,10 +186,12 @@ const updateFractions = (context) => {
       xAxis = context.response.data.celltypes;
       average = context.response.data.average;
       fractions = context.response.data.fraction_detected;
+      isSurface = context.response.params.surface_only;
     } else {
       xAxis = context.plotState.xaxis;
       average = context.plotState.average;
       fractions = context.plotState.fractions;
+      isSurface = context.plotState.isSurface;
     }
     plotType = "fractionDetected";
   }
@@ -197,10 +200,12 @@ const updateFractions = (context) => {
     yAxis = context.response.data.features;
     unit = context.response.data.unit;
     measurement_type = context.response.data.measurement_type;
+    isSurface = context.response.params.surface_only;
   } else {
     yAxis = context.plotState.yaxis;
     unit = context.plotState.unit;
     measurement_type = context.plotState.measurement_type;
+    isSurface = context.plotState.isSurface;
   }
 
   // handle 2 different cases:
@@ -231,6 +236,7 @@ const updateFractions = (context) => {
     hasLog: context.plotState.hasLog,
     // This varibale is used only for interactor plots. we need these genes to highlight the plot
     queriedGenes: queriedGenes,
+    isSurface: isSurface,
   };
 };
 
