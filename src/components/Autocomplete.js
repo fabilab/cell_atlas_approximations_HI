@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import { trainingUtterances } from '@fabilab/atlasapprox-nlp';
 
 
-const availableSuggestions = [
-  'Explore @organism',
-  'Show 10 markers for @celltype in @organism @organ',
-];
+const availableSuggestions = trainingUtterances;
 
 
 const Autocomplete = ({ searchMessage, setSearchMessage, sendFirstSearch, focus }) => {
@@ -30,6 +28,7 @@ const Autocomplete = ({ searchMessage, setSearchMessage, sendFirstSearch, focus 
       setSuggestions(filteredSuggestions);
     } else {
       setSuggestions([]);
+      queryInput.current.focus();
     }
   };
 
