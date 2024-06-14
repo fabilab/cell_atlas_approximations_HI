@@ -1,26 +1,25 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Typography, Row, Col } from 'antd';
-import { RobotOutlined, SendOutlined } from '@ant-design/icons';
+import { Typography, Row, Col } from 'antd';
 import FeedbackForm from './FeedbackForm';
 import search from '../asset/icon.png';
+import Autocomplete from './Autocomplete';
 const { Title } = Typography;
 const { Text } = Typography;
+
 
 
 
 const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
+  const [focusQuery, setFocusQuery] = useState(false);
   const navigate = useNavigate();
 
   const sendFirstSearch = (query) => {
     setSearchMessage('');
     navigate("/mainboard", { state: query });
   }
-
-  // textInput must be declared here so the ref can refer to it
-  const queryInput = useRef(null);
 
   const sampleQueries = [
     'What species are available?',
@@ -69,28 +68,12 @@ const Landing = () => {
           Explore Cell Atlas Approximations
         </Title>
       </div>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        marginTop: '8vh' 
-      }}>
-        <Input
-          placeholder="Ask me a question OR click on one below..."
-          ref={queryInput}
-          value={searchMessage}
-          onChange={(e) => setSearchMessage(e.target.value.replace(/(\r\n|\n|\r)/gm, ""))}
-          prefix={<RobotOutlined style={{ paddingRight: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }}/> }
-          suffix={<SendOutlined style={{paddingLeft: '10px', color: searchMessage.length > 0 ? '#1677ff' : 'grey' }} onClick={() => sendFirstSearch(searchMessage)}/>}
-          style={{
-            maxWidth: '50vw', 
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',  // Shadow effect
-            height: '50px',  // Increased height
-            borderRadius: '25px',
-          }}
-          onPressEnter={() => sendFirstSearch(searchMessage)}
-        />
-      </div>
+      <Autocomplete
+        searchMessage={searchMessage}
+        setSearchMessage={setSearchMessage}
+        sendFirstSearch={sendFirstSearch}
+        focus={focusQuery}
+      />
       <div style={{ 
           marginTop: '8vh', 
           // fontWeight: 'bold', 
@@ -111,7 +94,7 @@ const Landing = () => {
               textAlign: index % 2 === 1 ? "left" : "right",
               }}>
               <Text
-                onClick={() => { setSearchMessage(query); queryInput.current.focus(); }}
+                onClick={() => { setSearchMessage(query); setFocusQuery(!focusQuery); }}
                 style={{
                   color: searchMessage === query ? '#303131' : 'initial',
                   fontWeight: searchMessage === query ? 'bold' : '',
