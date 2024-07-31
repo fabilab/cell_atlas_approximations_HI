@@ -467,8 +467,7 @@ export const updatePlotState = (response, plotState, setPlotState) => {
   }
   const context = {
     intent: intent,
-    features:
-      (response.data?.features || response.data?.feature || []).join(",") || plotState.features,
+    features: response.data?.features || response.data?.feature || plotState.features,
     markers: (response.data && response.data.markers) || "",
     organism:
       (response.params && response.params.organism) ||
