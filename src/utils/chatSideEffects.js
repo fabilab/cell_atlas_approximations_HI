@@ -274,7 +274,7 @@ export const updateChat = async (response, plotState) => {
         params.features = [...apiData[endpoint]];
         params.features.push(params.feature);
         delete params.celltype;
-      } else if (intent === "markers.geneExpression") {
+      } else if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility") {
         params.features = [...apiData[endpoint]];
         delete params.celltype;
       } else if (intent === "markers.geneExpression.across_organs") {
