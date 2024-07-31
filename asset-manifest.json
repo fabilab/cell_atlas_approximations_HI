@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.dde52aec.css",
-    "main.js": "/static/js/main.191bd4ec.js",
+    "main.css": "/static/css/main.9c77b418.css",
+    "main.js": "/static/js/main.716e4bbf.js",
     "static/media/t_aestivum.jpeg": "/static/media/t_aestivum.88be02293c0b0d38b936.jpeg",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/geneExpHeatmap.png": "/static/media/geneExpHeatmap.73b6ae92652923832853.png",
@@ -13,7 +13,7 @@
     "static/media/f_vesca.jpeg": "/static/media/f_vesca.40e758fc2f059e757cc8.jpeg",
     "static/media/similar-genes.png": "/static/media/similar-genes.46952a10942d2f37b01b.png",
     "static/media/markers.png": "/static/media/markers.06c8d8026f53bdf3deba.png",
-    "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.bacd5de623fb563b961a.ttf",
+    "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/highest_exp_mouse.png": "/static/media/highest_exp_mouse.06463a5d327d7aaae9bb.png",
     "static/media/h_sapiens_chromatin.jpg": "/static/media/h_sapiens_chromatin.2eeb917edd0dc0fa17c7.jpg",
     "static/media/o_sativa.jpeg": "/static/media/o_sativa.01f9e2228c161aa314d7.jpeg",
@@ -24,11 +24,11 @@
     "static/media/d_melanogaster.jpg": "/static/media/d_melanogaster.4b81dbd203779ce4eb4e.jpg",
     "static/media/illu.png": "/static/media/illu.58368d7476e1b5894523.png",
     "static/media/h_sapiens.jpeg": "/static/media/h_sapiens.554acb2c1938a9978eab.jpeg",
-    "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.60127e352b7a11f7f1bc.ttf",
+    "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
     "static/media/m_musculus.jpg": "/static/media/m_musculus.86e9cae3b2afbc8da6fa.jpg",
     "static/media/l_minuta.jpeg": "/static/media/l_minuta.c0a8f53eba8b20d0edd7.jpeg",
+    "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
     "static/media/x_laevis.jpg": "/static/media/x_laevis.0666c96834c70efd3d6b.jpg",
-    "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.4d986b00ff9ca3828fbd.woff2",
     "static/media/m_murinus.jpg": "/static/media/m_murinus.1bedab7c45614bd85828.jpg",
     "static/media/p_dumerilii.jpeg": "/static/media/p_dumerilii.ba241cbf5b6cfc0d15db.jpeg",
     "static/media/c_hemisphaerica.jpeg": "/static/media/c_hemisphaerica.09f675602723bff983df.jpeg",
@@ -36,7 +36,7 @@
     "static/media/z_mays.jpeg": "/static/media/z_mays.946de309a19f071db341.jpeg",
     "static/media/t_adhaerens.jpeg": "/static/media/t_adhaerens.2a5ee028fa382f839a17.jpeg",
     "static/media/s_pistillata.jpeg": "/static/media/s_pistillata.c72270533ddcd24f79fa.jpeg",
-    "static/media/fa-brands-400.woff2": "/static/media/fa-brands-400.455ea818179b4def0c43.woff2",
+    "static/media/fa-brands-400.woff2": "/static/media/fa-brands-400.bb8d5a145e22822103fb.woff2",
     "static/media/m_murinus.jpeg": "/static/media/m_murinus.8c58c85541f70f50af85.jpeg",
     "static/media/a_queenslandica.jpeg": "/static/media/a_queenslandica.bb9300ea1b54bb8570b4.jpeg",
     "static/media/s_lacustris.jpeg": "/static/media/s_lacustris.0935ce39a7006abc638e.jpeg",
@@ -49,7 +49,7 @@
     "static/media/p_crozieri.jpeg": "/static/media/p_crozieri.198fa409d96576a2137a.jpeg",
     "static/media/d_melanogaster.jpeg": "/static/media/d_melanogaster.2cd99b691a1205b4e3a6.jpeg",
     "static/media/n_vectensis.jpeg": "/static/media/n_vectensis.dfd0c3bf3c0a640c7e50.jpeg",
-    "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.eb91f7b948a42799f678.ttf",
+    "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.17a6e1aebccdbaa39e78.ttf",
     "static/media/m_musculus.jpeg": "/static/media/m_musculus.d77198c715a5d44184a0.jpeg",
     "static/media/icon.png": "/static/media/icon.a5678a4e85412637cbbb.png",
     "static/media/temp.jpeg": "/static/media/temp.d4864e37a257623672e0.jpeg",
@@ -57,15 +57,15 @@
     "static/media/h_miamia.jpeg": "/static/media/h_miamia.7351572b66d85def27b2.jpeg",
     "static/media/c_gigas.jpeg": "/static/media/c_gigas.b78854c54f985642d7f3.jpeg",
     "static/media/x_laevis.jpeg": "/static/media/x_laevis.8e764c19ea74b9c26d07.jpeg",
-    "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.21cb8f55d8e0c5b89751.woff2",
-    "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.c8e090db312b0bea2aa2.ttf",
-    "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.cf7f5903d06b79ad60f1.woff2",
+    "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.bc3722686635b5f86132.woff2",
+    "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
+    "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/index.html",
-    "main.dde52aec.css.map": "/static/css/main.dde52aec.css.map",
-    "main.191bd4ec.js.map": "/static/js/main.191bd4ec.js.map"
+    "main.9c77b418.css.map": "/static/css/main.9c77b418.css.map",
+    "main.716e4bbf.js.map": "/static/js/main.716e4bbf.js.map"
   },
   "entrypoints": [
-    "static/css/main.dde52aec.css",
-    "static/js/main.191bd4ec.js"
+    "static/css/main.9c77b418.css",
+    "static/js/main.716e4bbf.js"
   ]
 }
