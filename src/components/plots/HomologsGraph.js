@@ -37,7 +37,7 @@ const HomologsGraph = ({ state }) => {
     targets,
     distances,
   } = state;
-  const { setLocalMessage } = useChat();
+  const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
   // Convert the features string to an array
   const featureArray = features.split(",");
 
@@ -351,6 +351,10 @@ const featureLabelClick = (event) => {
     const species = event.target.__data__.x === 0 ? source_organism : target_organism;
     let message = `what are the highest ${clickedFeature} expressors in ${species}?`;
     setLocalMessage(message);
+    inputBorderFlash();
+    if (queryInputRef.current) {
+      queryInputRef.current.focus();
+    }
 };
 
   return (
