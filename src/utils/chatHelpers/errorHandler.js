@@ -101,11 +101,6 @@ export const handleErrors = async (
           else if (intent !== "interactors.geneExpression") {
             answer += `Invalid features detected: "${errorValue}". These have been automatically excluded. <br>`;
             answer += buildAnswer(intent, plotState, apiData);
-            answer += `<br><br>It covers ${
-              apiData.celltypes
-                ? `${apiData.celltypes.length} cell types`
-                : "1 cell type"
-            } and ${apiData.features.length} genes.`;
           }
         } else {
           answer = `The feature "${errorValue}" is not available in our current dataset. Are you sure it is spelled correctly? You can retry the question with a different feature if you like. `;

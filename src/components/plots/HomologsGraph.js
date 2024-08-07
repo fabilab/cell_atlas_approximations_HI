@@ -348,12 +348,25 @@ const HomologsGraph = ({ state }) => {
 // A function that handle gene name click event
 const featureLabelClick = (event) => {
     const clickedFeature = event.target.textContent;
-    const species = event.target.__data__.x === 0 ? source_organism : target_organism;
-    let message = `what are the highest ${clickedFeature} expressors in ${species}?`;
-    setLocalMessage(message);
-    inputBorderFlash();
-    if (queryInputRef.current) {
-      queryInputRef.current.focus();
+    if (queries.includes(clickedFeature)) {
+      let indecies =[];
+      queries.forEach((element, index) => {
+          if (element === clickedFeature) {
+            indecies.push(index);
+          }
+      });
+      if (indecies.length > 20) {
+        indecies = indecies.slice(0, 20);
+      }
+      
+      const homologs = indecies.map(i => targets[i])
+
+      let message = `what are the sequences of ${homologs.join(',')} in ${target_organism}?`;
+      setLocalMessage(message);
+      inputBorderFlash();
+      if (queryInputRef.current) {
+        queryInputRef.current.focus();
+      }
     }
 };
 
@@ -365,22 +378,22 @@ const featureLabelClick = (event) => {
           layout={layout}
           config={config} 
           onAfterPlot={() => {
-              // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
-              document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-              document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+            // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
+            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+            
+            selectAll(".plot")
+              .selectAll('text')
+              .on("click", (event) => featureLabelClick (event));
+          }}
+          onInitialized={(figure, graphDiv)=>{
+            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
 
-              selectAll(".plot")
-                .selectAll('text')
-                .on("click", (event) => featureLabelClick (event));
-            }}
-            onInitialized={(figure, graphDiv)=>{
-              document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-              document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
-
-              selectAll(".plot")
-                .selectAll('text')
-                .on("click", (event) => featureLabelClick (event));
-            }}
+            selectAll(".plot")
+              .selectAll('text')
+              .on("click", (event) => featureLabelClick (event));
+          }}
         />
       </div>
       <div style={{ display: 'flex', margin: '0 3vw' }}>
