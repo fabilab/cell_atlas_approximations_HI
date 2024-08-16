@@ -26,7 +26,7 @@ const buildAnswer = (intent, plotState, data = null) => {
       if (intentParts.length > 2)
         addIntent = intentParts[2];
     }
-      
+
     switch (gIntent) {
       case "link":
         switch (sIntent) {
@@ -199,7 +199,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         
         break;
       case "comeasurement":
-        answer = `Here's the coexpression of ${typeof data.features === 'string' ? data.features.split(',').join(' and ') : data.features.join(' and ')} across all organs of ${data.organism}. `;
+        answer = `The plot on the right shows the coexpression of ${typeof data.features === 'string' ? data.features.split(',').join(' and ') : data.features.join(' and ')} across all organs and ${data.by} of ${data.organism}. `;
         answer += "<br><br>Type \"<b>log</b>\" to switch between linear and log scales. ";
         if (data?.by === 'celltype') {
           answer += "<br><br>Type \"<b>zoom in</b>\" to visualise data at cell state level. ";
