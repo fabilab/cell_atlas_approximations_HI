@@ -192,7 +192,7 @@ export const updateChat = async (response, plotState) => {
           measurement_type: plotState.measurement_type,
           include_embedding: true,
         };
-      } else {
+      } else if (plotState.plotType !== "coexpressScatter") {
         answer +=
           "Zooming into the neighborhood is only supported for across cell types measurements, particularly for dotplot and heatmap visualizations";
       }
