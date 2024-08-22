@@ -365,13 +365,13 @@ const highestMeasurement = (context) => {
     plotType: "highestMeasurement",
     organism: context.organism,
     organs: organs,
-    celltypes: celltypesOrgan,
+    celltypes: celltypes,
     features: context.features,
     measurement_type: context.measurement_type,
     celltypesOrgan: celltypesOrgan,
     yaxis: context.response.data.average,
     average: context.response.data.average,
-    fractions: null,
+    fractions: context.response.data.fraction_detected,
     unit: context.response.data.unit,
   };
 };

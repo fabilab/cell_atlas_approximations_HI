@@ -121,11 +121,18 @@ export const updateChat = async (response, plotState) => {
     }
 
     if (
-      mainIntent === "similar_features" ||
-      mainIntent === "highest_measurement"
+      mainIntent === "similar_features"
     ) {
       params.feature = params.features;
       delete params.features;
+    }
+
+    if (
+       mainIntent === "highest_measurement"
+    ) {
+      params.feature = params.features;
+      delete params.features;
+      params.per_organ = true
     }
 
     if (intent === "feature_sequences.geneExpression") {
