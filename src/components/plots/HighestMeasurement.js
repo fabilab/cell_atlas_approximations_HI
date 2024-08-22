@@ -27,7 +27,7 @@ const HighestMeasurement = ({ state }) => {
     const maxExpression = Math.max(...Object.values(organExpressionSum));
     const colorScale = scaleLinear()
         .domain([minExpression, maxExpression])
-        .range(["#dddcdc", "#0d7ae0"]);
+        .range(["#e6f1fc", "#2488ed"]);
 
     // Adjust scaling factors based on image size
     useEffect(() => {
@@ -104,19 +104,27 @@ const HighestMeasurement = ({ state }) => {
 
         const cellTypes = barChartData.map(item => item.cellType);
         const avgExpressions = barChartData.map(item => item.avgExpression);
-
+        
         return (
             <Plot
                 data={[
                     {
                         type: 'bar',
-                        x: cellTypes,
-                        y: avgExpressions,
+                        x: avgExpressions,
+                        y: cellTypes,
+                        orientation: 'h',
                     }
                 ]}
                 layout={{ 
                     title: `Average expression of ${feature} in ${organism} ${hoveredOrgan}`,
                     width: 450,  // Adjust the width here
+                    yaxis: {
+                        automargin: true,  // Ensure margin is handled well for long labels
+                        categoryorder: 'total ascending',  // Order categories by total value descending
+                    },
+                    xaxis: {
+                        autorange: true,  // Ensure the x-axis adjusts according to the data
+                    },
                 }}
             />
         );
