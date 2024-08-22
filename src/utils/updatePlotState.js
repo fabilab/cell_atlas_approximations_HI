@@ -355,6 +355,7 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
+  console.log(context)
   let organs = context.response.data.organs;
   let celltypes = context.response.data.celltypes;
   const celltypesOrgan = celltypes?.map((c, index) => {
@@ -366,7 +367,7 @@ const highestMeasurement = (context) => {
     organism: context.organism,
     organs: organs,
     celltypes: celltypes,
-    features: context.features,
+    feature: context.features,
     measurement_type: context.measurement_type,
     celltypesOrgan: celltypesOrgan,
     yaxis: context.response.data.average,
