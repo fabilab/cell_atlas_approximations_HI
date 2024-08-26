@@ -355,11 +355,13 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
+  let top_n = context.response.params?.number || 10;
   let organs = context.response.data.organs;
   let celltypes = context.response.data.celltypes;
   const celltypesOrgan = celltypes?.map((c, index) => {
     return c + " (" + organs[index] + ")";
   });
+
 
   return {
     plotType: "highestMeasurement",
@@ -373,6 +375,7 @@ const highestMeasurement = (context) => {
     average: context.response.data.average,
     fractions: context.response.data.fraction_detected,
     unit: context.response.data.unit,
+    top_n: top_n,
   };
 };
 

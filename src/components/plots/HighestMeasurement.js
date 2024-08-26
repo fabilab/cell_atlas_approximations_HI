@@ -7,7 +7,7 @@ import { Typography } from "antd";
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
-  const { feature, organism, organs, celltypes, average, fractions } = state;
+  const { feature, organism, organs, celltypes, average, fractions, unit, top_n } = state;
   const imageRef = useRef(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);

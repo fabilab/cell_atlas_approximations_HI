@@ -1,4 +1,4 @@
-import atlasapprox from "@fabilab/atlasapprox";
+import atlasapprox, { highest_measurement } from "@fabilab/atlasapprox";
 import {
   buildAPIParams,
   buildAnswer,
@@ -127,12 +127,13 @@ export const updateChat = async (response, plotState) => {
       delete params.features;
     }
 
+    // Use the first API call to construct answer, and the second API call to generate plots
     if (
        mainIntent === "highest_measurement"
     ) {
       params.feature = params.features;
       delete params.features;
-      params.per_organ = true
+      extraEndpointsToCall.push("highest_measurement")
     }
 
     if (intent === "feature_sequences.geneExpression") {
@@ -309,8 +310,18 @@ export const updateChat = async (response, plotState) => {
           const allGenes = getAllGenes(apiData.queries, targetGenes);
           params.features = [...new Set(allGenes)];
         }
+      } else if (e === "highest_measurement") {
+        params.per_organ = true;
+        // Initialize two array to store the cell types and organs for bot response
+        apiData.responseCelltypes = apiData.celltypes
+        apiData.responseOrgans = apiData.organs;
+    
+        // Clear the rest of the apiData, only keep the cell tyoes and organs for bot answer
+        apiData = {
+          responseCelltypes: apiData.responseCelltypes,
+          responseOrgans: apiData.responseOrgans
+        };
       }
-      params.features = [...new Set(params.features)];
 
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
