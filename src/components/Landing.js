@@ -36,7 +36,7 @@ const Landing = () => {
     "What cells coexpress CD19 and MS4A1 in human?",
     'Show organs containing macrophage across species.',
     'What cell types are present in each organ of mouse?',
-    'What cell type is the highest expressor of GZMA in human?',
+    'What cell type is the highest expressor of Cd19 in mouse?',
     'what are the 3 top surface markers of NK cells in human liver?',
     // 'List highest accessibility of chr6:98834292-98834692 in human.',
     'Show 10 markers for fibroblast in human lung compared to other tissues.',

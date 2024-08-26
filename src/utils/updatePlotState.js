@@ -355,7 +355,6 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
-  console.log(context)
   let organs = context.response.data.organs;
   let celltypes = context.response.data.celltypes;
   const celltypesOrgan = celltypes?.map((c, index) => {
