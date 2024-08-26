@@ -355,13 +355,13 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
-  let top_n = context.response.params?.number || 10;
   let organs = context.response.data.organs;
   let celltypes = context.response.data.celltypes;
-  const celltypesOrgan = celltypes?.map((c, index) => {
-    return c + " (" + organs[index] + ")";
+  let topNCelltypes = context.response.data.topNCelltypes;
+  let topNOrgans = context.response.data.topNOrgans;
+  const celltypesOrgan = topNCelltypes?.map((c, index) => {
+    return c + " (" + topNOrgans[index] + ")";
   });
-
 
   return {
     plotType: "highestMeasurement",
@@ -373,9 +373,10 @@ const highestMeasurement = (context) => {
     celltypesOrgan: celltypesOrgan,
     yaxis: context.response.data.average,
     average: context.response.data.average,
-    fractions: context.response.data.fraction_detected,
+    topNCelltypes: context.response.data.topNCelltypes,
+    topNOrgans: context.response.data.topNOrgans,
+    topNExp: context.response.data.topNExp,
     unit: context.response.data.unit,
-    top_n: top_n,
   };
 };
 

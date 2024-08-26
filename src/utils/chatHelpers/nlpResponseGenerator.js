@@ -227,8 +227,8 @@ const buildAnswer = (intent, plotState, data = null) => {
           default:
             answer = "The highest measurement are in:";
         }
-        for (let i = 0; i < data.responseCelltypes.length; i++)
-          answer += "<br>" + (i+1) + ". " + data.responseCelltypes[i] + " in " + data.responseOrgans[i];
+        for (let i = 0; i < data.topNCelltypes.length; i++)
+          answer += "<br>" + (i+1) + ". " + data.topNCelltypes[i] + " in " + data.topNOrgans[i];
         break;
       case "add":
         switch (sIntent) {

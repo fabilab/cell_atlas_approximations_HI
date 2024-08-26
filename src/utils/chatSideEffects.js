@@ -312,17 +312,13 @@ export const updateChat = async (response, plotState) => {
         }
       } else if (e === "highest_measurement") {
         params.per_organ = true;
-        // Initialize two array to store the cell types and organs for bot response
-        apiData.responseCelltypes = apiData.celltypes
-        apiData.responseOrgans = apiData.organs;
-    
-        // Clear the rest of the apiData, only keep the cell tyoes and organs for bot answer
+        // Rename items in the apiData for bot answer and original bar chart
         apiData = {
-          responseCelltypes: apiData.responseCelltypes,
-          responseOrgans: apiData.responseOrgans
+          topNCelltypes: apiData.celltypes,
+          topNOrgans: apiData.organs,
+          topNExp: apiData.average,
         };
       }
-
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
     }

@@ -4,10 +4,11 @@ import HighestMeasurementBar from "./HighestMeasurementBar"; // Import the new c
 import orgMeta from "../../utils/organismMetadata.js";
 import { scaleLinear } from "d3-scale";
 import { Typography } from "antd";
+import BarChart from "./BarChart.js";
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
-  const { feature, organism, organs, celltypes, average, fractions, unit, top_n } = state;
+  const { feature, organism, celltypesOrgan, organs, celltypes, average, topNExp, unit } = state;
   const imageRef = useRef(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
@@ -113,40 +114,54 @@ const HighestMeasurement = ({ state }) => {
     // Update the organ data when a new organ is hovered over
     setOrganData(newOrganData);
   };
+
+  // Overwrite state.average with topNExp for the top barchart
+  const updatedState = {
+    ...state,
+    average: topNExp, // Use topNExp as the average data
+  };
+
   return (
-    <div
-      style={{
-        padding: "0% 1%",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          overflow: "auto",
-          minWidth: "0",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {renderImageMap()}
-        <Text style={{ alignSelf: "center" }}>
-          * Hover over an organ for cell type information.
-        </Text>
-      </div>
-      <div style={{ flex: 1, overflow: "auto", minWidth: "0" }}>
-        {hoveredOrgan && (
-          <HighestMeasurementBar
-            organData={organData}
-            hoveredOrgan={hoveredOrgan}
-            feature={feature}
-            organism={organism}
+    <div style={{ width: "inherit", alignItems: "center" }}>
+      <div style={{padding: "1% 3%" }}>
+          <BarChart
+            state={updatedState}
           />
-        )}
       </div>
+        <div
+        style={{
+            padding: "0% 1%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+        }}
+        >
+        <div
+            style={{
+            flex: 1,
+            overflow: "auto",
+            minWidth: "0",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            }}
+        >
+            {renderImageMap()}
+            <Text style={{ alignSelf: "center" }}>
+            * Hover over an organ for cell type information.
+            </Text>
+        </div>
+        <div style={{ flex: 1, overflow: "auto", minWidth: "0" }}>
+            {hoveredOrgan && (
+            <HighestMeasurementBar
+                organData={organData}
+                hoveredOrgan={hoveredOrgan}
+                feature={feature}
+                organism={organism}
+            />
+            )}
+        </div>
+        </div>
     </div>
   );
 };
