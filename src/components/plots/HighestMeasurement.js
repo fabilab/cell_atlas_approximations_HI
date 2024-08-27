@@ -1,18 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import ImageMapper from "react-img-mapper";
-import HighestMeasurementBar from "./HighestMeasurementBar"; // Import the new component
+import HighestMeasurementBar from "./HighestMeasurementBar";
 import orgMeta from "../../utils/organismMetadata.js";
 import { scaleLinear } from "d3-scale";
 import { Typography } from "antd";
 import BarChart from "./BarChart.js";
+
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
-  const { feature, organism, celltypesOrgan, organs, celltypes, average, topNExp, unit } = state;
+  const { feature, organism, organs, celltypes, average, topNExp, unit } = state;
   const imageRef = useRef(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
-  const [organData, setOrganData] = useState([]); // New state to manage organ data
+  const [organData, setOrganData] = useState([]);
+
+  const uniqueOrgans = [...new Set(organs)];
+  const hasMultipleOrgans = uniqueOrgans.length > 1;
 
   // Get the max expression value for each organ
   const highestExprPerOrgan = {};
@@ -23,19 +27,21 @@ const HighestMeasurement = ({ state }) => {
     }
   });
 
-  // Set up color scale
+  // Set up color scale for organ heatmap
   const minExpression = Math.min(...Object.values(highestExprPerOrgan));
   const maxExpression = Math.max(...Object.values(highestExprPerOrgan));
   const colorScale = scaleLinear()
     .domain([minExpression, maxExpression])
-    .range(["#edc2bb", "#eb3417"]);
+    .range(["#f0d2cc", "#ed4e2b"]);
 
-  // Adjust scaling factors based on image size
+  // Update scaling factors based on image size
   useEffect(() => {
-    const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
+    if (!hasMultipleOrgans) return;
+
     const updateScalingFactors = () => {
-      const renderedWidth = imageRef.current?.clientWidth || 480;
-      const renderedHeight = imageRef.current?.clientHeight || 480;
+      const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
+      const renderedWidth = imageRef.current?.clientWidth || 450;
+      const renderedHeight = imageRef.current?.clientHeight || 450;
 
       setScalingFactors({
         width: renderedWidth / intrinsicDimensions.width,
@@ -43,37 +49,26 @@ const HighestMeasurement = ({ state }) => {
       });
     };
 
-    // Call the function initially and add an event listener for window resizing
     updateScalingFactors();
     window.addEventListener("resize", updateScalingFactors);
 
-    return () => {
-      window.removeEventListener("resize", updateScalingFactors);
-    };
-  }, [organism]);
+    return () => window.removeEventListener("resize", updateScalingFactors);
+  }, [organism, hasMultipleOrgans]);
 
-  const areas = Object.keys(orgMeta[organism]?.organs || {}).map((organ) => {
-    const coords = orgMeta[organism].organs[organ].coords
-      .split(",")
-      .map(Number);
+  // Generate image map areas
+  const areas = Object.entries(orgMeta[organism]?.organs || {}).map(([organ, metadata]) => {
+    const coords = metadata.coords.split(",").map(Number);
     const adjustedCoords = coords.map((coord, index) =>
-      index % 2 === 0
-        ? coord * scalingFactors.width
-        : coord * scalingFactors.height
+      index % 2 === 0 ? coord * scalingFactors.width : coord * scalingFactors.height
     );
 
-    // Identify if the current area is a label
     const isLabel = organ.includes("-label");
-
-    // Determine color based on the filtered expression values
-    const organColor = highestExprPerOrgan[organ]
-      ? colorScale(highestExprPerOrgan[organ])
-      : "transparent";
+    const organColor = highestExprPerOrgan[organ] ? colorScale(highestExprPerOrgan[organ]) : "transparent";
 
     return {
       id: organ,
       name: organ,
-      shape: orgMeta[organism].organs[organ].shape || "poly",
+      shape: metadata.shape || "poly",
       coords: adjustedCoords,
       fillColor: isLabel ? "transparent" : organColor,
       preFillColor: isLabel ? "transparent" : organColor,
@@ -81,87 +76,79 @@ const HighestMeasurement = ({ state }) => {
     };
   });
 
-  const renderImageMap = () => {
-    return (
-      <ImageMapper
-        ref={imageRef}
-        src={require(`../../asset/anatomy/grey_${organism}.jpg`)}
-        map={{ name: `${organism}-map`, areas: areas }}
-        onMouseEnter={(area) => handleMouseEnter(area)}
-        width={480}
-        height={480}
-      />
-    );
-  };
-
+  // Handle mouse enter event for organ areas
   const handleMouseEnter = (area) => {
-    if (area.name.includes("-label")) return null;
+    if (area.name.includes("-label")) return;
+
     setHoveredOrgan(area.name);
-
-    // Reset organData before updating
-    setOrganData([]);
-
-    // Prepare data for the bar chart based on the hovered organ
     const newOrganData = organs
-      .map((organ, index) => {
-        if (organ === area.name) {
-          return { cellType: celltypes[index], avgExpression: average[index] };
-        }
-        return null;
-      })
-      .filter((item) => item !== null);
+      .map((organ, index) =>
+        organ === area.name
+          ? { cellType: celltypes[index], avgExpression: average[index] }
+          : null
+      )
+      .filter(Boolean);
 
-    // Update the organ data when a new organ is hovered over
     setOrganData(newOrganData);
   };
 
-  // Overwrite state.average with topNExp for the top barchart
-  const updatedState = {
-    ...state,
-    average: topNExp, // Use topNExp as the average data
-  };
+  // Render image map component
+  const renderImageMap = () => (
+    <ImageMapper
+      ref={imageRef}
+      src={require(`../../asset/anatomy/grey_${organism}.jpg`)}
+      map={{ name: `${organism}-map`, areas: areas }}
+      onMouseEnter={handleMouseEnter}
+      width={450}
+      height={450}
+    />
+  );
+
+  // Render color bar legend
+  const renderColorBar = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginLeft: "10px" }}>
+      <Text>High</Text>
+      <div
+        style={{
+          height: "100px",
+          width: "20px",
+          background: `linear-gradient(to bottom, #ed4e2b, #f0d2cc)`,
+          margin: "10px 0",
+        }}
+      />
+      <Text>Low</Text>
+    </div>
+  );
 
   return (
     <div style={{ width: "inherit", alignItems: "center" }}>
-      <div style={{padding: "1% 3%" }}>
-          <BarChart
-            state={updatedState}
-          />
+      <div style={{ padding: "1% 10%" }}>
+        <BarChart state={{ ...state, average: topNExp }} />
       </div>
-        <div
-        style={{
-            padding: "0% 1%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-        }}
-        >
-        <div
-            style={{
-            flex: 1,
-            overflow: "auto",
-            minWidth: "0",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            }}
-        >
-            {renderImageMap()}
-            <Text style={{ alignSelf: "center" }}>
-            * Hover over an organ for cell type information.
-            </Text>
-        </div>
-        <div style={{ flex: 1, overflow: "auto", minWidth: "0" }}>
+      {hasMultipleOrgans && (
+        <div style={{ padding: "0% 4%", display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              {renderImageMap()}
+              <Text style={{ alignSelf: "center", marginTop: "10px" }}>
+                * Hover over organs to explore gene expression details
+              </Text>
+            </div>
+            {renderColorBar()}
+          </div>
+          <div style={{ flex: 1, overflow: "auto", minWidth: "0", paddingLeft: "5%" }}>
             {hoveredOrgan && (
-            <HighestMeasurementBar
+              <HighestMeasurementBar
                 organData={organData}
                 hoveredOrgan={hoveredOrgan}
                 feature={feature}
                 organism={organism}
-            />
+                unit={unit}
+              />
             )}
+          </div>
         </div>
-        </div>
+      )}
     </div>
   );
 };

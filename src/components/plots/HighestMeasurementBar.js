@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 
-
-// This component renders a bar chart that displays the expression of 
-// a gene of interest across different cell types within a hovered organ. 
+// This component renders a bar chart that displays the expression of
+// a gene of interest across different cell types within a hovered organ.
 // It is used within the "highest measurement intent"
 
 const HighestMeasurementBar = ({
@@ -11,6 +10,7 @@ const HighestMeasurementBar = ({
   hoveredOrgan,
   feature,
   organism,
+  unit,
 }) => {
   const [cellTypes, setCellTypes] = useState([]);
   const [avgExpressions, setAvgExpressions] = useState([]);
@@ -36,18 +36,27 @@ const HighestMeasurementBar = ({
           x: avgExpressions,
           y: cellTypes,
           orientation: "h",
+          marker: {
+            color: "#e35f42",
+          },
         },
       ]}
       layout={{
-        title: `Average expression of ${feature} in ${organism} ${hoveredOrgan}`,
+        title: {
+          font: {
+            size: 15,
+          },
+          text: `average expression of <i>${feature}</i> in ${hoveredOrgan}`,
+        },
         width: 450,
-        height: 300 + 20 * cellTypes.length,
+        height: 250 + 20 * cellTypes.length,
         yaxis: {
           automargin: true,
           categoryorder: "total ascending",
         },
         xaxis: {
           autorange: true,
+          title: `${unit}`,
         },
         bargap: 0.1,
       }}
