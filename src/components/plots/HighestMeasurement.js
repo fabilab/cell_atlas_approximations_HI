@@ -9,7 +9,7 @@ import BarChart from "./BarChart.js";
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
-  const { feature, organism, organs, celltypes, average, topNExp, unit } = state;
+  const { feature, measurement_type, organism, organs, celltypes, average, topNExp, unit } = state;
   const imageRef = useRef(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
@@ -93,16 +93,25 @@ const HighestMeasurement = ({ state }) => {
   };
 
   // Render image map component
-  const renderImageMap = () => (
-    <ImageMapper
-      ref={imageRef}
-      src={require(`../../asset/anatomy/grey_${organism}.jpg`)}
-      map={{ name: `${organism}-map`, areas: areas }}
-      onMouseEnter={handleMouseEnter}
-      width={450}
-      height={450}
-    />
-  );
+  const renderImageMap = () => {
+    let imagePathPrefix;
+    // Check if the measurement type is chromatin_accessibility
+    if (measurement_type === "chromatin_accessibility") {
+      imagePathPrefix = `grey_${organism}_chromatin`;
+    } else {
+      imagePathPrefix = `grey_${organism}`;
+    }
+
+    return (
+      <ImageMapper
+        src={require(`../../asset/anatomy/${imagePathPrefix}.jpg`)}
+        map={{ name: `${organism}-map`, areas: areas }}
+        onMouseEnter={handleMouseEnter}
+        width={450}
+        height={450}
+      />
+    );
+  }
 
   // Render color bar legend
   const renderColorBar = () => (

@@ -369,7 +369,7 @@ const highestMeasurement = (context) => {
     organs: organs,
     celltypes: celltypes,
     feature: context.features,
-    measurement_type: context.measurement_type,
+    measurement_type: context.response.data.measurement_type,
     celltypesOrgan: celltypesOrgan,
     yaxis: context.response.data.average,
     average: context.response.data.average,
