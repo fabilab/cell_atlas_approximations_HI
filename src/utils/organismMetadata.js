@@ -106,11 +106,6 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/d_rerio.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Zebrafish",
     category: "Animal",
-    organs: {
-      "Whole": {
-          coords: "247,35,203,70,177,131,175,159,162,228,173,300,199,370,228,422,342,426,408,415,412,346,395,264,358,176,310,109,287,67"
-      },
-    },
   },
   "f_vesca": {
     bioName: "Fragaria vesca",
