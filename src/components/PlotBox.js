@@ -10,6 +10,7 @@ import CellxOrganTable from './plots/CellxOrganTable';
 import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
 import CoexpressScatter from './plots/CoexpressScatter';
+import HighestMeasurement from './plots/HighestMeasurement';
 import OrganxOrganismTable from './plots/OrganxOrganismTable';
 
 const plotStyle = {
@@ -30,7 +31,7 @@ const PlotBox = ({ state }) => {
             state={state}
           />
         </div>
-      );
+      )
     case 'fractionDetected':
     case 'fractionDetectedAcrossOrgans':
       return (
@@ -39,8 +40,15 @@ const PlotBox = ({ state }) => {
             state={state}
           />
         </div>
-      );
+      )
     case 'highestMeasurement':
+      return (
+        <div>
+          <HighestMeasurement
+            state={state}
+          />
+        </div>
+      )
     case 'similarCelltypes':
       return (
         <div style={plotStyle}>

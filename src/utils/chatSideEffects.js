@@ -1,4 +1,4 @@
-import atlasapprox from "@fabilab/atlasapprox";
+import atlasapprox, { highest_measurement } from "@fabilab/atlasapprox";
 import {
   buildAPIParams,
   buildAnswer,
@@ -121,11 +121,19 @@ export const updateChat = async (response, plotState) => {
     }
 
     if (
-      mainIntent === "similar_features" ||
-      mainIntent === "highest_measurement"
+      mainIntent === "similar_features"
     ) {
       params.feature = params.features;
       delete params.features;
+    }
+
+    // Use the first API call to construct answer, and the second API call to generate plots
+    if (
+       mainIntent === "highest_measurement"
+    ) {
+      params.feature = params.features;
+      delete params.features;
+      extraEndpointsToCall.push("highest_measurement")
     }
 
     if (intent === "feature_sequences.geneExpression") {
@@ -302,9 +310,15 @@ export const updateChat = async (response, plotState) => {
           const allGenes = getAllGenes(apiData.queries, targetGenes);
           params.features = [...new Set(allGenes)];
         }
+      } else if (e === "highest_measurement") {
+        params.per_organ = true;
+        // Rename items in the apiData for bot answer and original bar chart
+        apiData = {
+          topNCelltypes: apiData.celltypes,
+          topNOrgans: apiData.organs,
+          topNExp: apiData.average,
+        };
       }
-      params.features = [...new Set(params.features)];
-
       let extraApiData = await atlasapprox[e](params);
       apiData = { ...apiData, ...extraApiData };
     }
