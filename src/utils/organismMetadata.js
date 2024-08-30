@@ -12,11 +12,17 @@ const organismMetadata = {
   "a_thaliana": {
     bioName: "Arabidopsis thaliana",
     commonName: "Thale cress",
-    dataSource: "Shahan et al 2022",
+    dataSource: [
+      `[root]: Shahan et al 2022 "A single-cell Arabidopsis root atlas reveals developmental trajectories in wild-type and cell identity mutants"`,
+      `[shoot]: Xu et al 2024 "Large-scale single-cell profiling of stem cells uncovers redundant regulators of shoot development and yield trait variation"`
+    ],
     about: "Arabidopsis thaliana is a small flowering plant widely used as a model organism in plant biology.",
     imagePath: require("../asset/organisms/a_thaliana.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Arabidopsis_thaliana",
-    paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S1534580722000338",
+    paperHyperlink: [
+      "https://www.sciencedirect.com/science/article/pii/S1534580722000338",
+      "https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1"
+    ],
     category: "Plant",
     organs: {
       "shoot": { coords: "251,6,249,11,242,15,238,24,235,33,234,49,230,55,237,61,232,81,240,85,246,76,255,70,264,69,272,66,273,57,264,58,255,62,264,49,267,39,266,28,258,23,262,15,260,8", shape: "poly" },
