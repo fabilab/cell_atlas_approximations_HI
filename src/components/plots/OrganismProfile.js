@@ -16,7 +16,7 @@ const OrganismProfile = ({ state }) => {
     const [imagePath, setImagePath] = useState(null);
     const [bioName, setBioName] = useState("Unknown");
     const [commonName, setCommonName] = useState("Unknown");
-    const [dataSource, setDataSource] = useState("Data source not available");
+    const [dataSource, setDataSource] = useState(null);
     const [description, setDescription] = useState("Description not available");
     const [descriptionHyperlink, setDescriptionHyperlink] = useState("Hyperlink unavailable");
     const [paperHyperlink, setPaperHyperlink] = useState("Hyperlink unavailable");
@@ -162,6 +162,29 @@ const OrganismProfile = ({ state }) => {
         );
     };
 
+    const renderDataSource = () => {
+        if (Array.isArray(dataSource) && Array.isArray(paperHyperlink)) {
+            return (
+                <div>
+                    <p>Data source:</p>
+                    {dataSource.map((source, index) => (
+                        <p key={index}>
+                            <a href={paperHyperlink[index]} style={{color: '#0958d9'}} target="_blank" rel="noreferrer">
+                                {source}
+                            </a>
+                        </p>
+                    ))}
+                </div>
+            );
+        } else {
+            return (
+                <p>
+                    Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noreferrer">{dataSource}</a>
+                </p>
+            );
+        }
+    };
+
     return (
         <div style={{  width: "inherit"}}>
             <div style={{display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 3%"}}>
@@ -176,7 +199,7 @@ const OrganismProfile = ({ state }) => {
                 <div>
                     <h2 style={{fontSize: "1.3em"}}>{bioName}</h2>
                     <p >Common name: {commonName}</p>
-                    <p>Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noreferrer">{dataSource}</a></p>
+                    {renderDataSource()}
                 </div>
             </div>
             <div style={{padding: "1% 3%"}}>

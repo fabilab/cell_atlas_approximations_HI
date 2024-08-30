@@ -12,12 +12,24 @@ const organismMetadata = {
   "a_thaliana": {
     bioName: "Arabidopsis thaliana",
     commonName: "Thale cress",
-    dataSource: "Shahan et al 2022",
+    dataSource: [
+      `[root]: Shahan et al 2022 "A single-cell Arabidopsis root atlas reveals developmental trajectories in wild-type and cell identity mutants"`,
+      `[shoot]: Xu et al 2024 "Large-scale single-cell profiling of stem cells uncovers redundant regulators of shoot development and yield trait variation"`
+    ],
     about: "Arabidopsis thaliana is a small flowering plant widely used as a model organism in plant biology.",
     imagePath: require("../asset/organisms/a_thaliana.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Arabidopsis_thaliana",
-    paperHyperlink: "https://www.sciencedirect.com/science/article/pii/S1534580722000338",
+    paperHyperlink: [
+      "https://www.sciencedirect.com/science/article/pii/S1534580722000338",
+      "https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1"
+    ],
     category: "Plant",
+    organs: {
+      "shoot": { coords: "251,6,249,11,242,15,238,24,235,33,234,49,230,55,237,61,232,81,240,85,246,76,255,70,264,69,272,66,273,57,264,58,255,62,264,49,267,39,266,28,258,23,262,15,260,8", shape: "poly" },
+      "root": { coords: "198,439,192,453,186,476,183,501,172,520,159,536,184,516,196,492,206,461,215,451,218,457,195,510,172,538,193,519,207,500,226,467,242,472,243,486,234,504,217,529,212,550,215,564,229,588,220,558,225,533,237,515,261,476,264,496,257,525,263,538,279,553,266,524,274,509,279,477,269,463,288,473,293,488,307,502,325,505,353,502,324,500,310,492,291,463,265,452,249,439,241,419,225,436,212,455", shape: "poly" },
+      "shoot-label": { coords: "424,42,465,61", shape: "rect" },
+      "root-label": { coords: "490,485,531,504", shape: "rect" }
+    }
   },
   "c_elegans": {
     bioName: "Caenorhabditis elegans",
@@ -100,11 +112,6 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/d_rerio.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Zebrafish",
     category: "Animal",
-    organs: {
-      "Whole": {
-          coords: "247,35,203,70,177,131,175,159,162,228,173,300,199,370,228,422,342,426,408,415,412,346,395,264,358,176,310,109,287,67"
-      },
-    },
   },
   "f_vesca": {
     bioName: "Fragaria vesca",
@@ -494,7 +501,7 @@ const organismMetadata = {
       "gut-label": {coords: "915,550,1039,588", "shape": "rect"},
       "bladder-label": {coords: "915,604,1091,645", "shape": "rect"},
       "muscle-label": {coords: "914,820,1079,865", "shape": "rect"}
-    }  
+    }
   },
   "z_mays": {
     bioName: "Zea mays",
