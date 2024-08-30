@@ -5,10 +5,17 @@ import { Popover, Button } from 'antd';
 import orgMeta from '../../utils/organismMetadata.js';
 
 const BarChart = ({ state }) => {
-  let { plotType, celltypesOrgan, targetCelltype, average, organism, features, unit } = state;
+  let { plotType, celltypesOrgan, targetCelltype, average, organism, feature, unit } = state;
   let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
   let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   let xValue = celltypesOrgan;
+  // Determine the appropriate URL based on the organism
+  let geneLinkUrl;
+  if (organism === 'h_sapiens') {
+    geneLinkUrl = `https://www.genecards.org/cgi-bin/carddisp.pl?gene=${feature}`;
+  } else if (organism === 'm_musculus') {
+    geneLinkUrl = `https://asia.ensembl.org/Mus_musculus/Gene/Summary?g=${feature}`;
+  }
 
   let title = '';
   let yLabel = '';
@@ -18,7 +25,11 @@ const BarChart = ({ state }) => {
       yLabel = `Distance`;
       break;
     case "highestMeasurement":
-      title = `<b>Highest expressor of ${features} in ${organism}</b>`;
+      if (organism === "h_sapiens" || organism === "m_musculus") {
+        title = `<b>Highest expressor of <i><a href="${geneLinkUrl}" target="_blank">${feature}</a></i> in ${organism}</b>`;
+      } else {
+        title = `<b>Highest expressor of <i>${feature}</i> in ${organism}</b>`;
+      }
       yLabel = unit;
       break;
     default:

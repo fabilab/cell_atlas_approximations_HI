@@ -119,7 +119,6 @@ const OrganismProfile = ({ state }) => {
                 <img 
                     src={imagePath} 
                     alt={organism} 
-                    // style={{width: "8%", height: "auto", paddingRight: "8%"}}
                     width={350}
                     height={350}
                 />
