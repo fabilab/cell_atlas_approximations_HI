@@ -1,4 +1,4 @@
-import atlasapprox, { highest_measurement } from "@fabilab/atlasapprox";
+import atlasapprox from "@fabilab/atlasapprox";
 import {
   buildAPIParams,
   buildAnswer,
