@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import orgMeta from '../../utils/organismMetadata.js'; 
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
@@ -10,7 +10,6 @@ const { Text } = Typography;
 const OrganismProfile = ({ state }) => {
     let { organism, organs, measurement_type } = state;
 
-    const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
     const [clickedOrgan, setClickedOrgan] = useState(null);
     const [apiCellOrgan, setApiCellOrgan] = useState(null);
@@ -145,10 +144,10 @@ const OrganismProfile = ({ state }) => {
         });
     
         return ( 
+            // eslint-disable-next-line
             <ImageMapper 
-                ref={imageRef}
                 map={{ name: `${organism}-map`, areas: areas }}
-                onMouseEnter={(area, index, event) => handleOrganClick(area)}
+                onMouseEnter={(area) => handleOrganClick(area)}
                 onLoad={handleImageLoad}
                 width={480}
                 stayHighlighted={true}

@@ -101,6 +101,7 @@ const HighestMeasurement = ({ state }) => {
     }
 
     return (
+      // eslint-disable-next-line
       <ImageMapper
         src={require(`../../asset/anatomy/${imagePathPrefix}.jpg`)}
         map={{ name: `${organism}-map`, areas: areas }}
