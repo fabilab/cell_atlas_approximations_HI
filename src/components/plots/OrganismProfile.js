@@ -4,6 +4,7 @@ import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
 import { Typography } from 'antd';
 import OrganCellChart from './OrganCellChart.js';
+import { scaleImage } from '../../utils/plotHelpers/scaleImage.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ state }) => {
@@ -43,26 +44,9 @@ const OrganismProfile = ({ state }) => {
             }
         } else {
             let imageWithDimensions = require(`../../asset/anatomy/${organism}.jpg`);
-            loadImageAndCalculateDimensions(imageWithDimensions, setScalingFactors)
+            scaleImage(imageWithDimensions, 480, setScalingFactors)
         }
     }
-
-    const loadImageAndCalculateDimensions = (imagePath, setScalingFactors) => {
-        const img = new Image();
-        img.src = imagePath;
-        img.onload = () => {
-            const intrinsicDimensions = {
-                width: img.naturalWidth,
-                height: img.naturalHeight,
-            };
-            const renderedSize = 480;
-            setScalingFactors({
-                width: renderedSize / intrinsicDimensions.width,
-                height: renderedSize / intrinsicDimensions.height,
-            });
-        };
-    };
-
 
     useEffect(() => {
         if (organism) {
