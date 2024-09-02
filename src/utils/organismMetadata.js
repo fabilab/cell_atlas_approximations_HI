@@ -69,7 +69,6 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/d_melanogaster.jpeg"),
     descriptionHyperlink:"https://en.wikipedia.org/wiki/Drosophila_melanogaster",
     paperHyperlink: "https://www.science.org/doi/10.1126/science.abk2432",
-    intrinsicDimensions: { width: 925, height: 817 },
     category: "Animal",
     organs: {
       "antenna": {coords: "344,80,400,160,424,153"},
@@ -142,7 +141,6 @@ const organismMetadata = {
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
     paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896",
     category: "Animal",
-    intrinsicDimensions: { width: 1361, height: 1361 },
     organs: {
       "brain": {coords: "682,38,668,32,656,38,647,49,644,61,649,85,656,95,668,97,681,107,689,107,701,99,712,91,715,79,719,65,712,47,701,36,690,32"},
       "brain-label": {coords: "865,39,1036,87", shape: "rect"},
@@ -248,7 +246,6 @@ const organismMetadata = {
     imagePath: require("../asset/organisms/m_musculus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/House_mouse",
     paperHyperlink: "https://www.nature.com/articles/s41586-020-2496-1",
-    intrinsicDimensions: { width: 1134, height: 1227 },
     category: "Animal",
     organs: {
       "skin": {coords: "454,249,436,301,434,328,456,328,483,321,466,287"},
@@ -294,7 +291,6 @@ const organismMetadata = {
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Gray_mouse_lemur",
     paperHyperlink:"https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2",
     category: "Animal",
-    intrinsicDimensions: { width: 1126, height: 1046 },
     organs: {
       "eye": {coords: "528,70,486,130,480,112,487,93,505,75"},
       "skin": {coords: "357,183,429,323,405,312,385,293,371,260"},
@@ -464,7 +460,6 @@ const organismMetadata = {
     about: "Xenopus laevis is a species of African aquatic frog. It is a model organism for cell biology and development.",
     imagePath: require("../asset/organisms/x_laevis.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/African_clawed_frog",
-    intrinsicDimensions: { width: 1110, height: 1115 },
     category: "Animal",
     organs: {
       "heart": {coords: "531,263,520,273,527,285,527,291,512,309,506,332,509,352,513,369,528,381,544,381,556,374,570,358,574,342,577,324,573,305,563,297,574,288,571,274,559,277,544,294"},

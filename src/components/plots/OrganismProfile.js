@@ -23,9 +23,11 @@ const OrganismProfile = ({ state }) => {
     const [loading, setLoading] = useState(true);
     let params = {};
 
+    // fetch cell type abundance data for organism with single organ
     const fetchOrganData = async () => {
         let numOrgans = organs.length;
         let organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
+        setImagePath(organismImagePath);
         if (numOrgans < 2) {
             try {
                 params = {
@@ -40,17 +42,27 @@ const OrganismProfile = ({ state }) => {
                 console.error("Error fetching cell types:", error);
             }
         } else {
-            const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
-            if (intrinsicDimensions) {
-                const renderedSize = 480;
-                setScalingFactors({
-                    width: renderedSize / intrinsicDimensions.width,
-                    height: renderedSize / intrinsicDimensions.height,
-                });
-            }
+            let imageWithDimensions = require(`../../asset/anatomy/${organism}.jpg`);
+            loadImageAndCalculateDimensions(imageWithDimensions, setScalingFactors)
         }
-        setImagePath(organismImagePath);
     }
+
+    const loadImageAndCalculateDimensions = (imagePath, setScalingFactors) => {
+        const img = new Image();
+        img.src = imagePath;
+        img.onload = () => {
+            const intrinsicDimensions = {
+                width: img.naturalWidth,
+                height: img.naturalHeight,
+            };
+            const renderedSize = 480;
+            setScalingFactors({
+                width: renderedSize / intrinsicDimensions.width,
+                height: renderedSize / intrinsicDimensions.height,
+            });
+        };
+    };
+
 
     useEffect(() => {
         if (organism) {
