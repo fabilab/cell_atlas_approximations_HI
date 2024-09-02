@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ImageMapper from "react-img-mapper";
 import HighestMeasurementBar from "./HighestMeasurementBar";
 import orgMeta from "../../utils/organismMetadata.js";
 import { scaleLinear } from "d3-scale";
 import { Typography } from "antd";
 import BarChart from "./BarChart.js";
+import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
 
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
   const { feature, measurement_type, organism, organs, celltypes, average, topNExp, unit } = state;
-  const imageRef = useRef(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
   const [organData, setOrganData] = useState([]);
@@ -38,22 +38,20 @@ const HighestMeasurement = ({ state }) => {
   useEffect(() => {
     if (!hasMultipleOrgans) return;
 
-    const updateScalingFactors = () => {
-      const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
-      const renderedWidth = imageRef.current?.clientWidth || 450;
-      const renderedHeight = imageRef.current?.clientHeight || 450;
+    let imagePathPrefix;
+    // Check if the measurement type is chromatin_accessibility
+    if (measurement_type === "chromatin_accessibility") {
+      imagePathPrefix = `grey_${organism}_chromatin`;
+    } else {
+      imagePathPrefix = `grey_${organism}`;
+    }
+    let imageWithDimensions = require(`../../asset/anatomy/${imagePathPrefix}.jpg`);
 
-      setScalingFactors({
-        width: renderedWidth / intrinsicDimensions.width,
-        height: renderedHeight / intrinsicDimensions.height,
-      });
-    };
+    scaleImage(imageWithDimensions, 450, setScalingFactors)
+    window.addEventListener("resize", scaleImage(imageWithDimensions, 450, setScalingFactors));
 
-    updateScalingFactors();
-    window.addEventListener("resize", updateScalingFactors);
-
-    return () => window.removeEventListener("resize", updateScalingFactors);
-  }, [organism, hasMultipleOrgans]);
+    return () => window.removeEventListener("resize", scaleImage(imageWithDimensions, 450, setScalingFactors));
+  }, [organism, hasMultipleOrgans, measurement_type]);
 
   // Generate image map areas
   const areas = Object.entries(orgMeta[organism]?.organs || {}).map(([organ, metadata]) => {
