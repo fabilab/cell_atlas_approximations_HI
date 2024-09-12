@@ -1,4 +1,4 @@
-import transpose from "./plotHelpers.js/math";
+import transpose from "./plotHelpers/math.js";
 
 const exploreOrganism = (context) => {
   let organism = context.organism;

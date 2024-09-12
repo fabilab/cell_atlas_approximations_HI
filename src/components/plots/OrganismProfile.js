@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import orgMeta from '../../utils/organismMetadata.js'; 
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from 'react-img-mapper';
 import { Typography } from 'antd';
 import OrganCellChart from './OrganCellChart.js';
+import { scaleImage } from '../../utils/plotHelpers/scaleImage.js';
 const { Text } = Typography;
 
 const OrganismProfile = ({ state }) => {
     let { organism, organs, measurement_type } = state;
 
-    const imageRef = useRef(null);
     const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
     const [clickedOrgan, setClickedOrgan] = useState(null);
     const [apiCellOrgan, setApiCellOrgan] = useState(null);
@@ -23,9 +23,11 @@ const OrganismProfile = ({ state }) => {
     const [loading, setLoading] = useState(true);
     let params = {};
 
+    // fetch cell type abundance data for organism with single organ
     const fetchOrganData = async () => {
         let numOrgans = organs.length;
         let organismImagePath = require(`../../asset/organisms/${organism}.jpeg`);
+        setImagePath(organismImagePath);
         if (numOrgans < 2) {
             try {
                 params = {
@@ -40,16 +42,9 @@ const OrganismProfile = ({ state }) => {
                 console.error("Error fetching cell types:", error);
             }
         } else {
-            const intrinsicDimensions = orgMeta[organism]?.intrinsicDimensions;
-            if (intrinsicDimensions) {
-                const renderedSize = 480;
-                setScalingFactors({
-                    width: renderedSize / intrinsicDimensions.width,
-                    height: renderedSize / intrinsicDimensions.height,
-                });
-            }
+            let imageWithDimensions = require(`../../asset/anatomy/${organism}.jpg`);
+            scaleImage(imageWithDimensions, 480, setScalingFactors)
         }
-        setImagePath(organismImagePath);
     }
 
     useEffect(() => {
@@ -149,10 +144,10 @@ const OrganismProfile = ({ state }) => {
         });
     
         return ( 
+            // eslint-disable-next-line
             <ImageMapper 
-                ref={imageRef}
                 map={{ name: `${organism}-map`, areas: areas }}
-                onMouseEnter={(area, index, event) => handleOrganClick(area)}
+                onMouseEnter={(area) => handleOrganClick(area)}
                 onLoad={handleImageLoad}
                 width={480}
                 stayHighlighted={true}
