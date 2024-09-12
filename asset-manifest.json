@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.19dc097e.css",
-    "main.js": "/static/js/main.c175e054.js",
+    "main.js": "/static/js/main.c8482448.js",
     "static/media/t_aestivum.jpeg": "/static/media/t_aestivum.88be02293c0b0d38b936.jpeg",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/d_rerio.jpeg": "/static/media/d_rerio.f86bab91a7da519c8481.jpeg",
@@ -64,15 +64,16 @@
     "static/media/c_gigas.jpeg": "/static/media/c_gigas.b78854c54f985642d7f3.jpeg",
     "static/media/a_thaliana.jpg": "/static/media/a_thaliana.9273509d8a440a69788a.jpg",
     "static/media/x_laevis.jpeg": "/static/media/x_laevis.8e764c19ea74b9c26d07.jpeg",
+    "static/media/grey_a_thaliana.jpg": "/static/media/grey_a_thaliana.0c1a39b49a71e2638b37.jpg",
     "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.bc3722686635b5f86132.woff2",
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/index.html",
     "main.19dc097e.css.map": "/static/css/main.19dc097e.css.map",
-    "main.c175e054.js.map": "/static/js/main.c175e054.js.map"
+    "main.c8482448.js.map": "/static/js/main.c8482448.js.map"
   },
   "entrypoints": [
     "static/css/main.19dc097e.css",
-    "static/js/main.c175e054.js"
+    "static/js/main.c8482448.js"
   ]
 }
