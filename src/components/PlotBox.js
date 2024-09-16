@@ -11,6 +11,7 @@ import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
 import CoexpressScatter from './plots/CoexpressScatter';
 import HighestMeasurement from './plots/HighestMeasurement';
+import HighestMeasurementMultiple from './plots/HighestMeasurementMultiple';
 import OrganxOrganismTable from './plots/OrganxOrganismTable';
 
 const plotStyle = {
@@ -45,6 +46,14 @@ const PlotBox = ({ state }) => {
       return (
         <div>
           <HighestMeasurement
+            state={state}
+          />
+        </div>
+      )
+    case 'highestMeasurementMultiple':
+      return (
+        <div>
+          <HighestMeasurementMultiple
             state={state}
           />
         </div>
