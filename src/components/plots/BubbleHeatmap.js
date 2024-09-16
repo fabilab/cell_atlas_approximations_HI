@@ -24,6 +24,7 @@ const YlGnBu = [
 const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene }) => {
 
   let { plotType, xaxis, yaxis, average, fractions, organism, organ, celltype, unit, hasLog, measurement_type, queriedGenes, isSurface } = state;
+  console.log(state)
   const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
   let yTickTexts;
   if (organism === 'h_sapiens' && measurement_type === 'gene_expression') {

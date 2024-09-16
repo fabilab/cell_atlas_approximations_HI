@@ -355,7 +355,6 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
-  
   let organism = context.organism;
   let organs = context.response.data.organs;
   let celltypes = context.response.data.celltypes;
@@ -370,6 +369,7 @@ const highestMeasurement = (context) => {
       return c + " (" + organs[index] + ")";
     });
     let score = context.response.data.score;
+    let fraction_detected = context.response.data.fraction_detected
     return {
       plotType: "highestMeasurementMultiple",
       organism: organism,
@@ -380,6 +380,7 @@ const highestMeasurement = (context) => {
       celltypesOrgan: celltypesOrgan,
       yaxis: average,
       average: average,
+      fractions: fraction_detected,
       score: score,
       unit: unit,
     }
