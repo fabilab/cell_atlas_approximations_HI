@@ -355,29 +355,59 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
+  
+  let organism = context.organism;
   let organs = context.response.data.organs;
   let celltypes = context.response.data.celltypes;
-  let topNCelltypes = context.response.data.topNCelltypes;
-  let topNOrgans = context.response.data.topNOrgans;
-  const celltypesOrgan = topNCelltypes?.map((c, index) => {
-    return c + " (" + topNOrgans[index] + ")";
-  });
+  let features = context.response.data.features || null;
+  let measurement_type = context.response.data.measurement_type;
+  let average = context.response.data.average;
+  let unit = context.response.data.unit;
 
-  return {
-    plotType: "highestMeasurement",
-    organism: context.organism,
-    organs: organs,
-    celltypes: celltypes,
-    feature: context.features,
-    measurement_type: context.response.data.measurement_type,
-    celltypesOrgan: celltypesOrgan,
-    yaxis: context.response.data.average,
-    average: context.response.data.average,
-    topNCelltypes: context.response.data.topNCelltypes,
-    topNOrgans: context.response.data.topNOrgans,
-    topNExp: context.response.data.topNExp,
-    unit: context.response.data.unit,
-  };
+  // if features provided
+  if (features) {
+    let celltypesOrgan = celltypes?.map((c, index) => {
+      return c + " (" + organs[index] + ")";
+    });
+    let score = context.response.data.score;
+    return {
+      plotType: "highestMeasurementMultiple",
+      organism: organism,
+      organs: organs,
+      celltypes: celltypes,
+      features: features,
+      measurement_type: measurement_type,
+      celltypesOrgan: celltypesOrgan,
+      yaxis: average,
+      average: average,
+      score: score,
+      unit: unit,
+    }
+  } 
+  // if only one feature present
+  else {
+    let topNCelltypes = context.response.data.topNCelltypes;
+    let topNOrgans = context.response.data.topNOrgans;
+    let celltypesOrgan = topNCelltypes?.map((c, index) => {
+      return c + " (" + topNOrgans[index] + ")";
+    });
+
+    return {
+      plotType: "highestMeasurement",
+      organism: organism,
+      organs: organs,
+      celltypes: celltypes,
+      feature: context.features,
+      measurement_type: measurement_type,
+      celltypesOrgan: celltypesOrgan,
+      yaxis: average,
+      average: average,
+      topNCelltypes: context.response.data.topNCelltypes,
+      topNOrgans: context.response.data.topNOrgans,
+      topNExp: context.response.data.topNExp,
+      unit: unit,
+    };
+  }
 };
 
 const similarFeatures = (context) => {

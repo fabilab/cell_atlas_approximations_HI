@@ -54,7 +54,6 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
-
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -65,7 +64,6 @@ export const updateChat = async (response, plotState) => {
     endpoint,
     params;
   let extraEndpointsToCall = [];
-
   // this is defined to store celltypes and organ for celltypes intent.
   let targetCelltypes, targetOrgan;
   if (intent === "None") {
@@ -120,20 +118,23 @@ export const updateChat = async (response, plotState) => {
       params.measurement_type = "chromatin_accessibility";
     }
 
-    if (
-      mainIntent === "similar_features"
-    ) {
+    if (mainIntent === "similar_features") {
       params.feature = params.features;
       delete params.features;
     }
 
     // Use the first API call to construct answer, and the second API call to generate plots
-    if (
-       mainIntent === "highest_measurement"
-    ) {
-      params.feature = params.features;
-      delete params.features;
-      extraEndpointsToCall.push("highest_measurement")
+    if (mainIntent === "highest_measurement") {
+      // if multiple features
+      if (params.features.split(',').length > 1) {
+        endpoint = "highest_measurement_multiple";
+      } 
+      // else for single feature
+      else { 
+        params.feature = params.features;
+        delete params.features;
+        extraEndpointsToCall.push("highest_measurement");
+      }
     }
 
     if (intent === "feature_sequences.geneExpression") {
@@ -282,7 +283,10 @@ export const updateChat = async (response, plotState) => {
         params.features = [...apiData[endpoint]];
         params.features.push(params.feature);
         delete params.celltype;
-      } else if (intent === "markers.geneExpression" || intent === "markers.chromatinAccessibility") {
+      } else if (
+        intent === "markers.geneExpression" ||
+        intent === "markers.chromatinAccessibility"
+      ) {
         params.features = [...apiData[endpoint]];
         delete params.celltype;
       } else if (intent === "markers.geneExpression.across_organs") {
