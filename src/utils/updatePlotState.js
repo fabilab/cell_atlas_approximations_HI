@@ -14,11 +14,16 @@ const exploreOrganism = (context) => {
 };
 
 const addFeatures = (context) => {
+
   let features = context.features;
   let measurement_type = context.plotState.measurement_type;
   if (context.plotState.plotType === "neighborhood") {
     return updateNeighbor(context);
-  } else if (!context.plotState.fractions) {
+  } 
+  else if (context.plotState.plotType === "highestMeasurementMultiple") {
+    return highestMeasurement({...context, features, measurement_type });
+  }
+  else if (!context.plotState.fractions) {
     return updateAverage({ ...context, features, measurement_type });
   } else {
     return updateFractions({ ...context, features, measurement_type });
@@ -29,7 +34,11 @@ const removeFeatures = (context) => {
   let features = context.features;
   if (context.plotState.plotType === "neighborhood") {
     return updateNeighbor(context);
-  } else if (!context.plotState.fractions) {
+  } 
+  else if (context.plotState.plotType === "highestMeasurementMultiple") {
+    return highestMeasurement({...context, features });
+  }
+  else if (!context.plotState.fractions) {
     return updateAverage({ ...context, features });
   } else {
     return updateFractions({ ...context, features });

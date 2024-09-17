@@ -14,7 +14,7 @@ const YlGnBu = [
 ];
 
 const BubbleHeatmap = ({ state }) => {
-  let { celltypesOrgan, features, average, fraction_detected, organism, unit, hasLog, measurement_type } = state;
+  let { celltypesOrgan, features, average, fraction_detected, organism, unit, hasLog } = state;
 
   if (hasLog) {
     average = average.map((row) => row.map((value) => Math.log10(value)));
