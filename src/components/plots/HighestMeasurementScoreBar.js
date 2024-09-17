@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 const HighestMeasurementScoreBar = ({ state }) => {
   const { organism, celltypesOrgan, score } = state;
   let yValue = score.map((x) => Number(x.toPrecision(3)));
-
+  
   let trace1 = {
     x: celltypesOrgan,
     y: score,
@@ -21,29 +21,23 @@ const HighestMeasurementScoreBar = ({ state }) => {
     },
   };
   let layout = {
-    width: "100%",
+    width: celltypesOrgan.length * 40 + 300,
     height: "100%",
     xaxis: {
       automargin: true,
       title: {
         text: "Cell types(Organs)",
-        font: {
-          size: 16,
-        },
-        standoff: 10,
+        standoff: 20,
       },
       tickangle: 270,
     },
     yaxis: {
       title: {
         text: "score",
-        font: {
-          size: 16,
-        },
-        standoff: 10,
+        standoff: 20,
       },
     },
-    title: `Expression score of genes across ${organism} cell type (organ) combination`,
+    title: `<b>Expression score of genes across ${organism} top cell types & organs<b>`,
   };
 
   let data = [trace1];

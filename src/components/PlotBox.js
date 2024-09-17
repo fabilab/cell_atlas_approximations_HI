@@ -52,7 +52,7 @@ const PlotBox = ({ state }) => {
       )
     case 'highestMeasurementMultiple':
       return (
-        <div>
+        <div style={plotStyle}>
           <HighestMeasurementMultiple
             state={state}
           />

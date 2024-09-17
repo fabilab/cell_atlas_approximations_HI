@@ -9,7 +9,6 @@ const HighestMeasurementBar = ({
   organData,
   hoveredOrgan,
   feature,
-  organism,
   unit,
 }) => {
   const [cellTypes, setCellTypes] = useState([]);
@@ -43,9 +42,6 @@ const HighestMeasurementBar = ({
       ]}
       layout={{
         title: {
-          font: {
-            size: 15,
-          },
           text: `average expression of <i>${feature}</i> in ${hoveredOrgan}`,
         },
         width: 450,
