@@ -1,4 +1,5 @@
 import Plot from "react-plotly.js";
+
 const HighestMeasurementScoreBar = ({ state }) => {
   const { organism, celltypesOrgan, score } = state;
   let yValue = score.map((x) => Number(x.toPrecision(3)));

@@ -42,7 +42,10 @@ const toggleLog = (context) => {
     return updateNeighbor(context);
   } else if (context.plotState.plotType === "coexpressScatter") {
     return updateComeasurement(context);
-  } else {
+  } else if (context.plotState.plotType === "highestMeasurementMultiple") {
+    return highestMeasurement(context);
+  }
+  else {
     if (!context.plotState.fractions) {
       return updateAverage(context);
     } else {
@@ -355,21 +358,24 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
+
   let organism = context.organism;
-  let organs = context.response.data.organs;
-  let celltypes = context.response.data.celltypes;
-  let features = context.response.data.features || null;
-  let measurement_type = context.response.data.measurement_type;
-  let average = context.response.data.average;
-  let unit = context.response.data.unit;
+  let data_path = context.response.data ? context.response.data : context.plotState;
+  let organs = data_path.organs;
+  let celltypes = data_path.celltypes;
+  let features = data_path.features || null;
+  let measurement_type = data_path.measurement_type;
+  let average = data_path.average;
+  let unit = data_path.unit;
 
   // if features provided
   if (features) {
     let celltypesOrgan = celltypes?.map((c, index) => {
       return c + " (" + organs[index] + ")";
     });
-    let score = context.response.data.score;
-    let fraction_detected = context.response.data.fraction_detected
+    let score = data_path.score;
+    let fraction_detected = data_path.fraction_detected;
+    let hasLog = context.plotState.hasLog;
     return {
       plotType: "highestMeasurementMultiple",
       organism: organism,
@@ -380,9 +386,10 @@ const highestMeasurement = (context) => {
       celltypesOrgan: celltypesOrgan,
       yaxis: average,
       average: average,
-      fractions: fraction_detected,
+      fraction_detected: fraction_detected,
       score: score,
       unit: unit,
+      hasLog,
     }
   } 
   // if only one feature present

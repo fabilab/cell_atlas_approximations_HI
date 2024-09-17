@@ -14,7 +14,7 @@ const YlGnBu = [
 ];
 
 const BubbleHeatmap = ({ state }) => {
-  let { plotType, celltypesOrgan, features, average, fractions, organism, organ, unit, hasLog, measurement_type } = state;
+  let { celltypesOrgan, features, average, fraction_detected, organism, unit, hasLog, measurement_type } = state;
 
   if (hasLog) {
     average = average.map((row) => row.map((value) => Math.log10(value)));
@@ -31,9 +31,9 @@ const BubbleHeatmap = ({ state }) => {
     all_x = all_x.concat(celltypesOrgan);
     all_y = all_y.concat(Array(celltypesOrgan.length).fill(features[i]));
     all_color = all_color.concat(average[i].map(value => Number(value.toFixed(3))));
-    all_size = all_size.concat(fractions[i].map((x) => customDotScale(x * 100)));
+    all_size = all_size.concat(fraction_detected[i].map((x) => customDotScale(x * 100)));
     const text = celltypesOrgan.map((cellTypeOrgan, index) => {
-      return `gene: ${features[i]}<br>cell type/organ: ${cellTypeOrgan}<br>expression:${average[i][index]} <br>fraction: ${(fractions[i][index] * 100).toFixed(3)}%`;
+      return `gene: ${features[i]}<br>cell type/organ: ${cellTypeOrgan}<br>expression:${average[i][index]} <br>fraction: ${(fraction_detected[i][index] * 100).toFixed(3)}%`;
     });
     all_hovertext = all_hovertext.concat(text);
   }
