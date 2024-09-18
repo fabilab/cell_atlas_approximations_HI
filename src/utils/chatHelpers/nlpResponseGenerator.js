@@ -195,8 +195,6 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "celltypexorgan":
         answer = "The presence matrix of cell types in " + data.organism + " is shown in the plot. ";
         answer += "<br><br>Type \"<b>download</b>\" to get the table data in CSV format. ";
-
-        
         break;
       case "comeasurement":
         answer = `The plot on the right shows the coexpression of ${typeof data.features === 'string' ? data.features.split(',').join(' and ') : data.features.join(' and ')} across all organs and ${data.by} in ${data.organism}. `;
@@ -219,7 +217,11 @@ const buildAnswer = (intent, plotState, data = null) => {
       case "highest_measurement":
         switch (sIntent) {
           case "geneExpression":
-            answer = "The highest expressors of " + data.feature + " are:";
+            if(data.feature) {
+              answer = "The highest expressors of " + data.feature + " in " + data.organism + " are: <br>";
+            } else if (data.features) {
+              answer = "The highest expressors of " + data.features + " in " + data.organism + " are: <br>";
+            }
             break;
           case "chromatinAccessibility":
             answer = "The cell types with the most accessibility of " + data.feature + " are:";
@@ -227,9 +229,14 @@ const buildAnswer = (intent, plotState, data = null) => {
           default:
             answer = "The highest measurement are in:";
         }
-        for (let i = 0; i < data.topNCelltypes.length; i++)
-          answer += "<br>" + (i+1) + ". " + data.topNCelltypes[i] + " in " + data.topNOrgans[i];
-        break;
+        if (data.features) {
+          for (let i = 0; i < data.celltypes.length; i++)
+            answer += "<br>" + (i+1) + ". " + data.celltypes[i] + " in " + data.organs[i];
+        } else {
+          for (let i = 0; i < data.topNCelltypes.length; i++)
+            answer += "<br>" + (i+1) + ". " + data.topNCelltypes[i] + " in " + data.topNOrgans[i];
+        }
+          break;
       case "add":
         switch (sIntent) {
           case "features":

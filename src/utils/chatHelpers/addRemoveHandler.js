@@ -2,7 +2,6 @@
 // It's applicable for both heatmap,dotplot and cell state plot
 export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
   params.organism = plotState.organism;
-
   if (plotState.plotType.endsWith("AcrossOrgans")) {
     params.celltype = plotState.celltype;
   } else {
@@ -16,12 +15,18 @@ export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
   }
 
   if (mainIntent === "add" && params.features && plotState.features) {
+
     let plotStateGenes;
     if (plotState.plotType === "neighborhood") {
       plotStateGenes = plotState.features;
       endpoint = "neighborhood";
       params.include_embedding = true;
-    } else {
+    } 
+    else if (plotState.plotType === "highestMeasurementMultiple") {
+      plotStateGenes = plotState.features;
+      endpoint = "highest_measurement_multiple"
+    }
+    else {
       plotStateGenes = Array.isArray(plotState.features)
         ? plotState.features
         : plotState.features.split(",").map((gene) => gene.trim());
@@ -36,12 +41,18 @@ export const handleAddRemove = (mainIntent, params, plotState, endpoint) => {
 
   if (mainIntent === "remove" && params.features && plotState.features) {
     let geneArrayA, geneArrayB;
+
     if (plotState.plotType === "neighborhood") {
       geneArrayA = params.features.split(",");
       geneArrayB = plotState.features;
       endpoint = "neighborhood";
       params.include_embedding = true;
-    } else {
+    } else if (plotState.plotType === "highestMeasurementMultiple") {
+      geneArrayA = params.features.split(",");
+      geneArrayB = plotState.features;
+      endpoint = "highest_measurement_multiple";
+    }
+    else {
       geneArrayA = params.features.split(",");
       geneArrayB =
         typeof plotState.features === "string"

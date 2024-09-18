@@ -14,11 +14,16 @@ const exploreOrganism = (context) => {
 };
 
 const addFeatures = (context) => {
+
   let features = context.features;
   let measurement_type = context.plotState.measurement_type;
   if (context.plotState.plotType === "neighborhood") {
     return updateNeighbor(context);
-  } else if (!context.plotState.fractions) {
+  } 
+  else if (context.plotState.plotType === "highestMeasurementMultiple") {
+    return highestMeasurement({...context, features, measurement_type });
+  }
+  else if (!context.plotState.fractions) {
     return updateAverage({ ...context, features, measurement_type });
   } else {
     return updateFractions({ ...context, features, measurement_type });
@@ -29,7 +34,11 @@ const removeFeatures = (context) => {
   let features = context.features;
   if (context.plotState.plotType === "neighborhood") {
     return updateNeighbor(context);
-  } else if (!context.plotState.fractions) {
+  } 
+  else if (context.plotState.plotType === "highestMeasurementMultiple") {
+    return highestMeasurement({...context, features });
+  }
+  else if (!context.plotState.fractions) {
     return updateAverage({ ...context, features });
   } else {
     return updateFractions({ ...context, features });
@@ -42,7 +51,10 @@ const toggleLog = (context) => {
     return updateNeighbor(context);
   } else if (context.plotState.plotType === "coexpressScatter") {
     return updateComeasurement(context);
-  } else {
+  } else if (context.plotState.plotType === "highestMeasurementMultiple") {
+    return highestMeasurement(context);
+  }
+  else {
     if (!context.plotState.fractions) {
       return updateAverage(context);
     } else {
@@ -355,29 +367,64 @@ const similarCelltypes = (context) => {
 };
 
 const highestMeasurement = (context) => {
-  let organs = context.response.data.organs;
-  let celltypes = context.response.data.celltypes;
-  let topNCelltypes = context.response.data.topNCelltypes;
-  let topNOrgans = context.response.data.topNOrgans;
-  const celltypesOrgan = topNCelltypes?.map((c, index) => {
-    return c + " (" + topNOrgans[index] + ")";
-  });
 
-  return {
-    plotType: "highestMeasurement",
-    organism: context.organism,
-    organs: organs,
-    celltypes: celltypes,
-    feature: context.features,
-    measurement_type: context.response.data.measurement_type,
-    celltypesOrgan: celltypesOrgan,
-    yaxis: context.response.data.average,
-    average: context.response.data.average,
-    topNCelltypes: context.response.data.topNCelltypes,
-    topNOrgans: context.response.data.topNOrgans,
-    topNExp: context.response.data.topNExp,
-    unit: context.response.data.unit,
-  };
+  let organism = context.organism;
+  let data_path = context.response.data ? context.response.data : context.plotState;
+  let organs = data_path.organs;
+  let celltypes = data_path.celltypes;
+  let features = data_path.features || null;
+  let measurement_type = data_path.measurement_type;
+  let average = data_path.average;
+  let unit = data_path.unit;
+
+  // if features provided
+  if (features) {
+    let celltypesOrgan = celltypes?.map((c, index) => {
+      return c + " (" + organs[index] + ")";
+    });
+    let score = data_path.score;
+    let fraction_detected = data_path.fraction_detected;
+    let hasLog = context.plotState.hasLog;
+    return {
+      plotType: "highestMeasurementMultiple",
+      organism: organism,
+      organs: organs,
+      celltypes: celltypes,
+      features: features,
+      measurement_type: measurement_type,
+      celltypesOrgan: celltypesOrgan,
+      yaxis: average,
+      average: average,
+      fraction_detected: fraction_detected,
+      score: score,
+      unit: unit,
+      hasLog,
+    }
+  } 
+  // if only one feature present
+  else {
+    let topNCelltypes = context.response.data.topNCelltypes;
+    let topNOrgans = context.response.data.topNOrgans;
+    let celltypesOrgan = topNCelltypes?.map((c, index) => {
+      return c + " (" + topNOrgans[index] + ")";
+    });
+
+    return {
+      plotType: "highestMeasurement",
+      organism: organism,
+      organs: organs,
+      celltypes: celltypes,
+      feature: context.features,
+      measurement_type: measurement_type,
+      celltypesOrgan: celltypesOrgan,
+      yaxis: average,
+      average: average,
+      topNCelltypes: context.response.data.topNCelltypes,
+      topNOrgans: context.response.data.topNOrgans,
+      topNExp: context.response.data.topNExp,
+      unit: unit,
+    };
+  }
 };
 
 const similarFeatures = (context) => {
