@@ -17,7 +17,7 @@ const YlGnBu = [
   [1, "rgb(250,245,182)"],
 ];
 
-const BubbleHeatmap = ({ state }) => {
+const HighestMeasurementBubble = ({ state }) => {
   let {
     celltypesOrgan,
     features,
@@ -117,4 +117,4 @@ const BubbleHeatmap = ({ state }) => {
   return <Plot data={[data]} layout={layout} config={{ responsive: true }} />;
 };
 
-export default BubbleHeatmap;
+export default HighestMeasurementBubble;
