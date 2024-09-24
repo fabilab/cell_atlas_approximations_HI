@@ -70,11 +70,11 @@ const BubbleHeatmap = ({ state }) => {
   }
 
   let numFeatures = features.length;
-  let plotHeight =
-    numFeatures < 4 ? numFeatures * 40 + 300 : numFeatures * 30 + 300;
+  let plotHeight = numFeatures < 8 ? numFeatures * 40 + 300 : numFeatures * 30 + 300;
+  let plotWidth = celltypesOrgan.length * 40 + 380;
 
   let layout = {
-    width: celltypesOrgan.length * 40 + 380,
+    width: plotWidth,
     height: plotHeight,
     xaxis: {
       automargin: true,

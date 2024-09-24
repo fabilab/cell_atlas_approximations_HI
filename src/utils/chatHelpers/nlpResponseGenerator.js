@@ -220,7 +220,11 @@ const buildAnswer = (intent, plotState, data = null) => {
             if(data.feature) {
               answer = "The highest expressors of " + data.feature + " in " + data.organism + " are: <br>";
             } else if (data.features) {
-              answer = "The highest expressors of " + data.features + " in " + data.organism + " are: <br>";
+              if (data.features_negative) {
+                answer = "The cell types in " + data.organism + " that highly express " + data.features + " but do not express " + data.features_negative + " are: <br>";
+              } else {
+                answer = "The highest expressors of " + data.features + " in " + data.organism + " are: <br>";
+              }
             }
             break;
           case "chromatinAccessibility":
@@ -232,6 +236,7 @@ const buildAnswer = (intent, plotState, data = null) => {
         if (data.features) {
           for (let i = 0; i < data.celltypes.length; i++)
             answer += "<br>" + (i+1) + ". " + data.celltypes[i] + " in " + data.organs[i];
+          answer += "<br><br>Type \"<b>log</b>\" to increase the dynamic range of the plot. ";
         } else {
           for (let i = 0; i < data.topNCelltypes.length; i++)
             answer += "<br>" + (i+1) + ". " + data.topNCelltypes[i] + " in " + data.topNOrgans[i];
