@@ -373,12 +373,16 @@ const highestMeasurement = (context) => {
   let organs = data_path.organs;
   let celltypes = data_path.celltypes;
   let features = data_path.features || null;
+  let features_negative = data_path.features_negative || null;
   let measurement_type = data_path.measurement_type;
   let average = data_path.average;
   let unit = data_path.unit;
 
   // if features provided
   if (features) {
+    if (features_negative) {
+      features = [...features, ...features_negative]
+    }
     let celltypesOrgan = celltypes?.map((c, index) => {
       return c + " (" + organs[index] + ")";
     });

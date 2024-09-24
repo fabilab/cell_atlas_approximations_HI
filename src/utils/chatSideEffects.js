@@ -125,11 +125,19 @@ export const updateChat = async (response, plotState) => {
 
     // Use the first API call to construct answer, and the second API call to generate plots
     if (mainIntent === "highest_measurement") {
-      // if multiple features
-      if (params.features.split(',').length > 1) {
+      // Case 1: has both features and negative features
+      if (params.featuresNegative) {
+        params.features_negative = params.featuresNegative;
+        delete params.negativeFeatures;
         endpoint = "highest_measurement_multiple";
       } 
-      // else for single feature
+
+      // Case 2: Multiple features
+      else if (params.features.split(',').length > 1) {
+        endpoint = "highest_measurement_multiple";
+      } 
+      
+      // Case 3: Single feature
       else { 
         params.feature = params.features;
         delete params.features;
