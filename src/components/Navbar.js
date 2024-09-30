@@ -39,7 +39,7 @@ const Navbar = () => {
         <div style={{ display: 'flex'}}>
           <div style={{ fontFamily: "inherit", marginRight: '20px'}}>
             <InfoCircleOutlined />
-            <a href='/#/user-guide' target='_blank' style={navItemStyle} className="tab-link"> User guide</a>
+            <a href='/#/user-guide' id="user-guide-link" target='_blank' style={navItemStyle} className="tab-link"> User guide</a>
           </div>
           <div style={{ marginRight: '20px' }}>
             <CodeOutlined />

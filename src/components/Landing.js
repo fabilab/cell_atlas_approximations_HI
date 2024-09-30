@@ -1,9 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Typography, Row, Col } from 'antd';
 import { RobotOutlined, SendOutlined } from '@ant-design/icons';
 import FeedbackForm from './FeedbackForm';
 import search from '../asset/icon.png';
+// libraries for new user tour
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
+import Cookies from 'js-cookie';
+import { landingTourSteps } from '../utils/tourConfig';
+
 const { Title } = Typography;
 const { Text } = Typography;
 
@@ -13,14 +19,64 @@ const Landing = () => {
 
   const [searchMessage, setSearchMessage] = useState('')
   const navigate = useNavigate();
+  const queryInput = useRef(null);
+  const intro = useRef(introJs());
+
+  // https://introjs.com/docs/tour/options
+  useEffect(() => {
+    intro.current.setOptions({
+      steps: landingTourSteps,
+      exitOnOverlayClick: false,
+      showStepNumbers: false,
+      showBullets: false,
+      showProgress: true,
+      doneLabel: 'Next',
+      nextLabel: 'Next',
+    });
+
+    // Ensure the query is filled when reaching the #query-input step
+    intro.current.onbeforechange((targetElement) => {
+      if (targetElement.id === 'query-input') {
+        setSearchMessage('Show 10 markers of T cells in human blood.');
+      }
+    });
+
+    // Handle query submission when "Next" is clicked in the #query-input step
+    intro.current.onafterchange((targetElement) => {
+      if (targetElement.id === 'query-input') {
+        const nextButton = document.querySelector('.introjs-nextbutton');
+        
+        // Add the event listener only if it's not already added
+        if (!nextButton.hasAttribute('data-clicked')) {
+          nextButton.addEventListener('click', () => {
+            sendFirstSearch('Show 10 markers of T cells in human blood.');
+            intro.current.exit(); // Exit the tour after submission
+          });
+          nextButton.setAttribute('data-clicked', true); // Prevent re-adding the event listener
+        }
+      }
+    });
+
+    // Delay the start of the tour to ensure everything is loaded
+    setTimeout(() => {
+      intro.current.start();
+    }, 500); // Adjust this delay if necessary
+  }, []); 
+
 
   const sendFirstSearch = (query) => {
+
+    // Save current step before navigating
+    const currentStep = intro.current._currentStep; 
+    console.log(currentStep);
+    sessionStorage.setItem('currentTourStep', currentStep); // Save current step in sessionStorage
+
     setSearchMessage('');
     navigate("/mainboard", { state: query });
+    // Cookies.set('tourCompleted', 'true', { expires: 365 });
   }
 
   // textInput must be declared here so the ref can refer to it
-  const queryInput = useRef(null);
 
   const sampleQueries = [
     'What species are available?',
@@ -29,7 +85,7 @@ const Landing = () => {
     'What cell types are there in mouse liver?',
     'show interactors of NOTCH1 in human heart.',
     // 'show interactors of COL1A1 in human heart.',
-    'Show 10 markers of rod cells in the frog eye.',
+    'Show 10 markers of T cells in human blood.',
     'What are markers for all cells in mouse lung?',
     'What organisms have chromatin accessibility?',
     'Show 10 genes similar to Col1a1 in mouse lung.',
@@ -76,6 +132,7 @@ const Landing = () => {
         marginTop: '8vh' 
       }}>
         <Input
+          id="query-input"
           placeholder="Ask me a question OR click on one below..."
           ref={queryInput}
           value={searchMessage}
@@ -91,9 +148,9 @@ const Landing = () => {
           onPressEnter={() => sendFirstSearch(searchMessage)}
         />
       </div>
-      <div style={{ 
+      <div id="example-query"
+        style={{ 
           marginTop: '8vh', 
-          // fontWeight: 'bold', 
           color: '#303131', 
           marginLeft:'5%',
           marginRight: '5%',
@@ -111,6 +168,7 @@ const Landing = () => {
               textAlign: index % 2 === 1 ? "left" : "right",
               }}>
               <Text
+                id={`query-${index}`} 
                 onClick={() => { setSearchMessage(query); queryInput.current.focus(); }}
                 style={{
                   color: searchMessage === query ? '#303131' : 'initial',
