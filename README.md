@@ -3,7 +3,7 @@
 # Cell Atlas Approximations - Human Interface
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=dpX5lGmDUVs&list=PLg5L12XyDFdxLOqmpwB2nsZS_kzt7CnkR&index=1"><img width="300" src="http://i.ytimg.com/vi/dpX5lGmDUVs/hqdefault.jpg"></a>
+  <a href="https://www.youtube.com/watch?v=dpX5lGmDUVs&list=PLg5L12XyDFdxLOqmpwB2nsZS_kzt7CnkR&index=1"><img width="600" src="http://i.ytimg.com/vi/dpX5lGmDUVs/hqdefault.jpg"></a>
 </p>
 
 Cell atlases are multi-organ single cell omics data sets describing entire organisms.
