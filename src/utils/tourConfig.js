@@ -46,10 +46,10 @@ export const resultTourSteps = [
     title: 'Next query',
   },
   {
-    element: '#user-guide-tab',
-    intro: 'Check out our nav bar for user guide, video tutorials and code examples',
+    element: '#navbar-resources',
+    intro: 'Check out our nav bar for user guide, video tutorials and code repository if you need more information',
     position: 'bottom',
-    title: 'User Guide'
+    title: 'Other resources'
   }
 ];
 

@@ -23,21 +23,29 @@ const MainBoard = () => {
     const savedStep = sessionStorage.getItem('currentTourStep');
     if (savedStep !== null) {
       intro.current.setOptions({
-        steps: resultTourSteps, // Use the tour steps defined for MainBoard
+        steps: resultTourSteps,
         exitOnOverlayClick: false,
         showStepNumbers: false,
         showBullets: false,
         showProgress: true,
-        initialStep: parseInt(savedStep, 10), // Start from the saved step
+        initialStep: parseInt(savedStep, 10),
       });
+
+      // Handle completion of the tour
+      intro.current.oncomplete(() => {
+        sessionStorage.removeItem('currentTourStep');
+        navigate('/');
+      });
+
+      // Handle any exit (including clicking 'x' or Done button)
+      intro.current.onexit(() => {
+        sessionStorage.removeItem('currentTourStep');
+        navigate('/');
+      });
+
       intro.current.start();
     }
-
-    // Clean up: remove the saved step when the tour is finished
-    intro.current.onexit(() => {
-      sessionStorage.removeItem('currentTourStep');
-    });
-  }, []);
+  }, [navigate]);
 
   //  The following code was adapted from guidance provided by OpenAI's GPT-4.
   useEffect(() => {

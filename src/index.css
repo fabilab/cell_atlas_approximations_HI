@@ -81,3 +81,12 @@ code {
   z-index: 2;  /* to ensure the header stays on top */
 }
 
+.introjs-helperLayer {
+  background-color: transparent !important;
+  border: 2px solid white !important;
+  border-radius: 4px !important;
+}
+
+.introjs-overlay {
+  opacity: 0.5 !important;
+}
