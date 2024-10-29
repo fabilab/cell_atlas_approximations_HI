@@ -19,56 +19,56 @@ const MainBoard = () => {
   const [plotState, setPlotState] = useState({"hasLog": false});
 
   useEffect(() => {
-    // Start the tour from where it left off (if it exists)
-    const savedStep = sessionStorage.getItem('currentTourStep');
-    if (savedStep !== null) {
+    // Check if we should continue the tour
+    const currentTourStep = localStorage.getItem('currentTourStep');
+    const tourCompleted = localStorage.getItem('tourCompleted');
+    
+    if (currentTourStep && !tourCompleted) {
       intro.current.setOptions({
         steps: resultTourSteps,
         exitOnOverlayClick: false,
         showStepNumbers: false,
         showBullets: false,
         showProgress: true,
-        initialStep: parseInt(savedStep, 10),
+        doneLabel: 'Done',
       });
 
-      // Handle completion of the tour
+      // Handle tour completion
       intro.current.oncomplete(() => {
-        sessionStorage.removeItem('currentTourStep');
+        // Mark tour as completed
+        localStorage.setItem('tourCompleted', 'true');
+        // Clean up tour state
+        localStorage.removeItem('currentTourStep');
+        // Redirect to landing page
         navigate('/');
       });
 
-      // Handle any exit (including clicking 'x' or Done button)
+      // Handle early exit (X button)
       intro.current.onexit(() => {
-        sessionStorage.removeItem('currentTourStep');
-        navigate('/');
+        if (!intro.current._currentStep === resultTourSteps.length - 1) {
+          // Only mark as completed if user didn't reach the end
+          localStorage.setItem('tourCompleted', 'true');
+          localStorage.removeItem('currentTourStep');
+          navigate('/');
+        }
       });
 
+      // Handle step changes
+      intro.current.onafterchange((targetElement) => {
+        const currentStep = intro.current._currentStep;
+        localStorage.setItem('currentTourStep', (currentStep + 4).toString()); // +4 to account for landing steps
+      });
+
+      // Start from the correct step
       intro.current.start();
     }
-  }, [navigate]);
 
-  //  The following code was adapted from guidance provided by OpenAI's GPT-4.
-  useEffect(() => {
-    // Set a flag in sessionStorage on component mount
-    if (!sessionStorage.getItem('MainBoardLoaded')) {
-      sessionStorage.setItem('MainBoardLoaded', 'true');
-    } else {
-      navigate('/');
-    }
-
-    // Add a simple beforeunload event listener
-    const handleBeforeUnload = (e) => {
-      e.preventDefault();
-      e.returnValue = ''; // Setting returnValue is necessary
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
+    // Cleanup function
     return () => {
-      sessionStorage.removeItem('MainBoardLoaded');
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      intro.current.exit();
     };
   }, [navigate]);
+
 
   useEffect(() => {
     if (triggersPlotUpdate(currentResponse)) {

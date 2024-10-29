@@ -7,7 +7,6 @@ import search from '../asset/icon.png';
 // libraries for new user tour
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
-import Cookies from 'js-cookie';
 import { landingTourSteps } from '../utils/tourConfig';
 
 const { Title } = Typography;
@@ -24,6 +23,12 @@ const Landing = () => {
 
   // https://introjs.com/docs/tour/options
   useEffect(() => {
+    // Check if tour was completed previously
+    const tourCompleted = localStorage.getItem('tourCompleted');
+    if (tourCompleted) {
+      return; // Don't start tour if it was completed
+    }
+
     intro.current.setOptions({
       steps: landingTourSteps,
       exitOnOverlayClick: false,
@@ -33,8 +38,8 @@ const Landing = () => {
       doneLabel: 'Next',
       nextLabel: 'Next',
     });
-  
-    // Handle both empty and filled states for search input
+
+    // Handle step changes
     intro.current.onbeforechange((targetElement) => {
       const currentStep = intro.current._currentStep;
       
@@ -43,60 +48,47 @@ const Landing = () => {
         setSearchMessage('');
       }
       
-      // Fill search on last step
+      // Fill search on final landing step (submit query step)
       if (currentStep === 3) {
         setSearchMessage('Show 10 markers of T cells in human blood.');
       }
     });
-  
-    // Handle query submission at the last step
+
+    // Handle submit step specifically
     intro.current.onafterchange((targetElement) => {
       const currentStep = intro.current._currentStep;
-      if (currentStep === 3) {
+      if (currentStep === 3) { // Submit query step
         const nextButton = document.querySelector('.introjs-nextbutton');
-        if (!nextButton.hasAttribute('data-clicked')) {
+        if (nextButton && !nextButton.hasAttribute('data-clicked')) {
           nextButton.addEventListener('click', () => {
+            // Save that we're transitioning to mainboard tour
+            localStorage.setItem('currentTourStep', '4'); // Start mainboard from first step
             sendFirstSearch('Show 10 markers of T cells in human blood.');
-            intro.current.exit();
           });
           nextButton.setAttribute('data-clicked', true);
         }
       }
     });
-  
-    // Clean up
+
+    // Start tour
+    intro.current.start();
+
     return () => {
+      // Cleanup
       const nextButton = document.querySelector('.introjs-nextbutton');
       if (nextButton) {
         nextButton.removeEventListener('click', () => {
           sendFirstSearch('Show 10 markers of T cells in human blood.');
-          intro.current.exit();
         });
       }
     };
   }, []);
-  
-  // Start tour
-  useEffect(() => {
-    const tourCompleted = Cookies.get('tourCompleted');
-    if (!tourCompleted) {
-      setTimeout(() => {
-        intro.current.start();
-      }, 600);
-    }
-  }, []);
-
 
   const sendFirstSearch = (query) => {
-
-    // Save current step before navigating
-    const currentStep = intro.current._currentStep; 
-    sessionStorage.setItem('currentTourStep', currentStep); // Save current step in sessionStorage
-
     setSearchMessage('');
     navigate("/mainboard", { state: query });
-    // Cookies.set('tourCompleted', 'true', { expires: 365 });
-  }
+  };
+
 
   // textInput must be declared here so the ref can refer to it
 

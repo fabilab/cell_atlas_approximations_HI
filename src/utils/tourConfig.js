@@ -7,7 +7,7 @@ export const landingTourSteps = [
   },
   {
     element: '#search-container',
-    intro: 'Use the search bar here to ask questions about the cell atlases - our chat bot will guide you',
+    intro: 'Use the search bar here to ask questions about the cell atlases - our chat bot 🤖 will guide you.',
     position: 'bottom',
     title: 'Search and query'
   },
