@@ -1,48 +1,55 @@
 // https://introjs.com/docs/tour/examples/json-config
-// Define the new user tour setting here:
+
 export const landingTourSteps = [
   {
-    intro: 'Welcome to AtlasApprox! 👋 Let me guide you through a quick tour to help you get started.',
+    intro: 'Welcome to Atlasapprox! 👋 Let\'s walk through the main features to help you get started.',
     title: 'Welcome'
   },
   {
-    element: '#user-guide-link',
-    intro: 'Check out the user guide here for detailed instructions on how to use AtlasApprox.',
+    element: '#search-container',
+    intro: 'Use the search bar here to ask questions about the cell atlases - our chat bot will guide you',
     position: 'bottom',
-    title: 'User guide'
+    title: 'Search and query'
   },
   {
     element: '#example-query',
-    intro: 'Here are some example queries you can try. Simply click on one to start exploring!',
+    intro: 'Not sure what to ask? Click any example query from here to try it out!',
     position: 'right',
     title: 'Example queries'
   },
   {
-    element: '#query-input',
-    intro: 'You can type your own question or choose from the example queries. Press Enter to submit.',
+    element: '#search-container',
+    intro: "Once the query is ready, press Enter to submit this it and see the results!",
     position: 'bottom',
-    title: 'Submit your query'
+    title: 'Submit query',
+    tooltipClass: 'custom-tooltip-class'
   },
 ];
 
 export const resultTourSteps = [
   {
     element: '#chat-box',
-    intro: 'This is the chat area where you interact with the bot. Your questions and responses will appear here.',
+    intro: 'Your conversation with the bot appears here. Follow its suggestion to explore the data further',
     position: 'bottom',
-    title: 'Chat with the bot'
+    title: 'Chat area'
   },
   {
     element: '#plot-box',
-    intro: 'Here you will see the visual output (plots) based on the query you submitted.',
+    intro: 'Interactive plots will appear here based on your queries.',
     position: 'left',
-    title: 'Visualise results'
+    title: 'Visualization'
   },
   {
-    element: '#hover-plot',
-    intro: 'Some plots are interactive! Hover over data points to get detailed information.',
-    position: 'left',
-    title: 'Interact with plots'
+    element: '#chat-box-input',
+    intro: "Type you next question here to continue exploring",
+    position: 'right',
+    title: 'Next query',
   },
+  {
+    element: '#user-guide-tab',
+    intro: 'Check out our nav bar for user guide, video tutorials and code examples',
+    position: 'bottom',
+    title: 'User Guide'
+  }
 ];
 
