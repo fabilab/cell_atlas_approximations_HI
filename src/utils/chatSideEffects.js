@@ -7,6 +7,7 @@ import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js";
+import { exampleQueries } from "./chatHelpers/exampleQueries.js";
 
 // An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
@@ -398,6 +399,12 @@ export const updateChat = async (response, plotState) => {
 
     // END: Handle building answer when main API call succeeds
   } catch ({ status, message, error }) {
+    // Handle 500 Internal Server Error
+    if (status === 500) {
+      const exampleQuery = exampleQueries[intent] ||
+      "Please rephrase your question. Check the examples on landing page for guidance.";
+      answer = `I couldn't process this query. Try rephrasing it like this: <br/><br/> "${exampleQuery}"`
+  }
     const result = await handleErrors(
       error,
       mainIntent,
