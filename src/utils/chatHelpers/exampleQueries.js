@@ -27,6 +27,8 @@ export const exampleQueries = {
     "celltypexorgan.chromatinAccessibility": "show cell type presence by chromatin accessibility across organs in [organism]",
     
     // Expression analysis intents
+    "average.geneExpression": "what is the expression of [features] in [organism] [organ]?",
+    "average.chromatinAccessibility": "what is the chromatin accessibility of [features] in [organism]?",
     "average.geneExpression.across_organs": "what is the expression of [gene] across organs in [organism] [celltype]?",
     "fraction_detected.geneExpression": "what is the fraction of cells expressing [gene] in [organism] [organ]?",
     "fraction_detected.chromatinAccessibility": "what is the fraction of cells with open chromatin at [features] in [organism] [organ]?",
