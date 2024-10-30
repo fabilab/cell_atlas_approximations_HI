@@ -29,7 +29,7 @@ export const landingTourSteps = [
 export const resultTourSteps = [
   {
     element: '#chat-box',
-    intro: 'Your conversation with the bot appears here. Follow its suggestion to explore the data further',
+    intro: 'Your conversation with the bot appears here. Follow its suggestion to explore the data further.',
     position: 'bottom',
     title: 'Chat area'
   },
@@ -41,13 +41,13 @@ export const resultTourSteps = [
   },
   {
     element: '#chat-box-input',
-    intro: "Type you next question here to continue exploring",
+    intro: "Type you next question here to continue exploring.",
     position: 'right',
     title: 'Next query',
   },
   {
     element: '#navbar-resources',
-    intro: 'Check out our nav bar for user guide, video tutorials and code repository if you need more information',
+    intro: 'Check out our nav bar for user guide, video tutorials and code repository if you need more information.',
     position: 'bottom',
     title: 'Other resources'
   }
