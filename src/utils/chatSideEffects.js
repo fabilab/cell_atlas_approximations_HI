@@ -7,7 +7,6 @@ import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js";
-import { exampleQueries } from "./chatHelpers/exampleQueries.js";
 
 // An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
@@ -200,7 +199,9 @@ export const updateChat = async (response, plotState) => {
     }
 
     if (intent === "zoom.in.neighborhood") {
+      console.log(plotState)
       if (["fractionDetected", "average"].includes(plotState.plotType)) {
+        console.log(plotState.plotType);
         response.intent = intent = "neighborhood.geneExpression";
         mainIntent = endpoint = "neighborhood";
         params = {
@@ -214,6 +215,7 @@ export const updateChat = async (response, plotState) => {
         answer +=
           "Zooming into the neighborhood is only supported for across cell types measurements, particularly for dotplot and heatmap visualizations";
       }
+      console.log(answer);
     }
 
     if (mainIntent === "fraction_detected" || mainIntent === "average") {
@@ -252,7 +254,7 @@ export const updateChat = async (response, plotState) => {
     // START: Calling main API endpoint
     if (endpoint) {
       apiData = await atlasapprox[endpoint](params);
-
+      console.log(apiData);
       if (intent === "celltypes.geneExpression") {
         apiData.targetCelltypes = targetCelltypes;
         apiData.targetOrgan = targetOrgan;
@@ -394,36 +396,36 @@ export const updateChat = async (response, plotState) => {
     // END: Calling extra endpoints
 
     // START: Handle building answer when main API call succeeds
-
+    console.log(answer)
     answer += buildAnswer(intent, plotState, apiData);
 
     // END: Handle building answer when main API call succeeds
   } catch ({ status, message, error }) {
-    // Handle 500 Internal Server Error
-    if (status === 500) {
-      const exampleQuery = exampleQueries[intent] ||
-      "Please rephrase your question. Check the examples on landing page for guidance.";
-      answer = `I couldn't process this query. Try rephrasing it like this: <br/><br/> "${exampleQuery}"`
-  }
-    const result = await handleErrors(
-      error,
-      mainIntent,
-      params,
-      entities,
-      answer,
-      endpoint,
-      plotState,
-      intent,
-      message,
-      // this line is added to handle cases where there is an invalid gene found from the interactors api
-      // which will cause an error on the dot plot api.
-      // we need to pass both the queried and targets genes onto the dotplot's error handling function
-      apiData
-    );
-    params = result.params;
-    apiData = result.apiData;
-    answer = result.answer;
+
+    // If there is a handleable error type with messages and which params are missing
+    if (error?.type) {
+      const result = await handleErrors(
+        error,
+        mainIntent,
+        params,
+        entities,
+        answer,
+        endpoint,
+        plotState,
+        intent,
+        message,
+        apiData
+      );
+      params = result.params;
+      apiData = result.apiData;
+      answer += result.answer;
+    }
+    // for other errors, e.g 500. Since the intent is valid, we handle them in buildAnswer() to make sure user can always get an answer from the bot
+    else {
+      answer = buildAnswer(intent, plotState, apiData)
+    }
   } finally {
+    console.log(answer);
     return {
       hasData: apiData !== null,
       params: apiData ? params : null,
