@@ -20,8 +20,8 @@ This repo is a component of [Light and scalable statistical approximations of ce
 
 ## Design
 The human interface is composed of two primary elements:
-- A chat bot trained by machine learning to process requests and questions.
-- An interactive chart via [CanvaXpress](https://canvasxpress.org/index.html) to visualise gene expression and other features of cell atlases.
+- A chat bot, powered by [nlpjs](https://github.com/axa-group/nlp.js), trained by machine learning to process requests and questions.
+- An interactive chart window, powered by [plotly.js](https://plotly.com/javascript/react/), to visualise gene expression and other features of cell atlases.
 
 ## Authors
 Proudly developed @ [fabilab](https://fabilab.org) by Ying Xu.
