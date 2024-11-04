@@ -26,6 +26,7 @@ const Landing = () => {
 
   // tour for new users: https://introjs.com/docs/tour/options
   useEffect(() => {
+
     // Don't start tour if it was ever dismissed or completed
     const isFirstVisit = localStorage.getItem("isFirstVisit");
     const introInstance = intro.current;
@@ -46,11 +47,6 @@ const Landing = () => {
       showProgress: true,
       doneLabel: "Next",
       nextLabel: "Next",
-      tooltipClass: 'customTooltip', // Add custom class for Safari styling
-      highlightClass: 'customHighlight', // Add custom class for Safari styling
-      disableInteraction: true, // Prevent interaction issues in Safari
-      scrollToElement: true, // Ensure element is in view
-      scrollPadding: 50, // Add padding when scrolling
     });
 
     // Handle step changes
@@ -110,7 +106,7 @@ const Landing = () => {
     'Explore lemur',
     'What cell types are there in mouse liver?',
     'Show interactors of NOTCH1 in human heart.',
-    'Show 10 markers of rod cells in the frog eye.',
+    'Show 10 markers of T cells in human blood.',
     'What are markers for all cells in mouse lung?',
     'What organisms have chromatin accessibility?',
     'Show 10 genes similar to Col1a1 in mouse lung.',

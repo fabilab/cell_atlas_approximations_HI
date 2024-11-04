@@ -51,7 +51,7 @@ const Navbar = () => {
           </div>
           <div style={{ fontFamily: "inherit", marginRight: '20px'}}>
             <YoutubeOutlined />
-            <a href='https://www.youtube.com/@fabilab' target='_blank' style={navItemStyle} className="tab-link"> Tutorials</a>
+            <a href='https://www.youtube.com/@fabilab' target='_blank' rel="noreferrer" style={navItemStyle} className="tab-link"> Tutorials</a>
           </div>
           <div style={{ marginRight: '20px' }}>
             <CodeOutlined />
