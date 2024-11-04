@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.19dc097e.css",
-    "main.js": "/static/js/main.e331d6ed.js",
+    "main.css": "/static/css/main.d67d9656.css",
+    "main.js": "/static/js/main.356c5e71.js",
     "static/media/t_aestivum.jpeg": "/static/media/t_aestivum.88be02293c0b0d38b936.jpeg",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/d_rerio.jpeg": "/static/media/d_rerio.f86bab91a7da519c8481.jpeg",
@@ -35,6 +35,7 @@
     "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
     "static/media/x_laevis.jpg": "/static/media/x_laevis.0666c96834c70efd3d6b.jpg",
     "static/media/m_murinus.jpg": "/static/media/m_murinus.1bedab7c45614bd85828.jpg",
+    "static/media/c_intestinalis.jpeg": "/static/media/c_intestinalis.eaa63c03a7a3f98eec32.jpeg",
     "static/media/p_dumerilii.jpeg": "/static/media/p_dumerilii.ba241cbf5b6cfc0d15db.jpeg",
     "static/media/grey_x_laevis.jpg": "/static/media/grey_x_laevis.b0df12efb03a5379d59f.jpg",
     "static/media/c_hemisphaerica.jpeg": "/static/media/c_hemisphaerica.09f675602723bff983df.jpeg",
@@ -68,12 +69,10 @@
     "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.bc3722686635b5f86132.woff2",
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
-    "index.html": "/index.html",
-    "main.19dc097e.css.map": "/static/css/main.19dc097e.css.map",
-    "main.e331d6ed.js.map": "/static/js/main.e331d6ed.js.map"
+    "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.19dc097e.css",
-    "static/js/main.e331d6ed.js"
+    "static/css/main.d67d9656.css",
+    "static/js/main.356c5e71.js"
   ]
 }
