@@ -36,7 +36,7 @@ const PlotBox = ({ state }) => {
     case 'fractionDetected':
     case 'fractionDetectedAcrossOrgans':
       return (
-        <div style={plotStyle}>
+        <div style={plotStyle} id="plot-box">
           <BubbleHeatmap
             state={state}
           />

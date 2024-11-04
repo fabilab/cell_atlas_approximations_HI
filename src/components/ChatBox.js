@@ -100,16 +100,12 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   }, [chatHistory]);
 
   return (
-    <div style={{ 
-        width: "25%",
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-        height: "100%",
-        backgroundColor: "#e4eff7",
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-        position: 'relative',
-      }}>
+    <div style={{
+      width: "100%", 
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '100%'
+    }}>
        <div style={{ 
           flexGrow: 1, 
           overflowY: "auto",
@@ -131,7 +127,7 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
       <Row className="chat-input-row" style={{padding:'10px'}}>
         <div className="chat-input-container">
           <Input.TextArea
-            id="chatBoxInput"
+            id="chat-box-input"
             ref={queryInputRef}
             autoSize={{ minRows: 4, maxRows: 5 }}
             value={localMessage}

@@ -81,3 +81,17 @@ code {
   z-index: 2;  /* to ensure the header stays on top */
 }
 
+.introjs-helperLayer {
+  background-color: transparent !important;
+  border: 2px solid white !important;
+  border-radius: 4px !important;
+}
+
+.introjs-overlay {
+  opacity: 0.5 !important;
+}
+
+/* added this line to fix bug in safari */
+.introjs-tooltipReferenceLayer {
+  visibility: visible !important;
+}

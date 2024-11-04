@@ -366,7 +366,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   } else {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div>
+        <div id="hover-plot" style={{ width: '100%', height: '100%' }}>
           <Plot
             data={[data]}
             layout={layout}
