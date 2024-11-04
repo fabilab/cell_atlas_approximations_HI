@@ -1,6 +1,11 @@
 <img src="https://raw.githubusercontent.com/fabilab/cell_atlas_approximations/main/figures/figure_HI.png" width="150" height="150">
 
 # Cell Atlas Approximations - Human Interface
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=dpX5lGmDUVs&list=PLg5L12XyDFdxLOqmpwB2nsZS_kzt7CnkR&index=1"><img width="600" src="http://i.ytimg.com/vi/dpX5lGmDUVs/hqdefault.jpg"></a>
+</p>
+
 Cell atlases are multi-organ single cell omics data sets describing entire organisms.
 
 This project implements a web interface that enables biologists, doctors, and other researchers to browse and interact with cell atlases using natural language (initially, English).
