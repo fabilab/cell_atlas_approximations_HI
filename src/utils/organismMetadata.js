@@ -61,6 +61,16 @@ const organismMetadata = {
     paperHyperlink: "https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4",
     category: "Animal",
   },
+  "c_intestinalis": {
+    bioName: "Ciona intestinalis",
+    commonName: "Sea vase",
+    dataSource:  `Cao et al. 2019 "Comprehensive single-cell transcriptome lineages of a proto-vertebrate"`,
+    about: "Ciona intestinalis (sometimes known by the common name of vase tunicate) is an ascidian (sea squirt), a tunicate with very soft tunic.",
+    imagePath: require("../asset/organisms/c_intestinalis.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Ciona_intestinalis",
+    paperHyperlink: "https://www.nature.com/articles/s41586-019-1385-y",
+    category: "Animal",
+  },
   "d_melanogaster": {
     bioName: "Drosophila melanogaster",
     commonName: "Fruit fly",
