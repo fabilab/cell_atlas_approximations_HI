@@ -2,24 +2,24 @@
 
 export const landingTourSteps = [
   {
-    intro: 'Welcome to Atlasapprox! 👋 Let\'s walk through the main features to help you get started.',
-    title: 'Welcome'
+    intro: 'Let\'s get you started! 👋 Want to skip? Just click the "x" in the corner.',
+    title: 'Welcome to atlasapprox!'
   },
   {
     element: '#search-container',
-    intro: 'Use the search bar here to ask questions about the cell atlases - our chat bot 🤖 will guide you.',
+    intro: 'You can type a question in this search bar - our chat bot 🤖 will try its very best to answer.',
     position: 'bottom',
     title: 'Search and query'
   },
   {
     element: '#example-query',
-    intro: 'Not sure what to ask? Click any example query from here to try it out!',
+    intro: 'Not sure what to ask? Click any example sentence from here to try it out!',
     position: 'right',
     title: 'Example queries'
   },
   {
     element: '#search-container',
-    intro: "Once the query is ready, press Enter to submit this it and see the results!",
+    intro: "After you are done typing, click the arrow or press Enter to submit.",
     position: 'bottom',
     title: 'Submit query',
     tooltipClass: 'custom-tooltip-class'
@@ -29,13 +29,13 @@ export const landingTourSteps = [
 export const resultTourSteps = [
   {
     element: '#chat-box',
-    intro: 'Your conversation with the bot appears here. Follow its suggestion to explore the data further.',
+    intro: 'Your conversation with the bot appears here. In addition to a reply to your query, the bot can suggest your next query.',
     position: 'bottom',
     title: 'Chat area'
   },
   {
     element: '#plot-box',
-    intro: 'Interactive plots will appear here based on your queries.',
+    intro: 'Data charts appear here. They are interactive - try clicking on them to download plots or data, or to look up genes.',
     position: 'left',
     title: 'Visualization'
   },
@@ -47,7 +47,7 @@ export const resultTourSteps = [
   },
   {
     element: '#navbar-resources',
-    intro: 'Check out our nav bar for user guide, video tutorials and code repository if you need more information.',
+    intro: 'Want to learn more? Check out our user guides, video tutorials, documentation, and code repositories. Or reach out to tell us what you think! Have fun exploring!',
     position: 'bottom',
     title: 'Other resources'
   }
