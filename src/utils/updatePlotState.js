@@ -469,6 +469,15 @@ const cellAbundance = (context) => {
   };
 };
 
+const cellTypeProfile = (context) => {
+  return {
+    plotType: "cellTypeProfile",
+    cellType: context.response.params.celltype,
+    description: context.response.cellTypeDescription,
+    distributionData: context.response.distributionData,
+  };
+};
+
 const availableOrganisms = (context) => {
   return {
     plotType: "showOrganisms",
@@ -509,6 +518,7 @@ const plotFunctionDispatcher = {
   similar_celltypes: similarCelltypes,
   fraction_detected: updateFractions,
   feature_sequences: featureSequences,
+  celltype_location: cellTypeProfile,
   highest_measurement: highestMeasurement,
 };
 

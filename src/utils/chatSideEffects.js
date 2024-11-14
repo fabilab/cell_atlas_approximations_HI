@@ -7,6 +7,8 @@ import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js";
+import { fetchCellTypeDescription } from "./plotHelpers/celltypeDescription.js";
+import { getCellTypeDistribution } from "./plotHelpers/cellTypeProfileData.js";
 
 // An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
@@ -29,6 +31,7 @@ const updatePlotIntents = [
   "organxorganism",
   "similar_features",
   "feature_sequences",
+  "celltype_location",
   "fraction_detected",
   "similar_celltypes",
   "highest_measurement",
@@ -54,15 +57,16 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
+  console.log(response);
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
   let subIntent = intent.split(".")[1] || null;
   let complete = response.complete;
   let answer = "",
-    apiData = null,
-    endpoint,
-    params;
+      apiData = null,
+      endpoint,
+      params;
   let extraEndpointsToCall = [];
   // this is defined to store celltypes and organ for celltypes intent.
   let targetCelltypes, targetOrgan;
@@ -261,6 +265,19 @@ export const updateChat = async (response, plotState) => {
         apiData.features = params.features;
         apiData.source_organism = params.source_organism;
         apiData.target_organism = params.target_organism;
+      }
+
+      // we want to add a description to the cell type
+      if (intent === "celltype_location.geneExpression") {
+        let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
+        // Get distribution data across species and organs
+        let distributionData = await getCellTypeDistribution(params.celltype);
+        console.log(distributionData);
+        if (!distributionData.success) {
+          throw new Error(distributionData.message);
+        }
+        apiData.cellTypeDescription = cellTypeDescription;
+        apiData.distributionData = distributionData;
       }
     }
 
