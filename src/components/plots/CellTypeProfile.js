@@ -1,41 +1,108 @@
 import React, { useState, useEffect } from 'react';
-import { use } from 'react';
+import ImageMapper from "react-img-mapper";
+import orgMeta from "../../utils/organismMetadata.js";
+import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
+import { scaleLinear } from "d3-scale";
 import Plot from 'react-plotly.js';
 
 const CellTypeProfile = ({ state }) => {
   const { cellType, description, distributionData } = state;
+  console.log(distributionData)
   const [selectedSpecies, setSelectedSpecies] = useState('all');
   const [organTotal, setOrganTotal] = useState(null);
   const [distributionPlotData, setDistributionPlotData] = useState(null);
+  const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
 
   const makePlot = (d) => {
     const total = {};
-      d.forEach(species => {
-        species.organCounts.forEach(({ organ, count }) => {
-          total[organ] = (total[organ] || 0) + count;
-        });
+    d.forEach(species => {
+      species.organCounts.forEach(({ organ, count }) => {
+        total[organ] = (total[organ] || 0) + count;
       });
+    });
 
-      const sortedOrgans = Object.entries(total)
-        .sort(([, a], [, b]) => b - a)
-        .map(([organ]) => organ);
-      
-      const allPlotData = d.map((speciesData) => ({
-        x: sortedOrgans,
-        y: sortedOrgans.map(organ => {
-          const organCount = speciesData.organCounts.find(count => count.organ === organ);
-          return organCount ? organCount.count : 0;
-        }),
-        name: speciesData.organism,
-        type: 'bar',
-        text: sortedOrgans.map(organ => {
-          const organCount = speciesData.organCounts.find(count => count.organ === organ);
-          return organCount ? organCount.count.toString() : '';
-        }),
-        textposition: 'auto',
-      }));
-      setOrganTotal(total);
-      setDistributionPlotData(allPlotData)
+    const sortedOrgans = Object.entries(total)
+      .sort(([, a], [, b]) => b - a)
+      .map(([organ]) => organ);
+    
+    const plotData = d.map((speciesData) => ({
+      x: sortedOrgans,
+      y: sortedOrgans.map(organ => {
+        const organCount = speciesData.organCounts.find(count => count.organ === organ);
+        return organCount ? organCount.count : 0;
+      }),
+      name: speciesData.organism,
+      type: 'bar',
+      text: sortedOrgans.map(organ => {
+        const organCount = speciesData.organCounts.find(count => count.organ === organ);
+        return organCount ? organCount.count.toString() : '';
+      }),
+      textposition: 'auto',
+    }));
+    
+    if (plotData.length === 1) {
+      console.log(plotData[0]['y'])
+      const minCount = Math.min(...plotData[0]['y']);
+      const maxCount = Math.max(...plotData[0]['y']);
+      console.log(minCount, maxCount)
+      const colorScale = scaleLinear()
+        .domain([minCount, maxCount])
+        .range(["#f0d2cc", "#ed4e2b"]);
+      plotData[0].marker = {
+        color: plotData[0].y.map(c => colorScale(c))
+      }
+    }
+    
+    setOrganTotal(total);
+    setDistributionPlotData(plotData)
+  }
+
+  // Render image map component
+  const renderImageMap = () => {
+    const counts = distributionData.data.filter(d=>d.organism===selectedSpecies)[0].organCounts.reduce((acc, item) => {
+      acc[item.organ] = item.count;
+      return acc;
+    }, {});
+    if (Object.keys(counts).length === 1) {
+      return <></>
+    }
+    const minCount = Math.min(...Object.values(counts));
+    const maxCount = Math.max(...Object.values(counts));
+    const colorScale = scaleLinear()
+      .domain([minCount, maxCount])
+      .range(["#f0d2cc", "#ed4e2b"]);
+
+    const areas = Object.entries(orgMeta[selectedSpecies]?.organs || {}).map(([organ, metadata]) => {
+      const coords = metadata.coords.split(",").map(Number);
+      const adjustedCoords = coords.map((coord, index) =>
+        index % 2 === 0 ? coord * scalingFactors.width : coord * scalingFactors.height
+      );
+  
+      const isLabel = organ.includes("-label");
+      const organColor = counts[organ] ? colorScale(counts[organ]) : "transparent";
+      return {
+        id: organ,
+        name: organ,
+        shape: metadata.shape || "poly",
+        coords: adjustedCoords,
+        fillColor: isLabel ? "transparent" : organColor,
+        preFillColor: isLabel ? "transparent" : organColor,
+        strokeColor: "transparent",
+      };
+    });
+
+    let imagePathPrefix = `grey_${selectedSpecies}`;
+
+    return (
+      // eslint-disable-next-line
+      <ImageMapper
+        src={require(`../../asset/anatomy/${imagePathPrefix}.jpg`)}
+        map={{ name: `${selectedSpecies}-map`, areas: areas }}
+        // onMouseEnter={handleMouseEnter}
+        width={450}
+        height={450}
+      />
+    );
   }
 
   useEffect(() => {
@@ -50,6 +117,11 @@ const CellTypeProfile = ({ state }) => {
         makePlot(distributionData.data)
       } else {
         makePlot(distributionData.data.filter(d => d.organism === selectedSpecies))
+        if (orgMeta[selectedSpecies].organs) {
+          const imagePathPrefix = `grey_${selectedSpecies}`;
+          let imageWithDimensions = require(`../../asset/anatomy/${imagePathPrefix}.jpg`);
+          scaleImage(imageWithDimensions, 450, setScalingFactors)
+        }
       }
     }
   }, [selectedSpecies])
@@ -58,7 +130,7 @@ const CellTypeProfile = ({ state }) => {
     width: 1000,
     height: 450,
     barmode: 'stack',
-    showlegend: true,
+    showlegend: distributionPlotData ? distributionPlotData.length > 1 : false,
     margin: {
       l: 50,
       r: 50,
@@ -147,6 +219,12 @@ const CellTypeProfile = ({ state }) => {
             height: '450px'
           }}
         />
+      </div>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+          {
+            selectedSpecies !== 'all' &&
+            renderImageMap()
+          }
       </div>
     </div>
   );
