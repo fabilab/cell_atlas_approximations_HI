@@ -1,36 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { use } from 'react';
 import Plot from 'react-plotly.js';
 
 const CellTypeProfile = ({ state }) => {
   const { cellType, description, distributionData } = state;
+  const [selectedSpecies, setSelectedSpecies] = useState('all');
+  const [organTotal, setOrganTotal] = useState(null);
+  const [distributionPlotData, setDistributionPlotData] = useState(null);
 
-  // Process and sort data
-  const organTotals = {};
-  distributionData.data.forEach(species => {
-    species.organCounts.forEach(({ organ, count }) => {
-      organTotals[organ] = (organTotals[organ] || 0) + count;
-    });
-  });
+  const makePlot = (d) => {
+    const total = {};
+      d.forEach(species => {
+        species.organCounts.forEach(({ organ, count }) => {
+          total[organ] = (total[organ] || 0) + count;
+        });
+      });
 
-  const sortedOrgans = Object.entries(organTotals)
-    .sort(([, a], [, b]) => b - a)
-    .map(([organ]) => organ);
+      const sortedOrgans = Object.entries(total)
+        .sort(([, a], [, b]) => b - a)
+        .map(([organ]) => organ);
+      
+      const allPlotData = d.map((speciesData) => ({
+        x: sortedOrgans,
+        y: sortedOrgans.map(organ => {
+          const organCount = speciesData.organCounts.find(count => count.organ === organ);
+          return organCount ? organCount.count : 0;
+        }),
+        name: speciesData.organism,
+        type: 'bar',
+        text: sortedOrgans.map(organ => {
+          const organCount = speciesData.organCounts.find(count => count.organ === organ);
+          return organCount ? organCount.count.toString() : '';
+        }),
+        textposition: 'auto',
+      }));
+      setOrganTotal(total);
+      setDistributionPlotData(allPlotData)
+  }
 
-  // Create plot data for vertical bars
-  const plotData = distributionData.data.map((speciesData) => ({
-    x: sortedOrgans,
-    y: sortedOrgans.map(organ => {
-      const organCount = speciesData.organCounts.find(count => count.organ === organ);
-      return organCount ? organCount.count : 0;
-    }),
-    name: speciesData.organism,
-    type: 'bar',
-    text: sortedOrgans.map(organ => {
-      const organCount = speciesData.organCounts.find(count => count.organ === organ);
-      return organCount ? organCount.count.toString() : '';
-    }),
-    textposition: 'auto',
-  }));
+  useEffect(() => {
+    if (!distributionPlotData) {
+      makePlot(distributionData.data)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (distributionPlotData) {
+      if (selectedSpecies === 'all') {
+        makePlot(distributionData.data)
+      } else {
+        makePlot(distributionData.data.filter(d => d.organism === selectedSpecies))
+      }
+    }
+  }, [selectedSpecies])
 
   const layout = {
     width: 1000,
@@ -50,7 +72,7 @@ const CellTypeProfile = ({ state }) => {
     },
     yaxis: {
       title: 'Cell Count',
-      range: [0, Math.max(...Object.values(organTotals))], // Add 10% padding
+      range: [0, Math.max(...Object.values(organTotal || 0))], // Add 10% padding
     },
     plot_bgcolor: 'white',
     paper_bgcolor: 'white',
@@ -70,6 +92,7 @@ const CellTypeProfile = ({ state }) => {
     responsive: true,
     displayModeBar: false
   }
+
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ 
@@ -89,13 +112,34 @@ const CellTypeProfile = ({ state }) => {
       <h1 style={{ 
         fontSize: '24px', 
         marginBottom: '8px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px' /* Optional for spacing between text and dropdown */
       }}>
-        Cell type distribution
+        Cell type distribution in
+        <select 
+          id="species" 
+          style={{
+            fontSize: '18px', 
+            height: 'calc(1em + 16px)', /* Approximate height adjustment */
+            lineHeight: '1',
+            padding: '4px 8px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            value: {selectedSpecies}
+          }}
+          onChange={e => setSelectedSpecies(e.target.value)}
+        >
+          <option value="all">All</option>
+          {
+            distributionData.data.map(d => <option value={d.organism}>{d.organism}</option>)
+          }
+        </select>
       </h1>
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <Plot
-          data={plotData}
+          data={distributionPlotData}
           layout={layout}
           config={config}
           style={{
