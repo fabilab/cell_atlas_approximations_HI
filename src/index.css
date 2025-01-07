@@ -95,3 +95,14 @@ code {
 .introjs-tooltipReferenceLayer {
   visibility: visible !important;
 }
+
+.compact-table .ant-table-thead > tr > th {
+  font-size: 13px;
+  padding: 8px; 
+}
+
+.compact-table .ant-table-tbody > tr > td {
+  font-size: 13px;
+  padding: 8px;
+}
+

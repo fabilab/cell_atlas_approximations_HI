@@ -470,7 +470,6 @@ const cellAbundance = (context) => {
 };
 
 const cellTypeProfile = (context) => {
-  console.log(context);
   return {
     plotType: "cellTypeProfile",
     cellType: context.response.params.celltype,

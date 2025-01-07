@@ -145,9 +145,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           y1: geneIndex - 0.4,
           line: {
               color: 'rgba(176, 130, 245, 0.2)',
-              width: 1
+              width: 0
           },
-          fillcolor: 'rgba(176, 130, 245, 0.2)'
+          // fillcolor: 'rgba(176, 130, 245, 0.2)'
       };
     });
   }

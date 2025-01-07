@@ -57,7 +57,7 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
-  console.log(response);
+  
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
@@ -272,7 +272,6 @@ export const updateChat = async (response, plotState) => {
         let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
         // Get distribution data across species and organs
         let distributionData = await getCellTypeDistribution(params.celltype);
-        console.log(distributionData);
         if (!distributionData.success) {
           throw new Error(distributionData.message);
         }
