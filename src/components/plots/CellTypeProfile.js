@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from "react-img-mapper";
 import orgMeta from "../../utils/organismMetadata.js";
-import { fetchWikiImage } from '../../utils/plotHelpers/cellTypeImageFetcher.js';
+import { fetchWikiImage } from '../../utils/cellTypeResources/fetchImage.js';
 import BubbleHeatmap from './BubbleHeatmap';
 import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
 import { InfoCircleOutlined } from "@ant-design/icons";

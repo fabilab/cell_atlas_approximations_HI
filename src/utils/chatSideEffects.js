@@ -7,7 +7,7 @@ import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js";
-import { fetchCellTypeDescription } from "./plotHelpers/celltypeDescription.js";
+import { fetchCellTypeDescription } from "./cellTypeResources/fetchDescription.js";
 import { getCellTypeDistribution } from "./plotHelpers/cellTypeProfileData.js";
 
 // An array of intents that trigger a plot update.
