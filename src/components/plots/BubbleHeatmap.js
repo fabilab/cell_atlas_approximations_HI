@@ -94,7 +94,6 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
     all_x = all_x.concat(xaxis);
     all_y = all_y.concat(Array(xaxis.length).fill(yaxis[i]));
     all_color = all_color.concat(average[i].map(value => Number(value.toFixed(3))));
-    // all_size = all_size.concat(fractions[i].map((x) => (x * 100).toFixed(3)));
     all_size = all_size.concat(fractions[i].map((x) => customDotScale(x * 100)));
     const text = xaxis.map((xaxisLabel, index) => {
       return `${featureHover}: ${yaxis[i]}<br>${xHover}: ${xaxisLabel}<br>${zHover} ${average[i][index].toPrecision(3)}<br>fraction: ${(fractions[i][index] * 100).toFixed(3)}%`;

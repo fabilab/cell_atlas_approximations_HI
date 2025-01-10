@@ -46,6 +46,7 @@ const removeFeatures = (context) => {
 };
 
 const toggleLog = (context) => {
+
   context.plotState.hasLog = !context.plotState.hasLog;
   if (context.plotState.plotType === "neighborhood") {
     return updateNeighbor(context);
@@ -53,6 +54,8 @@ const toggleLog = (context) => {
     return updateComeasurement(context);
   } else if (context.plotState.plotType === "highestMeasurementMultiple") {
     return highestMeasurement(context);
+  } else if (context.plotState.plotType === "cellTypeProfile") {
+    return cellTypeProfile(context);
   }
   else {
     if (!context.plotState.fractions) {
@@ -470,11 +473,25 @@ const cellAbundance = (context) => {
 };
 
 const cellTypeProfile = (context) => {
+  let cellType, description, distributionData, hasLog;
+  // By default
+  if (context.response.data) {
+    cellType = context.response.data.celltype;
+    description = context.response.data.cellTypeDescription;
+    distributionData = context.response.data.distributionData;
+    hasLog = false;
+  } else {
+    cellType = context.plotState.cellType;
+    description = context.plotState.description;
+    distributionData = context.plotState.distributionData;
+    hasLog = context.plotState.hasLog;
+  }
   return {
     plotType: "cellTypeProfile",
-    cellType: context.response.params.celltype,
-    description: context.response.data.cellTypeDescription,
-    distributionData: context.response.data.distributionData,
+    cellType: cellType,
+    description: description,
+    distributionData: distributionData,
+    hasLog: hasLog
   };
 };
 

@@ -6,7 +6,7 @@ import { fetchWikiImage } from '../../utils/plotHelpers/cellTypeImageFetcher.js'
 import BubbleHeatmap from './BubbleHeatmap';
 import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Typography, Select, Table } from "antd";
+import { Typography, Select, Table, Spin } from "antd";
 import { scaleLinear } from "d3-scale";
 import Plot from 'react-plotly.js';
 
@@ -15,8 +15,7 @@ const { Text } = Typography;
 
 const CellTypeProfile = ({ state }) => {
 
-  const { cellType, description, distributionData } = state;
-
+  const { cellType, description, distributionData, hasLog } = state;
   const [selectedSpecies, setSelectedSpecies] = useState('all');
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
   const [wikiImage, setWikiImage] = useState(null);
@@ -249,7 +248,7 @@ const CellTypeProfile = ({ state }) => {
     setSelectedSpecies('all');
     setHoveredOrgan(null);
     setSelectedOrganMarkers(null);
-  }, [state])
+  }, [state.cellType])
 
   useEffect(() => {
     if (!distributionPlotData) {
@@ -393,7 +392,6 @@ const CellTypeProfile = ({ state }) => {
           }
         </div>
         <div style={{ flex: 1, overflow: "auto", minWidth: "0", paddingLeft: "5%" }}>
-
           {
             hoveredOrgan && selectedOrganMarkers ?
               !loadingMarker ?
@@ -440,37 +438,74 @@ const CellTypeProfile = ({ state }) => {
                   />
                 </div>
                 :
-                <p>Loading Markers</p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Spin size="large" />
+                  <p>Loading markers...</p>
+              </div>
               :
               <></>
           }
         </div>
       </div>
-      <div style={{ padding: '24px', height: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {
-          hoveredOrgan && selectedSpecies && markerExpressionPlotData ?
-            !loadingMarkerPlot?
-              <BubbleHeatmap
-                state={{
-                  plotType: "fractionDetected",
-                  xaxis: markerExpressionPlotData.celltypes,
-                  yaxis: markerExpressionPlotData.features,
-                  average: markerExpressionPlotData.average,
-                  fractions: markerExpressionPlotData.fraction_detected,
-                  organism: selectedSpecies,
-                  organ: markerExpressionPlotData.organ,
-                  celltype: false,
-                  unit: markerExpressionPlotData.unit,
-                  hasLog: false,
-                  measurement_type: markerExpressionPlotData.measurement_type,
-                  queriedGenes: false,
-                  isSurface: false
-                }}
-              />
-            :
-            <p>Loading Plot</p>
-          :
-          <></>
+      <div style={{ 
+        padding: '24px', 
+        width: '100%',
+        display: "flex", 
+        flexDirection: "column", 
+        alignItems: "center",
+      }}>
+        {hoveredOrgan && selectedSpecies && markerExpressionPlotData ? 
+          !loadingMarkerPlot ? (
+            <div style={{
+              width: '100%',
+              overflowX: 'auto',
+              overflowY: 'visible',
+              paddingBottom: '20px'
+            }}>
+              <div style={{
+                minWidth: 'max-content',
+                display: 'inline-block',
+                height: 'auto',
+                minHeight: '600px',
+              }}>
+                <BubbleHeatmap
+                  state={{
+                    plotType: "fractionDetected",
+                    xaxis: markerExpressionPlotData.celltypes,
+                    yaxis: markerExpressionPlotData.features,
+                    average: markerExpressionPlotData.average,
+                    fractions: markerExpressionPlotData.fraction_detected,
+                    organism: selectedSpecies,
+                    organ: markerExpressionPlotData.organ,
+                    celltype: false,
+                    unit: markerExpressionPlotData.unit,
+                    hasLog: hasLog,
+                    measurement_type: markerExpressionPlotData.measurement_type,
+                    queriedGenes: false,
+                    isSurface: false
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+              <Spin size="large" />
+              <p>Loading plot</p>
+            </div>
+          )
+          : <></>
         }
       </div>
     </div>
