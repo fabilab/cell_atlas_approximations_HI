@@ -188,6 +188,22 @@ export const updateChat = async (response, plotState) => {
       params.measurement_type = "chromatin_accessibility";
     }
 
+    if (intent === "explore.celltype") {
+      endpoint = null;
+      let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
+      // Get distribution data across species and organs
+      let distributionData = await getCellTypeDistribution(params.celltype);
+      if (!distributionData.success) {
+        throw new Error(distributionData.message);
+      }
+      if (!apiData) {
+        apiData = {};  // Initialize it if undefined
+    }
+      apiData.cellTypeDescription = cellTypeDescription;
+      apiData.distributionData = distributionData;
+      console.log(apiData)
+    }
+
     if (
       intent === "zoom.out.neighborhood" &&
       plotState.plotType === "neighborhood"
@@ -265,18 +281,6 @@ export const updateChat = async (response, plotState) => {
         apiData.features = params.features;
         apiData.source_organism = params.source_organism;
         apiData.target_organism = params.target_organism;
-      }
-
-      // we want to add a description to the cell type
-      if (intent === "celltype_location.geneExpression") {
-        let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
-        // Get distribution data across species and organs
-        let distributionData = await getCellTypeDistribution(params.celltype);
-        if (!distributionData.success) {
-          throw new Error(distributionData.message);
-        }
-        apiData.cellTypeDescription = cellTypeDescription;
-        apiData.distributionData = distributionData;
       }
     }
 

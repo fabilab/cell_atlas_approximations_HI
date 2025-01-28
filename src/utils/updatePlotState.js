@@ -1,16 +1,44 @@
 import transpose from "./plotHelpers/math";
 
-const exploreOrganism = (context) => {
-  let organism = context.organism;
-  let organs = context.response.data.organs;
-  let measurement_type = context.response.data.measurement_type;
+const exploreProfile = (context) => {
+  // explore organism profile
+  if (context.intent === "explore.organism") {
+    let organism = context.organism;
+    let organs = context.response.data.organs;
+    let measurement_type = context.response.data.measurement_type;
 
-  return {
-    plotType: "organismProfile",
-    organism: organism,
-    organs: organs,
-    measurement_type: measurement_type,
-  };
+    return {
+      plotType: "organismProfile",
+      organism: organism,
+      organs: organs,
+      measurement_type: measurement_type,
+    };
+  } 
+  // explore cell type profile
+  else if (context.intent === "explore.celltype") {
+      let cellType, description, distributionData, hasLog;
+      // by default
+      if (context.response.data) {
+        cellType = context.response.params.celltype;
+        description = context.response.data.cellTypeDescription;
+        distributionData = context.response.data.distributionData;
+        hasLog = false;
+      } 
+      // when log transformation is applie to the plot
+      else {
+        cellType = context.plotState.cellType;
+        description = context.plotState.description;
+        distributionData = context.plotState.distributionData;
+        hasLog = context.plotState.hasLog;
+      }
+      return {
+        plotType: "cellTypeProfile",
+        cellType: cellType,
+        description: description,
+        distributionData: distributionData,
+        hasLog: hasLog
+      };
+  }
 };
 
 const addFeatures = (context) => {
@@ -519,7 +547,7 @@ const plotFunctionDispatcher = {
   add: addFeatures,
   plot: toggleLog,
   remove: removeFeatures,
-  explore: exploreOrganism,
+  explore: exploreProfile,
   markers: updateMarkers,
   average: updateAverage,
   celltypes: cellAbundance,

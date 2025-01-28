@@ -14,7 +14,6 @@ const { Option } = Select;
 const { Text } = Typography;
 
 const CellTypeProfile = ({ state }) => {
-
   const { cellType, description, distributionData, hasLog } = state;
   const [selectedSpecies, setSelectedSpecies] = useState('all');
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
@@ -26,7 +25,6 @@ const CellTypeProfile = ({ state }) => {
   const [distributionPlotData, setDistributionPlotData] = useState(null);
   const [distributionPlotLayout, setDistributionPlotLayout] = useState(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
-
   // Add effect to fetch the image
   useEffect(() => {
     const getImage = async () => {
@@ -171,10 +169,11 @@ const CellTypeProfile = ({ state }) => {
       console.error("Error fetching markers:", error);
     }
   };
-
   // Render image map component
   const renderImageMap = () => {
-    const counts = distributionData.data.filter(d=>d.organism===selectedSpecies)[0].organCounts.reduce((acc, item) => {
+    const match = distributionData.data.filter(d=>d.organism===selectedSpecies);
+    if (match.length === 0) { return <></> }
+    const counts = match[0].organCounts.reduce((acc, item) => {
       acc[item.organ] = item.count;
       return acc;
     }, {});
@@ -221,7 +220,9 @@ const CellTypeProfile = ({ state }) => {
   }
 
   const renderColorBar = () => {
-    const counts = distributionData.data.filter(d=>d.organism===selectedSpecies)[0].organCounts.reduce((acc, item) => {
+    const match = distributionData.data.filter(d=>d.organism===selectedSpecies);
+    if (match.length === 0) { return <></> }
+    const counts = match[0].organCounts.reduce((acc, item) => {
       acc[item.organ] = item.count;
       return acc;
     }, {});
@@ -245,6 +246,7 @@ const CellTypeProfile = ({ state }) => {
   };
 
   useEffect(() => {
+    ('new cell type')
     setSelectedSpecies('all');
     setHoveredOrgan(null);
     setSelectedOrganMarkers(null);
