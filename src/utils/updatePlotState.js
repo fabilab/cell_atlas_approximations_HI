@@ -2,7 +2,7 @@ import transpose from "./plotHelpers/math";
 
 const exploreProfile = (context) => {
   // explore organism profile
-  if (context.intent === "explore.organism") {
+  if (context.intent.includes("explore.organism")) {
     let organism = context.organism;
     let organs = context.response.data.organs;
     let measurement_type = context.response.data.measurement_type;
@@ -19,7 +19,7 @@ const exploreProfile = (context) => {
       let cellType, description, distributionData, hasLog;
       // by default
       if (context.response.data) {
-        cellType = context.response.params.celltype;
+        cellType = context.response.data.cellType;
         description = context.response.data.cellTypeDescription;
         distributionData = context.response.data.distributionData;
         hasLog = false;
@@ -563,7 +563,6 @@ const plotFunctionDispatcher = {
   similar_celltypes: similarCelltypes,
   fraction_detected: updateFractions,
   feature_sequences: featureSequences,
-  celltype_location: cellTypeProfile,
   highest_measurement: highestMeasurement,
 };
 

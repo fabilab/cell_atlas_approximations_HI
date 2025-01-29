@@ -13,8 +13,22 @@ import Plot from 'react-plotly.js';
 const { Option } = Select;
 const { Text } = Typography;
 
+/**
+ * CellTypeProfile Component
+ * 
+ * This component provides an interactive visualization of cell type distribution 
+ * across species and organs. It displays:
+ * - An image and description of the selected cell type.
+ * - A bar chart of cell type distribution across species and organs.
+ * - An organ map when a species is selected.
+ * - A table of top 10 marker genes and a bubble heatmap when an organ is selected.
+ * - Log transformation support for gene expression dot plots.
+ */
+
 const CellTypeProfile = ({ state }) => {
+
   const { cellType, description, distributionData, hasLog } = state;
+
   const [selectedSpecies, setSelectedSpecies] = useState('all');
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
   const [wikiImage, setWikiImage] = useState(null);
@@ -25,7 +39,10 @@ const CellTypeProfile = ({ state }) => {
   const [distributionPlotData, setDistributionPlotData] = useState(null);
   const [distributionPlotLayout, setDistributionPlotLayout] = useState(null);
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
-  // Add effect to fetch the image
+
+  /**
+   * Fetches the cell type image from Wikipedia when the cellType changes.
+   */
   useEffect(() => {
     const getImage = async () => {
       const imageData = await fetchWikiImage(cellType);
@@ -34,9 +51,16 @@ const CellTypeProfile = ({ state }) => {
     getImage();
   }, [cellType]);
 
+  /**
+   * Generates a bar chart of cell type distribution across species and organs.
+   */
   const makePlot = useCallback(() => {
-    let d = selectedSpecies !== 'all'  ? distributionData.data.filter(d => d.organism === selectedSpecies) : distributionData.data;
-    const total = {};
+    let d = selectedSpecies !== 'all'  
+        ? distributionData.data.filter(d => d.organism === selectedSpecies)
+        : distributionData.data;
+
+    // Aggregate total counts for each organ across species
+    let total = {};
     d.forEach(species => {
       species.organCounts.forEach(({ organ, count }) => {
         total[organ] = (total[organ] || 0) + count;
@@ -47,6 +71,7 @@ const CellTypeProfile = ({ state }) => {
       .sort(([, a], [, b]) => b - a)
       .map(([organ]) => organ);
     
+    // Generate bar chart data
     const plotData = d.map((speciesData) => {
       const rawCount = sortedOrgans.map(organ => {
         const organCount = speciesData.organCounts.find(count => count.organ === organ);
@@ -113,13 +138,13 @@ const CellTypeProfile = ({ state }) => {
       plotLayout.showlegend = false
       plotLayout.yaxis = {
         title: 'Cell percentage',
-        range: [0, maxCount*1.2 > 100 ? 100 : maxCount*1.2], // Add 10% padding
+        range: [0, maxCount*1.2 > 100 ? 100 : maxCount*1.2],
       }
     } else {
       plotLayout.showlegend = true
       plotLayout.yaxis = {
         title: 'Cell Count',
-        range: [0, Math.max(...Object.values(total || 0))*1.1], // Add 10% padding
+        range: [0, Math.max(...Object.values(total || 0))*1.1],
       }
     }
     
@@ -127,15 +152,12 @@ const CellTypeProfile = ({ state }) => {
     setDistributionPlotLayout(plotLayout)
   }, [selectedSpecies, distributionData.data]);
 
-  const handleOrganSelect = async (area) => {
-    if (area.name.includes("-label")) return;
-    setHoveredOrgan(area.name);
-    setLoadingMarker(true);
-    setLoadingMarkerPlot(true);
+  const fetchMarkers = async (organ) => {
+    
     try {
       const marker_params = {
         organism: selectedSpecies,
-        organ: area.name,
+        organ: organ,
         celltype: cellType,
         number: 10,
         measurement_types: "gene_expression"
@@ -146,7 +168,7 @@ const CellTypeProfile = ({ state }) => {
       
       apiResponse = await atlasapprox.dotplot({
         organism: selectedSpecies,
-        organ: area.name,
+        organ: organ,
         features: markers,
         measurement_types: "gene_expression",
       })
@@ -160,26 +182,63 @@ const CellTypeProfile = ({ state }) => {
         fraction: fractionDetected[index]
       }));
 
-      setMarkerExpressionPlotData(apiResponse);
-      setLoadingMarker(false);
-      setLoadingMarkerPlot(false);
-      setSelectedOrganMarkers(combined)
-
+      return {"dotPlotData": apiResponse, "markerExpression": combined}
     } catch (error) {
       console.error("Error fetching markers:", error);
     }
+  }
+
+  const handleOrganSelect = async (area) => {
+    if (area.name.includes("-label")) return;
+    
+    setHoveredOrgan(area.name);
+    setLoadingMarker(true);
+    setLoadingMarkerPlot(true);
+    
+    const { dotPlotData, markerExpression } = await fetchMarkers(area.name);
+    
+    setMarkerExpressionPlotData(dotPlotData);
+    setLoadingMarker(false);
+    setLoadingMarkerPlot(false);
+    setSelectedOrganMarkers(markerExpression)
+
   };
-  // Render image map component
+  // Render organ map component
   const renderImageMap = () => {
+
+    // If no matching data, return nothing
     const match = distributionData.data.filter(d=>d.organism===selectedSpecies);
     if (match.length === 0) { return <></> }
     const counts = match[0].organCounts.reduce((acc, item) => {
       acc[item.organ] = item.count;
       return acc;
     }, {});
+    
+    // If only one organ, show the species's picture from './organism'
     if (Object.keys(counts).length === 1) {
-      return <></>
+      const organ = Object.keys(counts)[0]
+      
+      return (
+        <ImageMapper
+          src={require(`../../asset/organisms/${selectedSpecies}.jpeg`)}
+          onLoad={async () => {
+            setHoveredOrgan(organ);
+            setLoadingMarker(true);
+            setLoadingMarkerPlot(true);
+            
+            const { dotPlotData, markerExpression } = await fetchMarkers(organ);
+            
+            setMarkerExpressionPlotData(dotPlotData);
+            setLoadingMarker(false);
+            setLoadingMarkerPlot(false);
+            setSelectedOrganMarkers(markerExpression)
+          }}
+          width={450}
+          height={450}
+        />
+      );
     }
+
     const minCount = Math.min(...Object.values(counts));
     const maxCount = Math.max(...Object.values(counts));
     const colorScale = scaleLinear()
@@ -363,7 +422,7 @@ const CellTypeProfile = ({ state }) => {
           />
         </div>
       )}
-      {selectedSpecies !== 'all' && Object.keys(orgMeta[selectedSpecies]?.organs || {}).length >= 2 && (
+      {selectedSpecies !== 'all' && Object.keys(orgMeta[selectedSpecies]?.organs || {}).length >= 1 && (
         <>
           <h1 style={{ 
             fontSize: '22px', 

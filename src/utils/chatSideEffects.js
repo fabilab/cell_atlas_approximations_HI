@@ -199,9 +199,9 @@ export const updateChat = async (response, plotState) => {
       if (!apiData) {
         apiData = {};  // Initialize it if undefined
     }
+      apiData.cellType = params.celltype;
       apiData.cellTypeDescription = cellTypeDescription;
       apiData.distributionData = distributionData;
-      console.log(apiData)
     }
 
     if (

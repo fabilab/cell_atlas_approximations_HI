@@ -326,11 +326,15 @@ const buildAnswer = (intent, plotState, data = null) => {
           answer = "Great choice! The summary profile displayed provides a brief overview of " + data.organism + ". <br><br>"
           answer += "To visualize marker genes for each cell type in " + data.organism + ", simply click on the cell type along the y-axis of the bar chart. This will populate the chatbox with a suggestion query related to the selected cell type"
           break;
+        case "celltype":
+          answer = "The summary profile for " + data.cellType + " is displayed on the right. <br><br>"
+          answer += "If the cell type is found in multiple species and organs, use the drop down menu above the chart to select a species for organ map and marker genes."
+          break;
           default:
             answer = "<p>Great choice! The summary profile displayed provides a brief overview of " + data.organism + ". </p>";
       }
       break;
-    case "feature_sequences":
+    case "feature_sequences": 
       switch (sIntent) {
         case "geneExpression":
           answer = "The sequences of " + data.features + " in " + data.organism + " are shown.<br><br>Type \"<b>download</b>\" to get a FASTA file of them all. ";

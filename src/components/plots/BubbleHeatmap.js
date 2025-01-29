@@ -144,9 +144,9 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           y1: geneIndex - 0.4,
           line: {
               color: 'rgba(176, 130, 245, 0.2)',
-              width: 0
+              width: 1
           },
-          // fillcolor: 'rgba(176, 130, 245, 0.2)'
+          fillcolor: 'rgba(176, 130, 245, 0.2)'
       };
     });
   }
@@ -365,7 +365,7 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
   } else {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div id="hover-plot" style={{ width: '100%', height: '100%' }}>
+        <div id="hover-plot" style={{ width: '100%', height: '100%',paddingLeft: '30px' }}>
           <Plot
             data={[data]}
             layout={layout}
