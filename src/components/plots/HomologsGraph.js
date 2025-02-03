@@ -378,19 +378,20 @@ const featureLabelClick = (event) => {
           layout={layout}
           config={config} 
           onAfterPlot={() => {
+            console.log('after plot')
             // https://stackoverflow.com/questions/47397551/how-to-make-plotly-js-listen-the-click-events-of-the-tick-labels
-            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+            document.querySelectorAll('.plot-container .overplot')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .overplot')[0].style['pointer-events'] = 'all';
             
-            selectAll(".plot")
+            selectAll(".overplot")
               .selectAll('text')
               .on("click", (event) => featureLabelClick (event));
           }}
           onInitialized={(figure, graphDiv)=>{
-            document.querySelectorAll('.plot-container .plot')[0].style.cursor = 'pointer';
-            document.querySelectorAll('.plot-container .plot')[0].style['pointer-events'] = 'all';
+            document.querySelectorAll('.plot-container .overplot')[0].style.cursor = 'pointer';
+            document.querySelectorAll('.plot-container .overplot')[0].style['pointer-events'] = 'all';
 
-            selectAll(".plot")
+            selectAll(".overplot")
               .selectAll('text')
               .on("click", (event) => featureLabelClick (event));
           }}

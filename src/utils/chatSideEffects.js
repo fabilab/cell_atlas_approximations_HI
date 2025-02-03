@@ -7,7 +7,6 @@ import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js";
-import { fetchCellTypeDescription } from "./cellTypeResources/fetchDescription.js";
 import { getCellTypeDistribution } from "./plotHelpers/cellTypeProfileData.js";
 
 // An array of intents that trigger a plot update.
@@ -190,7 +189,7 @@ export const updateChat = async (response, plotState) => {
 
     if (intent === "explore.celltype") {
       endpoint = null;
-      let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
+      // let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
       // Get distribution data across species and organs
       let distributionData = await getCellTypeDistribution(params.celltype);
       if (!distributionData.success) {
@@ -200,7 +199,6 @@ export const updateChat = async (response, plotState) => {
         apiData = {};  // Initialize it if undefined
     }
       apiData.cellType = params.celltype;
-      apiData.cellTypeDescription = cellTypeDescription;
       apiData.distributionData = distributionData;
     }
 
