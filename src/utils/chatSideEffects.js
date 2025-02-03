@@ -7,6 +7,7 @@ import { handleNoApiIntents } from "./chatHelpers/handleNoApiIntent.js";
 import { handlePlotConversion } from "./chatHelpers/plotConversion.js";
 import { handleAddRemove } from "./chatHelpers/addRemoveHandler.js";
 import { handleErrors } from "./chatHelpers/errorHandler.js";
+import { getCellTypeDistribution } from "./plotHelpers/cellTypeProfileData.js";
 
 // An array of intents that trigger a plot update.
 // These intents require either fetching data from the API or from previous plot state, and updating the plot accordingly.
@@ -29,6 +30,7 @@ const updatePlotIntents = [
   "organxorganism",
   "similar_features",
   "feature_sequences",
+  "celltype_location",
   "fraction_detected",
   "similar_celltypes",
   "highest_measurement",
@@ -54,15 +56,16 @@ export const triggersPlotUpdate = (response) => {
  * @returns {object} - Object containing parameters extracted from user's query, data to make plot, and bot response
  */
 export const updateChat = async (response, plotState) => {
+  
   let entities = response.entities;
   let intent = response.intent;
   let mainIntent = intent.split(".")[0];
   let subIntent = intent.split(".")[1] || null;
   let complete = response.complete;
   let answer = "",
-    apiData = null,
-    endpoint,
-    params;
+      apiData = null,
+      endpoint,
+      params;
   let extraEndpointsToCall = [];
   // this is defined to store celltypes and organ for celltypes intent.
   let targetCelltypes, targetOrgan;
@@ -182,6 +185,21 @@ export const updateChat = async (response, plotState) => {
     } else if (intent === "explore.organism.chromatinAccessibility") {
       endpoint = "organs";
       params.measurement_type = "chromatin_accessibility";
+    }
+
+    if (intent === "explore.celltype") {
+      endpoint = null;
+      // let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
+      // Get distribution data across species and organs
+      let distributionData = await getCellTypeDistribution(params.celltype);
+      if (!distributionData.success) {
+        throw new Error(distributionData.message);
+      }
+      if (!apiData) {
+        apiData = {};  // Initialize it if undefined
+    }
+      apiData.cellType = params.celltype;
+      apiData.distributionData = distributionData;
     }
 
     if (

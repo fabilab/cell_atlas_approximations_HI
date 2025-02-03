@@ -2,6 +2,7 @@ export const exampleQueries = {
     // Explore intents
     "explore.organism.geneExpression": "explore [organism]",
     "explore.organism.chromatinAccessibility": "explore the chromatin state of [organism]",
+    "explore.celltype": "Show profile of fibroblast [or any other valid cell types]",
     
     // Measurement types intent
     "measurement_types": "what measurement types are available?",

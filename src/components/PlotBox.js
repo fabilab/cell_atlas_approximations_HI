@@ -10,6 +10,7 @@ import CellxOrganTable from './plots/CellxOrganTable';
 import OrganismProfile from './plots/OrganismProfile';
 import FeatureSequences from './plots/FeatureSequences';
 import CoexpressScatter from './plots/CoexpressScatter';
+import CellTypeProfile from './plots/CellTypeProfile';
 import HighestMeasurement from './plots/HighestMeasurement';
 import HighestMeasurementMultiple from './plots/HighestMeasurementMultiple';
 import OrganxOrganismTable from './plots/OrganxOrganismTable';
@@ -75,6 +76,12 @@ const PlotBox = ({ state }) => {
     case 'organXorganism':
       return (
         <OrganxOrganismTable
+          state={state}
+        />
+      )
+    case 'cellTypeProfile':
+      return (
+        <CellTypeProfile
           state={state}
         />
       )

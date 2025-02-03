@@ -1,16 +1,44 @@
 import transpose from "./plotHelpers/math";
 
-const exploreOrganism = (context) => {
-  let organism = context.organism;
-  let organs = context.response.data.organs;
-  let measurement_type = context.response.data.measurement_type;
+const exploreProfile = (context) => {
+  // explore organism profile
+  if (context.intent.includes("explore.organism")) {
+    let organism = context.organism;
+    let organs = context.response.data.organs;
+    let measurement_type = context.response.data.measurement_type;
 
-  return {
-    plotType: "organismProfile",
-    organism: organism,
-    organs: organs,
-    measurement_type: measurement_type,
-  };
+    return {
+      plotType: "organismProfile",
+      organism: organism,
+      organs: organs,
+      measurement_type: measurement_type,
+    };
+  } 
+  // explore cell type profile
+  else if (context.intent === "explore.celltype") {
+      let cellType, description, distributionData, hasLog;
+      // by default
+      if (context.response.data) {
+        cellType = context.response.data.cellType;
+        description = context.response.data.cellTypeDescription;
+        distributionData = context.response.data.distributionData;
+        hasLog = false;
+      } 
+      // when log transformation is applie to the plot
+      else {
+        cellType = context.plotState.cellType;
+        description = context.plotState.description;
+        distributionData = context.plotState.distributionData;
+        hasLog = context.plotState.hasLog;
+      }
+      return {
+        plotType: "cellTypeProfile",
+        cellType: cellType,
+        description: description,
+        distributionData: distributionData,
+        hasLog: hasLog
+      };
+  }
 };
 
 const addFeatures = (context) => {
@@ -46,6 +74,7 @@ const removeFeatures = (context) => {
 };
 
 const toggleLog = (context) => {
+
   context.plotState.hasLog = !context.plotState.hasLog;
   if (context.plotState.plotType === "neighborhood") {
     return updateNeighbor(context);
@@ -53,6 +82,8 @@ const toggleLog = (context) => {
     return updateComeasurement(context);
   } else if (context.plotState.plotType === "highestMeasurementMultiple") {
     return highestMeasurement(context);
+  } else if (context.plotState.plotType === "cellTypeProfile") {
+    return cellTypeProfile(context);
   }
   else {
     if (!context.plotState.fractions) {
@@ -469,6 +500,29 @@ const cellAbundance = (context) => {
   };
 };
 
+const cellTypeProfile = (context) => {
+  let cellType, description, distributionData, hasLog;
+  // By default
+  if (context.response.data) {
+    cellType = context.response.data.celltype;
+    description = context.response.data.cellTypeDescription;
+    distributionData = context.response.data.distributionData;
+    hasLog = false;
+  } else {
+    cellType = context.plotState.cellType;
+    description = context.plotState.description;
+    distributionData = context.plotState.distributionData;
+    hasLog = context.plotState.hasLog;
+  }
+  return {
+    plotType: "cellTypeProfile",
+    cellType: cellType,
+    description: description,
+    distributionData: distributionData,
+    hasLog: hasLog
+  };
+};
+
 const availableOrganisms = (context) => {
   return {
     plotType: "showOrganisms",
@@ -493,7 +547,7 @@ const plotFunctionDispatcher = {
   add: addFeatures,
   plot: toggleLog,
   remove: removeFeatures,
-  explore: exploreOrganism,
+  explore: exploreProfile,
   markers: updateMarkers,
   average: updateAverage,
   celltypes: cellAbundance,
