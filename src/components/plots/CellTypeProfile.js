@@ -18,10 +18,10 @@ const { Text } = Typography;
  * CellTypeProfile Component
  *
  * This component provides an interactive visualization of cell type distribution
- * across species and organs. It displays:
+ * across organism and organs. It displays:
  * - An image and description of the selected cell type.
- * - A bar chart of cell type distribution across species and organs.
- * - An organ map when a species is selected.
+ * - A bar chart of cell type distribution across organism and organs.
+ * - An organ map when a organism is selected.
  * - A table of top 10 marker genes and a bubble heatmap when an organ is selected.
  * - Log transformation support for gene expression dot plots.
  */
@@ -30,8 +30,8 @@ const CellTypeProfile = ({ state }) => {
   const { cellType, distributionData, hasLog } = state;
 
   const [description, setDescription] = useState(null);
-  const [selectedSpecies, setSelectedSpecies] = useState("all");
-  const [hoveredOrgan, setHoveredOrgan] = useState(null);
+  const [selectedOrganism, setSelectedOrganism] = useState("all");
+  const [clickedOrgan, setClickedOrgan] = useState(null);
   const [wikiImage, setWikiImage] = useState(null);
   const [selectedOrganMarkers, setSelectedOrganMarkers] = useState(null);
   const [loadingMarkerPlot, setLoadingMarkerPlot] = useState(true);
@@ -47,8 +47,8 @@ const CellTypeProfile = ({ state }) => {
    * Fetches the cell type image from Wikipedia when the cellType changes.
    */
   useEffect(() => {
-    setSelectedSpecies("all");
-    setHoveredOrgan(null);
+    setSelectedOrganism("all");
+    setClickedOrgan(null);
     setSelectedOrganMarkers(null);
 
     const getImage = async () => {
@@ -69,16 +69,17 @@ const CellTypeProfile = ({ state }) => {
    */
   const makePlot = useCallback(() => {
     let d =
-      selectedSpecies !== "all"
-        ? distributionData.data.filter((d) => d.species === selectedSpecies)
+      selectedOrganism !== "all"
+        ? distributionData.data.filter((d) => d.organism === selectedOrganism)
         : distributionData.data;
     // Group percentages by organ
+
     let organData = {};
-    d.forEach(({ organ, species, percentage }) => {
+    d.forEach(({ organ, organism, percentage }) => {
       if (!organData[organ]) {
         organData[organ] = {};
       }
-      organData[organ][species] = percentage;
+      organData[organ][organism] = percentage;
     });
 
     const sortedOrgans = Object.keys(organData).sort(
@@ -92,15 +93,15 @@ const CellTypeProfile = ({ state }) => {
     const chartWidth = sortedOrgans.length > 25 ? 40 * sortedOrgans.length : 30 * sortedOrgans.length + 500; // Increase width when x-axis has >15 items
     // Generate bar chart data
     const plotData = [];
-    const speciesSet = new Set(d.map((item) => item.species));
+    const organismSet = new Set(d.map((item) => item.organism));
 
-    speciesSet.forEach((species) => {
-      const yValues = sortedOrgans.map((organ) => (organData[organ][species] || 0));
+    organismSet.forEach((organism) => {
+      const yValues = sortedOrgans.map((organ) => (organData[organ][organism] || 0));
 
       plotData.push({
         x: sortedOrgans,
         y: yValues,
-        name: species,
+        name: organism,
         type: "bar",
         text: yValues.map((p) => p.toFixed(2) + "%"),
         textposition: "auto",
@@ -144,13 +145,13 @@ const CellTypeProfile = ({ state }) => {
 
     setDistributionPlotData(plotData);
     setDistributionPlotLayout(plotLayout);
-  }, [selectedSpecies, distributionData.data]);
+  }, [selectedOrganism, distributionData.data]);
 
   const fetchMarkers = useCallback(
     async (organ) => {
       try {
         const marker_params = {
-          organism: selectedSpecies,
+          organism: selectedOrganism,
           organ: organ,
           celltype: cellType,
           number: 10,
@@ -161,7 +162,7 @@ const CellTypeProfile = ({ state }) => {
         let markers = apiResponse.markers;
 
         apiResponse = await atlasapprox.dotplot({
-          organism: selectedSpecies,
+          organism: selectedOrganism,
           organ: organ,
           features: markers,
           measurement_types: "gene_expression",
@@ -181,13 +182,13 @@ const CellTypeProfile = ({ state }) => {
         console.error("Error fetching markers:", error);
       }
     },
-    [cellType, selectedSpecies]
+    [cellType, selectedOrganism]
   );
 
   const handleOrganSelect = async (area) => {
     if (area.name.includes("-label")) return;
 
-    setHoveredOrgan(area.name);
+    setClickedOrgan(area.name);
     setLoadingMarker(true);
     setLoadingMarkerPlot(true);
 
@@ -200,12 +201,9 @@ const CellTypeProfile = ({ state }) => {
   };
 
   const renderImageMap = () => {
-    if (!orgMeta[selectedSpecies] || !orgMeta[selectedSpecies].organs) {
-      return <></>; // Ensure organ metadata exists
-    }
-  
+
     // Extract the relevant species' organ percentage data
-    const match = distributionData.data.filter((d) => d.species === selectedSpecies);
+    const match = distributionData.data.filter((d) => d.organism === selectedOrganism);
   
     if (match.length === 0) {
       return <></>;
@@ -216,9 +214,17 @@ const CellTypeProfile = ({ state }) => {
       acc[item.organ] = item.percentage; // Use percentage instead of count
       return acc;
     }, {});
-    
-    if (Object.keys(organPercentages).length === 0) {
-      return <></>;
+
+    // If only one organ, show the species's picture from './organism'
+    if (Object.keys(organPercentages).length === 1) {
+      return (
+        <ImageMapper
+          id="organism-image"
+          src={require(`../../asset/organisms/${selectedOrganism}.jpeg`)}
+          width={300}
+          height={300}
+        />
+      );
     }
   
     // Define color scale
@@ -229,7 +235,7 @@ const CellTypeProfile = ({ state }) => {
       .range(["#f0d2cc", "#ed4e2b"]); // Light to dark color gradient
   
     // Generate organ map areas
-    const areas = Object.entries(orgMeta[selectedSpecies].organs).map(([organ, metadata]) => {
+    const areas = Object.entries(orgMeta[selectedOrganism].organs).map(([organ, metadata]) => {
       const coords = metadata.coords.split(",").map(Number);
       const adjustedCoords = coords.map((coord, index) =>
         index % 2 === 0 ? coord * scalingFactors.width : coord * scalingFactors.height
@@ -248,13 +254,13 @@ const CellTypeProfile = ({ state }) => {
       };
     });
   
-    let imagePathPrefix = `grey_${selectedSpecies}`;
+    let imagePathPrefix = `grey_${selectedOrganism}`;
   
     return (
       <ImageMapper
         id="organism-image"
         src={require(`../../asset/anatomy/${imagePathPrefix}.jpg`)}
-        map={{ name: `${selectedSpecies}-map`, areas }}
+        map={{ name: `${selectedOrganism}-map`, areas }}
         onClick={handleOrganSelect}
         width={450}
         height={450}
@@ -263,8 +269,9 @@ const CellTypeProfile = ({ state }) => {
   };  
 
   const renderColorBar = () => {
-    const match = distributionData.data.filter((d) => d.organism === selectedSpecies);
-    if (match.length === 0) {
+    const match = distributionData.data.filter((d) => d.organism === selectedOrganism);
+
+    if (!match.length || !match[0] || !Array.isArray(match[0].organCounts)) {
       return <></>;
     }
     const counts = match[0].organCounts.reduce((acc, item) => {
@@ -297,20 +304,20 @@ const CellTypeProfile = ({ state }) => {
   });
 
   useEffect(() => {
-    setHoveredOrgan(null);
+    setClickedOrgan(null);
     setSelectedOrganMarkers(null);
-    if (selectedSpecies === "all") {
+    if (selectedOrganism === "all") {
       makePlot();
     } else {
       makePlot();
-      if (orgMeta[selectedSpecies].organs) {
-        const imagePathPrefix = `grey_${selectedSpecies}`;
+      if (orgMeta[selectedOrganism].organs) {
+        const imagePathPrefix = `grey_${selectedOrganism}`;
         let imageWithDimensions = require(`../../asset/anatomy/${imagePathPrefix}.jpg`);
         scaleImage(imageWithDimensions, 450, setScalingFactors);
       }
 
       const fetch_data = async (organ) => {
-        setHoveredOrgan(organ);
+        setClickedOrgan(organ);
         setLoadingMarker(true);
         setLoadingMarkerPlot(true);
 
@@ -322,19 +329,22 @@ const CellTypeProfile = ({ state }) => {
         setLoadingMarkerPlot(false);
       };
 
-      const match = distributionData.data.filter((d) => d.organism === selectedSpecies);
-      if (match.length !== 0) {
-        const counts = match[0].organCounts.reduce((acc, item) => {
-          acc[item.organ] = item.count;
-          return acc;
-        }, {});
-        if (Object.keys(counts).length === 1) {
-          const organ = Object.keys(counts)[0];
-          fetch_data(organ);
+      const match = distributionData.data.filter((d) => d.organism === selectedOrganism);
+      if (match.length === 1) {
+        const organ = match[0].organ;
+        fetch_data(organ);
+      }
+      if (match.length >= 1) {
+          // Find the organ with the highest percentage
+        const highestOrgan = match.reduce((max, item) =>
+          !max || item.percentage > max.percentage ? item : max
+        , null)?.organ;
+        if (highestOrgan) {
+          fetch_data(highestOrgan);
         }
       }
     }
-  }, [selectedSpecies, makePlot, distributionData, fetchMarkers]);
+  }, [selectedOrganism, makePlot, distributionData, fetchMarkers]);
 
   return (
     <div style={{ padding: "20px" }}>
@@ -370,16 +380,16 @@ const CellTypeProfile = ({ state }) => {
       {/* cell type distribution bar chart */}
       <h1 style={{ fontSize: "22px", fontWeight: "bold", display: "flex", alignItems: "center", gap: "8px" }}>
         Cell type distribution in
-        <Select defaultValue="all" style={{ width: 150 }} onChange={(value) => setSelectedSpecies(value)} value={selectedSpecies}>
+        <Select defaultValue="all" style={{ width: 150 }} onChange={(value) => setSelectedOrganism(value)} value={selectedOrganism}>
           <Option value="all">All</Option>
-            {Array.from(new Set(distributionData.data.map((d) => d.species))).map((species) => (
-              <Option key={species} value={species}>{species}</Option>
+            {Array.from(new Set(distributionData.data.map((d) => d.organism))).map((organism) => (
+              <Option key={organism} value={organism}>{organism}</Option>
             ))}
         </Select>
       </h1>
       <div style={{ marginTop: "16px", fontSize: "15px", color: "#888", display: "flex", alignItems: "center" }}>
         <InfoCircleOutlined style={{ marginRight: "8px" }} />
-        <p>Choose a species from the dropdown to view the organ map.</p>
+        <p>Choose a organism from the dropdown to view the organ map.</p>
       </div>
       {distributionPlotData && distributionPlotLayout && (
         <div style={{ width: "100%", display: "flex" }}>
@@ -388,7 +398,7 @@ const CellTypeProfile = ({ state }) => {
       )}
 
       {/* organ map */}
-      {selectedSpecies !== "all" && Object.keys(orgMeta[selectedSpecies]?.organs || {}).length >= 1 && (
+      {selectedOrganism !== "all" && Object.keys(orgMeta[selectedOrganism]?.organs || {}).length >= 1 && (
         <>
           <h1 style={{ fontSize: "22px", marginBottom: "8px", fontWeight: "bold" }}>Organ map</h1>
           <div style={{ marginTop: "16px", fontSize: "15px", color: "#888", display: "flex", alignItems: "center" }}>
@@ -401,16 +411,19 @@ const CellTypeProfile = ({ state }) => {
         {/* species's picture with/without label */}
         <div style={{ display: "flex", alignItems: "flex-start" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            {selectedSpecies !== "all" && renderImageMap()}
+            {selectedOrganism !== "all" && renderImageMap()}
           </div>
-          {selectedSpecies !== "all" && renderColorBar()}
+          {selectedOrganism !== "all" && renderColorBar()}
         </div>
         {/* markers table */}
         <div style={{ flex: 1, overflow: "auto", minWidth: "0", paddingLeft: "5%" }}>
-          {hoveredOrgan && selectedSpecies ? (
+          {clickedOrgan && selectedOrganism ? (
             !loadingMarker ? (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <h4>Top 10 markers for {cellType} in {selectedSpecies} {hoveredOrgan}</h4>
+                <h4>
+                  Top 10 markers for {cellType} in {selectedOrganism}{" "}
+                  <span style={{ color: "red", fontWeight: "bold" }}>{clickedOrgan}</span>
+                </h4>
                 <Table
                   className="compact-table"
                   dataSource={selectedOrganMarkers.map((marker, index) => ({
@@ -421,7 +434,7 @@ const CellTypeProfile = ({ state }) => {
                   }))}
                   columns={[
                     { title: "Gene", dataIndex: "gene", key: "gene", render: (text) => 
-                        selectedSpecies === "h_sapiens" && markerExpressionPlotData.measurement_type === "gene_expression" ? (
+                        selectedOrganism === "h_sapiens" && markerExpressionPlotData.measurement_type === "gene_expression" ? (
                           <a href={`https://www.genecards.org/cgi-bin/carddisp.pl?gene=${text}`} target="_blank" rel="noopener noreferrer">{text}</a>
                         ) : text },
                     { title: "Expression (cptt)", dataIndex: "expression", key: "expression", align: "center" },
@@ -443,7 +456,7 @@ const CellTypeProfile = ({ state }) => {
       </div>
 
       <div style={{ padding: "24px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {hoveredOrgan && selectedSpecies ? (
+        {clickedOrgan && selectedOrganism ? (
           !loadingMarkerPlot ? (
             <div style={{ width: "100%", overflowX: "auto", overflowY: "visible", paddingBottom: "20px" }}>
               <div style={{ minWidth: "max-content", display: "inline-block", height: "auto", minHeight: "600px" }}>
@@ -454,7 +467,7 @@ const CellTypeProfile = ({ state }) => {
                     yaxis: markerExpressionPlotData.features,
                     average: markerExpressionPlotData.average,
                     fractions: markerExpressionPlotData.fraction_detected,
-                    organism: selectedSpecies,
+                    organism: selectedOrganism,
                     organ: markerExpressionPlotData.organ,
                     celltype: false,
                     unit: markerExpressionPlotData.unit,
