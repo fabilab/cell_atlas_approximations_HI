@@ -90,7 +90,7 @@ const CellTypeProfile = ({ state }) => {
     const barWidth = sortedOrgans.length > 2? 0.8 : 0.4;
 
     // Adjust chart width dynamically
-    const chartWidth = sortedOrgans.length > 25 ? 40 * sortedOrgans.length : 30 * sortedOrgans.length + 500; // Increase width when x-axis has >15 items
+    const chartWidth = sortedOrgans.length > 25 ? 40 * sortedOrgans.length : 30 * sortedOrgans.length + 500;
     // Generate bar chart data
     const plotData = [];
     const organismSet = new Set(d.map((item) => item.organism));
@@ -103,11 +103,25 @@ const CellTypeProfile = ({ state }) => {
         y: yValues,
         name: organism,
         type: "bar",
-        text: yValues.map((p) => p.toFixed(2) + "%"),
+        text: yValues.map((p) => p.toFixed(2)),
         textposition: "auto",
         width: Array(sortedOrgans.length).fill(barWidth),
+        showlegend: true,
       });
     });
+    const organSums = {}; // Store summed values per organ
+
+    plotData.forEach(trace => {
+      trace.x.forEach((organ, index) => {
+        organSums[organ] = (organSums[organ] || 0) + trace.y[index]; 
+      });
+    });
+    
+    const maxYValue = Math.max(...Object.values(organSums)); // Correct maximum
+    const isSingleSpecies = selectedOrganism !== "all";
+    const maxY = isSingleSpecies && maxYValue <= 100 ? 100 : maxYValue * 1.1;
+    
+
     // Define layout
     const plotLayout = {
       width: chartWidth,
@@ -125,7 +139,7 @@ const CellTypeProfile = ({ state }) => {
       },
       yaxis: {
         title: "Cell percentage (%)",
-        range: [0, 100],
+        range: [0, maxY],
       },
       plot_bgcolor: "white",
       paper_bgcolor: "white",
@@ -134,10 +148,12 @@ const CellTypeProfile = ({ state }) => {
         size: 12,
       },
       legend: {
+        showlegend: true,
         x: 1,
-        y: 1,
+        y: 1.1,
         xanchor: "right",
         yanchor: "top",
+        bgcolor: "rgba(255, 255, 255, 0.8)",
       },
       bargap: 0.05,
       bargroupgap: 0.1,
