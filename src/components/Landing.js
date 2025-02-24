@@ -104,10 +104,9 @@ const Landing = () => {
   const sampleQueries = [
     'What species are available?',
     'Explore lemur',
-    'What cell types are there in mouse liver?',
+    'Show 10 markers of T cells in human blood.',
     'Show profile of neutrophil',
     'What are markers for all cells in mouse lung?',
-    'Show 10 markers of T cells in human blood.',
     'Show interactors of NOTCH1 in human heart.',
     'What organisms have chromatin accessibility?',
     'Show 10 genes similar to Col1a1 in mouse lung.',
@@ -139,7 +138,7 @@ const Landing = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          paddingTop: "24vh",
+          paddingTop: "23vh",
         }}
       >
         <img

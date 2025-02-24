@@ -6,7 +6,7 @@ import { fetchWikiImage } from "../../utils/cellTypeResources/fetchImage.js";
 import BubbleHeatmap from "./BubbleHeatmap";
 import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
 import { fetchCellTypeDescription } from "../../utils/cellTypeResources/fetchDescription.js";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { BarChartOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Typography, Select, Table, Spin } from "antd";
 import { scaleLinear } from "d3-scale";
 import Plot from "react-plotly.js";
@@ -90,7 +90,7 @@ const CellTypeProfile = ({ state }) => {
     const barWidth = sortedOrgans.length > 2? 0.8 : 0.4;
 
     // Adjust chart width dynamically
-    const chartWidth = sortedOrgans.length > 25 ? 40 * sortedOrgans.length : 30 * sortedOrgans.length + 500;
+    const chartWidth = sortedOrgans.length >= 24 ? 35 * sortedOrgans.length + 200 : 30 * sortedOrgans.length + 500;
     // Generate bar chart data
     const plotData = [];
     const organismSet = new Set(d.map((item) => item.organism));
@@ -365,10 +365,10 @@ const CellTypeProfile = ({ state }) => {
   return (
     <div style={{ padding: "20px" }}>
       {/* cell type name, picture and desctiption */}
-      <h1 style={{ fontSize: "24px", marginBottom: "15px", fontWeight: "bold", cursor: "pointer"}}>
+      <h1 style={{ fontSize: "24px", marginBottom: "15px", fontWeight: "bold", color: "#1890ff", cursor: "pointer"}}>
       <a 
         href={`https://www.google.com/search?q=${encodeURIComponent(cellType)}`} target="_blank" rel="noopener noreferrer"
-        style={{ textDecoration: "none" }}
+        style={{ textDecoration: "none", color: "#116bf2"}}
       >
         {cellType}
       </a>
@@ -381,11 +381,11 @@ const CellTypeProfile = ({ state }) => {
             style={{ width: "120px", height: "120px", objectFit: "cover" }}
           />
         </div>
-        <p style={{ fontSize: "15px", lineHeight: "1.5", flex: 1 }}>
+        <p style={{ fontSize: "16px", lineHeight: "1.5", flex: 1 }}>
           {description || "loading"}{" "}
           <span style={{ fontSize: "15px", color: "#888" }}>
             (Source:{" "}
-            <a href="https://www.ebi.ac.uk/ols4" target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
+            <a href="https://www.ebi.ac.uk/ols4" target="_blank" rel="noopener noreferrer" style={{ color: "#116bf2" }}>
               EBI
             </a>
             )
@@ -403,9 +403,11 @@ const CellTypeProfile = ({ state }) => {
             ))}
         </Select>
       </h1>
-      <div style={{ marginTop: "16px", fontSize: "15px", color: "#888", display: "flex", alignItems: "center" }}>
-        <InfoCircleOutlined style={{ marginRight: "8px" }} />
-        <p>Choose a organism from the dropdown to view the organ map.</p>
+      <div style={{ marginTop: "16px", fontSize: "15px", color: "#555", display: "flex", alignItems: "center" }}>
+      <p style={{ fontSize: "14px", marginTop: "10px" }}>
+        <BarChartOutlined style={{ fontSize: "20px", marginRight: "5px", color: "#007bff" }} />
+        The percentages in the chart represent the proportion of <b>{cellType}</b> cells relative to all measured cells in a specific organ of a species. Each color in the chart represents a different species. Select a species from the dropdown to view the organ map and marker gene data.
+      </p>
       </div>
       {distributionPlotData && distributionPlotLayout && (
         <div style={{ width: "100%", display: "flex" }}>
