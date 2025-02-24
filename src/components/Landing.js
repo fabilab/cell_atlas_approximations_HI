@@ -104,10 +104,10 @@ const Landing = () => {
   const sampleQueries = [
     'What species are available?',
     'Explore lemur',
-    'What cell types are there in mouse liver?',
-    'Show interactors of NOTCH1 in human heart.',
     'Show 10 markers of T cells in human blood.',
+    'Show profile of neutrophil',
     'What are markers for all cells in mouse lung?',
+    'Show interactors of NOTCH1 in human heart.',
     'What organisms have chromatin accessibility?',
     'Show 10 genes similar to Col1a1 in mouse lung.',
     "What cells coexpress CD19 and MS4A1 in human?",
@@ -115,9 +115,9 @@ const Landing = () => {
     'What cell types are present in each organ of mouse?',
     'What cell type is the highest expressor of Cd19 in mouse?',
     'What are the 3 top surface markers of NK cells in human liver?',
-    'Show 10 markers for fibroblast in human lung compared to other tissues.',
-    'Show the 10 top marker peaks for cardiomyocyte in h_sapiens heart.',
     'What are the homologs of MS4A1,GP6,COL1A1 from human to mouse?',
+    'Show the 10 top marker peaks for cardiomyocyte in h_sapiens heart.',
+    'Show 10 markers for fibroblast in human lung compared to other tissues.',
     'What is the expression of COL13A1, COL14A1, TGFBI, PDGFRA, GZMA in human lung?',
     'What are the cell states of ML358828a, ML071151a, ML065728a in jellyfish whole?',
     'Compare fraction expressing PTPRC, MARCO, CD68, CD14 in macrophage across organs in human.',
@@ -138,7 +138,7 @@ const Landing = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          paddingTop: "24vh",
+          paddingTop: "23vh",
         }}
       >
         <img

@@ -188,9 +188,9 @@ export const updateChat = async (response, plotState) => {
     }
 
     if (intent === "explore.celltype") {
+      // No direct API call needed, we use helper functions
       endpoint = null;
-      // let cellTypeDescription = await fetchCellTypeDescription(params.celltype);
-      // Get distribution data across species and organs
+
       let distributionData = await getCellTypeDistribution(params.celltype);
       if (!distributionData.success) {
         throw new Error(distributionData.message);

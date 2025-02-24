@@ -218,6 +218,16 @@ const organismMetadata = {
       "vagina-label": {coords: "57,846,246,896", shape: "rect"}
     }
   },
+  "h_vulgaris": {
+    bioName: "Hydra vulgaris",
+    commonName: "Fresh-water polyp",
+    dataSource: `Siebert et al 2019 "Stem cell differentiation trajectories in Hydra resolved at single-cell resolution"`,    
+    about: "Hydra vulgaris, the fresh-water polyp,[3] is a small freshwater hydroid with length from 10 mm to 30 mm and width about 1 mm. H. vulgaris is often used, like many hydra, as a model organism for morphallactic regeneration because they are easy to care for, requiring minimal direct care, and reproduce relatively quickly",
+    imagePath: require("../asset/organisms/h_vulgaris.jpeg"),
+    descriptionHyperlink: "https://en.wikipedia.org/wiki/Hydra_vulgaris",
+    paperHyperlink: "https://www.science.org/doi/10.1126/science.aav9314",
+    category: "Animal",
+  },
   "i_pulchra": {
     bioName: "Isodiametra pulchra",
     commonName: "Acoel",
