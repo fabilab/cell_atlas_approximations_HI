@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.c7a5c677.css",
-    "main.js": "/static/js/main.eaf6ab5b.js",
+    "main.js": "/static/js/main.68c56260.js",
     "static/media/t_aestivum.jpeg": "/static/media/t_aestivum.88be02293c0b0d38b936.jpeg",
     "static/media/h_sapiens.jpg": "/static/media/h_sapiens.42084885c6df0313bedd.jpg",
     "static/media/d_rerio.jpeg": "/static/media/d_rerio.f86bab91a7da519c8481.jpeg",
@@ -76,6 +76,6 @@
   },
   "entrypoints": [
     "static/css/main.c7a5c677.css",
-    "static/js/main.eaf6ab5b.js"
+    "static/js/main.68c56260.js"
   ]
 }
