@@ -38,11 +38,7 @@ const HighestMeasurementBubble = ({ state }) => {
     });
   }
 	const yTickVals = features.map((_, index) => index);
-
-  if (hasLog) {
-    average = average.map((row) => row.map((value) => Math.log10(value)));
-    unit = "log( " + unit + " )";
-  }
+  const displayUnit = hasLog ? `Log(${unit})` : unit;
 
   let all_x = [];
   let all_y = [];
@@ -108,7 +104,7 @@ const HighestMeasurementBubble = ({ state }) => {
       sizeref: (2 * Math.max(...all_size)) / 6.2 ** 2,
       colorscale: YlGnBu,
       reversescale: true,
-      colorbar: { title: { text: unit, titleside: "bottom" } },
+      colorbar: { title: { text: displayUnit, titleside: "bottom" } },
     },
     text: all_hovertext,
     hoverinfo: "text",
