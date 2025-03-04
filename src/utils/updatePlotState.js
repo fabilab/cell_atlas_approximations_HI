@@ -1,4 +1,4 @@
-import transpose from "./plotHelpers/math";
+import {transpose} from "./plotHelpers/math";
 
 const exploreProfile = (context) => {
   // explore organism profile
@@ -80,7 +80,7 @@ const toggleLog = (context) => {
     return updateNeighbor(context);
   } else if (context.plotState.plotType === "coexpressScatter") {
     return updateComeasurement(context);
-  } else if (context.plotState.plotType === "highestMeasurementMultiple") {
+  } else if (context.plotState.plotType === "highestMeasurementMultiple" || context.plotState.plotType === "highestMeasurement") {
     return highestMeasurement(context);
   } else if (context.plotState.plotType === "cellTypeProfile") {
     return cellTypeProfile(context);
@@ -408,6 +408,7 @@ const highestMeasurement = (context) => {
   let measurement_type = data_path.measurement_type;
   let average = data_path.average;
   let unit = data_path.unit;
+  let hasLog = context.plotState.hasLog;
 
   // if features provided
   if (features) {
@@ -419,7 +420,6 @@ const highestMeasurement = (context) => {
     });
     let score = data_path.score;
     let fraction_detected = data_path.fraction_detected;
-    let hasLog = context.plotState.hasLog;
     return {
       plotType: "highestMeasurementMultiple",
       organism: organism,
@@ -433,31 +433,39 @@ const highestMeasurement = (context) => {
       fraction_detected: fraction_detected,
       score: score,
       unit: unit,
-      hasLog,
+      hasLog: hasLog,
     }
   } 
   // if only one feature present
   else {
-    let topNCelltypes = context.response.data.topNCelltypes;
-    let topNOrgans = context.response.data.topNOrgans;
-    let celltypesOrgan = topNCelltypes?.map((c, index) => {
-      return c + " (" + topNOrgans[index] + ")";
-    });
+      let topNCelltypes = data_path.topNCelltypes;
+      let topNOrgans = data_path.topNOrgans;
+      let celltypesOrgan;
+
+      if (context.response.data) {
+          celltypesOrgan = topNCelltypes?.map((c, index) => {
+          return c + " (" + topNOrgans[index] + ")";
+        });
+      }
+      else {
+        celltypesOrgan = context.plotState.celltypesOrgan;
+      }
 
     return {
       plotType: "highestMeasurement",
       organism: organism,
       organs: organs,
       celltypes: celltypes,
-      feature: context.features,
+      feature: data_path.feature,
       measurement_type: measurement_type,
       celltypesOrgan: celltypesOrgan,
       yaxis: average,
       average: average,
-      topNCelltypes: context.response.data.topNCelltypes,
-      topNOrgans: context.response.data.topNOrgans,
-      topNExp: context.response.data.topNExp,
+      topNCelltypes: topNCelltypes,
+      topNOrgans: topNOrgans,
+      topNExp: data_path.topNExp,
       unit: unit,
+      hasLog: hasLog,
     };
   }
 };

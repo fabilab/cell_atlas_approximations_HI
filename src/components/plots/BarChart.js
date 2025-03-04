@@ -5,7 +5,7 @@ import { Popover, Button } from 'antd';
 import orgMeta from '../../utils/organismMetadata.js';
 
 const BarChart = ({ state }) => {
-  let { plotType, celltypesOrgan, targetCelltype, average, organism, feature, unit } = state;
+  let { plotType, celltypesOrgan, targetCelltype, average, organism, feature, unit, hasLog } = state;
   let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
   let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   let xValue = celltypesOrgan;
@@ -30,7 +30,7 @@ const BarChart = ({ state }) => {
       } else {
         title = `<b>Highest expressor of <i>${feature}</i> in ${organism}</b>`;
       }
-      yLabel = unit;
+      yLabel = hasLog ? `Log(${unit})` : unit;
       break;
     default:
       break;
