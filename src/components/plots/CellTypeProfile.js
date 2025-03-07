@@ -42,7 +42,6 @@ const CellTypeProfile = ({ state }) => {
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
 
   const imageUnavailableNotice = require("../../asset/imageUnavailable.png");
-
   /**
    * Fetches the cell type image from Wikipedia when the cellType changes.
    */

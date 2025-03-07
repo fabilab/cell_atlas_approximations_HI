@@ -1,7 +1,7 @@
 import Plot from "react-plotly.js";
 
 const HighestMeasurementScoreBar = ({ state }) => {
-  const { organism, celltypesOrgan, score } = state;
+  const { organism, celltypesOrgan, score, hasLog } = state;
   let yValue = score.map((x) => Number(x.toPrecision(3)));
   
   let trace1 = {
@@ -33,11 +33,11 @@ const HighestMeasurementScoreBar = ({ state }) => {
     },
     yaxis: {
       title: {
-        text: "score",
+        text: hasLog ? "Log10(score)" : "score",
         standoff: 20,
       },
     },
-    title: `<b>Expression score of genes across ${organism} top cell types & organs<b>`,
+    title: `<b>Expression score of genes across ${organism} top cell types & organs$`
   };
 
   let data = [trace1];

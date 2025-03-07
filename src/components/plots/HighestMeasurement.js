@@ -6,11 +6,12 @@ import { scaleLinear } from "d3-scale";
 import { Typography } from "antd";
 import BarChart from "./BarChart.js";
 import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
+import { transformData } from "../../utils/plotHelpers/math.js"
 
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
-  const { feature, measurement_type, organism, organs, celltypes, average, topNExp, unit } = state;
+  const { feature, measurement_type, organism, organs, celltypes, average, topNExp, unit, hasLog } = state;
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
   const [organData, setOrganData] = useState([]);
@@ -18,22 +19,46 @@ const HighestMeasurement = ({ state }) => {
   const uniqueOrgans = [...new Set(organs)];
   const hasMultipleOrgans = uniqueOrgans.length > 1;
 
+  // Transform the average data for the bar chart
+  const transformedAverage = transformData(average, hasLog);
+  const transformedTopNExp = transformData(topNExp, hasLog);
+
   // Get the max expression value for each organ
   const highestExprPerOrgan = {};
   organs.forEach((organ, index) => {
     if (!highestExprPerOrgan[organ]) {
       // Since the returned avg is already in descending order, just get the first exp (highest) for each organ
-      highestExprPerOrgan[organ] = average[index];
+      highestExprPerOrgan[organ] = transformedAverage[index];
     }
   });
+
 
   // Set up color scale for organ heatmap
   const minExpression = Math.min(...Object.values(highestExprPerOrgan));
   const maxExpression = Math.max(...Object.values(highestExprPerOrgan));
   const colorScale = scaleLinear()
     .domain([minExpression, maxExpression])
-    .range(["#f0d2cc", "#ed4e2b"]);
+    .range(["#fae0de", "#ed4e2b"]);
 
+    // Recompute organData whenever transformedAverage or hoveredOrgan changes
+  useEffect(() => {
+    if (!hoveredOrgan) {
+      setOrganData([]);
+      return;
+    }
+
+    const newOrganData = organs
+      .map((organ, index) =>
+        organ === hoveredOrgan
+          ? { cellType: celltypes[index], avgExpression: transformedAverage[index] }
+          : null
+      )
+      .filter(Boolean);
+      
+    setOrganData(newOrganData);
+  }, [hoveredOrgan, transformedAverage, organs, celltypes]);
+
+  
   // Update scaling factors based on image size
   useEffect(() => {
     if (!hasMultipleOrgans) return;
@@ -82,7 +107,7 @@ const HighestMeasurement = ({ state }) => {
     const newOrganData = organs
       .map((organ, index) =>
         organ === area.name
-          ? { cellType: celltypes[index], avgExpression: average[index] }
+          ? { cellType: celltypes[index], avgExpression: transformedAverage[index] }
           : null
       )
       .filter(Boolean);
@@ -131,7 +156,7 @@ const HighestMeasurement = ({ state }) => {
   return (
     <div style={{ width: "inherit", alignItems: "center" }}>
       <div style={{ padding: "1% 10%" }}>
-        <BarChart state={{ ...state, average: topNExp }} />
+        <BarChart state={{ ...state, average: transformedTopNExp }} />
       </div>
       {hasMultipleOrgans && (
         <div style={{ padding: "0% 4%", display: "flex", justifyContent: "space-between" }}>
@@ -152,6 +177,7 @@ const HighestMeasurement = ({ state }) => {
                 feature={feature}
                 organism={organism}
                 unit={unit}
+                hasLog={hasLog}
               />
             )}
           </div>
