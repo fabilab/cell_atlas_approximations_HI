@@ -39,6 +39,31 @@ export function handleNoApiIntents(mainIntent, subIntent, intent, plotState, par
       };
     // handle log and unlog data
     case "plot":
+      if (!plotState || !plotState.plotType) {
+        return {
+          hasData: false,
+          message: "Log transformation is NOT available because there is no plot to transform.",
+        };
+      }
+      // Define eligible plot types for log transformation
+      const logEligiblePlotTypes = [
+        "neighborhood",
+        "coexpressScatter",
+        "highestMeasurementMultiple",
+        "highestMeasurement",
+        "cellTypeProfile",
+        "average",
+        "averageAcrossOrgans",
+        "fractionDetected",
+        "fractionDetectedAcrossOrgans",
+      ];
+      // Check if the current plot type is eligible for log transformation
+      if (!logEligiblePlotTypes.includes(plotState.plotType)) {
+        return {
+          hasData: false,
+          message: `Sorry, log transformation is not available for the current plot (${plotState.plotType}).`,
+        };
+      }
       answer = buildAnswer(intent, plotState);
       return {
         hasData: true,

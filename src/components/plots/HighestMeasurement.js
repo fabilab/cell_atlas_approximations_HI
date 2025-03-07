@@ -28,17 +28,37 @@ const HighestMeasurement = ({ state }) => {
   organs.forEach((organ, index) => {
     if (!highestExprPerOrgan[organ]) {
       // Since the returned avg is already in descending order, just get the first exp (highest) for each organ
-      highestExprPerOrgan[organ] = average[index];
+      highestExprPerOrgan[organ] = transformedAverage[index];
     }
   });
+
 
   // Set up color scale for organ heatmap
   const minExpression = Math.min(...Object.values(highestExprPerOrgan));
   const maxExpression = Math.max(...Object.values(highestExprPerOrgan));
   const colorScale = scaleLinear()
     .domain([minExpression, maxExpression])
-    .range(["#f0d2cc", "#ed4e2b"]);
+    .range(["#fae0de", "#ed4e2b"]);
 
+    // Recompute organData whenever transformedAverage or hoveredOrgan changes
+  useEffect(() => {
+    if (!hoveredOrgan) {
+      setOrganData([]);
+      return;
+    }
+
+    const newOrganData = organs
+      .map((organ, index) =>
+        organ === hoveredOrgan
+          ? { cellType: celltypes[index], avgExpression: transformedAverage[index] }
+          : null
+      )
+      .filter(Boolean);
+      
+    setOrganData(newOrganData);
+  }, [hoveredOrgan, transformedAverage, organs, celltypes]);
+
+  
   // Update scaling factors based on image size
   useEffect(() => {
     if (!hasMultipleOrgans) return;
@@ -157,6 +177,7 @@ const HighestMeasurement = ({ state }) => {
                 feature={feature}
                 organism={organism}
                 unit={unit}
+                hasLog={hasLog}
               />
             )}
           </div>

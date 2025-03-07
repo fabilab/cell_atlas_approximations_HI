@@ -85,6 +85,7 @@ const toggleLog = (context) => {
   } else if (context.plotState.plotType === "cellTypeProfile") {
     return cellTypeProfile(context);
   }
+
   else {
     if (!context.plotState.fractions) {
       return updateAverage(context);

@@ -10,6 +10,7 @@ const HighestMeasurementBar = ({
   hoveredOrgan,
   feature,
   unit,
+  hasLog,
 }) => {
   const [cellTypes, setCellTypes] = useState([]);
   const [avgExpressions, setAvgExpressions] = useState([]);
@@ -52,7 +53,7 @@ const HighestMeasurementBar = ({
         },
         xaxis: {
           autorange: true,
-          title: `${unit}`,
+          title: hasLog ? `Log10(${unit})` : unit,
         },
         bargap: 0.1,
       }}

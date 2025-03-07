@@ -37,9 +37,7 @@ const HighestMeasurementScoreBar = ({ state }) => {
         standoff: 20,
       },
     },
-    title: `<b>Expression score of genes across ${organism} top cell types & organs${
-      hasLog ? " (Log10 Scale)" : ""
-    }</b>`,
+    title: `<b>Expression score of genes across ${organism} top cell types & organs$`
   };
 
   let data = [trace1];
