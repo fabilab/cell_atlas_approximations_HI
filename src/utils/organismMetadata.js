@@ -268,10 +268,6 @@ const organismMetadata = {
     bioName: "Mus musculus",
     commonName: "House mouse",
     dataSource: [
-      `[root]: Shahan et al 2022 "A single-cell Arabidopsis root atlas reveals developmental trajectories in wild-type and cell identity mutants"`,
-      `[shoot]: Xu et al 2024 "Large-scale single-cell profiling of stem cells uncovers redundant regulators of shoot development and yield trait variation"`
-    ],
-    dataSource: [
       `[other organs]: Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,
       `[blood]: Single-cell transcriptomics of peripheral blood in the aging mouse"`,
     ],
