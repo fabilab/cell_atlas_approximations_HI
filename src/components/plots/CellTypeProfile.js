@@ -203,6 +203,11 @@ const CellTypeProfile = ({ state }) => {
   const handleOrganSelect = async (area) => {
     if (area.name.includes("-label")) return;
 
+    const organ = area.name;
+    let d = distributionData.data.filter((d) => d.organism === selectedOrganism).map(d=>d.organ)
+    
+    if (!d.includes(organ)) return;
+
     setClickedOrgan(area.name);
     setLoadingMarker(true);
     setLoadingMarkerPlot(true);
@@ -263,8 +268,8 @@ const CellTypeProfile = ({ state }) => {
         name: organ,
         shape: metadata.shape || "poly",
         coords: adjustedCoords,
-        fillColor: organColor,
-        preFillColor: organColor,
+        fillColor: distributionData.data.filter((d) => d.organism === selectedOrganism).map(d=>d.organ).includes(organ) ? "yellow" : organColor,
+        preFillColor: clickedOrgan === organ ? 'yellow' : organColor,
         strokeColor: "transparent",
       };
     });
