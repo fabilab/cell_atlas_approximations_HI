@@ -145,11 +145,17 @@ const organismMetadata = {
   "h_sapiens": {
     bioName: "Homo sapiens",
     commonName: "Human",
-    dataSource: `RNA: Tabula Sapiens 2022 "The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans"`,    
+    dataSource: [
+      `[RNA]: "The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans"`,
+      `[ATAC]: Zhang et al 2021 "A single-cell atlas of chromatin accessibility in the human genome""`,
+    ],
+    paperHyperlink: [
+      "https://www.science.org/doi/10.1126/science.abl4896",
+      "https://doi.org/10.1016/j.cell.2021.10.024",
+    ],
     about: "Homo sapiens or human is a primate that inhabits all continents. But you know that.",
     imagePath: require("../asset/organisms/h_sapiens.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Human",
-    paperHyperlink:"https://www.science.org/doi/10.1126/science.abl4896",
     category: "Animal",
     organs: {
       "brain": {coords: "682,38,668,32,656,38,647,49,644,61,649,85,656,95,668,97,681,107,689,107,701,99,712,91,715,79,719,65,712,47,701,36,690,32"},
@@ -261,11 +267,21 @@ const organismMetadata = {
   "m_musculus": {
     bioName: "Mus musculus",
     commonName: "House mouse",
-    dataSource: `Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,    
+    dataSource: [
+      `[root]: Shahan et al 2022 "A single-cell Arabidopsis root atlas reveals developmental trajectories in wild-type and cell identity mutants"`,
+      `[shoot]: Xu et al 2024 "Large-scale single-cell profiling of stem cells uncovers redundant regulators of shoot development and yield trait variation"`
+    ],
+    dataSource: [
+      `[other organs]: Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,
+      `[blood]: Single-cell transcriptomics of peripheral blood in the aging mouse"`,
+    ],
+    paperHyperlink: [
+      "https://www.nature.com/articles/s41586-020-2496-1",
+      "https://doi.org/10.18632/aging.204471",
+    ], 
     about: "Mus musculis or house mouse is a small rodent that lives both in wild temperate climates and in close proximity to humans (e.g. cities). It is a very widely used model organism to study disease, development, genetics, evolution, and other topics.",
     imagePath: require("../asset/organisms/m_musculus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/House_mouse",
-    paperHyperlink: "https://www.nature.com/articles/s41586-020-2496-1",
     category: "Animal",
     organs: {
       "skin": {coords: "447,246,431,289,426,311,426,328,445,329,476,322,459,290,450,269"},
@@ -523,10 +539,16 @@ const organismMetadata = {
   "z_mays": {
     bioName: "Zea mays",
     commonName: "corn",
-    dataSource: `Marand  et al 2021 "A cis-regulatory atlas in maize at single-cell resolution"`,
+    dataSource: [
+      `[seedling]: Marand et al 2021 "A cis-regulatory atlas in maize at single-cell resolution"`,
+      `[eartip]: Xu et al 2024 "Large-scale single-cell profiling of stem cells uncovers redundant regulators of shoot development and yield trait variation"`,
+    ],
+    paperHyperlink: [
+      "https://www.cell.com/cell/pdf/S0092-8674(21)00493-1.pdf",
+      "https://doi.org/10.1101/2024.03.04.583414",
+    ],
     descriptionHyperlink: "https://en.wikipedia.org/wiki/Maize",
     about: "Maize (Zea mays), also known as corn, is a tall grass domesticated in southern Mexico 9,000 years ago, known for its cereal grain produced on leafy stalks, commonly found in yellow or white varieties.",
-    paperHyperlink: "https://doi.org/10.1016/j.cell.2021.04.014",
     imagePath: require("../asset/organisms/z_mays.jpeg"),
     category: "Plant",
     organs: {

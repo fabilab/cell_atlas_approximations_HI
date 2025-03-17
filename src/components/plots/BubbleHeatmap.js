@@ -355,8 +355,31 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           />
         </div>
         <div>
-          <Tooltip title={dataSource} overlayStyle={{ maxWidth: '400px', overflowX: 'auto' }}>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
+          <Tooltip 
+            placement="rightTop" 
+            color="#108ee9" 
+            overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}
+            title={
+              Array.isArray(dataSource) && Array.isArray(paperHyperlink) ? (
+                <div>
+                  {dataSource.map((source, index) => (
+                    <p key={index} style={{ marginBottom: "5px" }}>
+                      <a href={paperHyperlink[index]} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
+                        {source}
+                      </a>
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p>
+                  <a href={paperHyperlink} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
+                    {dataSource}
+                  </a>
+                  <br />
+                </p>
+              )
+            }>
+            <Button>Data source</Button>
           </Tooltip>
         </div>
       </div>
@@ -393,8 +416,30 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
           />
         </div>
         <div>
-          <Tooltip placement="rightTop" color="#108ee9" title={dataSource} overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
+          <Tooltip 
+            placement="rightTop" 
+            color="#108ee9" 
+            overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}
+            title={
+              Array.isArray(dataSource) && Array.isArray(paperHyperlink) ? (
+                <div>
+                  {dataSource.map((source, index) => (
+                    <p key={index} style={{ marginBottom: "5px" }}>
+                      <a href={paperHyperlink[index]} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
+                        {source}
+                      </a>
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p>
+                  <a href={paperHyperlink} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
+                    {dataSource}
+                  </a>
+                </p>
+              )
+            }>
+            <Button>Data source</Button>
           </Tooltip>
         </div>
         { queriedGenes &&
