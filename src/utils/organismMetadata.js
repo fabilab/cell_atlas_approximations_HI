@@ -269,7 +269,7 @@ const organismMetadata = {
     commonName: "House mouse",
     dataSource: [
       `[other organs]: Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,
-      `[blood]: Single-cell transcriptomics of peripheral blood in the aging mouse"`,
+      `[blood]: "Single-cell transcriptomics of peripheral blood in the aging mouse"`,
     ],
     paperHyperlink: [
       "https://www.nature.com/articles/s41586-020-2496-1",

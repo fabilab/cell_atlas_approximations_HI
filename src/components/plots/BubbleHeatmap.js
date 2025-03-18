@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
-import orgMeta from '../../utils/organismMetadata.js';
-import { Tooltip, Button } from 'antd';
 import {selectAll} from "d3";
 import { useChat } from '../ChatContext'; 
 import { Typography } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
 const { Link, Paragraph } = Typography;
+
 
 const customDotScale = (fractions) => {
   return 25 * Math.pow(fractions / 100.0, 1/4);
@@ -34,8 +34,6 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
     });
   }
 
-  let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
-  let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   const yTickVals = yaxis.map((_, index) => index);
 
   let all_x = [];
@@ -354,33 +352,8 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
             onInitialized={(figure, graphDiv) => attachHoverListener()}
           />
         </div>
-        <div>
-          <Tooltip 
-            placement="rightTop" 
-            color="#108ee9" 
-            overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}
-            title={
-              Array.isArray(dataSource) && Array.isArray(paperHyperlink) ? (
-                <div>
-                  {dataSource.map((source, index) => (
-                    <p key={index} style={{ marginBottom: "5px" }}>
-                      <a href={paperHyperlink[index]} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
-                        {source}
-                      </a>
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <p>
-                  <a href={paperHyperlink} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
-                    {dataSource}
-                  </a>
-                  <br />
-                </p>
-              )
-            }>
-            <Button>Data source</Button>
-          </Tooltip>
+        <div style={{ marginTop: "15px", width: '100%', textAlign: 'left' }}>
+          <DataSource organism={organism} />
         </div>
       </div>
     );
@@ -415,41 +388,19 @@ const BubbleHeatmap = ({ state, hoveredGene, setHoveredGeneColor, setHoveredGene
             }}
           />
         </div>
-        <div>
-          <Tooltip 
-            placement="rightTop" 
-            color="#108ee9" 
-            overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}
-            title={
-              Array.isArray(dataSource) && Array.isArray(paperHyperlink) ? (
-                <div>
-                  {dataSource.map((source, index) => (
-                    <p key={index} style={{ marginBottom: "5px" }}>
-                      <a href={paperHyperlink[index]} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
-                        {source}
-                      </a>
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <p>
-                  <a href={paperHyperlink} style={{ color: '#fff', textDecoration: "underline" }} target="_blank" rel="noreferrer">
-                    {dataSource}
-                  </a>
-                </p>
-              )
-            }>
-            <Button>Data source</Button>
-          </Tooltip>
+        <div style={{ marginTop: '15px', marginBottom: '20px', width: '100%', textAlign: 'letf', marginBotton: "20px"}}>
+          <DataSource organism={organism} />
         </div>
-        { queriedGenes &&
-          <div style={{ display: 'flex', margin: '0 3vw' }}>
-            <InfoCircleOutlined style={{ fontSize: '18px', color: '#1890ff', marginRight: '15px' }} />
-            <Paragraph style={{ margin: 0, fontSize: '15px'}}>
-              The gene interaction pairs are identified using data from <Link href="https://omnipathdb.org/" target="_blank">OmniPath</Link>, a comprehensive molecular biology database that combines information from over 100 resources.
-            </Paragraph>
+        {queriedGenes && (
+          <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+              <QuestionCircleOutlined style={{ fontSize: '18px', color: '#1890ff', marginRight: '15px' }} />
+              <Paragraph style={{ margin: 0, fontSize: '15px', maxWidth: '900px' }}>
+                The gene interaction pairs are identified using data from <Link href="https://omnipathdb.org/" target="_blank">OmniPath</Link>, a comprehensive molecular biology database that combines information from over 100 resources.
+              </Paragraph>
+            </div>
           </div>
-        }
+        )}
       </div>
     );
   }

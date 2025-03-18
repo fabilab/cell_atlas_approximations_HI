@@ -2,13 +2,10 @@ import React from "react";
 import { useChat } from "../ChatContext";
 import Plot from "react-plotly.js";
 import { selectAll } from "d3";
-import { Button, Tooltip } from 'antd';
-import orgMeta from '../../utils/organismMetadata.js';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
 
 const OrganCellChart = ({ state }) => {
   let { plotLocation, apiCellOrgan, organism, organName, measurementType } = state;
-  let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
-  let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   
   const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
   const scaleFactor = plotLocation === "celltypes" ? 1.3 : 1; // Scale factor for size adjustment
@@ -131,9 +128,7 @@ const OrganCellChart = ({ state }) => {
       </div>
       {plotLocation === 'celltypes' && (
         <div>
-          <Tooltip placement="rightTop" color="#108ee9" title={dataSource} overlayStyle={{ maxWidth: '600px', overflowX: 'auto' }}>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Tooltip>
+          <DataSource organism={organism} />
         </div>
       )}
     </div>

@@ -1,13 +1,11 @@
 import React from 'react';
 import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
 import Plot from 'react-plotly.js';
-import { Popover, Button } from 'antd';
-import orgMeta from '../../utils/organismMetadata.js';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
+
 
 const BarChart = ({ state }) => {
   let { plotType, celltypesOrgan, targetCelltype, average, organism, feature, unit, hasLog } = state;
-  let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
-  let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
   let xValue = celltypesOrgan;
   // Determine the appropriate URL based on the organism
   let geneLinkUrl;
@@ -149,9 +147,7 @@ const BarChart = ({ state }) => {
         />
       </div>
       <div>
-        <Popover content={dataSource} placement='right'>
-          <Button href={paperHyperlink} target="_blank">Data source</Button>
-        </Popover>
+        <DataSource organism={organism} />
       </div>
     </div>
   );

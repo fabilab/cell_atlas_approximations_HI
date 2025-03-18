@@ -107,7 +107,7 @@ const Landing = () => {
     'Show 10 markers of T cells in human blood.',
     'Show profile of neutrophil',
     'What are markers for all cells in mouse lung?',
-    'Show interactors of NOTCH1 in human heart.',
+    'Show interactors of INS in human pancreas',
     'What organisms have chromatin accessibility?',
     'Show 10 genes similar to Col1a1 in mouse lung.',
     "What cells coexpress CD19 and MS4A1 in human?",

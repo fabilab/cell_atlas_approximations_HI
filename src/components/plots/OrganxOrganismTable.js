@@ -1,14 +1,11 @@
 import React from 'react';
 import { Table } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
-import { Popover, Button } from 'antd';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
 
-// FIXME: why is this function the only one that takes the entire state in like this??
 const OrganxOrganismTable = ({ state }) => {
   
     let { organs, organisms, detected } = state;
-    let dataSource = "Tabula Sapiens,Tabula Muris Senis,Tabula Microcebus,Wagner et al. 2018, Liao et al 2022";
-    let paperHyperlink = "https://atlasapprox.readthedocs.io/en/latest/index.html";
     // Filter cell types detected in multiple organs
     // Define the columns for the table
     const columns = [
@@ -46,9 +43,7 @@ const OrganxOrganismTable = ({ state }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", margin: "1vh" }}>
         <div>
-          <Popover content={dataSource} placement='right'>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+            <DataSource organisms={organisms} />
         </div>
         <br></br>
         <div>

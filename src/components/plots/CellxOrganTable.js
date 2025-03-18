@@ -1,21 +1,18 @@
 import React from 'react';
 import { Table } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
-import orgMeta from '../../utils/organismMetadata.js';
-import { Popover, Button } from 'antd';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
 
-// FIXME: why is this function the only one that takes the entire state in like this??
 const CellxOrganTable = ({ state }) => {
-  
-  let dataSource = orgMeta[state.organism]?.dataSource || "Data source not available";
-  let paperHyperlink = orgMeta[state.organism]?.paperHyperlink || "Hyperlink unavailable";
+    let { celltypes, detected, organism, organs } = state;
+
     // Filter cell types detected in multiple organs
-    const multiOrgansData = state.celltypes.map((celltype, index) => {
+    const multiOrgansData = celltypes.map((celltype, index) => {
       const row = { key: index, celltype };
       let organCount = 0;
-      state.organs.forEach((organ, organIndex) => {
-        row[organ] = state.detected[index][organIndex] > 0;
-        if (state.detected[index][organIndex]) {
+      organs.forEach((organ, organIndex) => {
+        row[organ] = detected[index][organIndex] > 0;
+        if (detected[index][organIndex]) {
             organCount++;
         }
       });
@@ -24,15 +21,15 @@ const CellxOrganTable = ({ state }) => {
 
     // Construct a dictionary for cell types uniquely detected in each organ
     const uniqueOrganDict = {};
-    state.organs.forEach((organ) => {
+    organs.forEach((organ) => {
       uniqueOrganDict[organ] = [];
     });
 
-    state.celltypes.forEach((celltype, index) => {
+    celltypes.forEach((celltype, index) => {
       let detectedCount = 0;
       let detectedOrgan = null;
-      state.organs.forEach((organ, organIndex) => {
-        if (state.detected[index][organIndex] > 0) {
+      organs.forEach((organ, organIndex) => {
+        if (detected[index][organIndex] > 0) {
           detectedCount++;
           detectedOrgan = organ;
         }
@@ -44,7 +41,7 @@ const CellxOrganTable = ({ state }) => {
 
     // Add a row for uniquely detected cell types at the bottom
     const uniqueRow = { key: 'unique', celltype: 'Unique Cell Types' };
-    state.organs.forEach((organ) => {
+    organs.forEach((organ) => {
       uniqueRow[organ] = uniqueOrganDict[organ].join(', ');
     });
     multiOrgansData.push(uniqueRow);
@@ -62,7 +59,7 @@ const CellxOrganTable = ({ state }) => {
         ),
         fixed: 'left',
       },
-      ...state.organs.map(organ => ({
+      ...organs.map(organ => ({
         title: organ,
         dataIndex: organ,
         key: organ,
@@ -82,9 +79,7 @@ const CellxOrganTable = ({ state }) => {
     return (
       <div style={{ display: "flex", flexDirection: "column", margin: "1vh" }}>
         <div>
-          <Popover content={dataSource} placement='right'>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+          <DataSource organism={organism} />
         </div>
         <br></br>
         <div>

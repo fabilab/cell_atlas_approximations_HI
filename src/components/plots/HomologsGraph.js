@@ -3,7 +3,9 @@ import Plot from "react-plotly.js";
 import { useChat } from '../ChatContext'; 
 import {selectAll} from "d3";
 import { Typography } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
+
 const { Link, Paragraph } = Typography;
 
 
@@ -396,8 +398,11 @@ const featureLabelClick = (event) => {
           }}
         />
       </div>
+      <div style={{ margin: '0 3vw', marginBottom: '20px' }}>
+        <DataSource organisms={[source_organism, target_organism]} />
+      </div>
       <div style={{ display: 'flex', margin: '0 3vw' }}>
-        <InfoCircleOutlined style={{ fontSize: '18px', color: '#1890ff', marginRight: '15px' }} />
+        <QuestionCircleOutlined style={{ fontSize: '18px', color: '#1890ff', marginRight: '15px' }} />
         <Paragraph style={{ margin: 0, fontSize: '15px'}}>
           Homologs are computed as follows: the algorithm first generates ESM1b embeddings for each protein-coding gene sequence. These embeddings are then compressed using <Link href="https://doi.org/10.1073/pnas.2211823120" target="_blank">PROST</Link> (PRotein Ortholog Search Tool). It then calculates the L1 distances between the compressed embedding of the query gene and all genes in the target species. Finally, it reports the genes with the smallest L1 distances as potential homologs to the query gene.
         </Paragraph>
