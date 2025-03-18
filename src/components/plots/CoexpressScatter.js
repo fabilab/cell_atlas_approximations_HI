@@ -1,15 +1,11 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Popover, Button } from 'antd';
 import chroma from 'chroma-js';
-import orgMeta from '../../utils/organismMetadata.js';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
 
 const CoexpressScatter = ({ state }) => {
 
     let { organism, features, expData, unit, hasLog, by } = state;
-
-    let dataSource = orgMeta[organism]?.dataSource || "Data source not available";
-    let paperHyperlink = orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable";
 
     const logTransformOrNone = value => hasLog ?  Math.log10(value + 1) : value;
     expData = expData.map(item => ({
@@ -58,24 +54,19 @@ const CoexpressScatter = ({ state }) => {
             title: `${features[1]}<br>(${unit})`,
             autorange: true
         }
-      };
+    };
 
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-        <div>
-            <Plot
-                data={plotData}
-                layout={layout}
-            />
-        </div>
-        <div>
-          <Popover content={dataSource} placement='right'>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
-        </div>
-    </div>
-  );
+	return (
+		<div style={{ display: "flex", flexDirection: "column" }}>
+			<div>
+				<Plot data={plotData} layout={layout} />
+			</div>
+			<div>
+				<DataSource organism={organism} />
+			</div>
+		</div>
+	);
 };
 
 export default CoexpressScatter;

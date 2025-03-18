@@ -398,7 +398,7 @@ const CellTypeProfile = ({ state }) => {
       </div>
 
       {/* cell type distribution bar chart */}
-      <h1 style={{ fontSize: "22px", fontWeight: "bold", display: "flex", alignItems: "center", gap: "8px" }}>
+      <h1 style={{ fontSize: "1.3em", fontWeight: "600", color: "#333", display: "flex", alignItems: "center", gap: "8px" }}>
         Cell type distribution in
         <Select defaultValue="all" style={{ width: 150 }} onChange={(value) => setSelectedOrganism(value)} value={selectedOrganism}>
           <Option value="all">All</Option>

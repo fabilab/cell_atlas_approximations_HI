@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { downloadSVG } from '../../utils/downloadHelpers/downLoadSvg';
-import orgMeta from '../../utils/organismMetadata.js';
-import { Popover, Button } from 'antd';
+import DataSource from '../../utils/plotHelpers/dataSource.js';
 
 const Heatmap = ({ state }) => { 
   
   const [plotData, setData] = useState(null);
   const [plotLayout, setLayout] = useState(null);
   const [plotConfig, setConfig] = useState(null);
-  const [dataSource, setDataSource] = useState("");
-  const [paperHyperlink, setPaperHyperlink] = useState("");
 
   let { plotType, xaxis, yaxis, average, organism, organ, celltype, unit, measurement_type, hasLog } = state;
   let values = average;
@@ -26,8 +23,6 @@ const Heatmap = ({ state }) => {
   const yTickVals = yaxis.map((_, index) => index);
 
   useEffect(() => {
-    setDataSource(orgMeta[organism]?.dataSource || "Data source not available");
-    setPaperHyperlink(orgMeta[organism]?.paperHyperlink || "Hyperlink unavailable");
   
     // Apply log transform to data is requested by user
     let plot_unit = unit;
@@ -197,9 +192,7 @@ const Heatmap = ({ state }) => {
           />
         </div>
         <div>
-          <Popover content={dataSource} placement='right'>
-            <Button href={paperHyperlink} target="_blank">Data source</Button>
-          </Popover>
+          <DataSource organism={organism} />
         </div>
       </div>
     );
