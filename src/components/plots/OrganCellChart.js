@@ -62,7 +62,7 @@ const OrganCellChart = ({ state }) => {
       range: [-0.2, 4],
     },
     title: {
-      text: `<b>Cell type abundance in <span style='color:#0958d9;'>${organName}</span></b>`,
+      text: `<b>Cell type abundance in <span style='color:#127ee3;'>${organName}</span></b>`,
       font: {
         size: 14 * scaleFactor,
       },

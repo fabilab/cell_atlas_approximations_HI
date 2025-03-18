@@ -163,7 +163,7 @@ const OrganismProfile = ({ state }) => {
                     <p>Data source:</p>
                     {dataSource.map((source, index) => (
                         <p key={index}>
-                            <a href={paperHyperlink[index]} style={{color: '#0958d9'}} target="_blank" rel="noreferrer">
+                            <a href={paperHyperlink[index]} style={{color: '#127ee3', textDecoration: "none"}} target="_blank" rel="noreferrer">
                                 {source}
                             </a>
                         </p>
@@ -172,33 +172,65 @@ const OrganismProfile = ({ state }) => {
             );
         } else {
             return (
-                <p>
-                    Data source: <a href={paperHyperlink} style={{color: '#0958d9'}} target="_blank" rel="noreferrer">{dataSource}</a>
-                </p>
+                <div>
+                    <p>Data source:</p>
+                    <p>
+                        <a href={paperHyperlink} style={{color: '#127ee3', textDecoration: "none"}} target="_blank" rel="noreferrer">{dataSource}</a>
+                    </p>
+                </div>
             );
         }
     };
 
     return (
         <div style={{  width: "inherit"}}>
-            <div style={{display: "flex", alignItems: "center", backgroundColor: "rgb(30,41,56,0.13)", padding: "0% 3%"}}>
-                {
-                    imagePath &&
-                    <img 
-                        src={imagePath} 
-                        alt={organism} 
-                        style={{width: "8%", height: "auto", paddingRight: "8%"}}
-                    />
-                }
-                <div>
-                    <h2 style={{fontSize: "1.3em"}}>{bioName}</h2>
-                    <p >Common name: {commonName}</p>
-                    {renderDataSource()}
+            <div
+                style={{
+                display: "flex",
+                alignItems: "flex-start",
+                backgroundColor: "#f5f5f5",
+                padding: "2% 3% 0% 3%",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+            >
+                {imagePath && (
+                <img
+                    src={imagePath}
+                    alt={organism}
+                    style={{
+                    width: "120px",
+                    height: "auto",
+                    marginRight: "24px",
+                    borderRadius: "4px",
+                    objectFit: "cover",
+                    }}
+                />
+                )}
+                <div style={{ flex: 1 }}>
+                    <h2 style={{ fontSize: "1.1em", fontWeight: "600", margin: "0 0 8px 0" }}>
+                        {bioName}
+                    </h2>
+                    <p style={{ fontSize: "1em"}}>
+                        Common name: {commonName}
+                    </p>
+                    <div style={{ fontSize: "1em" }}>
+                        {renderDataSource()}
+                    </div>
                 </div>
             </div>
-            <div style={{padding: "1% 3%"}}>
+            <div style={{ padding: "1% 3%" }}>
                 <h3>About</h3>
-                <p style={{textAlign: "justify", fontFamily:"PT Serif"}}>{description} <a href={descriptionHyperlink} target="_blank" rel="noreferrer">"From Wikipedia"</a></p>
+                <p>
+                {description}{" "}
+                <a
+                    href={descriptionHyperlink}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: "#127ee3", textDecoration: "none" }}
+                >
+                    "From Wikipedia"
+                </a>
+                </p>
             </div>
             <div style={{ padding: "1% 3%" }}>
                 <h3>Organ Map</h3>

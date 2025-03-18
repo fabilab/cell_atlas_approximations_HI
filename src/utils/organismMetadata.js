@@ -146,7 +146,7 @@ const organismMetadata = {
     bioName: "Homo sapiens",
     commonName: "Human",
     dataSource: [
-      `[RNA]: "The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans"`,
+      `[RNA]: The Tabula Sapiens “A multiple-organ, single-cell transcriptomic atlas of humans"`,
       `[ATAC]: Zhang et al 2021 "A single-cell atlas of chromatin accessibility in the human genome""`,
     ],
     paperHyperlink: [
@@ -268,14 +268,14 @@ const organismMetadata = {
     bioName: "Mus musculus",
     commonName: "House mouse",
     dataSource: [
-      `[other organs]: Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,
-      `[blood]: "Single-cell transcriptomics of peripheral blood in the aging mouse"`,
+      `[all except blood]: Tabula Muris Senis 2020 "A single-cell transcriptomic atlas characterizes ageing tissues in the mouse"`,
+      `[blood]: Teo et al 2022 "Single-cell transcriptomics of peripheral blood in the aging mouse"`,
     ],
     paperHyperlink: [
       "https://www.nature.com/articles/s41586-020-2496-1",
       "https://doi.org/10.18632/aging.204471",
     ], 
-    about: "Mus musculis or house mouse is a small rodent that lives both in wild temperate climates and in close proximity to humans (e.g. cities). It is a very widely used model organism to study disease, development, genetics, evolution, and other topics.",
+    about: "The house mouse (Mus musculus) is a small mammal of the order Rodentia, characteristically having a pointed snout, large rounded ears, and a long and almost hairless tail. It is one of the most abundant species of the genus Mus",
     imagePath: require("../asset/organisms/m_musculus.jpeg"),
     descriptionHyperlink: "https://en.wikipedia.org/wiki/House_mouse",
     category: "Animal",
