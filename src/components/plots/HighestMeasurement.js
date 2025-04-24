@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ImageMapper from "react-img-mapper";
 import HighestMeasurementBar from "./HighestMeasurementBar";
 import orgMeta from "../../utils/organismMetadata.js";
@@ -6,12 +6,12 @@ import { scaleLinear } from "d3-scale";
 import { Typography } from "antd";
 import BarChart from "./BarChart.js";
 import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
-import { transformData } from "../../utils/plotHelpers/math.js"
+import { transformData } from "../../utils/plotHelpers/math.js";
 
 const { Text } = Typography;
 
 const HighestMeasurement = ({ state }) => {
-  const { feature, measurement_type, organism, organs, celltypes, average, topNExp, unit, hasLog } = state;
+  const { feature, measurement_type, organism, organs, celltypes, average, topNExp, topNOrgans, unit, hasLog } = state;
   const [scalingFactors, setScalingFactors] = useState({ width: 1, height: 1 });
   const [hoveredOrgan, setHoveredOrgan] = useState(null);
   const [organData, setOrganData] = useState([]);
@@ -20,18 +20,16 @@ const HighestMeasurement = ({ state }) => {
   const hasMultipleOrgans = uniqueOrgans.length > 1;
 
   // Transform the average data for the bar chart
-  const transformedAverage = transformData(average, hasLog);
-  const transformedTopNExp = transformData(topNExp, hasLog);
+  const transformedAverage = useMemo(() => transformData(average, hasLog), [average, hasLog]);
+  const transformedTopNExp = useMemo(() => transformData(topNExp, hasLog), [topNExp, hasLog]);
 
   // Get the max expression value for each organ
   const highestExprPerOrgan = {};
   organs.forEach((organ, index) => {
     if (!highestExprPerOrgan[organ]) {
-      // Since the returned avg is already in descending order, just get the first exp (highest) for each organ
       highestExprPerOrgan[organ] = transformedAverage[index];
     }
   });
-
 
   // Set up color scale for organ heatmap
   const minExpression = Math.min(...Object.values(highestExprPerOrgan));
@@ -40,7 +38,7 @@ const HighestMeasurement = ({ state }) => {
     .domain([minExpression, maxExpression])
     .range(["#fae0de", "#ed4e2b"]);
 
-    // Recompute organData whenever transformedAverage or hoveredOrgan changes
+  // Recompute organData whenever transformedAverage or hoveredOrgan changes
   useEffect(() => {
     if (!hoveredOrgan) {
       setOrganData([]);
@@ -54,17 +52,22 @@ const HighestMeasurement = ({ state }) => {
           : null
       )
       .filter(Boolean);
-      
+    
     setOrganData(newOrganData);
   }, [hoveredOrgan, transformedAverage, organs, celltypes]);
 
-  
+  // Set the default highlighted organ to the top organ by expression
+  useEffect(() => {
+    if (hasMultipleOrgans && topNOrgans?.length > 0 && !hoveredOrgan) {
+      setHoveredOrgan(topNOrgans[0]); // Default to the organ with highest expression (e.g., "marrow")
+    }
+  }, [topNOrgans, hasMultipleOrgans, hoveredOrgan],);
+
   // Update scaling factors based on image size
   useEffect(() => {
     if (!hasMultipleOrgans) return;
 
     let imagePathPrefix;
-    // Check if the measurement type is chromatin_accessibility
     if (measurement_type === "chromatin_accessibility") {
       imagePathPrefix = `grey_${organism}_chromatin`;
     } else {
@@ -72,7 +75,7 @@ const HighestMeasurement = ({ state }) => {
     }
     let imageWithDimensions = require(`../../asset/anatomy/${imagePathPrefix}.jpg`);
 
-    scaleImage(imageWithDimensions, 450, setScalingFactors)
+    scaleImage(imageWithDimensions, 450, setScalingFactors);
     window.addEventListener("resize", scaleImage(imageWithDimensions, 450, setScalingFactors));
 
     return () => window.removeEventListener("resize", scaleImage(imageWithDimensions, 450, setScalingFactors));
@@ -118,7 +121,6 @@ const HighestMeasurement = ({ state }) => {
   // Render image map component
   const renderImageMap = () => {
     let imagePathPrefix;
-    // Check if the measurement type is chromatin_accessibility
     if (measurement_type === "chromatin_accessibility") {
       imagePathPrefix = `grey_${organism}_chromatin`;
     } else {
@@ -135,7 +137,7 @@ const HighestMeasurement = ({ state }) => {
         height={450}
       />
     );
-  }
+  };
 
   // Render color bar legend
   const renderColorBar = () => (
