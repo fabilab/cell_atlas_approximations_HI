@@ -28,7 +28,7 @@ const BarChart = ({ state }) => {
       } else {
         title = `<b>Highest expressor of <i>${feature}</i> in ${organism}</b>`;
       }
-      yLabel = hasLog ? `Log(${unit})` : unit;
+      yLabel = hasLog ? `${feature} expression <br> (Log 10(${unit}))` : `${feature} expression <br> (${unit})`;
       break;
     default:
       break;

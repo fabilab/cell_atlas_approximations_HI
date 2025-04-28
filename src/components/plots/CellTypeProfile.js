@@ -72,7 +72,6 @@ const CellTypeProfile = ({ state }) => {
         ? distributionData.data.filter((d) => d.organism === selectedOrganism)
         : distributionData.data;
     // Group percentages by organ
-
     let organData = {};
     d.forEach(({ organ, organism, percentage }) => {
       if (!organData[organ]) {
@@ -80,23 +79,24 @@ const CellTypeProfile = ({ state }) => {
       }
       organData[organ][organism] = percentage;
     });
-
+  
     const sortedOrgans = Object.keys(organData).sort(
       (a, b) => Math.max(...Object.values(organData[b])) - Math.max(...Object.values(organData[a]))
     );
-
+  
     // Ensure all bars have the same width
-    const barWidth = sortedOrgans.length > 2? 0.8 : 0.4;
-
+    const barWidth = sortedOrgans.length > 2 ? 0.8 : 0.4;
+  
     // Adjust chart width dynamically
     const chartWidth = sortedOrgans.length >= 24 ? 35 * sortedOrgans.length + 200 : 30 * sortedOrgans.length + 500;
+  
     // Generate bar chart data
     const plotData = [];
     const organismSet = new Set(d.map((item) => item.organism));
-
+  
     organismSet.forEach((organism) => {
       const yValues = sortedOrgans.map((organ) => (organData[organ][organism] || 0));
-
+  
       plotData.push({
         x: sortedOrgans,
         y: yValues,
@@ -108,36 +108,46 @@ const CellTypeProfile = ({ state }) => {
         showlegend: true,
       });
     });
-    const organSums = {}; // Store summed values per organ
-
-    plotData.forEach(trace => {
-      trace.x.forEach((organ, index) => {
-        organSums[organ] = (organSums[organ] || 0) + trace.y[index]; 
+  
+    // Calculate the sum of each stack to find the tallest one
+    const stackSums = sortedOrgans.map((organ) => {
+      let sum = 0;
+      plotData.forEach((trace) => {
+        const organIndex = trace.x.indexOf(organ);
+        if (organIndex !== -1) {
+          sum += trace.y[organIndex];
+        }
       });
+      return sum;
     });
-    
-    const maxYValue = Math.max(...Object.values(organSums)); // Correct maximum
-    const isSingleSpecies = selectedOrganism !== "all";
-    const maxY = isSingleSpecies && maxYValue <= 100 ? 100 : maxYValue * 1.1;
-    
-
-    // Define layout
+  
+    const maxStackSum = Math.max(...stackSums);
+    const maxY = maxStackSum * 1.1; // Set y-axis max to 1.1 times the tallest stack
+  
+    // Define layout with adjusted y-axis range
     const plotLayout = {
       width: chartWidth,
-      height: 450,
+      height: 460,
       barmode: "stack",
       margin: {
         r: 50,
         t: 50,
-        b: 80,
+        b: 100,
+        l: 80,
       },
       xaxis: {
-        title: "Tissue",
+        title: {
+          text: "Organs",
+          standoff: 20,
+        },
         tickangle: 45,
         automargin: true,
       },
       yaxis: {
-        title: "Cell percentage (%)",
+        title: {
+          text: "Proportion (%)",
+          standoff: 20,
+        },
         range: [0, maxY],
       },
       plot_bgcolor: "white",
@@ -148,16 +158,18 @@ const CellTypeProfile = ({ state }) => {
       },
       legend: {
         showlegend: true,
-        x: 1,
-        y: 1.1,
+        x: 1, // Right edge of the chart
+        y: 1.1, // Top of the chart
         xanchor: "right",
         yanchor: "top",
+        orientation: "v", // Vertical orientation
+        traceorder: "normal",
         bgcolor: "rgba(255, 255, 255, 0.8)",
+        bordercolor: "#E2E2E2",
+        borderwidth: 1,
       },
-      bargap: 0.05,
-      bargroupgap: 0.1,
     };
-
+  
     setDistributionPlotData(plotData);
     setDistributionPlotLayout(plotLayout);
   }, [selectedOrganism, distributionData.data]);

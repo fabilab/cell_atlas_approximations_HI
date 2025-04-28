@@ -114,7 +114,9 @@ const Heatmap = ({ state }) => {
         ticktext: yTickTexts,
         tickvals: yTickVals,
       },
-      title: title,
+      title: {
+        text: title,
+      },
     };
   
     let cameraRetro= {
