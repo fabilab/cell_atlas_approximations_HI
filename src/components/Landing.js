@@ -108,7 +108,8 @@ const Landing = () => {
     "Explore lemur",
     "Show 10 markers of T cells in human blood.",
     "Show profile of neutrophil",
-    "What are markers for all cells in mouse lung?",
+    // FIXME: the api failed to return data with the parameters (500 error):
+    // "What are markers for all cells in mouse lung?",
     "Show interactors of INS in human pancreas",
     "What organisms have chromatin accessibility?",
     "Show 10 genes similar to Col1a1 in mouse lung.",
@@ -121,6 +122,7 @@ const Landing = () => {
     "What are the homologs of MS4A1,GP6,COL1A1 from human to mouse?",
     "Show 10 markers for fibroblast in human lung compared to other tissues.",
     "What is the expression of CD68, MARCO, SFTPC, PDGFRA in human lung?",
+    "What cell type is the highest expressor of KRT8, CDH1 but not ACTA2 in human?",
     "What are the cell states of ML358828a, ML071151a, ML065728a in jellyfish whole?",
     "Compare fraction expressing CD68, CSF1R, MRC1, CX3CR1 in macrophage across organs in human.",
     "What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?",

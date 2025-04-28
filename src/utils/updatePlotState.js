@@ -292,8 +292,7 @@ const updateNeighbor = (context) => {
     average,
     fractions,
     unit,
-    measurement_type,
-    queriedGenes;
+    measurement_type;
   // by deault:
   if (context.response.data) {
     celltypes = context.response.data.celltypes;
@@ -317,10 +316,6 @@ const updateNeighbor = (context) => {
     measurement_type = context.plotState.measurement_type;
   }
 
-  if (context.plotState.queriedGenes) {
-    queriedGenes = context.plotState.queriedGenes;
-  }
-
   return {
     plotType: "neighborhood",
     organism: context.organism,
@@ -337,7 +332,6 @@ const updateNeighbor = (context) => {
     hasLog: context.plotState.hasLog,
     unit: unit,
     measurement_type: measurement_type,
-    queriedGenes: queriedGenes,
   };
 };
 
