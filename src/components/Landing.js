@@ -17,16 +17,18 @@ const Landing = () => {
   const navigate = useNavigate();
   const queryInput = useRef(null);
   const intro = useRef(introJs());
-  
-  // Hanlde the first query submitted by user
-  const sendFirstSearch = useCallback((query) => {
-    setSearchMessage("");
-    navigate("/mainboard", { state: query });
-  }, [navigate]);
 
-  // tour for new users: https://introjs.com/docs/tour/options
+  // Handle the first query submitted by user
+  const sendFirstSearch = useCallback(
+    (query) => {
+      setSearchMessage("");
+      navigate("/mainboard", { state: query });
+    },
+    [navigate]
+  );
+
+  // Tour for new users: https://introjs.com/docs/tour/options
   useEffect(() => {
-
     // Don't start tour if it was ever dismissed or completed
     const isFirstVisit = localStorage.getItem("isFirstVisit");
     const introInstance = intro.current;
@@ -53,7 +55,7 @@ const Landing = () => {
     introInstance.onbeforechange((targetElement) => {
       const currentStep = introInstance._currentStep;
 
-      // show empty search bar
+      // Show empty search bar
       if (currentStep === 1) {
         setSearchMessage("");
       }
@@ -64,7 +66,7 @@ const Landing = () => {
       }
     });
 
-    // Handle early exit (X button), when user don't want to see the tour.
+    // Handle early exit (X button), when user doesn't want to see the tour
     introInstance.onexit(() => {
       localStorage.setItem("isFirstVisit", "false");
       localStorage.removeItem("currentTourStep");
@@ -78,7 +80,7 @@ const Landing = () => {
         const nextButton = document.querySelector(".introjs-nextbutton");
         if (nextButton && !nextButton.hasAttribute("data-clicked")) {
           nextButton.addEventListener("click", () => {
-            // transition to mainboard and continue the tour
+            // Transition to mainboard and continue the tour
             localStorage.setItem("currentTourStep", "4");
             sendFirstSearch("Show 10 markers of T cells in human blood.");
           });
@@ -102,26 +104,26 @@ const Landing = () => {
   }, [sendFirstSearch]);
 
   const sampleQueries = [
-    'What species are available?',
-    'Explore lemur',
-    'Show 10 markers of T cells in human blood.',
-    'Show profile of neutrophil',
-    'What are markers for all cells in mouse lung?',
-    'Show interactors of INS in human pancreas',
-    'What organisms have chromatin accessibility?',
-    'Show 10 genes similar to Col1a1 in mouse lung.',
+    "What species are available?",
+    "Explore lemur",
+    "Show 10 markers of T cells in human blood.",
+    "Show profile of neutrophil",
+    "What are markers for all cells in mouse lung?",
+    "Show interactors of INS in human pancreas",
+    "What organisms have chromatin accessibility?",
+    "Show 10 genes similar to Col1a1 in mouse lung.",
     "What cells coexpress CD19 and MS4A1 in human?",
-    'Show organs containing macrophage across species.',
-    'What cell types are present in each organ of mouse?',
-    'What cell type is the highest expressor of Cd19 in mouse?',
+    "Show organs containing macrophage across species.",
+    "What cell types are present in each organ of mouse?",
+    "What cell type is the highest expressor of Cd19 in mouse?",
     "What are the sequences of PRDM1, PTPRC, ACTB in human?",
-    'What are the 3 top surface markers of NK cells in human liver?',
-    'What are the homologs of MS4A1,GP6,COL1A1 from human to mouse?',
-    'Show 10 markers for fibroblast in human lung compared to other tissues.',
-    'What is the expression of CD68, MARCO, SFTPC, PDGFRA in human lung?',
-    'What are the cell states of ML358828a, ML071151a, ML065728a in jellyfish whole?',
-    'Compare fraction expressing CD68, CSF1R, MRC1, CX3CR1 in macrophage across organs in human.',
-    'What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?',
+    "What are the 3 top surface markers of NK cells in human liver?",
+    "What are the homologs of MS4A1,GP6,COL1A1 from human to mouse?",
+    "Show 10 markers for fibroblast in human lung compared to other tissues.",
+    "What is the expression of CD68, MARCO, SFTPC, PDGFRA in human lung?",
+    "What are the cell states of ML358828a, ML071151a, ML065728a in jellyfish whole?",
+    "Compare fraction expressing CD68, CSF1R, MRC1, CX3CR1 in macrophage across organs in human.",
+    "What is the chromatin accessibility of chr1:9955-10355, chr10:122199710-122200110 in human lung?",
   ];
 
   return (
@@ -130,7 +132,8 @@ const Landing = () => {
       style={{
         background:
           "linear-gradient(to bottom right, #bde7ff 10%, #ffffff, #ffffff 70%, #faf7c0 100%)",
-        height: "100vh",
+        minHeight: "100vh", // Changed from height to minHeight
+        paddingBottom: "2rem", // Added to ensure content isn't flush with the bottom
       }}
     >
       <div
@@ -201,7 +204,7 @@ const Landing = () => {
             }
             style={{
               width: "100%",
-              boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.15)",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
               height: "50px",
               borderRadius: "25px",
             }}
