@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import atlasapprox from "@fabilab/atlasapprox";
 import ImageMapper from "react-img-mapper";
 import orgMeta from "../../utils/organismMetadata.js";
-import { fetchWikiImage } from "../../utils/cellTypeResources/fetchImage.js";
+import { fetchCellImage } from "../../utils/cellTypeResources/fetchImage.js";
 import BubbleHeatmap from "./BubbleHeatmap";
 import { scaleImage } from "../../utils/plotHelpers/scaleImage.js";
 import { fetchCellTypeDescription } from "../../utils/cellTypeResources/fetchDescription.js";
@@ -51,14 +51,14 @@ const CellTypeProfile = ({ state }) => {
     setSelectedOrganMarkers(null);
 
     const getImage = async () => {
-      const imageData = await fetchWikiImage(cellType);
+      const imageData = await fetchCellImage(cellType);
       setWikiImage(imageData);
     };
     getImage();
 
     const getDescription = async () => {
-      let cellTypeDescription = await fetchCellTypeDescription(cellType);
-      setDescription(cellTypeDescription);
+      let description = await fetchCellTypeDescription(cellType);
+      setDescription(description);
     };
     getDescription();
   }, [cellType]);
@@ -381,34 +381,59 @@ const CellTypeProfile = ({ state }) => {
   return (
     <div style={{ padding: "20px" }}>
       {/* cell type name, picture and desctiption */}
-      <h1 style={{ fontSize: "24px", marginBottom: "15px", fontWeight: "bold", color: "#1890ff", cursor: "pointer"}}>
-      <a 
-        href={`https://www.google.com/search?q=${encodeURIComponent(cellType)}`} target="_blank" rel="noopener noreferrer"
-        style={{ textDecoration: "none", color: "#116bf2"}}
-      >
-        {cellType}
-      </a>
-        </h1>
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "20px", marginBottom: "20px" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-          <img
-            src={wikiImage ? wikiImage.url : imageUnavailableNotice}
-            alt={`${cellType} cell`}
-            style={{ width: "120px", height: "120px", objectFit: "cover" }}
-          />
-        </div>
-        <p style={{ fontSize: "16px", lineHeight: "1.5", flex: 1 }}>
-          {description || "loading"}{" "}
-          <span style={{ fontSize: "15px", color: "#888" }}>
-            (Source:{" "}
-            <a href="https://www.ebi.ac.uk/ols4" target="_blank" rel="noopener noreferrer" style={{ color: "#116bf2" }}>
-              EBI
+      <div style={{ background: "#f8f9fb", borderRadius: "5px", padding: "10px", marginBottom: "24px", display: "flex", gap: "16px", alignItems: "flex-start"}}>
+        {/* IMAGE */}
+        <img
+          src={wikiImage ? wikiImage.url : imageUnavailableNotice}
+          alt={`${cellType} cell`}
+          style={{ width: "120px", height: "120px", objectFit: "cover" }}
+        />
+        {/* TEXT BLOCK */}
+        <div>
+          <h2 style={{ fontSize: "1.1em", margin: "0 0 8px 0" }}>
+            <a 
+              href={`https://www.google.com/search?q=${encodeURIComponent(cellType)}`} target="_blank" rel="noopener noreferrer"
+              style={{ textDecoration: "none", color: "#116bf2"}}
+            >
+              {cellType}
             </a>
-            )
-          </span>
-        </p>
+          </h2>
+          {/* DESCRIPTION */}
+          <p style={{ fontSize: "16px", lineHeight: "1.5", flex: 1 }}>
+            {description?.text || "Loading..."}
+            {description?.hasSource && (
+              <span style={{ fontSize: "15px", color: "#888" }}>
+                {" "}
+                (Source:{" "}
+                <a
+                  href="https://www.ebi.ac.uk/ols4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#116bf2" }}
+                >
+                  EBI
+                </a>
+                )
+              </span>
+            )}
+          </p>
+          {/* IMAGE SOURCE (optional) */}
+          {wikiImage?.sourceUrl && (
+          <div style={{  marginTop: "4px" }}>
+            <span style={{ fontSize: "12px", color: "#666" }}>
+              Image source:&nbsp;
+              <a
+                href={wikiImage.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#116bf2", textDecoration: "none", fontWeight: "500" }}
+              >
+                {wikiImage.attribution}
+              </a>
+            </span>
+          </div>)}
+        </div>
       </div>
-
       {/* cell type distribution bar chart */}
       <h1 style={{ fontSize: "1.3em", fontWeight: "600", color: "#333", display: "flex", alignItems: "center", gap: "8px" }}>
         Cell type distribution in

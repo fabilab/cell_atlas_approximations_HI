@@ -207,7 +207,7 @@ const OrganismProfile = ({ state }) => {
                 />
                 )}
                 <div style={{ flex: 1 }}>
-                    <h2 style={{ fontSize: "1.1em", fontWeight: "600", margin: "0 0 8px 0" }}>
+                    <h2 style={{ fontSize: "1.1em", margin: "0 0 8px 0" }}>
                         {bioName}
                     </h2>
                     <p style={{ fontSize: "1em"}}>

@@ -1,6 +1,39 @@
 import { mapCellTypeName } from "./nameMapper";
+import cell_image_source from "./cell_image_source.json";
 
-export const fetchWikiImage = async (cellType) => {
+// Helper functions to get image attribution
+const getAttributionLabel = (url) => {
+  if (!url) return null;
+  if (url.includes("cildata.crbs.ucsd.edu")) return "Cell Image Library";
+  if (url.includes("wikimedia.org")) return "Wikipedia";
+  if (url.includes("wiley.com")) return "Wiley";
+  return "Source";
+};
+
+const resolveSourceUrl = (cellType, source) => {
+  if (!source) return null;
+  if (source.includes("cildata.crbs.ucsd.edu")) {
+    return `https://www.cellimagelibrary.org/browse/celltype`;
+  }
+  return source;
+};
+
+export const fetchCellImage = async (cellType) => {
+
+  // 1. Try to get cell image from local path
+  try {
+    const localImage = require(`../../asset/cell_images/${cellType}.jpg`);
+    const sourceUrl = cell_image_source[cellType];  
+    return {
+      url: localImage,
+      attribution: getAttributionLabel(sourceUrl),
+      sourceUrl: resolveSourceUrl(cellType, sourceUrl)
+    };
+  } catch (e) {
+    console.warn(`[LOCAL] No local image found for ${cellType}`);
+  }
+
+    // 2. Fallback to Wikipedia
   try {
     // Normalize the search term
     const updatedCellType = mapCellTypeName(cellType);
@@ -38,9 +71,12 @@ export const fetchWikiImage = async (cellType) => {
     const imagePage = imageInfoData.query.pages[Object.keys(imageInfoData.query.pages)[0]];
     if (!imagePage.imageinfo?.[0]) return null;
     
+    const imageUrl = imagePage.imageinfo[0].url;
+
     return {
-      url: imagePage.imageinfo[0].url,
-      attribution: imagePage.imageinfo[0].extmetadata?.Artist?.value || null
+      url: imageUrl,
+      attribution: getAttributionLabel(imageUrl),
+      sourceUrl: imageUrl
     };
   } catch (error) {
     console.error('Error fetching Wikipedia image:', error);
