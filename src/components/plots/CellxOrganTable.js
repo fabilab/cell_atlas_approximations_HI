@@ -1,10 +1,12 @@
-import React from 'react';
 import { Table } from 'antd';
 import { StopTwoTone } from '@ant-design/icons';
+import { useChat } from '../ChatContext'; 
 import DataSource from '../../utils/plotHelpers/dataSource.js';
 
 const CellxOrganTable = ({ state }) => {
     let { celltypes, detected, organism, organs } = state;
+
+    const { setLocalMessage, queryInputRef, inputBorderFlash } = useChat();
 
     // Filter cell types detected in multiple organs
     const multiOrgansData = celltypes.map((celltype, index) => {
@@ -53,9 +55,19 @@ const CellxOrganTable = ({ state }) => {
         dataIndex: 'celltype',
         key: 'celltype',
         render: (text) => (
-          <a href={`https://www.google.com/search?q=${text}`} target="_blank" rel="noreferrer" style={{fontWeight:"bold"}}>
+          <span
+            style={{ fontWeight: "bold", color: "#1890ff", cursor: "pointer" }}
+            onClick={() => {
+              const message = `show profile of ${text}`;
+              setLocalMessage(message);
+              inputBorderFlash();
+              if (queryInputRef.current) {
+                queryInputRef.current.focus();
+              }
+            }}
+          >
             {text}
-          </a>
+          </span>
         ),
         fixed: 'left',
       },

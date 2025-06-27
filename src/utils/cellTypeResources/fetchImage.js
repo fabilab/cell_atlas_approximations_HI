@@ -7,6 +7,7 @@ const getAttributionLabel = (url) => {
   if (url.includes("cildata.crbs.ucsd.edu")) return "Cell Image Library";
   if (url.includes("wikimedia.org")) return "Wikipedia";
   if (url.includes("wiley.com")) return "Wiley";
+  if (url.includes("sciencedirect")) return "ScienceDirect";
   return "Source";
 };
 
