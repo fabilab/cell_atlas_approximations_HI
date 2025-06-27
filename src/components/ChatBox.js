@@ -2,13 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { useChat } from './ChatContext'
 import { SendOutlined } from '@ant-design/icons';
 import Message from "./Message";
-import { Button, Row, Input } from "antd";
+import { Button, Row, Input, Spin } from "antd";
 import { updateChat } from "../utils/chatSideEffects";
 import { nlp } from "../utils/chatHelpers/nlpResponseGenerator";
 
 const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentResponse, plotState }) => {
   const [messageHistory, setMessageHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [sending, setSending] = useState(false);
   const { localMessage, setLocalMessage, queryInputRef,  inputHighlight } = useChat();
   const chatboxRef = useRef(null);
 
@@ -41,9 +42,13 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
   };
 
   const handleSubmit = async (text) => {
+    if (!text.trim()) return;
+    setSending(true); // show loading spinner
+
     const resetEverything = () => {
       setMessageHistory([]);
       setHistoryIndex(0);
+      setSending(false); // hide spinner even on reset
       setChatHistory([]);
       return '';
     }
@@ -84,7 +89,9 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
         
       } catch (error) {
         console.error("Error occurred during updateChat:", error);
-      }
+      } finally {
+        setSending(false); // hide loading spinner
+  }
     } 
   };
 
@@ -136,11 +143,22 @@ const ChatBox = ({ initialMessage, chatHistory, setChatHistory, setCurrentRespon
             className="chat-input"
             style={{ borderColor: inputHighlight ? '#1890ff' : 'white', borderWidth: inputHighlight ? '4.5px' : '1px'  }}
           />
-          <Button 
+          {/* <Button 
             type="text"
             icon={<SendOutlined
               style={{ color: localMessage.length > 0 ? '#1890ff' : 'grey' }}
             />} 
+            onClick={() => handleSubmit(localMessage)}
+            className="send-button"
+          /> */}
+          <Button
+            type="text"
+            disabled={sending || !localMessage.trim()}
+            icon={
+              sending
+                ? <Spin percent="auto" size="medium" />
+                : <SendOutlined style={{ fontSize: 20, color: localMessage.length > 0 ? '#1890ff' : 'grey' }} />
+            }
             onClick={() => handleSubmit(localMessage)}
             className="send-button"
           />
